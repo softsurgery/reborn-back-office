@@ -1,4 +1,4 @@
-import { Shield, Settings } from "lucide-react";
+import { Shield, Settings, FileStackIcon } from "lucide-react";
 
 export interface MenuItem {
   id: number;
@@ -10,13 +10,19 @@ export interface MenuItem {
 export const items: MenuItem[] = [
   {
     id: 1,
-    title: "Gestion des utilisateurs",
+    title: "Users Management",
     href: "/users-management/permissions",
     icon: <Shield />,
   },
   {
     id: 2,
-    title: "Paramètres",
+    title: "Files Management",
+    href: "/files-management",
+    icon: <FileStackIcon />,
+  },
+  {
+    id: 3,
+    title: "Settings",
     href: "/settings",
     icon: <Settings />,
   },
