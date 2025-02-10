@@ -1,5 +1,5 @@
-import Permissions from "@/components/AdministrativeTools/UsersManagement/Permissions/Permissions";
-import UserManagement from "@/components/AdministrativeTools/UsersManagement/UsersManagement";
+import Permissions from "@/components/AdministrativeTools/UserManagement/Permissions/Permissions";
+import UserManagement from "@/components/AdministrativeTools/UserManagement/UserManagement";
 
 export default function page() {
     return (

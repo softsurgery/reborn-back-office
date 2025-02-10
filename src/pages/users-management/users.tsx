@@ -1,5 +1,5 @@
-import Users from "@/components/AdministrativeTools/UsersManagement/Users/Users";
-import UserManagement from "@/components/AdministrativeTools/UsersManagement/UsersManagement";
+import Users from "@/components/AdministrativeTools/UserManagement/Users/Users";
+import UserManagement from "@/components/AdministrativeTools/UserManagement/UserManagement";
 
 export default function page() {
   return (

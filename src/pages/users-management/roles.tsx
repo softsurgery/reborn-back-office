@@ -1,5 +1,5 @@
-import Roles from "@/components/AdministrativeTools/UsersManagement/Roles/Roles";
-import UserManagement from "@/components/AdministrativeTools/UsersManagement/UsersManagement";
+import Roles from "@/components/AdministrativeTools/UserManagement/Roles/Roles";
+import UserManagement from "@/components/AdministrativeTools/UserManagement/UserManagement";
 import ComingSoon from "@/components/Common/CommingSoon";
 
 

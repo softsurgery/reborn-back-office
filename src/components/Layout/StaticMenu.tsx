@@ -16,8 +16,8 @@ export const items: MenuItem[] = [
   },
   {
     id: 2,
-    title: "Files Management",
-    href: "/files-management",
+    title: "File Management",
+    href: "/file-management",
     icon: <FileStackIcon />,
   },
   {

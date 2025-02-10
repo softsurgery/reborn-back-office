@@ -1,17 +1,17 @@
-import { IdCard, ImageIcon} from "lucide-react";
+import { IdCard, ImageIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import SidebarNav from "@/components/Common/SidebarNav";
 
-interface FilesManagementProps {
+interface FileManagementProps {
   className?: string;
   children?: React.ReactNode;
 }
 
-export default function FilesManagement({
+export default function FileManagement({
   className,
   children,
-}: FilesManagementProps) {
+}: FileManagementProps) {
   //translations
 
   //menu items
@@ -37,10 +37,11 @@ export default function FilesManagement({
     >
       <div className="space-y-0.5 py-5 sm:py-0">
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
-          Files Management
+          File Management
         </h1>
         <p className="text-muted-foreground">
-          Manage files
+          Manage and organize your files efficiently. Upload, categorize, and
+          access important documents
         </p>
       </div>
       <Separator className="my-4 lg:my-6" />
