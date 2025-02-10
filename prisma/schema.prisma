@@ -2,9 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// generator typescriptInterfaces {
-//   provider = "prisma-generator-typescript-interfaces"
-// }
+generator typescriptInterfaces {
+  provider = "prisma-generator-typescript-interfaces"
+}
 
 datasource db {
   provider = "mysql"
@@ -47,9 +47,9 @@ model Account {
   refresh_token_expires_in Int?
   user                     User?   @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -62,9 +62,9 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@index([userId])
 }
@@ -85,7 +85,7 @@ model Role {
   users       User[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @default(now()) @updatedAt
-  deletedAt     DateTime?
+  deletedAt   DateTime?
 }
 
 model Permission {
@@ -95,7 +95,7 @@ model Permission {
   roles       RolePermission[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @default(now()) @updatedAt
-  deletedAt     DateTime?
+  deletedAt   DateTime?
 }
 
 model RolePermission {
@@ -106,5 +106,17 @@ model RolePermission {
   permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @default(now()) @updatedAt
-  deletedAt     DateTime?
+  deletedAt    DateTime?
+}
+
+model Upload {
+  id           Int       @id @default(autoincrement())
+  slug         String    @db.VarChar(255)
+  filename     String    @db.VarChar(255)
+  relativePath String    @db.VarChar(255)
+  mimetype     String    @db.VarChar(255)
+  size         Float
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  deletedAt    DateTime?
 }
