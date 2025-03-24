@@ -8,6 +8,8 @@ import { UserService } from "./users-management/services/user.service";
 import { UserRepository } from "./users-management/repositories/user.repository";
 import { UploadService } from "./upload/services/upload.service";
 import { UploadRepository } from "./upload/repositories/upload.repository";
+import { FeedbackService } from "./feedback/service/feedback.service";
+import { FeedbackRepository } from "./feedback/repositories/feedback.repository";
 
 const prisma = new PrismaClient();
 
@@ -19,6 +21,7 @@ const container = {
     new RolePermissionRepository(prisma)
   ),
   PermissionService: new PermissionService(new PermissionRepository(prisma)),
+  FeedbackService: new FeedbackService(new FeedbackRepository(prisma)),
 };
 
 export default container;
