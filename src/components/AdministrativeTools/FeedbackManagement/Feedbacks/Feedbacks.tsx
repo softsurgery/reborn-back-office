@@ -84,7 +84,7 @@ export default function Feedbacks() {
   }, [feedbacksResponse]);
 
   const { mutate: deleteFeedback, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: number) => api.feedback.remove(id!),
+    mutationFn: (id: string) => api.feedback.remove(id),
     onSuccess: () => {
       toast("Feedback Deleted Successfully");
       refetchFeedbacks();
@@ -102,7 +102,7 @@ export default function Feedbacks() {
     closeDeleteFeedbackDialog,
   } = useFeedbackDeleteDialog({
     feedbackMessage: feedbackManager.message,
-    deleteFeedback: () => deleteFeedback(feedbackManager.id),
+    deleteFeedback: () => deleteFeedback(feedbackManager.id!),
     isDeletionPending,
     resetFeedback: () => feedbackManager.reset(),
   });

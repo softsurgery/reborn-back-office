@@ -19,7 +19,7 @@ export default function FeedbackManagement({
     {
       title: "Feedbacks",
       icon: <MessageCircle size={18} />,
-      href: "/feedbacks-management/feedbacks",
+      href: "/feedback-management/feedbacks",
     },
     {
       title: "DeviceInfo",

@@ -40,7 +40,7 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
           attribute="rating"
         />
       ),
-      cell: ({ row }) => <div>{row.original.category || "No Rating"}</div>,
+      cell: ({ row }) => <div>{row.original.rating || "No Rating"}</div>,
       enableSorting: true,
       enableHiding: true,
     },

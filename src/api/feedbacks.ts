@@ -31,18 +31,18 @@ const findAll = async (): Promise<Feedback[]> => {
   return response.data;
 };
 
-const findById = async (feedbackId: number): Promise<Feedback> => {
+const findById = async (feedbackId: string): Promise<Feedback> => {
   const response = await axios.get<Feedback>(`/api/feedbacks/${feedbackId}`);
   return response.data;
 };
 
-const create = async (Permission: Partial<Feedback>): Promise<Feedback> => {
-  const response = await axios.post<Feedback>("/api/feedbacks", Permission);
+const create = async (Feedback: Partial<Feedback>): Promise<Feedback> => {
+  const response = await axios.post<Feedback>("/api/feedbacks", Feedback);
   return response.data;
 };
 
 const update = async (
-  feedbackId: number,
+  feedbackId: string,
   Feedback: Partial<Feedback>
 ): Promise<Feedback> => {
   const response = await axios.put<Feedback>(
@@ -52,7 +52,7 @@ const update = async (
   return response.data;
 };
 
-const remove = async (feedbackId: number): Promise<void> => {
+const remove = async (feedbackId: string): Promise<void> => {
   await axios.delete(`/api/feedbacks/${feedbackId}`);
 };
 
