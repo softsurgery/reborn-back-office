@@ -21,7 +21,8 @@ export class BaseRepository<T> {
   async findPaginated(
     queryObject: IQueryObject,
     options: IOptionsObject = {},
-    supportSoftDelete: boolean = false): Promise<Paginated<T>> {
+    supportSoftDelete: boolean = false
+  ): Promise<Paginated<T>> {
     const {
       filter,
       sort,
@@ -29,9 +30,9 @@ export class BaseRepository<T> {
       page = "1",
       fields,
       join,
+      search,
     } = queryObject;
-
-    let where = parseFilters(filter, options);
+    let where = parseFilters(filter, options, search, await this.getFields());
     if (!supportSoftDelete) {
       where = { ...where, deletedAt: null };
     }
@@ -54,7 +55,6 @@ export class BaseRepository<T> {
     ]);
 
     const parsedPage = parseInt(page) || 0;
-
     return {
       data,
       meta: {
@@ -64,7 +64,7 @@ export class BaseRepository<T> {
         hasPreviousPage: parsedPage > 1,
         hasNextPage: itemCount > take * parsedPage,
         pageCount: Math.ceil(itemCount / take),
-      }
+      },
     };
   }
 
@@ -80,9 +80,9 @@ export class BaseRepository<T> {
     options: IOptionsObject = {},
     supportSoftDelete: boolean = false
   ): Promise<T[]> {
-    const { filter, sort, fields, join } = queryObject;
+    const { filter, sort, fields, join, search } = queryObject;
 
-    let where = parseFilters(filter, options);
+    let where = parseFilters(filter, options, search, await this.getFields());
     if (!supportSoftDelete) {
       where = { ...where, deletedAt: null };
     }
@@ -103,11 +103,18 @@ export class BaseRepository<T> {
     options: IOptionsObject = {},
     supportSoftDelete: boolean = false
   ): Promise<T | null> {
-    const models = await this.findByCondition(queryObject, options, supportSoftDelete);
+    const models = await this.findByCondition(
+      queryObject,
+      options,
+      supportSoftDelete
+    );
     return models.length > 0 ? models[0] : null;
   }
 
-  async findById(id: number | string, supportSoftDelete: boolean = false): Promise<T | null> {
+  async findById(
+    id: number | string,
+    supportSoftDelete: boolean = false
+  ): Promise<T | null> {
     if (!supportSoftDelete) {
       return this.model.findUnique({ where: { id, deletedAt: null } });
     }
@@ -221,5 +228,14 @@ export class BaseRepository<T> {
 
   async count(where: any = {}): Promise<number> {
     return this.model.count({ where });
+  }
+
+  async getFields(): Promise<string[]> {
+    const record = await this.model.findFirst();
+    if (!record) {
+      return [];
+    }
+
+    return Object.keys(record).filter((key) => typeof record[key] === "string");
   }
 }

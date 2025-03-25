@@ -58,49 +58,62 @@ function parseCondition(
 
 export function parseFilters(
   filter?: string,
-  options: IOptionsObject = {}
+  options: IOptionsObject = {},
+  search?: string,
+  searchableFields?: string[]
 ): object {
-  if (!filter) return {};
-
   const where: ILooseObject = {};
-  let andConditions: ILooseObject[] = [];
-  let orConditions: ILooseObject[] = [];
 
-  // Split the filter into tokens based on semicolons, but handle parentheses first
-  const tokens = filter.split(";");
+  if (filter) {
+    let andConditions: ILooseObject[] = [];
+    let orConditions: ILooseObject[] = [];
 
-  let currentGroup: string[] = [];
-  let insideParentheses = false;
-  let tempGroup: string[] = [];
+    const tokens = filter.split(";");
 
-  tokens.forEach((token) => {
-    if (token.startsWith("(")) {
-      // Inside parentheses: Begin a new OR group
-      insideParentheses = true;
-      tempGroup.push(token.slice(1)); // Remove the opening '('
-    } else if (token.endsWith(")")) {
-      // Inside parentheses: Close the current OR group
-      tempGroup.push(token.slice(0, -1)); // Remove the closing ')'
-      orConditions.push(...tempGroup.map((tg) => parseCondition(tg, options)));
-      insideParentheses = false;
-      tempGroup = [];
-    } else if (insideParentheses) {
-      // Inside parentheses: Add conditions to the temp group
-      tempGroup.push(token);
-    } else {
-      // Outside parentheses: Add to AND conditions
-      andConditions.push(parseCondition(token, options));
+    let insideParentheses = false;
+    let tempGroup: string[] = [];
+
+    tokens.forEach((token) => {
+      if (token.startsWith("(")) {
+        insideParentheses = true;
+        tempGroup.push(token.slice(1));
+      } else if (token.endsWith(")")) {
+        tempGroup.push(token.slice(0, -1));
+        orConditions.push(
+          ...tempGroup.map((tg) => parseCondition(tg, options))
+        );
+        insideParentheses = false;
+        tempGroup = [];
+      } else if (insideParentheses) {
+        tempGroup.push(token);
+      } else {
+        andConditions.push(parseCondition(token, options));
+      }
+    });
+
+    if (orConditions.length > 0) {
+      where.OR = orConditions;
     }
-  });
 
-  // Combine OR conditions (inside parentheses) and AND conditions (outside parentheses)
-  if (orConditions.length > 0) {
-    where.OR = orConditions;
+    if (andConditions.length > 0) {
+      where.AND = andConditions;
+    }
   }
 
-  if (andConditions.length > 0) {
-    where.AND = andConditions;
+  if (search && searchableFields && searchableFields.length > 0) {
+    const searchConditions = searchableFields.map((field) => ({
+      [field]: {
+        contains: search,
+      },
+    }));
+
+    if (!where.AND) {
+      where.AND = [];
+    }
+
+    where.AND.push({ OR: searchConditions });
   }
+
   return where;
 }
 
@@ -164,10 +177,8 @@ export function parseJoin(join?: string): ILooseObject | undefined {
     parts.forEach((part, index) => {
       if (!currentLevel[part]) {
         if (index === parts.length - 1) {
-          // Last part, set to `true`
           currentLevel[part] = true;
         } else {
-          // Intermediate parts, set up `include`
           currentLevel[part] = { include: {} };
         }
       }
