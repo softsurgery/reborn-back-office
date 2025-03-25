@@ -3,8 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { DataTableViewOptions } from "./data-table-view-options";
-import { useFeedbackActions } from "./ActionContext";
-import { Blocks } from "lucide-react";
+import { useFeedbackActions } from "./action-context";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -16,9 +15,9 @@ export function DataTableToolbar<TData>({
   const { setPage, searchTerm, setSearchTerm } = useFeedbackActions();
   return (
     <div className="flex items-center justify-between gap-2">
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter Feedbacks"
+          placeholder="Filter Feedbacks..."
           value={searchTerm.toString()}
           onChange={(event) => {
             setPage(1);
@@ -37,9 +36,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <div className="flex items-center space-x-2">
-        <DataTableViewOptions table={table} />
-      </div>
+      <DataTableViewOptions table={table} />
     </div>
   );
 }

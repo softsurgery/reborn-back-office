@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { CaretSortIcon, EyeNoneIcon } from "@radix-ui/react-icons";
-import { useFeedbackActions } from "./ActionContext";
+import { useFeedbackActions } from "./action-context";
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
@@ -23,7 +23,8 @@ export function DataTableColumnHeader<TData, TValue>({
   attribute,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  const { order, sortKey, setSortDetails, setPage } = useFeedbackActions();
+  const { order, sortKey, setSortDetails } = useFeedbackActions();
+
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -50,7 +51,6 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={() => {
-              setPage(1);
               if (attribute) setSortDetails(false, attribute);
             }}
           >
@@ -59,7 +59,6 @@ export function DataTableColumnHeader<TData, TValue>({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              setPage(1);
               if (attribute) setSortDetails(true, attribute);
             }}
           >

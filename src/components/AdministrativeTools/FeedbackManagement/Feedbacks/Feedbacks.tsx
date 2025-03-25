@@ -1,34 +1,28 @@
 import React from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
-import { useRouter } from "next/router";
-import { useDebounce } from "@/hooks/useDebounce";
 import ContentSection from "@/components/Common/ContentSection";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { FeedbackActionsContext } from "./data-table/action-context";
 import { DataTable } from "./data-table/data-table";
 import { getFeedbackColumns } from "./data-table/columns";
-import { FeedbackActionsContext } from "./data-table/ActionContext";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
+import { useFeedbackManager } from "./hooks/useFeedbackManager";
+import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
+import { toast } from "sonner";
 import { FEEDBACK_FILTER_FIELDS } from "@/constants/feedback.filter-fields";
-import { cn } from "@/lib/utils";
 import { createSearchFilterExpression } from "@/lib/object.util";
 
-interface FeedbacksProps {
-  className?: string;
-}
-
-export default function Feedbacks({ className }: FeedbacksProps) {
-  //next-router
-  const router = useRouter();
-
-  // set page title in the breadcrumb
+export default function Feedbacks() {
   const { setRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Feedback Management" },
-      { title: "Feedbacks", href: "/feedbacks-management/feedbacks" },
+      { title: "Feedbacks Management" },
+      { title: "Feedbacks", href: "/feedbacks-management/Feedbacks" },
     ]);
   }, []);
 
+  const feedbackManager = useFeedbackManager();
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
@@ -43,7 +37,7 @@ export default function Feedbacks({ className }: FeedbacksProps) {
 
   const [sortDetails, setSortDetails] = React.useState({
     order: true,
-    sortKey: "message",
+    sortKey: "id",
   });
   const { value: debouncedSortDetails, loading: sorting } = useDebounce<
     typeof sortDetails
@@ -55,7 +49,7 @@ export default function Feedbacks({ className }: FeedbacksProps) {
 
   const {
     data: feedbacksResponse,
-    isPending: isFeedbacksPending,
+    isFetching: isFeedbacksPending,
     refetch: refetchFeedbacks,
   } = useQuery({
     queryKey: [
@@ -89,7 +83,32 @@ export default function Feedbacks({ className }: FeedbacksProps) {
     return feedbacksResponse.data;
   }, [feedbacksResponse]);
 
+  const { mutate: deleteFeedback, isPending: isDeletionPending } = useMutation({
+    mutationFn: (id?: number) => api.feedback.remove(id!),
+    onSuccess: () => {
+      toast("Feedback Deleted Successfully");
+      refetchFeedbacks();
+      feedbackManager.reset();
+      closeDeleteFeedbackDialog();
+    },
+    onError: (error) => {
+      toast(error.message);
+    },
+  });
+
+  const {
+    deleteFeedbackDialog,
+    openDeleteFeedbackDialog,
+    closeDeleteFeedbackDialog,
+  } = useFeedbackDeleteDialog({
+    feedbackMessage: feedbackManager.message,
+    deleteFeedback: () => deleteFeedback(feedbackManager.id),
+    isDeletionPending,
+    resetFeedback: () => feedbackManager.reset(),
+  });
+
   const context = {
+    openDeleteFeedbackDialog,
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
@@ -110,8 +129,8 @@ export default function Feedbacks({ className }: FeedbacksProps) {
     <FeedbackActionsContext.Provider value={context}>
       <ContentSection
         title="Feedbacks"
-        desc="Feedbacks"
-        className={cn("w-full", className)}
+        desc="Manage user feedback to improve the platform and overall experience."
+        className="w-full"
       >
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
@@ -121,6 +140,7 @@ export default function Feedbacks({ className }: FeedbacksProps) {
           isPending={isPending}
         />
       </ContentSection>
+      {deleteFeedbackDialog}
     </FeedbackActionsContext.Provider>
   );
 }

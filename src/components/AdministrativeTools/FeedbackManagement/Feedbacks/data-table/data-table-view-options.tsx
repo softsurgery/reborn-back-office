@@ -39,9 +39,6 @@ export function DataTableViewOptions<TData>({
               typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
-            // const translatedColumnTitle = tSettings(`permissions.attributes.${column.id}`, {
-            //   defaultValue: column.id
-            // });
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
