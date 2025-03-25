@@ -2,12 +2,18 @@ import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
 import { Feedback } from "@/types/feedback";
 import { FeedbackRepository } from "../repositories/feedback.repository";
+import { DeviceInfoService } from "@/lib/device-info/services/device-info.service";
 
 export class FeedbackService {
   private feedbackRepository: FeedbackRepository;
+  private deviceInfoService: DeviceInfoService;
 
-  constructor(feedbackRepository: FeedbackRepository) {
+  constructor(
+    feedbackRepository: FeedbackRepository,
+    deviceInfoService: DeviceInfoService
+  ) {
     this.feedbackRepository = feedbackRepository;
+    this.deviceInfoService = deviceInfoService;
   }
   async getPaginatedFeedbacks(
     queryObject: IQueryObject
@@ -24,6 +30,7 @@ export class FeedbackService {
   }
 
   async createFeedback(data: Partial<Feedback>): Promise<Feedback> {
+    // const deviceInfo = await this.deviceInfoService.getDeviceInfo
     return this.feedbackRepository.create(data);
   }
 
