@@ -16,18 +16,18 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET": {
-        const feedback = await feedbackService.getFeedbackById(Number(id));
+        const feedback = await feedbackService.getFeedbackById(id);
         if (!feedback) {
           return res.status(404).json({ error: "Feedback not found" });
         }
         return res.status(200).json(feedback);
       }
       case "PUT": {
-        const updatedFeedback = await feedbackService.updateFeedback(Number(id), req.body);
+        const updatedFeedback = await feedbackService.updateFeedback(id, req.body);
         return res.status(200).json(updatedFeedback);
       }
       case "DELETE": {
-        await feedbackService.deleteFeedback(Number(id));
+        await feedbackService.deleteFeedback(id);
         return res.status(204).end();
       }
       default:

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Feedback } from "@/types/Feedback";
+import { Feedback } from "@/types/feedback";
 
 const findPaginated = async (
   page: number = 1,

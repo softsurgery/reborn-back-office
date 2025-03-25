@@ -1,6 +1,6 @@
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Feedback } from "@/types/Feedback";
+import { Feedback } from "@/types/feedback";
 import { FeedbackRepository } from "../repositories/feedback.repository";
 
 export class FeedbackService {
@@ -19,7 +19,7 @@ export class FeedbackService {
     return this.feedbackRepository.findByCondition(queryObject);
   }
 
-  async getFeedbackById(id: number): Promise<Feedback | null> {
+  async getFeedbackById(id: string): Promise<Feedback | null> {
     return this.feedbackRepository.findById(id);
   }
 
@@ -27,11 +27,11 @@ export class FeedbackService {
     return this.feedbackRepository.create(data);
   }
 
-  async updateFeedback(id: number, data: Partial<Feedback>): Promise<Feedback> {
+  async updateFeedback(id: string, data: Partial<Feedback>): Promise<Feedback> {
     return this.feedbackRepository.update(id, data);
   }
 
-  async deleteFeedback(id: number): Promise<Feedback> {
+  async deleteFeedback(id: string): Promise<Feedback> {
     return this.feedbackRepository.delete(id);
   }
 
