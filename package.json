@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "postinstall": "prisma generate && prisma migrate deploy",
     "build": "tsc",
     "start": "next start",
     "lint": "next lint"
@@ -38,7 +39,7 @@
     "next-themes": "^0.4.4",
     "prisma": "^6.2.1",
     "react": "^18",
-    "react-day-picker": "^9.5.1",
+    "react-day-picker": "8.10.1",
     "react-dom": "^18",
     "sonner": "^1.7.2",
     "tailwind-merge": "^3.0.1",
