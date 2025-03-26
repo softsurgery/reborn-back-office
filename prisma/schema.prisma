@@ -120,3 +120,33 @@ model Upload {
   updatedAt    DateTime  @default(now()) @updatedAt
   deletedAt    DateTime?
 }
+
+model DeviceInfo {
+  id           Int        @id @default(autoincrement())
+  platform     String?
+  model        String
+  version      String?
+  manufacturer String?
+  feedbacks    Feedback[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now()) @updatedAt
+  deletedAt    DateTime?
+}
+
+model Feedback {
+  id        Int              @id @default(autoincrement())
+  message   String
+  rating    Int
+  category  FeedbackCategory
+  deviceId  Int?
+  device    DeviceInfo?      @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now()) @updatedAt
+  deletedAt DateTime?
+}
+
+enum FeedbackCategory {
+  FeatureRequest
+  GeneralFeedback
+  Other
+}

@@ -7,30 +7,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Role } from "@/types";
+import { Feedback } from "@/types/feedback";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-import {
-  CopyIcon,
-  Settings2,
-  Telescope,
-  Trash2,
-} from "lucide-react";
-import { useRoleActions } from "./action-context";
-import { useRoleManager } from "../hooks/useRoleManager";
+import { Telescope, Trash2 } from "lucide-react";
+import { useFeedbackActions } from "./action-context";
+import { useFeedbackManager } from "../hooks/useFeedbackManager";
 
 interface DataTableRowActionsProps {
-  row: Row<Role>;
+  row: Row<Feedback>;
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  const role = row.original;
-  const { openUpdateRoleSheet, openDeleteRoleDialog, openDuplicateRoleDialog } = useRoleActions();
+  const feedback = row.original;
+  const { openDeleteFeedbackDialog } = useFeedbackActions();
 
-  const roleManager = useRoleManager();
+  const feedbackManager = useFeedbackManager();
 
-  const targetRole = () => {
-    roleManager.setRole(role);
+  const targetFeedback = () => {
+    feedbackManager.setFeedback(feedback);
   };
 
   return (
@@ -46,28 +41,14 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
       <DropdownMenuContent align="center" className="w-[160px]">
         <DropdownMenuLabel className="text-center">Actions </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => { }}>
+        <DropdownMenuItem onClick={() => {}}>
           <Telescope className="h-5 w-5 mr-2" /> Inspect
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            targetRole();
-            openUpdateRoleSheet();
-          }}
-        >
-          <Settings2 className="h-5 w-5 mr-2" /> Update
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {
-          targetRole();
-          openDuplicateRoleDialog();
-        }}>
-          <CopyIcon className="h-5 w-5 mr-2" /> Duplicate
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            targetRole();
-            openDeleteRoleDialog();
+            targetFeedback();
+            openDeleteFeedbackDialog();
           }}
         >
           <Trash2 className="h-5 w-5 mr-2" /> Delete

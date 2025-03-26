@@ -8,17 +8,41 @@ import { UserService } from "./users-management/services/user.service";
 import { UserRepository } from "./users-management/repositories/user.repository";
 import { UploadService } from "./upload/services/upload.service";
 import { UploadRepository } from "./upload/repositories/upload.repository";
+import { FeedbackService } from "./feedback/service/feedback.service";
+import { FeedbackRepository } from "./feedback/repositories/feedback.repository";
+import { DeviceInfoService } from "./device-info/services/device-info.service";
+import { DeviceInfoRepository } from "./device-info/repositories/device-info.repository";
 
 const prisma = new PrismaClient();
 
+//file-managmement
+const uploadService = new UploadService(new UploadRepository(prisma)); //upload
+
+//user-management
+const userService = new UserService(new UserRepository(prisma)); //user
+const roleService = new RoleService(
+  new RoleRepository(prisma),
+  new RolePermissionRepository(prisma)
+); //role
+const permissionService = new PermissionService(
+  new PermissionRepository(prisma)
+);
+
+//feedback/bug-report
+const deviceInfoService = new DeviceInfoService(
+  new DeviceInfoRepository(prisma)
+); // device-info
+const feedbackService = new FeedbackService(
+  new FeedbackRepository(prisma),
+  deviceInfoService
+); // feedback
+
 const container = {
-  UploadService: new UploadService(new UploadRepository(prisma)),
-  UserService: new UserService(new UserRepository(prisma)),
-  RoleService: new RoleService(
-    new RoleRepository(prisma),
-    new RolePermissionRepository(prisma)
-  ),
-  PermissionService: new PermissionService(new PermissionRepository(prisma)),
+  UploadService: uploadService,
+  UserService: userService,
+  RoleService: roleService,
+  PermissionService: permissionService,
+  FeedbackService: feedbackService,
 };
 
 export default container;
