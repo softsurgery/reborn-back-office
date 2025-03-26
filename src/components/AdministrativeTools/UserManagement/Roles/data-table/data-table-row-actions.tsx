@@ -7,13 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Role } from "@/types/role";
+import { Role } from "@/types";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import {
-  Copy,
   CopyIcon,
-  Download,
   Settings2,
   Telescope,
   Trash2,
