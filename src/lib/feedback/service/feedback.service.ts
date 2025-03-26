@@ -3,6 +3,7 @@ import { Paginated } from "@/lib/prisma/interfaces/pagination";
 import { Feedback } from "@/types/feedback";
 import { FeedbackRepository } from "../repositories/feedback.repository";
 import { DeviceInfoService } from "@/lib/device-info/services/device-info.service";
+import { DeviceInfo } from "@/types";
 
 export class FeedbackService {
   private feedbackRepository: FeedbackRepository;
@@ -30,8 +31,20 @@ export class FeedbackService {
   }
 
   async createFeedback(data: Partial<Feedback>): Promise<Feedback> {
-    // const deviceInfo = await this.deviceInfoService.getDeviceInfo
-    return this.feedbackRepository.create(data);
+    const { device, ...rest } = data;
+    let deviceInfo: DeviceInfo | null = null;
+    if (device) {
+      deviceInfo = await this.deviceInfoService.getDeviceInfoByCondition({
+        filter: `model||$eq||${device.model}`,
+      });
+
+      if (!deviceInfo) {
+        deviceInfo = await this.deviceInfoService.createDeviceInfo(device);
+      }
+
+      rest.deviceId = deviceInfo.id;
+    }
+    return this.feedbackRepository.create(rest);
   }
 
   async updateFeedback(id: string, data: Partial<Feedback>): Promise<Feedback> {

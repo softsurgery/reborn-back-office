@@ -23,6 +23,11 @@ export class DeviceInfoService {
     return this.deviceInfoRepository.findById(id);
   }
 
+  async getDeviceInfoByCondition(queryObject: IQueryObject): Promise<DeviceInfo | null> {
+    return this.deviceInfoRepository.findOneByCondition(queryObject);
+  }
+
+
   async createDeviceInfo(data: Partial<DeviceInfo>): Promise<DeviceInfo> {
     return this.deviceInfoRepository.create(data);
   }
