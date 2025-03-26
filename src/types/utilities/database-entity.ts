@@ -1,5 +1,6 @@
 export interface DatabaseEntity {
-  createdAt?: string;
-  updatedAt?: string;
-  deletedAt?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+  isDeletionRestricted: boolean;
 }
