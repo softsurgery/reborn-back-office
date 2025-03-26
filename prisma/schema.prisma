@@ -122,22 +122,31 @@ model Upload {
 }
 
 model DeviceInfo {
-  id           String  @id @default(uuid())
+  id           Int        @id @default(autoincrement())
   platform     String?
-  model        String?
+  model        String
   version      String?
   manufacturer String?
   feedbacks    Feedback[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now()) @updatedAt
+  deletedAt    DateTime?
 }
 
 model Feedback {
-  id        String     @id @default(uuid())
-  message   String?
-  rating    Int?
-  category  String?
-  deviceId  String?
-  device    DeviceInfo? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now()) @updatedAt
-  deletedAt    DateTime?
-} 
+  id        Int              @id @default(autoincrement())
+  message   String
+  rating    Int
+  category  FeedbackCategory
+  deviceId  Int?
+  device    DeviceInfo?      @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now()) @updatedAt
+  deletedAt DateTime?
+}
+
+enum FeedbackCategory {
+  FeatureRequest
+  GeneralFeedback
+  Other
+}
