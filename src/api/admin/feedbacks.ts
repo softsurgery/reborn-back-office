@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Feedback } from "@/types/feedback";
-import { ServerResponse } from "@/types";
+import { Feedback, ServerResponse } from "@/types";
 
 const findPaginated = async (
   page: number = 1,
@@ -42,7 +41,10 @@ const findById = async (feedbackId: number): Promise<Feedback> => {
 const create = async (
   Feedback: Partial<Feedback>
 ): Promise<ServerResponse<Feedback>> => {
-  const response = await axios.post<ServerResponse<Feedback>>("/api/admin/feedbacks", Feedback);
+  const response = await axios.post<ServerResponse<Feedback>>(
+    "/api/admin/feedbacks",
+    Feedback
+  );
   return response.data;
 };
 

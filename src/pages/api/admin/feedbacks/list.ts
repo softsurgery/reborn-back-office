@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   const feedbackService = container.FeedbackService;
   if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json({ error: "Method Not Allowed", code: 405 });
   }
   try {
     const feedbacks = await feedbackService.getPaginatedFeedbacks(req.query);
@@ -15,6 +15,6 @@ export default async function handler(
   } catch (error) {
     return res
       .status(500)
-      .json({ error: "Internal Server Error", details: error });
+      .json({ error: "Internal Server Error", code: 500, details: error });
   }
 }
