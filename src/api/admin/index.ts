@@ -3,7 +3,7 @@ import { permission } from "./permissions";
 import { role } from "./roles";
 import { user } from "./users";
 
-export const api = {
+export const admin = {
   permission,
   role,
   user,
