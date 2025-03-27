@@ -1,9 +1,8 @@
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Feedback } from "@/types/feedback";
 import { FeedbackRepository } from "../repositories/feedback.repository";
 import { DeviceInfoService } from "@/lib/device-info/services/device-info.service";
-import { DeviceInfo } from "@/types";
+import { Feedback, DeviceInfo } from "@/types";
 
 export class FeedbackService {
   private feedbackRepository: FeedbackRepository;
@@ -51,7 +50,7 @@ export class FeedbackService {
     return this.feedbackRepository.update(id, data);
   }
 
-  async deleteFeedback(id: string): Promise<Feedback> {
+  async deleteFeedback(id: number): Promise<Feedback> {
     return this.feedbackRepository.delete(id);
   }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { api } from "@/api";
 import ContentSection from "@/components/Common/ContentSection";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -11,7 +12,6 @@ import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
 import { toast } from "sonner";
 import { FEEDBACK_FILTER_FIELDS } from "@/constants/feedback.filter-fields";
 import { createSearchFilterExpression } from "@/lib/object.util";
-import { api } from "@/api";
 
 export default function Feedbacks() {
   const { setRoutes } = useBreadcrumb();
@@ -61,7 +61,7 @@ export default function Feedbacks() {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.feedback.findPaginated(
+      api.admin.feedback.findPaginated(
         debouncedPage,
         debouncedSize,
         `${debouncedSortDetails.sortKey}:${
@@ -84,7 +84,7 @@ export default function Feedbacks() {
   }, [feedbacksResponse]);
 
   const { mutate: deleteFeedback, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.feedback.remove(id),
+    mutationFn: (id: number) => api.admin.feedback.remove(id),
     onSuccess: () => {
       toast("Feedback Deleted Successfully");
       refetchFeedbacks();

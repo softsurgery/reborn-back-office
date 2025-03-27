@@ -40,8 +40,8 @@ const findById = async (feedbackId: number): Promise<Feedback> => {
 
 const create = async (
   Feedback: Partial<Feedback>
-): Promise<ServerResponse<Feedback>> => {
-  const response = await axios.post<ServerResponse<Feedback>>(
+): Promise<Feedback> => {
+  const response = await axios.post<Feedback>(
     "/api/admin/feedbacks",
     Feedback
   );
@@ -51,17 +51,15 @@ const create = async (
 const update = async (
   feedbackId: number,
   Feedback: Partial<Feedback>
-): Promise<ServerResponse<Feedback>> => {
-  const response = await axios.put<ServerResponse<Feedback>>(
+): Promise<Feedback> => {
+  const response = await axios.put<Feedback>(
     `/api/admin/feedbacks/${feedbackId}`,
     Feedback
   );
   return response.data;
 };
 
-const remove = async (
-  feedbackId: number
-): Promise<ServerResponse<Feedback>> => {
+const remove = async (feedbackId: number): Promise<Feedback> => {
   const response = await axios.delete(`/api/admin/feedbacks/${feedbackId}`);
   return response.data;
 };

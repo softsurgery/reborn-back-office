@@ -35,7 +35,7 @@ export default async function handler(
         });
       }
       case "DELETE": {
-        const deletedFeedback = await feedbackService.deleteFeedback(id);
+        const deletedFeedback = await feedbackService.deleteFeedback(Number(id));
         return res.status(200).json({
           message: "Feedback deleted successfully",
           code: 200,

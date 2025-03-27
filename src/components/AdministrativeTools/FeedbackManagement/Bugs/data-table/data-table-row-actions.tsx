@@ -12,7 +12,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import { Telescope, Trash2 } from "lucide-react";
 import { useBugActions } from "./action-context";
-import { useBugManager } from "../hooks/useBugManager";
+import { useBugManager } from "../../../../../hooks/stores/useBugManager";
 
 interface DataTableRowActionsProps {
   row: Row<Bug>;
