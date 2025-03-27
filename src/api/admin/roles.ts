@@ -10,7 +10,7 @@ const findPaginated = async (
   fields: string[] = [],
   join: string[] = ["permissions.permission"]
 ): Promise<Paginated<Role>> => {
-  const response = await axios.get<Paginated<Role>>(`/api/roles/list?`, {
+  const response = await axios.get<Paginated<Role>>(`/api/admin/roles/list?`, {
     params: {
       page,
       size,
@@ -24,32 +24,34 @@ const findPaginated = async (
 };
 
 const findAll = async (): Promise<Role[]> => {
-  const response = await axios.get<Role[]>(`/api/roles`);
+  const response = await axios.get<Role[]>(`/api/admin/roles`);
   return response.data;
 };
 
 const findById = async (roleId: number): Promise<Role> => {
-  const response = await axios.get<Role>(`/api/roles/${roleId}`);
+  const response = await axios.get<Role>(`/api/admin/roles/${roleId}`);
   return response.data;
 };
 
 const create = async (role: Partial<Role>): Promise<Role> => {
-  const response = await axios.post<Role>("/api/roles", role);
+  const response = await axios.post<Role>("/api/admin/roles", role);
   return response.data;
 };
 
 const update = async (roleId: number, role: Partial<Role>): Promise<Role> => {
-  const response = await axios.put<Role>(`/api/roles/${roleId}`, role);
+  const response = await axios.put<Role>(`/api/admin/roles/${roleId}`, role);
   return response.data;
 };
 
 const duplicate = async (roleId?: number): Promise<Role> => {
-  const response = await axios.get<Role>(`/api/roles/duplicate/${roleId}`);
+  const response = await axios.get<Role>(
+    `/api/admin/roles/duplicate/${roleId}`
+  );
   return response.data;
-}
+};
 
 const remove = async (roleId?: number): Promise<void> => {
-  await axios.delete(`/api/roles/${roleId}`);
+  await axios.delete(`/api/admin/roles/${roleId}`);
 };
 
 export const role = {
