@@ -1,11 +1,5 @@
-import { feedback } from "./feedbacks";
-import { permission } from "./permissions";
-import { role } from "./roles";
-import { user } from "./users";
+import { admin } from "./admin";
 
 export const api = {
-    permission,
-    role,
-    user,
-    feedback
-}
+  ...admin,
+};

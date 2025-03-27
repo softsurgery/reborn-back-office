@@ -11,7 +11,7 @@ const findPaginated = async (
   fields: string[] = [],
   join: string[] = ["role"]
 ): Promise<Paginated<User>> => {
-  const response = await axios.get<Paginated<User>>(`/api/users?`, {
+  const response = await axios.get<Paginated<User>>(`/api/admin/users?`, {
     params: {
       page,
       size,
@@ -25,37 +25,37 @@ const findPaginated = async (
 };
 
 const activate = async (id?: string): Promise<User> => {
-  const response = await axios.get<User>(`/api/users/activate/${id}`);
+  const response = await axios.get<User>(`/api/admin/users/activate/${id}`);
   return response.data;
 };
 
 const deactivate = async (id?: string): Promise<User> => {
-  const response = await axios.get<User>(`/api/users/deactivate/${id}`);
+  const response = await axios.get<User>(`/api/admin/users/deactivate/${id}`);
   return response.data;
 };
 
 const findAll = async (): Promise<User[]> => {
-  const response = await axios.get<User[]>(`/api/users`);
+  const response = await axios.get<User[]>(`/api/admin/users`);
   return response.data;
 };
 
 const findById = async (userId: string): Promise<User> => {
-  const response = await axios.get<User>(`/api/users/${userId}`);
+  const response = await axios.get<User>(`/api/admin/users/${userId}`);
   return response.data;
 };
 
 const create = async (user: Partial<User>): Promise<User> => {
-  const response = await axios.post<User>("/api/users", user);
+  const response = await axios.post<User>("/api/admin/users", user);
   return response.data;
 };
 
 const update = async (userId?: string, user?: Partial<User>): Promise<User> => {
-  const response = await axios.put<User>(`/api/users/${userId}`, user);
+  const response = await axios.put<User>(`/api/admin/users/${userId}`, user);
   return response.data;
 };
 
 const remove = async (userId?: string): Promise<void> => {
-  await axios.delete(`/api/users/${userId}`);
+  await axios.delete(`/api/admin/users/${userId}`);
 };
 
 export const user = {

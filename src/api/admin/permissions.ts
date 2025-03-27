@@ -11,15 +11,15 @@ const findPaginated = async (
   join: string[] = ["roles"]
 ): Promise<Paginated<Permission>> => {
   const response = await axios.get<Paginated<Permission>>(
-    `/api/permissions/list?`,
+    `/api/admin/permissions/list?`,
     {
       params: {
         page,
         size,
         sort,
         filter,
-        fields: fields? fields.join(",") : "",
-        join: join? join.join(",") : "",
+        fields: fields ? fields.join(",") : "",
+        join: join ? join.join(",") : "",
       },
     }
   );
@@ -27,24 +27,27 @@ const findPaginated = async (
 };
 
 const findAll = async (): Promise<Permission[]> => {
-  const response = await axios.get<Permission[]>(`/api/permissions`);
+  const response = await axios.get<Permission[]>(`/api/admin/permissions`);
   return response.data;
 };
 
 const findById = async (permissionId: number): Promise<Permission> => {
   const response = await axios.get<Permission>(
-    `/api/permissions/${permissionId}`
+    `/api/admin/permissions/${permissionId}`
   );
   return response.data;
 };
 
 const create = async (Permission: Partial<Permission>): Promise<Permission> => {
-  const response = await axios.post<Permission>("/api/permissions", Permission);
+  const response = await axios.post<Permission>(
+    "/api/admin/permissions",
+    Permission
+  );
   return response.data;
 };
 
 const seed = async (): Promise<Permission> => {
-  const response = await axios.get("/api/permissions/seed");
+  const response = await axios.get("/api/admin/permissions/seed");
   return response.data;
 };
 
@@ -53,14 +56,14 @@ const update = async (
   Permission: Partial<Permission>
 ): Promise<Permission> => {
   const response = await axios.put<Permission>(
-    `/api/permissions/${permissionId}`,
+    `/api/admin/permissions/${permissionId}`,
     Permission
   );
   return response.data;
 };
 
 const remove = async (permissionId: number): Promise<void> => {
-  await axios.delete(`/api/permissions/${permissionId}`);
+  await axios.delete(`/api/admin/permissions/${permissionId}`);
 };
 
 export const permission = {

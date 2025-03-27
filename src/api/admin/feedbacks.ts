@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Feedback } from "@/types/feedback";
+import { Feedback, ServerResponse } from "@/types";
 
 const findPaginated = async (
   page: number = 1,
@@ -11,7 +11,7 @@ const findPaginated = async (
   join: string[] = []
 ): Promise<Paginated<Feedback>> => {
   const response = await axios.get<Paginated<Feedback>>(
-    `/api/feedbacks/list?`,
+    `/api/admin/feedbacks/list?`,
     {
       params: {
         page,
@@ -27,33 +27,43 @@ const findPaginated = async (
 };
 
 const findAll = async (): Promise<Feedback[]> => {
-  const response = await axios.get<Feedback[]>(`/api/feedbacks`);
+  const response = await axios.get<Feedback[]>(`/api/admin/feedbacks`);
   return response.data;
 };
 
 const findById = async (feedbackId: number): Promise<Feedback> => {
-  const response = await axios.get<Feedback>(`/api/feedbacks/${feedbackId}`);
+  const response = await axios.get<Feedback>(
+    `/api/admin/feedbacks/${feedbackId}`
+  );
   return response.data;
 };
 
-const create = async (Feedback: Partial<Feedback>): Promise<Feedback> => {
-  const response = await axios.post<Feedback>("/api/feedbacks", Feedback);
+const create = async (
+  Feedback: Partial<Feedback>
+): Promise<ServerResponse<Feedback>> => {
+  const response = await axios.post<ServerResponse<Feedback>>(
+    "/api/admin/feedbacks",
+    Feedback
+  );
   return response.data;
 };
 
 const update = async (
   feedbackId: number,
   Feedback: Partial<Feedback>
-): Promise<Feedback> => {
-  const response = await axios.put<Feedback>(
-    `/api/feedbacks/${feedbackId}`,
+): Promise<ServerResponse<Feedback>> => {
+  const response = await axios.put<ServerResponse<Feedback>>(
+    `/api/admin/feedbacks/${feedbackId}`,
     Feedback
   );
   return response.data;
 };
 
-const remove = async (feedbackId: number): Promise<void> => {
-  await axios.delete(`/api/feedbacks/${feedbackId}`);
+const remove = async (
+  feedbackId: number
+): Promise<ServerResponse<Feedback>> => {
+  const response = await axios.delete(`/api/admin/feedbacks/${feedbackId}`);
+  return response.data;
 };
 
 export const feedback = {
