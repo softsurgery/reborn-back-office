@@ -15,7 +15,7 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET": {
-        const feedback = await feedbackService.getFeedbackById(id);
+        const feedback = await feedbackService.getFeedbackById(Number(id));
         if (!feedback) {
           return res
             .status(404)
@@ -25,7 +25,7 @@ export default async function handler(
       }
       case "PUT": {
         const updatedFeedback = await feedbackService.updateFeedback(
-          id,
+          Number(id),
           req.body
         );
         return res.status(200).json({
@@ -35,7 +35,9 @@ export default async function handler(
         });
       }
       case "DELETE": {
-        const deletedFeedback = await feedbackService.deleteFeedback(Number(id));
+        const deletedFeedback = await feedbackService.deleteFeedback(
+          Number(id)
+        );
         return res.status(200).json({
           message: "Feedback deleted successfully",
           code: 200,

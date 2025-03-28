@@ -25,7 +25,7 @@ export class FeedbackService {
     return this.feedbackRepository.findByCondition(queryObject);
   }
 
-  async getFeedbackById(id: string): Promise<Feedback | null> {
+  async getFeedbackById(id: number): Promise<Feedback | null> {
     return this.feedbackRepository.findById(id);
   }
 
@@ -46,7 +46,7 @@ export class FeedbackService {
     return this.feedbackRepository.create(rest);
   }
 
-  async updateFeedback(id: string, data: Partial<Feedback>): Promise<Feedback> {
+  async updateFeedback(id: number, data: Partial<Feedback>): Promise<Feedback> {
     return this.feedbackRepository.update(id, data);
   }
 

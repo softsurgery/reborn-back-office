@@ -13,7 +13,7 @@ interface FeedbackManager extends FeedbackManagerData {
 const initialState: FeedbackManagerData = {
   id: undefined,
   message: "",
-  category: "FeatureRequest",
+  category: undefined,
   rating: 0,
 };
 
