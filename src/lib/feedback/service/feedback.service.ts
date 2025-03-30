@@ -54,6 +54,10 @@ export class FeedbackService {
     return this.feedbackRepository.delete(id);
   }
 
+  async deleteFeedbacks(ids: number[]) : Promise<Feedback[]> {
+    return this.feedbackRepository.softDeleteMany(ids);
+  }
+
   async countFeedbacks(where: any = {}): Promise<number> {
     return this.feedbackRepository.count(where);
   }

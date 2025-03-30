@@ -20,6 +20,24 @@ export default async function handler(
           data: feedback,
         });
       }
+      case "DELETE": {
+        try {
+          const { ids } = req.body;
+          if (!ids || !Array.isArray(ids)) {
+            return res.status(400).json({error : "Invalid request. 'ids' array required"});
+          }
+          const feedbacks = await feedbackService.deleteFeedbacks(ids)
+          return res.status(200).json({
+            message: "Feedback Deleted Successfully",
+            code: 200,
+            data: feedbacks,
+          });
+        }
+        catch(error:any) {
+          console.error("Error deleting feedbacksxxx:",error);
+          return res.status(500).json({error : "Internal Server Error",details:error.message});
+        }
+      }
       default:
         return res.status(405).json({ error: "Method Not Allowed", code: 405 });
     }
