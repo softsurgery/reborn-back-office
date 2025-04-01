@@ -12,7 +12,7 @@ import { useBugManager } from "@/hooks/stores/useBugManager";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
+import { useBugDeleteDialog } from "@/components/AdministrativeTools/FeedbackManagement/Bugs/modals/BugDeleteDialog";
 
 interface BugsTableActionBarProps {
   table: Table<any>;
@@ -34,20 +34,23 @@ export function BugsTableActionBar({ table }: BugsTableActionBarProps) {
     },
   });
 
-  const onBugDelete = React.useCallback(() => {
-    startTransition(async () => {
+  const { deleteBugDialog, openDeleteBugDialog, closeDeleteBugDialog } = useBugDeleteDialog({
+    bugMessage: `${rows.length}  bugs`,
+    deleteBug: async () => {
       const ids = rows.map((row) => row.original.id);
-      
       await Promise.all(ids.map((id) => deleteBug(id)));
-
       ids.forEach((id) => bugManager.removeBug(id));
-      
       table.toggleAllRowsSelected(false);
       bugManager.reset();
-
       toast(`${ids.length} bug${ids.length > 1 ? "s" : ""} deleted successfully`);
-    });
-  }, [rows, deleteBug, bugManager, table]);
+    },
+    isDeletionPending,
+    resetBug: () => bugManager.reset(),
+  });
+
+  const onBugDelete = React.useCallback(() => {
+    openDeleteBugDialog();
+  }, [openDeleteBugDialog]);
 
   return (
     <TooltipProvider>
@@ -68,6 +71,7 @@ export function BugsTableActionBar({ table }: BugsTableActionBarProps) {
           </DataTableActionBarAction>
         </div>
       </DataTableActionBar>
+      {deleteBugDialog}
     </TooltipProvider>
   );
 }
