@@ -9,6 +9,9 @@ interface BugManagerData {
 }
 
 interface BugManager extends BugManagerData {
+  bugs: Bug[]; 
+  setBugs: (bugs: Bug[]) => void; 
+  removeBug: (id: number) => void; 
   set: (name: keyof BugManagerData, value: any) => void;
   reset: () => void;
   getBug: () => Partial<Bug>;
@@ -24,6 +27,17 @@ const initialState: BugManagerData = {
 
 export const useBugManager = create<BugManager>((set, get) => ({
   ...initialState,
+  bugs: [], 
+
+  setBugs: (bugs) => {
+    set({ bugs });
+  },
+
+  removeBug: (id) => {
+    set((state) => ({
+      bugs: state.bugs.filter((bug) => bug.id !== id),
+    }));
+  },
 
   set: (name: keyof BugManager, value: any) => {
     set((state) => ({
@@ -47,15 +61,12 @@ export const useBugManager = create<BugManager>((set, get) => ({
   },
 
   setBug: (data: Partial<Bug>) => {
-    set(
-      (state) =>
-        ({
-          ...state,
-          id: data.id,
-          title: data.title,
-          description: data.description,
-          category: data.category,
-        } as Partial<BugManager>)
-    );
+    set((state) => ({
+      ...state,
+      id: data.id,
+      title: data.title,
+      description: data.description,
+      category: data.category,
+    }));
   },
 }));
