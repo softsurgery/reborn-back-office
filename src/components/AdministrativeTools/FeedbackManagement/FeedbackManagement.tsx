@@ -19,7 +19,7 @@ export default function FeedbackManagement({
     {
       title: "Feedbacks",
       icon: <MessageCircle size={18} />,
-      href: "/feedback-management/feedbacks",
+      href: "/feedbacks-management/feedbacks",
     },
     {
       title: "DeviceInfo",
@@ -29,7 +29,7 @@ export default function FeedbackManagement({
     {
       title: "Bugs",
       icon: <Bug size={18} />,
-      href: "/feedbacks-management/Bugs",
+      href: "/feedbacks-management/bugs",
     },
   ];
 
@@ -44,7 +44,9 @@ export default function FeedbackManagement({
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           Feedback Management
         </h1>
-        <p className="text-muted-foreground">Manage feedbacks, deviceInfo and bugs within your organization.</p>
+        <p className="text-muted-foreground">
+          Manage feedbacks, deviceInfo and bugs within your organization.
+        </p>
       </div>
       <Separator className="my-4 lg:my-6" />
       <div className="flex-1 flex flex-col overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 ">

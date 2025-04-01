@@ -12,6 +12,8 @@ import { FeedbackService } from "./feedback/service/feedback.service";
 import { FeedbackRepository } from "./feedback/repositories/feedback.repository";
 import { DeviceInfoService } from "./device-info/services/device-info.service";
 import { DeviceInfoRepository } from "./device-info/repositories/device-info.repository";
+import { BugService } from "./bug/service/bug.service";
+import { BugRepository } from "./bug/repositories/bug.repository";
 
 const prisma = new PrismaClient();
 
@@ -26,7 +28,7 @@ const roleService = new RoleService(
 ); //role
 const permissionService = new PermissionService(
   new PermissionRepository(prisma)
-);
+); //permission
 
 //feedback/bug-report
 const deviceInfoService = new DeviceInfoService(
@@ -36,6 +38,7 @@ const feedbackService = new FeedbackService(
   new FeedbackRepository(prisma),
   deviceInfoService
 ); // feedback
+const bugService = new BugService(new BugRepository(prisma), deviceInfoService); // bug
 
 const container = {
   UploadService: uploadService,
@@ -43,6 +46,7 @@ const container = {
   RoleService: roleService,
   PermissionService: permissionService,
   FeedbackService: feedbackService,
+  BugService: bugService,
 };
 
 export default container;

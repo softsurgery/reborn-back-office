@@ -1,4 +1,9 @@
-import { Shield, Settings, FileStackIcon, MessageSquareShare } from "lucide-react";
+import {
+  Shield,
+  Settings,
+  FileStackIcon,
+  MessageSquareShare,
+} from "lucide-react";
 
 export interface MenuItem {
   id: number;
@@ -23,7 +28,7 @@ export const items: MenuItem[] = [
   {
     id: 3,
     title: "Feedback Management",
-    href: "/feedback-management/feedbacks",
+    href: "/feedbacks-management/feedbacks",
     icon: <MessageSquareShare />,
   },
   {

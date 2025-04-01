@@ -3,26 +3,26 @@ import { api } from "@/api";
 import ContentSection from "@/components/Common/ContentSection";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FeedbackActionsContext } from "./data-table/action-context";
+import { BugActionsContext } from "./data-table/action-context";
 import { DataTable } from "./data-table/data-table";
-import { getFeedbackColumns } from "./data-table/columns";
+import { getBugColumns } from "./data-table/columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useFeedbackManager } from "./hooks/useFeedbackManager";
-import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
+import { useBugManager } from "../../../../hooks/stores/useBugManager";
+import { useBugDeleteDialog } from "./modals/BugDeleteDialog";
 import { toast } from "sonner";
-import { FEEDBACK_FILTER_FIELDS } from "@/constants/feedback.filter-fields";
+import { BUG_FILTER_FIELDS } from "@/constants/bug.filter-fields";
 import { createSearchFilterExpression } from "@/lib/object.util";
 
-export default function Feedbacks() {
+export default function Bugs() {
   const { setRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
       { title: "Feedbacks Management" },
-      { title: "Feedbacks", href: "/feedbacks-management/Feedbacks" },
+      { title: "Bugs", href: "/feedbacks-management/bugs" },
     ]);
   }, []);
 
-  const feedbackManager = useFeedbackManager();
+  const bugManager = useBugManager();
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
@@ -48,12 +48,12 @@ export default function Feedbacks() {
     useDebounce<string>(searchTerm, 500);
 
   const {
-    data: feedbacksResponse,
-    isFetching: isFeedbacksPending,
-    refetch: refetchFeedbacks,
+    data: bugsResponse,
+    isFetching: isBugsPending,
+    refetch: refetchBugs,
   } = useQuery({
     queryKey: [
-      "feedbacks",
+      "bugs",
       debouncedPage,
       debouncedSize,
       debouncedSortDetails.order,
@@ -61,7 +61,7 @@ export default function Feedbacks() {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.admin.feedback.findPaginated(
+      api.admin.bug.findPaginated(
         debouncedPage,
         debouncedSize,
         `${debouncedSortDetails.sortKey}:${
@@ -69,7 +69,7 @@ export default function Feedbacks() {
         }`,
         debouncedSearchTerm
           ? createSearchFilterExpression(
-              FEEDBACK_FILTER_FIELDS,
+              BUG_FILTER_FIELDS,
               "||$cont||",
               debouncedSearchTerm,
               ";"
@@ -78,42 +78,39 @@ export default function Feedbacks() {
       ),
   });
 
-  const feedbacks = React.useMemo(() => {
-    if (!feedbacksResponse) return [];
-    return feedbacksResponse.data;
-  }, [feedbacksResponse]);
+  const bugs = React.useMemo(() => {
+    if (!bugsResponse) return [];
+    return bugsResponse.data;
+  }, [bugsResponse]);
 
-  const { mutate: deleteFeedback, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.admin.feedback.remove(id),
+  const { mutate: deleteBug, isPending: isDeletionPending } = useMutation({
+    mutationFn: (id: number) => api.admin.bug.remove(id),
     onSuccess: () => {
-      toast("Feedback Deleted Successfully");
-      refetchFeedbacks();
-      feedbackManager.reset();
-      closeDeleteFeedbackDialog();
+      toast("Bug Deleted Successfully");
+      refetchBugs();
+      bugManager.reset();
+      closeDeleteBugDialog();
     },
     onError: (error) => {
       toast(error.message);
     },
   });
 
-  const {
-    deleteFeedbackDialog,
-    openDeleteFeedbackDialog,
-    closeDeleteFeedbackDialog,
-  } = useFeedbackDeleteDialog({
-    feedbackMessage: feedbackManager.message,
-    deleteFeedback: () => deleteFeedback(feedbackManager.id!),
-    isDeletionPending,
-    resetFeedback: () => feedbackManager.reset(),
-  });
+  const { deleteBugDialog, openDeleteBugDialog, closeDeleteBugDialog } =
+    useBugDeleteDialog({
+      bugMessage: bugManager.title,
+      deleteBug: () => deleteBug(bugManager.id!),
+      isDeletionPending,
+      resetBug: () => bugManager.reset(),
+    });
 
   const context = {
-    openDeleteFeedbackDialog,
+    openDeleteBugDialog,
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
     page,
-    totalPageCount: feedbacksResponse?.meta.pageCount || 0,
+    totalPageCount: bugsResponse?.meta.pageCount || 0,
     setPage,
     size,
     setSize,
@@ -123,24 +120,23 @@ export default function Feedbacks() {
       setSortDetails({ order, sortKey }),
   };
 
-  const isPending =
-    isFeedbacksPending || paging || resizing || searching || sorting;
+  const isPending = isBugsPending || paging || resizing || searching || sorting;
   return (
-    <FeedbackActionsContext.Provider value={context}>
+    <BugActionsContext.Provider value={context}>
       <ContentSection
-        title="Feedbacks"
-        desc="Manage user feedback to improve the platform and overall experience."
+        title="Bugs"
+        desc="Manage user bugs to improve the platform and overall experience."
         className="w-full"
       >
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
-          columns={getFeedbackColumns()}
-          data={feedbacks}
+          columns={getBugColumns()}
+          data={bugs}
           isPending={isPending}
         />
       </ContentSection>
-      {deleteFeedbackDialog}
-    </FeedbackActionsContext.Provider>
+      {deleteBugDialog}
+    </BugActionsContext.Provider>
   );
 }

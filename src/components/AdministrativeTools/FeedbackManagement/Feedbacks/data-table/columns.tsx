@@ -19,19 +19,6 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "category",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={"Category"}
-          attribute="category"
-        />
-      ),
-      cell: ({ row }) => <div>{row.original.category || "No Category"}</div>,
-      enableSorting: true,
-      enableHiding: true,
-    },
-    {
       accessorKey: "rating",
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -41,6 +28,19 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
         />
       ),
       cell: ({ row }) => <div>{row.original.rating || "No Rating"}</div>,
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "category",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={"Category"}
+          attribute="category"
+        />
+      ),
+      cell: ({ row }) => <div>{row.original.category || "No Category"}</div>,
       enableSorting: true,
       enableHiding: true,
     },

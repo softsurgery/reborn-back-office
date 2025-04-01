@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const feedbackService = container.FeedbackService;
+  const bugService = container.BugService;
   const { id } = req.query;
 
   if (!id || Array.isArray(id)) {
@@ -15,33 +15,27 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET": {
-        const feedback = await feedbackService.getFeedbackById(Number(id));
-        if (!feedback) {
-          return res
-            .status(404)
-            .json({ error: "Feedback not found", code: 404 });
+        const bug = await bugService.getBugById(id);
+        if (!bug) {
+          return res.status(404).json({ error: "Bug not found", code: 404 });
         }
-        return res.status(200).json(feedback);
+        return res.status(200).json(bug);
       }
       case "PUT": {
-        const updatedFeedback = await feedbackService.updateFeedback(
-          Number(id),
-          req.body
-        );
+        const updatedBug = await bugService.updateBug(id, req.body);
         return res.status(200).json({
-          message: "Feedback updated successfully",
+          message: "Bug updated successfully",
           code: 200,
-          data: updatedFeedback,
+          data: updatedBug,
         });
       }
       case "DELETE": {
-        const deletedFeedback = await feedbackService.deleteFeedback(
-          Number(id)
-        );
+        console.log("failed");
+        const deletedBug = await bugService.deleteBug(Number(id));
         return res.status(200).json({
-          message: "Feedback deleted successfully",
+          message: "Bug deleted successfully",
           code: 200,
-          data: deletedFeedback,
+          data: deletedBug,
         });
       }
       default:

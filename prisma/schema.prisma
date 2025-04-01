@@ -80,6 +80,7 @@ model DeviceInfo {
   version      String?
   manufacturer String?
   feedbacks    Feedback[]
+  bugs         Bug[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @default(now()) @updatedAt
   deletedAt    DateTime?
@@ -97,8 +98,28 @@ model Feedback {
   deletedAt DateTime?
 }
 
+model Bug {
+  id        Int              @id @default(autoincrement())
+  title   String
+  description    String
+  category  BugCategory
+  deviceId  Int?
+  device    DeviceInfo?      @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now()) @updatedAt
+  deletedAt DateTime?
+}
+
 enum FeedbackCategory {
   FeatureRequest
   GeneralFeedback
+  Other
+}
+
+enum BugCategory {
+  Crash
+  UiIssue
+  Performance
+  FeatureNotWorking
   Other
 }

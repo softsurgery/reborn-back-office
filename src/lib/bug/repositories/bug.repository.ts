@@ -1,9 +1,9 @@
 import { BaseRepository } from "@/lib/prisma/repositories/prisma-abstract-repository";
-import { Feedback } from "@/types";
+import { Bug } from "@/types";
 import { PrismaClient } from "@prisma/client";
 
-export class FeedbackRepository extends BaseRepository<Feedback> {
+export class BugRepository extends BaseRepository<Bug> {
   constructor(prisma: PrismaClient) {
-    super(prisma.feedback, prisma);
+    super(prisma.bug, prisma);
   }
 }
