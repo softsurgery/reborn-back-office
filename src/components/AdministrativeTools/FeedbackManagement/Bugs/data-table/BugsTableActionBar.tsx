@@ -1,0 +1,64 @@
+"use client";
+
+import React from "react";
+import { Table } from "@tanstack/react-table";
+import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import {
+  DataTableActionBar,
+  DataTableActionBarAction,
+} from "@/components/AdministrativeTools/FeedbackManagement/Bugs/data-table/data-table-action-bar";
+import { useBugManager } from "@/hooks/stores/useBugManager";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/api";
+import { TooltipProvider } from "@/components/ui/tooltip"; 
+interface BugsTableActionBarProps {
+  table: Table<any>;
+}
+
+export function BugsTableActionBar({ table }: BugsTableActionBarProps) {
+  const rows = table.getFilteredSelectedRowModel().rows;
+  const [isPending, startTransition] = React.useTransition();
+  const bugManager = useBugManager();
+
+  const { mutate: deleteBug, isPending: isDeletionPending } = useMutation({
+    mutationFn: (id: number) => api.admin.bug.remove(id),
+    onSuccess: () => {
+      toast("Bug Deleted Successfully");
+      table.toggleAllRowsSelected(false);
+      bugManager.reset();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const onBugDelete = React.useCallback(() => {
+    startTransition(async () => {
+      const ids = rows.map((row) => row.original.id);
+      ids.forEach((id) => deleteBug(id));
+    });
+  }, [rows, deleteBug]);
+
+  return (
+    <TooltipProvider> {/* Wrap with TooltipProvider */}
+      <DataTableActionBar table={table} visible={rows.length > 0}>
+        <div className="flex h-7 items-center rounded-md border pr-1 pl-2.5">
+          <span className="whitespace-nowrap text-xs">
+            {rows.length} selected
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <DataTableActionBarAction
+            size="icon"
+            tooltip="Delete bugs"
+            isPending={isPending || isDeletionPending}
+            onClick={onBugDelete}
+          >
+            <Trash2 />
+          </DataTableActionBarAction>
+        </div>
+      </DataTableActionBar>
+    </TooltipProvider>
+  );
+}

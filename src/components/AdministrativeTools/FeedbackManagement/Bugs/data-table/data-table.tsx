@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,7 +13,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import React from "react";
 import { DataTableToolbar } from "./data-table-toolbar";
 import {
   Table,
@@ -26,7 +25,8 @@ import {
 import { PackageOpen } from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 import { Spinner } from "@/components/Common/Spinner";
-import { DataTableActionBar } from "./data-table-action-bar";
+import { BugsTableActionBar } from "./BugsTableActionBar"; 
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   className?: string;
@@ -34,11 +34,9 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isPending: boolean;
-  actionBar?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
-  actionBar,
   className,
   containerClassName,
   columns,
@@ -147,7 +145,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-      <DataTableActionBar table={table}>{actionBar}</DataTableActionBar>
+      <BugsTableActionBar table={table} /> 
     </div>
   );
 }
