@@ -35,7 +35,6 @@ export function BugsTableActionBar({ table }: BugsTableActionBarProps) {
   });
 
   const { deleteBugDialog, openDeleteBugDialog, closeDeleteBugDialog } = useBugDeleteDialog({
-    bugMessage: `${rows.length}  bugs`,
     deleteBug: async () => {
       const ids = rows.map((row) => row.original.id);
       await Promise.all(ids.map((id) => deleteBug(id)));
