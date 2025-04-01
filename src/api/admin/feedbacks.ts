@@ -64,13 +64,6 @@ const remove = async (feedbackId: number): Promise<Feedback> => {
   return response.data;
 };
 
-const removeByIds = async (feedbackIds: number[]): Promise<Feedback[]> => {
-    const response = await axios.delete("/api/admin/feedbacks", {
-      data: { ids: feedbackIds } 
-    });
-    return response.data.data;  
-};
-
 export const feedback = {
   // Feedbacks
   findPaginated,
@@ -79,5 +72,4 @@ export const feedback = {
   create,
   update,
   remove,
-  removeByIds
 };
