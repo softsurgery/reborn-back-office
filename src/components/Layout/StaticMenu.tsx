@@ -20,12 +20,6 @@ export const items: MenuItem[] = [
     icon: <Shield />,
   },
   {
-    id: 2,
-    title: "File Management",
-    href: "/file-management",
-    icon: <FileStackIcon />,
-  },
-  {
     id: 3,
     title: "Feedback Management",
     href: "/feedbacks-management/feedbacks",
