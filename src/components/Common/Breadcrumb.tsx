@@ -1,31 +1,30 @@
 import {
-  Breadcrumb as ShadcnBreadcrumb,
+  Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/router";
 
-interface BreadcrumbProps {
+interface BreadcrumbCommonProps {
   className?: string;
-  routes?: { title: string; href?: string }[];
+  hierarchy?: { title: string; href?: string }[];
 }
 
-export const Breadcrumb = ({
+export const BreadcrumbCommon = ({
   className,
-  routes,
-}: BreadcrumbProps) => {
+  hierarchy,
+}: BreadcrumbCommonProps) => {
   const router = useRouter();
-  const lastIndex = routes ? routes.length - 1 : 0;
+  const lastIndex = hierarchy ? hierarchy.length - 1 : 0;
 
   return (
-    <ShadcnBreadcrumb className={cn(className, "my-auto")} aria-label="breadcrumb">
+    <Breadcrumb className={cn(className, "my-auto")} aria-label="breadcrumb">
       <BreadcrumbList className="flex flex-wrap gap-1 sm:gap-2 items-center">
-        {routes?.map((item, index) => (
+        {hierarchy?.map((item, index) => (
           <BreadcrumbItem
             key={index}
             className="flex items-center gap-1 sm:gap-2"
@@ -55,6 +54,6 @@ export const Breadcrumb = ({
           </BreadcrumbItem>
         ))}
       </BreadcrumbList>
-    </ShadcnBreadcrumb>
+    </Breadcrumb>
   );
 };

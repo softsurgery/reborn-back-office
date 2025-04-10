@@ -2,7 +2,7 @@ import { useDialog } from "@/components/Common/Dialogs";
 import { Spinner } from "@/components/Common/Spinner";
 import { Button } from "@/components/ui/button";
 
-interface RoleDeleteDialogProps {
+interface UserActivateDialogProps {
   userFullname?: string;
   activateUser?: () => void;
   isActivationPending?: boolean;
@@ -14,7 +14,7 @@ export const useActivateUserDialog = ({
   activateUser,
   isActivationPending,
   resetUser,
-}: RoleDeleteDialogProps) => {
+}: UserActivateDialogProps) => {
   const {
     DialogFragment: activateUserDialog,
     openDialog: openActivateUserDialog,

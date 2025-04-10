@@ -6,13 +6,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json({ error: "Method Not Allowed", code: 405 });
   }
 
   try {
     await seedPermissions();
-    return res.status(200).json({ message: "Permissions seeded successfully" });
+    return res
+      .status(200)
+      .json({ message: "Permissions seeded successfully", code: 200 });
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error", details: error });
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", code: 500, details: error });
   }
 }

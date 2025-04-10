@@ -20,17 +20,17 @@ export function DataTableToolbar<TData>({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Filter Roles..."
-          value={searchTerm.toString()}
+          value={searchTerm?.toString()}
           onChange={(event) => {
-            setPage(1);
-            setSearchTerm(event.target.value);
+            setPage?.(1);
+            setSearchTerm?.(event.target.value);
           }}
           className="h-8 w-[150px] lg:w-[300px]"
         />
         {searchTerm && (
           <Button
             variant="ghost"
-            onClick={() => setSearchTerm("")}
+            onClick={() => setSearchTerm?.("")}
             className="h-8 px-2 lg:px-3"
           >
             Reset

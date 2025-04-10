@@ -1,16 +1,16 @@
-import { Inter } from "next/font/google";
-import Application from "@/components/Application";
+import React from "react";
+import type { AppProps } from "next/app";
 import Head from "next/head";
-import { ThemeProvider } from "next-themes";
-import { AppProps } from "next/app";
-import '@/styles/globals.css';
-import { AuthProvider } from "@/context/AuthContext";
+import Application from "@/components/Application";
+
+import { ThemeProvider } from "@/context/ThemeContext";
+import { Inter } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const inter = Inter({ subsets: ["latin"] });
-
 const queryClient = new QueryClient();
-export default function Home({ Component, pageProps }: AppProps) {
+
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
@@ -20,7 +20,6 @@ export default function Home({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <QueryClientProvider client={queryClient}>
-      <AuthProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -30,9 +29,9 @@ export default function Home({ Component, pageProps }: AppProps) {
           <Application
             Component={Component}
             pageProps={pageProps}
+            className={inter.className}
           />
         </ThemeProvider>
-      </AuthProvider>
       </QueryClientProvider>
     </>
   );

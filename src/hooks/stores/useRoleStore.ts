@@ -1,15 +1,10 @@
-import { Permission, Role } from "@/types/user-management";
+import { Permission, Role, RolePermission } from "@/types";
 import { create } from "zustand";
 
-interface RoleManagerData {
-  id?: number;
-  label?: string;
-  description?: string;
-  permissions?: Permission[];
-}
+interface RoleStoreData extends Partial<Role> {}
 
-interface RoleManager extends RoleManagerData {
-  set: (name: keyof RoleManagerData, value: any) => void;
+interface RoleStore extends RoleStoreData {
+  set: (name: keyof RoleStoreData, value: any) => void;
   reset: () => void;
   getRole: () => Partial<Role>;
   setRole: (data: Partial<Role>) => void;
@@ -18,17 +13,17 @@ interface RoleManager extends RoleManagerData {
   isPermissionSelected: (permissionId?: number) => boolean;
 }
 
-const initialState: RoleManagerData = {
+const initialState: RoleStoreData = {
   id: undefined,
   label: "",
   description: "",
   permissions: [],
 };
 
-export const useRoleManager = create<RoleManager>((set, get) => ({
+export const useRoleStore = create<RoleStore>((set, get) => ({
   ...initialState,
 
-  set: (name: keyof RoleManager, value: any) => {
+  set: (name: keyof RoleStore, value: any) => {
     set((state) => ({
       ...state,
       [name]: value,
@@ -54,19 +49,19 @@ export const useRoleManager = create<RoleManager>((set, get) => ({
       id: data.id,
       label: data.label,
       description: data.description,
-      permissions:
-        data.permissions
-          ?.map((p) => p.permission)
-          .filter((p): p is Permission => p !== undefined) || [],
+      permissions: data.permissions,
     }));
   },
 
   addPermission: (permission: Permission) => {
-    const { permissions } = get();
+    const { id, permissions } = get();
     if (!permissions?.some((p) => p.id === permission.id)) {
       set((state) => ({
         ...state,
-        permissions: [...(permissions || []), permission],
+        permissions: [
+          ...(permissions || []),
+          { permissionId: permission.id, roleId: id } as RolePermission,
+        ],
       }));
     }
   },

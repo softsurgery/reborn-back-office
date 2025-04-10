@@ -1,47 +1,51 @@
 import { User } from "@/types/user-management";
 import { create } from "zustand";
 
-interface UserManagerData {
-  id?: string;
-  username?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  dateOfBirth?: Date;
-  roleId?: number;
-  password?: string;
+interface UserStoreData extends Partial<User> {
+  setManualPassword?: boolean;
   confirmPassword?: string;
+  errors: Record<string, string[]>;
 }
 
-interface UserManager extends UserManagerData {
-  set: (name: keyof UserManagerData, value: any) => void;
+interface UserStore extends UserStoreData {
+  set: (name: keyof UserStoreData, value: any) => void;
+  resetError: (name?: keyof UserStoreData) => void;
   reset: () => void;
   getUser: () => Partial<User>;
   setUser: (data: Partial<User>) => void;
 }
 
-const initialState: UserManagerData = {
+const initialState: UserStoreData = {
   id: "",
   username: "",
   email: "",
   firstName: "",
   lastName: "",
-  dateOfBirth: new Date(),
+  dateOfBirth: null,
   roleId: undefined,
   password: "",
+  setManualPassword: false,
   confirmPassword: "",
+  errors: {},
 };
 
-export const useUserManager = create<UserManager>((set, get) => ({
+export const useUserStore = create<UserStore>((set, get) => ({
   ...initialState,
 
-  set: (name: keyof UserManager, value: any) => {
+  set: (name: keyof UserStoreData, value: any) => {
     set((state) => ({
       ...state,
       [name]: value,
     }));
   },
-
+  resetError: (name?: keyof UserStoreData) => {
+    if (name)
+      set((state) => ({
+        ...state,
+        errors: { ...state.errors, [name]: [] },
+      }));
+    else set((state) => ({ ...state, errors: {} }));
+  },
   reset: () => {
     set({ ...initialState });
   },
@@ -53,8 +57,7 @@ export const useUserManager = create<UserManager>((set, get) => ({
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      dateOfBirth: data.dateOfBirth,
-      password: data.password,
+      dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
       roleId: data.roleId,
     };
   },

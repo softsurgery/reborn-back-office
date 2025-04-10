@@ -1,18 +1,14 @@
 import React from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import ContentSection from "@/components/Common/ContentSection";
 import { DataTable } from "./data-table/data-table";
 import { getPermissionColumns } from "./data-table/columns";
 import { PermissionActionsContext } from "./data-table/ActionContext";
-import { usePermissionSeedDialog } from "./modal/PermissionSeedDialog";
-import { toast } from "sonner";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { PERMISSION_FILTER_FIELDS } from "@/constants/permission.filter-fields";
-import { cn } from "@/lib/utils";
-import { createSearchFilterExpression } from "@/lib/object.util";
 
 interface PermissionsProps {
   className?: string;
@@ -22,12 +18,11 @@ export default function Permissions({ className }: PermissionsProps) {
   //next-router
   const router = useRouter();
 
-  // set page title in the breadcrumb
   const { setRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "User Management" },
-      { title: "Permissions", href: "/users-management/permissions" },
+      { title: "User Management", href: "/user-management" },
+      { title: "Permission", href: "/user-management/permission" },
     ]);
   }, []);
 
@@ -69,21 +64,14 @@ export default function Permissions({ className }: PermissionsProps) {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.permission.findPaginated(
-        debouncedPage,
-        debouncedSize,
-        `${debouncedSortDetails.sortKey}:${
+      api.admin.permission.findPaginated({
+        page: debouncedPage.toString(),
+        size: debouncedSize.toString(),
+        sort: `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
-        debouncedSearchTerm
-          ? createSearchFilterExpression(
-              PERMISSION_FILTER_FIELDS,
-              "||$cont||",
-              debouncedSearchTerm,
-              ";"
-            )
-          : ""
-      ),
+        search: debouncedSearchTerm,
+      }),
   });
 
   const permissions = React.useMemo(() => {
@@ -91,30 +79,8 @@ export default function Permissions({ className }: PermissionsProps) {
     return permissionsResponse.data;
   }, [permissionsResponse]);
 
-  const { mutate: seedPermission, isPending: isSeedingPending } = useMutation({
-    mutationFn: () => api.permission.seed(),
-    onSuccess: () => {
-      toast("Permissions Seeding Successfully");
-      refetchPermissions();
-      closeSeedPermissionDialog();
-    },
-    onError: (error) => {
-      toast(error.message);
-    },
-  });
-
-  const {
-    seedPermissionDialog,
-    openSeedPermissionDialog,
-    closeSeedPermissionDialog,
-  } = usePermissionSeedDialog({
-    seedPermission,
-    isSeedingPending,
-  });
-
   const context = {
     //search, filtering, sorting & paging
-    openSeedPermissionDialog,
     searchTerm,
     setSearchTerm,
     page,
@@ -134,8 +100,9 @@ export default function Permissions({ className }: PermissionsProps) {
     <PermissionActionsContext.Provider value={context}>
       <ContentSection
         title="Permissions"
-        desc="Permissions"
-        className={cn("w-full", className)}
+        desc="Visualization of the permissions of the application"
+        className="w-full"
+        childrenClassName={cn("overflow-hidden", className)}
       >
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
@@ -145,7 +112,6 @@ export default function Permissions({ className }: PermissionsProps) {
           isPending={isPending}
         />
       </ContentSection>
-      {seedPermissionDialog}
     </PermissionActionsContext.Provider>
   );
 }

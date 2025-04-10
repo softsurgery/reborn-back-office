@@ -23,7 +23,7 @@ export function DataTableColumnHeader<TData, TValue>({
   attribute,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  const { order, sortKey, setSortDetails, setPage } = usePermissionActions();
+  const { order, sortKey, setSortDetails } = usePermissionActions();
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -50,7 +50,6 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={() => {
-              setPage(1);
               if (attribute) setSortDetails(false, attribute);
             }}
           >
@@ -59,7 +58,6 @@ export function DataTableColumnHeader<TData, TValue>({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              setPage(1);
               if (attribute) setSortDetails(true, attribute);
             }}
           >

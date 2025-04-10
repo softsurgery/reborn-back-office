@@ -51,7 +51,7 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={() => {
-              if (attribute) setSortDetails(false, attribute);
+              if (attribute) setSortDetails?.(false, attribute);
             }}
           >
             <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
@@ -59,7 +59,7 @@ export function DataTableColumnHeader<TData, TValue>({
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              if (attribute) setSortDetails(true, attribute);
+              if (attribute) setSortDetails?.(true, attribute);
             }}
           >
             <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />

@@ -7,7 +7,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Role } from "@/types";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import {
@@ -17,7 +16,8 @@ import {
   Trash2,
 } from "lucide-react";
 import { useRoleActions } from "./action-context";
-import { useRoleManager } from "../hooks/useRoleManager";
+import { Role } from "@/types/user-management";
+import { useRoleStore } from "@/hooks/stores/useRoleStore";
 
 interface DataTableRowActionsProps {
   row: Row<Role>;
@@ -27,10 +27,10 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const role = row.original;
   const { openUpdateRoleSheet, openDeleteRoleDialog, openDuplicateRoleDialog } = useRoleActions();
 
-  const roleManager = useRoleManager();
+  const roleStore = useRoleStore();
 
   const targetRole = () => {
-    roleManager.setRole(role);
+    roleStore.setRole(role);
   };
 
   return (
@@ -52,14 +52,14 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuItem
           onClick={() => {
             targetRole();
-            openUpdateRoleSheet();
+            openUpdateRoleSheet?.();
           }}
         >
           <Settings2 className="h-5 w-5 mr-2" /> Update
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => {
           targetRole();
-          openDuplicateRoleDialog();
+          openDuplicateRoleDialog?.();
         }}>
           <CopyIcon className="h-5 w-5 mr-2" /> Duplicate
         </DropdownMenuItem>
@@ -67,7 +67,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuItem
           onClick={() => {
             targetRole();
-            openDeleteRoleDialog();
+            openDeleteRoleDialog?.();
           }}
         >
           <Trash2 className="h-5 w-5 mr-2" /> Delete

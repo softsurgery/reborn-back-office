@@ -1,8 +1,7 @@
-import React from 'react';
+import React from "react";
 
 export const PermissionActionsContext = React.createContext({
-  openSeedPermissionDialog: () => {},
-  searchTerm: '',
+  searchTerm: "",
   setSearchTerm: (_value: string) => {},
   page: 1,
   totalPageCount: 0,
@@ -10,8 +9,8 @@ export const PermissionActionsContext = React.createContext({
   size: 1,
   setSize: (_value: number) => {},
   order: true,
-  sortKey: '',
-  setSortDetails: (_order: boolean, _sortKey: string) => {}
+  sortKey: "",
+  setSortDetails: (_order: boolean, _sortKey: string) => {},
 });
-
-export const usePermissionActions = () => React.useContext(PermissionActionsContext);
+export const usePermissionActions = () =>
+  React.useContext(PermissionActionsContext);

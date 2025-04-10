@@ -1,15 +1,13 @@
+import React from "react";
 import { api } from "@/api";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { updateUserSchema } from "@/types/validations/user.validation";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React from "react";
 import { toast } from "sonner";
-import { SafeParseReturnType } from "zod";
 import { UserActionsContext } from "./data-table/action-context";
 import { getUserColumns } from "./data-table/columns";
 import { DataTable } from "./data-table/data-table";
-import { useUserManager } from "./hooks/useUserManager";
 import { useUserCreateSheet } from "./modals/UserCreateSheet";
 import { useUserUpdateSheet } from "./modals/UserUpdateSheet";
 import ContentSection from "@/components/Common/ContentSection";
@@ -17,8 +15,8 @@ import { User } from "@/types/user-management";
 import { useUserDeleteDialog } from "./modals/UserDeleteDialog";
 import { useActivateUserDialog } from "./modals/UserActivateDialog";
 import { useDeactivateUserDialog } from "./modals/UserDeactivateDialog";
-import { createSearchFilterExpression } from "@/lib/object.util";
-import { USER_FILTER_ATTRIBUTES } from "@/constants/user.filter-fields";
+import { useUserStore } from "@/hooks/stores/useUserStore";
+import { ServerResponse } from "@/types";
 
 export default function Users() {
   const { setRoutes } = useBreadcrumb();
@@ -29,7 +27,7 @@ export default function Users() {
     ]);
   }, []);
 
-  const userManager = useUserManager();
+  const userStore = useUserStore();
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -69,21 +67,14 @@ export default function Users() {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.user.findPaginated(
-        debouncedPage,
-        debouncedSize,
-        `${debouncedSortDetails.sortKey}:${
+      api.admin.user.findPaginated({
+        page: debouncedPage.toString(),
+        size: debouncedSize.toString(),
+        sort: `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
-        debouncedSearchTerm
-          ? createSearchFilterExpression(
-              USER_FILTER_ATTRIBUTES,
-              "||$cont||",
-              debouncedSearchTerm,
-              ";"
-            )
-          : ""
-      ),
+        search: debouncedSearchTerm,
+      }),
   });
 
   const users = React.useMemo(() => {
@@ -92,11 +83,11 @@ export default function Users() {
   }, [usersResponse]);
 
   const { mutate: createUser, isPending: isCreationPending } = useMutation({
-    mutationFn: (user: Partial<User>) => api.user.create(user),
+    mutationFn: (user: Partial<User>) => api.admin.user.create(user),
     onSuccess: () => {
       toast("User Created Successfully");
       refetchUsers();
-      userManager.reset();
+      userStore.reset();
       closeCreateUserSheet();
     },
     onError: (error) => {
@@ -106,11 +97,11 @@ export default function Users() {
 
   const { mutate: updateUser, isPending: isUpdatePending } = useMutation({
     mutationFn: (data: { id?: string; user: Partial<User> }) =>
-      api.user.update(data.id, data.user),
-    onSuccess: () => {
-      toast("User Updated Successfully");
+      api.admin.user.update(data.id, data.user),
+    onSuccess: (response: ServerResponse<User>) => {
+      toast(response.message);
       refetchUsers();
-      userManager.reset();
+      userStore.reset();
       closeUpdateUserSheet();
     },
     onError: (error) => {
@@ -119,70 +110,56 @@ export default function Users() {
   });
 
   const { mutate: deleteUser, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: string) => api.user.remove(id),
-    onSuccess: () => {
+    mutationFn: (id?: string) => api.admin.user.remove(id),
+    onSuccess: (response: ServerResponse<User>) => {
+      toast(response.message);
       refetchUsers();
-      toast("User Deleted Successfully");
     },
     onError: (error) => toast(error.message),
   });
 
   const { mutate: activateUser, isPending: isActivationPending } = useMutation({
-    mutationFn: (id?: string) => api.user.activate(id),
-    onSuccess: () => {
+    mutationFn: (id?: string) => api.admin.user.activate(id),
+    onSuccess: (response: ServerResponse<User>) => {
+      toast(response.message);
       refetchUsers();
-      toast("User Activated Successfully");
     },
     onError: (error) => toast(error.message),
   });
 
   const { mutate: deactivateUser, isPending: isDeactivationPending } =
     useMutation({
-      mutationFn: (id?: string) => api.user.deactivate(id),
-      onSuccess: () => {
+      mutationFn: (id?: string) => api.admin.user.deactivate(id),
+      onSuccess: (response: ServerResponse<User>) => {
         refetchUsers();
-        toast("User Deactivated Successfully");
+        toast(response.message);
       },
       onError: (error) => toast(error.message),
     });
 
-  const handleValidation = (result: SafeParseReturnType<unknown, unknown>) => {
-    const errorMessage = Object.values(
-      result?.error?.flatten().fieldErrors ?? {}
-    )
-      .flat()
-      .map((error) => `<li> . ${error}</li>`)
-      .join("");
-    toast("⛔ Validation Errors", {
-      description: <ul dangerouslySetInnerHTML={{ __html: errorMessage }} />,
-      position: "top-center",
-    });
-  };
-
   const handleCreateSubmit = () => {
-    const data = userManager.getUser();
+    const data = userStore.getUser();
     const result = updateUserSchema.safeParse({
       ...data,
-      confirmPassword: userManager.confirmPassword,
+      confirmPassword: userStore.confirmPassword,
     });
     if (!result.success) {
-      handleValidation(result);
+      userStore.set("errors", result.error.flatten().fieldErrors);
     } else {
       createUser(data);
     }
   };
 
   const handleUpdateSubmit = () => {
-    const data = userManager.getUser();
-    console.log(data);
+    const data = userStore.getUser();
     const result = updateUserSchema.safeParse({
       ...data,
-      confirmPassword: userManager.confirmPassword,
+      confirmPassword: userStore.confirmPassword,
     });
     if (!result.success) {
-      handleValidation(result);
+      userStore.set("errors", result.error.flatten().fieldErrors);
     } else {
-      updateUser({ id: userManager.id, user: data });
+      updateUser({ id: userStore.id, user: data });
     }
   };
 
@@ -190,34 +167,34 @@ export default function Users() {
     useUserCreateSheet({
       createUser: handleCreateSubmit,
       isCreatePending: isCreationPending,
-      resetUser: () => userManager.reset(),
+      resetUser: () => userStore.reset(),
     });
 
   const { updateUserSheet, openUpdateUserSheet, closeUpdateUserSheet } =
     useUserUpdateSheet({
       updateUser: handleUpdateSubmit,
       isUpdatePending: isUpdatePending,
-      resetUser: () => userManager.reset(),
+      resetUser: () => userStore.reset(),
     });
 
   const { deleteUserDialog, openDeleteUserDialog } = useUserDeleteDialog({
-    deleteUser: () => deleteUser(userManager?.id),
+    deleteUser: () => deleteUser(userStore?.id),
     isDeletePending: isDeletionPending,
   });
 
   const { activateUserDialog, openActivateUserDialog } = useActivateUserDialog({
-    userFullname: `${userManager.firstName} - ${userManager.lastName}`,
-    activateUser: () => activateUser(userManager.id),
+    userFullname: `${userStore.firstName} - ${userStore.lastName}`,
+    activateUser: () => activateUser(userStore.id),
     isActivationPending,
-    resetUser: () => userManager.reset(),
+    resetUser: () => userStore.reset(),
   });
 
   const { deactivateUserDialog, openDeactivateUserDialog } =
     useDeactivateUserDialog({
-      userFullname: `${userManager.firstName} - ${userManager.lastName}`,
-      deactivateUser: () => deactivateUser(userManager.id),
+      userFullname: `${userStore.firstName} - ${userStore.lastName}`,
+      deactivateUser: () => deactivateUser(userStore.id),
       isDeactivationPending,
-      resetUser: () => userManager.reset(),
+      resetUser: () => userStore.reset(),
     });
 
   const context = {
@@ -251,10 +228,6 @@ export default function Users() {
         desc="View, manage, and customize user accounts to streamline access and ensure security."
         className="w-full"
       >
-        {/*
-         */}
-        {/*
-        {duplicateUserDialog} */}
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"

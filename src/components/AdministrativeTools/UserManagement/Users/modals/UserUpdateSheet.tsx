@@ -49,6 +49,7 @@ export const useUserUpdateSheet = ({
           <Button
             variant={"secondary"}
             onClick={() => {
+              resetUser?.();
               closeUpdateUserSheet();
             }}
           >

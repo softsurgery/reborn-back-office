@@ -19,28 +19,23 @@ export default function UserManagement({
     {
       title: "Users",
       icon: <Users size={18} />,
-      href: "/users-management/users",
+      href: "/user-management/users",
     },
     {
       title: "Roles",
       icon: <PackageCheck size={18} />,
-      href: "/users-management/roles",
+      href: "/user-management/roles",
     },
     {
       title: "Permissions",
       icon: <Lock size={18} />,
-      href: "/users-management/permissions",
+      href: "/user-management/permissions",
     },
   ];
 
   return (
-    <div
-      className={cn(
-        "flex-1 flex flex-col overflow-hidden m-5 lg:mx-10",
-        className
-      )}
-    >
-      <div className="space-y-0.5 py-5 sm:py-0">
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <div className="space-y-0.5 py-2 sm:py-0">
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           User Management
         </h1>
@@ -49,7 +44,7 @@ export default function UserManagement({
         </p>
       </div>
       <Separator className="my-4 lg:my-6" />
-      <div className="flex-1 flex flex-col overflow-hidden md:space-y-2 lg:flex-row lg:space-x-12 ">
+      <div className="flex-1 flex flex-col overflow-hidden 2xl:flex-row gap-6">
         <aside className="flex-1 mb-2">
           <SidebarNav items={sidebarNavItems} />
         </aside>
