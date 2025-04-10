@@ -993,10 +993,12 @@
   resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.21.2.tgz#dd57595a1773652bb6fb437e90a5f5386a49fd7e"
   integrity sha512-uvXk/U4cBiFMxt+p9/G7yUWI/UbHYbyghLCjlpWZ3mLeIZiUBSKcUnw9UnKkdRz7Z/N4UBuFLWQdJCjUe7HjvA==
 
-"@types/bcrypt@^10.0.28-alpha":
-  version "10.0.28-alpha"
-  resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-10.0.28-alpha.tgz#a735265642c6ae3b0e62765ea8822d7c758aff11"
-  integrity sha512-ScqYtJOHJrSEvaanJJUkv4hwOryjoJJUJrAsLK4UH7A2mElqEmRlVW4LMajRSTPif8+c25oz1fMmfLLEkRFBzA==
+"@types/bcrypt@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-5.0.2.tgz#22fddc11945ea4fbc3655b3e8b8847cc9f811477"
+  integrity sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==
+  dependencies:
+    "@types/node" "*"
 
 "@types/body-parser@*":
   version "1.19.5"
