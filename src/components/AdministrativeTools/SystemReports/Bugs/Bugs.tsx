@@ -10,8 +10,6 @@ import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useBugManager } from "../../../../hooks/stores/useBugManager";
 import { useBugDeleteDialog } from "./modals/BugDeleteDialog";
 import { toast } from "sonner";
-import { BUG_FILTER_FIELDS } from "@/constants/bug.filter-fields";
-import { createSearchFilterExpression } from "@/lib/object.util";
 
 export default function Bugs() {
   const { setRoutes } = useBreadcrumb();
@@ -67,14 +65,7 @@ export default function Bugs() {
         `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
-        debouncedSearchTerm
-          ? createSearchFilterExpression(
-              BUG_FILTER_FIELDS,
-              "||$cont||",
-              debouncedSearchTerm,
-              ";"
-            )
-          : ""
+        
       ),
   });
 

@@ -168,7 +168,7 @@ const data = {
         },
         {
           title: "Bugs",
-          url: "/system-repoorts/bugs",
+          url: "/system-reports/bugs",
           icon: Bug,
         },
         {
