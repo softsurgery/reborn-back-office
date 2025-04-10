@@ -7,35 +7,6 @@ import { Bug } from "@/types/bug";
 export const getBugColumns = (): ColumnDef<Bug>[] => {
   return [
     {
-      id: "select",
-      header: ({ table }) => (
-        <div className="w-10 flex justify-center">
-          <Checkbox
-            className="w-4 h-4"
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="w-10 flex justify-center">
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        </div>
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
       accessorKey: "title",
       header: ({ column }) => (
         <DataTableColumnHeader

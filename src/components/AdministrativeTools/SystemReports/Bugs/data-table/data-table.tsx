@@ -25,7 +25,6 @@ import {
 import { PackageOpen } from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 import { Spinner } from "@/components/Common/Spinner";
-import { BugsTableActionBar } from "./BugsTableActionBar"; 
 import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
@@ -145,7 +144,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-      <BugsTableActionBar table={table} /> 
     </div>
   );
 }
