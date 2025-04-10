@@ -10,7 +10,6 @@ import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useFeedbackManager } from "./hooks/useFeedbackManager";
 import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
 import { toast } from "sonner";
-import { FEEDBACK_FILTER_FIELDS } from "@/constants/feedback.filter-fields";
 import { createSearchFilterExpression } from "@/lib/object.util";
 
 export default function Feedbacks() {
