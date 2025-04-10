@@ -43,6 +43,7 @@ const container = {
   PermissionService: permissionService,
   FeedbackService: feedbackService,
   BugService: bugService,
+  DeviceInfoService: deviceInfoService,
 };
 
 export default container;

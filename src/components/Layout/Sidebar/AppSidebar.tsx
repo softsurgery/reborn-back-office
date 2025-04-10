@@ -71,7 +71,7 @@ const data = {
         },
         {
           title: "DeviceInfo",
-          url: "/system-repoorts/deviceInfos",
+          url: "/system-reports/deviceInfos",
           icon: Tablet,
         },
       ],
