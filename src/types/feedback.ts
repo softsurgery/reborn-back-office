@@ -1,5 +1,5 @@
 import { DeviceInfo } from "./device-info";
-import { DatabaseEntity } from "./utilities/database-entity";
+import { DatabaseEntity } from "./utils/database-entity";
 
 export type FeedbackCategory = "FeatureRequest" | "GeneralFeedback" | "Other";
 
