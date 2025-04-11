@@ -10,14 +10,29 @@ import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useBugManager } from "../../../../hooks/stores/useBugManager";
 import { useBugDeleteDialog } from "./modals/BugDeleteDialog";
 import { toast } from "sonner";
+import { useIntro } from "@/context/IntroContext";
+import { cn } from "@/lib/utils";
 
-export default function Bugs() {
-  const { setRoutes } = useBreadcrumb();
+interface BugsProps {
+  className?: string;
+}
+
+export default function Bugs({className}: BugsProps) {
+  const { setRoutes, clearRoutes } = useBreadcrumb();
+  const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Feedbacks Management" },
-      { title: "Bugs", href: "/feedbacks-management/bugs" },
+      { title: "System Reports", href: "/system-reports" },
+      { title: "Bug", href: "/system-reports/bugs" },
     ]);
+    setIntro?.(
+      "Bugs",
+      "Manage device information related to user-reported bugs to streamline issue diagnosis and resolution."
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
   }, []);
 
   const bugManager = useBugManager();
@@ -64,8 +79,7 @@ export default function Bugs() {
         debouncedSize,
         `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
-        }`,
-        
+        }`
       ),
   });
 
@@ -113,12 +127,8 @@ export default function Bugs() {
 
   const isPending = isBugsPending || paging || resizing || searching || sorting;
   return (
-    <BugActionsContext.Provider value={context}>
-      <ContentSection
-        title="Bugs"
-        desc="Manage user bugs to improve the platform and overall experience."
-        className="w-full"
-      >
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <BugActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
@@ -126,8 +136,8 @@ export default function Bugs() {
           data={bugs}
           isPending={isPending}
         />
-      </ContentSection>
-      {deleteBugDialog}
-    </BugActionsContext.Provider>
+        {deleteBugDialog}
+      </BugActionsContext.Provider>
+    </div>
   );
 }

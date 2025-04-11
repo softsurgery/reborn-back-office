@@ -10,15 +10,30 @@ import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useFeedbackManager } from "./hooks/useFeedbackManager";
 import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
 import { toast } from "sonner";
-import { createSearchFilterExpression } from "@/lib/object.util";
 
-export default function Feedbacks() {
-  const { setRoutes } = useBreadcrumb();
+import { useIntro } from "@/context/IntroContext";
+import { cn } from "@/lib/utils";
+
+interface BugsProps {
+  className?: string;
+}
+
+export default function Feedbacks({ className }: BugsProps) {
+  const { setIntro, clearIntro } = useIntro();
+  const { setRoutes, clearRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
       { title: "Feedbacks Management" },
       { title: "Feedbacks", href: "/feedbacks-management/Feedbacks" },
     ]);
+    setIntro?.(
+      "Feedbacks",
+      "Manage user feedback to improve the platform and overall experience."
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
   }, []);
 
   const feedbackManager = useFeedbackManager();
@@ -65,15 +80,7 @@ export default function Feedbacks() {
         debouncedSize,
         `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
-        }`,
-        debouncedSearchTerm
-          ? createSearchFilterExpression(
-              FEEDBACK_FILTER_FIELDS,
-              "||$cont||",
-              debouncedSearchTerm,
-              ";"
-            )
-          : ""
+        }`
       ),
   });
 
@@ -125,12 +132,8 @@ export default function Feedbacks() {
   const isPending =
     isFeedbacksPending || paging || resizing || searching || sorting;
   return (
-    <FeedbackActionsContext.Provider value={context}>
-      <ContentSection
-        title="Feedbacks"
-        desc="Manage user feedback to improve the platform and overall experience."
-        className="w-full"
-      >
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <FeedbackActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
@@ -138,8 +141,8 @@ export default function Feedbacks() {
           data={feedbacks}
           isPending={isPending}
         />
-      </ContentSection>
-      {deleteFeedbackDialog}
-    </FeedbackActionsContext.Provider>
+        {deleteFeedbackDialog}
+      </FeedbackActionsContext.Provider>
+    </div>
   );
 }

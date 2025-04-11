@@ -11,18 +11,33 @@ import { useRoleUpdateSheet } from "./modals/RoleUpdateSheet";
 import { useRoleDeleteDialog } from "./modals/RoleDeleteDialog";
 import { useRoleDuplicateDialog } from "./modals/RoleDuplicateDialog";
 import { toast } from "sonner";
-import { Permission, Role } from "@/types/user-management";
+import { Role } from "@/types/user-management";
 import { useRoleStore } from "@/hooks/stores/useRoleStore";
 import { useRoleCreateSheet } from "./modals/RoleCreateSheet";
 import { ServerResponse, RolePermission } from "@/types";
+import { cn } from "@/lib/utils";
+import { useIntro } from "@/context/IntroContext";
 
-export default function Roles() {
-  const { setRoutes } = useBreadcrumb();
+interface RolesProps {
+  className?: string;
+}
+
+export default function Roles({ className }: RolesProps) {
+  const { setRoutes, clearRoutes } = useBreadcrumb();
+  const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
       { title: "User Management", href: "/user-management" },
       { title: "Role", href: "/user-management/roles" },
     ]);
+    setIntro?.(
+      "Roles",
+      "Define and assign roles to streamline permissions and access control for users."
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
   }, []);
 
   const roleStore = useRoleStore();
@@ -154,11 +169,13 @@ export default function Roles() {
       role: {
         label: data.label,
         description: data.description,
-        permissions: roleStore.permissions?.map((permission: RolePermission) => {
-          return {
-            permissionId: permission?.id,
-          } as RolePermission;
-        }),
+        permissions: roleStore.permissions?.map(
+          (permission: RolePermission) => {
+            return {
+              permissionId: permission?.id,
+            } as RolePermission;
+          }
+        ),
       },
     });
   };
@@ -218,12 +235,8 @@ export default function Roles() {
   const isPending =
     isRolesPending || paging || resizing || searching || sorting;
   return (
-    <RoleActionsContext.Provider value={context}>
-      <ContentSection
-        title="Roles"
-        desc="Define and assign roles to streamline permissions and access control for users."
-        className="w-full"
-      >
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <RoleActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
@@ -231,11 +244,11 @@ export default function Roles() {
           data={roles}
           isPending={isPending}
         />
-      </ContentSection>
-      {createRoleSheet}
-      {deleteRoleDialog}
-      {updateRoleSheet}
-      {duplicateRoleDialog}
-    </RoleActionsContext.Provider>
+        {createRoleSheet}
+        {deleteRoleDialog}
+        {updateRoleSheet}
+        {duplicateRoleDialog}
+      </RoleActionsContext.Provider>
+    </div>
   );
 }

@@ -10,6 +10,7 @@ import { DeviceInfoActionsContext } from "./data-table/action-context";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { cn } from "@/lib/utils";
 import { createSearchFilterExpression } from "@/lib/object.util";
+import { useIntro } from "@/context/IntroContext";
 
 interface DeviceInfosProps {
   className?: string;
@@ -18,13 +19,21 @@ interface DeviceInfosProps {
 export default function DeviceInfos({ className }: DeviceInfosProps) {
   //next-router
   const router = useRouter();
-
-  const { setRoutes } = useBreadcrumb();
+  const {setIntro, clearIntro } = useIntro();
+  const { setRoutes, clearRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
       { title: "Feedbacks Management" },
       { title: "DeviceInfos", href: "/feedbacks-management/deviceInfos" },
     ]);
+    setIntro?.(
+      "DeviceInfos",
+      "Manage device information associated with bugs and feedback to enhance debugging and platform optimization."
+    )
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    }
   }, []);
 
   const [page, setPage] = React.useState(1);
@@ -70,7 +79,7 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
         debouncedSize,
         `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
-        }`,
+        }`
       ),
   });
 
@@ -95,12 +104,8 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
   const isPending =
     isDeviceInfosPending || paging || resizing || searching || sorting;
   return (
-    <DeviceInfoActionsContext.Provider value={context}>
-      <ContentSection
-        title="DeviceInfos"
-        desc="DeviceInfos"
-        className={cn("w-full", className)}
-      >
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <DeviceInfoActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
@@ -108,7 +113,7 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
           data={deviceInfos}
           isPending={isPending}
         />
-      </ContentSection>
-    </DeviceInfoActionsContext.Provider>
+      </DeviceInfoActionsContext.Provider>
+    </div>
   );
 }

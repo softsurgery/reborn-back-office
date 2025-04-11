@@ -10,21 +10,35 @@ import { getUserColumns } from "./data-table/columns";
 import { DataTable } from "./data-table/data-table";
 import { useUserCreateSheet } from "./modals/UserCreateSheet";
 import { useUserUpdateSheet } from "./modals/UserUpdateSheet";
-import ContentSection from "@/components/Common/ContentSection";
 import { User } from "@/types/user-management";
 import { useUserDeleteDialog } from "./modals/UserDeleteDialog";
 import { useActivateUserDialog } from "./modals/UserActivateDialog";
 import { useDeactivateUserDialog } from "./modals/UserDeactivateDialog";
 import { useUserStore } from "@/hooks/stores/useUserStore";
 import { ServerResponse } from "@/types";
+import { cn } from "@/lib/utils";
+import { useIntro } from "@/context/IntroContext";
 
-export default function Users() {
-  const { setRoutes } = useBreadcrumb();
+interface UsersProps {
+  className?: string;
+}
+
+export default function Users({ className }: UsersProps) {
+  const { setRoutes, clearRoutes } = useBreadcrumb();
+  const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
       { title: "User Management" },
       { title: "Users", href: "/users-management/users" },
     ]);
+    setIntro?.(
+      "Users",
+      "View, manage, and customize user accounts to streamline access and ensure security."
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
   }, []);
 
   const userStore = useUserStore();
@@ -222,12 +236,8 @@ export default function Users() {
     isUsersPending || paging || resizing || searching || sorting;
 
   return (
-    <UserActionsContext.Provider value={context}>
-      <ContentSection
-        title="Users"
-        desc="View, manage, and customize user accounts to streamline access and ensure security."
-        className="w-full"
-      >
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <UserActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
@@ -235,12 +245,12 @@ export default function Users() {
           data={users}
           isPending={isPending}
         />
-      </ContentSection>
-      {createUserSheet}
-      {updateUserSheet}
-      {deleteUserDialog}
-      {activateUserDialog}
-      {deactivateUserDialog}
-    </UserActionsContext.Provider>
+        {createUserSheet}
+        {updateUserSheet}
+        {deleteUserDialog}
+        {activateUserDialog}
+        {deactivateUserDialog}
+      </UserActionsContext.Provider>
+    </div>
   );
 }
