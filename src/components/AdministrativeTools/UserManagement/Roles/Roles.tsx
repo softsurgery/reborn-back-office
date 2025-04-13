@@ -7,26 +7,40 @@ import { RoleActionsContext } from "./data-table/action-context";
 import { DataTable } from "./data-table/data-table";
 import { getRoleColumns } from "./data-table/columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useRoleCreateSheet } from "./modals/RoleCreateSheet";
-import { useRoleManager } from "./hooks/useRoleManager";
 import { useRoleUpdateSheet } from "./modals/RoleUpdateSheet";
 import { useRoleDeleteDialog } from "./modals/RoleDeleteDialog";
 import { useRoleDuplicateDialog } from "./modals/RoleDuplicateDialog";
 import { toast } from "sonner";
-import { CreateRoleDto, UpdateRoleDto } from "@/types/user-management";
-import { ROLE_FILTER_ATTRIBUTES } from "@/constants/role.filter-fields";
-import { createSearchFilterExpression } from "@/lib/object.util";
+import { Role } from "@/types/user-management";
+import { useRoleStore } from "@/hooks/stores/useRoleStore";
+import { useRoleCreateSheet } from "./modals/RoleCreateSheet";
+import { ServerResponse, RolePermission } from "@/types";
+import { cn } from "@/lib/utils";
+import { useIntro } from "@/context/IntroContext";
 
-export default function Roles() {
-  const { setRoutes } = useBreadcrumb();
+interface RolesProps {
+  className?: string;
+}
+
+export default function Roles({ className }: RolesProps) {
+  const { setRoutes, clearRoutes } = useBreadcrumb();
+  const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "User Management" },
-      { title: "Roles", href: "/users-management/roles" },
+      { title: "User Management", href: "/user-management" },
+      { title: "Role", href: "/user-management/roles" },
     ]);
+    setIntro?.(
+      "Roles",
+      "Define and assign roles to streamline permissions and access control for users."
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
   }, []);
 
-  const roleManager = useRoleManager();
+  const roleStore = useRoleStore();
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
@@ -65,21 +79,14 @@ export default function Roles() {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.role.findPaginated(
-        debouncedPage,
-        debouncedSize,
-        `${debouncedSortDetails.sortKey}:${
+      api.admin.role.findPaginated({
+        page: debouncedPage.toString(),
+        size: debouncedSize.toString(),
+        sort: `${debouncedSortDetails.sortKey}:${
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
-        debouncedSearchTerm
-          ? createSearchFilterExpression(
-              ROLE_FILTER_ATTRIBUTES,
-              "||$cont||",
-              debouncedSearchTerm,
-              ";"
-            )
-          : ""
-      ),
+        search: debouncedSearchTerm,
+      }),
   });
 
   const roles = React.useMemo(() => {
@@ -88,11 +95,11 @@ export default function Roles() {
   }, [rolesResponse]);
 
   const { mutate: createRole, isPending: isCreationPending } = useMutation({
-    mutationFn: (role: CreateRoleDto) => api.role.create(role),
-    onSuccess: () => {
-      toast("Role Created Successfully");
+    mutationFn: (role: Partial<Role>) => api.admin.role.create(role),
+    onSuccess: (response: ServerResponse<Role>) => {
+      toast(response.message);
       refetchRoles();
-      roleManager.reset();
+      roleStore.reset();
       closeCreateRoleSheet();
     },
     onError: (error) => {
@@ -101,12 +108,12 @@ export default function Roles() {
   });
 
   const { mutate: updateRole, isPending: isUpdatePending } = useMutation({
-    mutationFn: (data: { id: number; role: UpdateRoleDto }) =>
-      api.role.update(data.id, data.role),
-    onSuccess: () => {
-      toast("Role Updated Successfully");
+    mutationFn: (data: { id: number; role: Partial<Role> }) =>
+      api.admin.role.update(data.id, data.role),
+    onSuccess: (response: ServerResponse<Role>) => {
+      toast(response.message);
       refetchRoles();
-      roleManager.reset();
+      roleStore.reset();
       closeUpdateRoleSheet();
     },
     onError: (error) => {
@@ -115,11 +122,11 @@ export default function Roles() {
   });
 
   const { mutate: deleteRole, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: number) => api.role.remove(id),
-    onSuccess: () => {
-      toast("Role Deleted Successfully");
+    mutationFn: (id?: number) => api.admin.role.remove(id),
+    onSuccess: (response: ServerResponse<Role>) => {
+      toast(response.message);
       refetchRoles();
-      roleManager.reset();
+      roleStore.reset();
       closeDeleteRoleDialog();
     },
     onError: (error) => {
@@ -129,11 +136,11 @@ export default function Roles() {
 
   const { mutate: duplicateRole, isPending: isDuplicationPending } =
     useMutation({
-      mutationFn: (id?: number) => api.role.duplicate(id),
-      onSuccess: () => {
-        toast("Role Duplicated Successfully");
+      mutationFn: (id?: number) => api.admin.role.duplicate(id),
+      onSuccess: (response: ServerResponse<Role>) => {
+        toast(response.message);
         refetchRoles();
-        roleManager.reset();
+        roleStore.reset();
         closeDuplicateRoleDialog();
       },
       onError: (error) => {
@@ -142,27 +149,33 @@ export default function Roles() {
     });
 
   const handleCreateSubmit = () => {
-    const data = roleManager.getRole();
-    const payload: CreateRoleDto = {
+    const data = roleStore.getRole();
+    const payload: Partial<Role> = {
       label: data.label,
       description: data.description,
-      permissionIds: roleManager.permissions
-        ?.map((permission) => permission?.id)
-        .filter((id): id is number => id !== undefined),
+      permissions: roleStore.permissions?.map((permission: RolePermission) => {
+        return {
+          permissionId: permission?.id,
+        } as RolePermission;
+      }),
     };
     createRole(payload);
   };
 
   const handleUpdateSubmit = () => {
-    const data = roleManager.getRole();
+    const data = roleStore.getRole();
     updateRole({
       id: data.id!,
       role: {
         label: data.label,
         description: data.description,
-        permissionIds: roleManager.permissions
-          ?.map((permission) => permission.id)
-          .filter((id): id is number => id !== undefined),
+        permissions: roleStore.permissions?.map(
+          (permission: RolePermission) => {
+            return {
+              permissionId: permission?.id,
+            } as RolePermission;
+          }
+        ),
       },
     });
   };
@@ -171,22 +184,22 @@ export default function Roles() {
     useRoleCreateSheet({
       createRole: handleCreateSubmit,
       isCreatePending: isCreationPending,
-      resetRole: () => roleManager.reset(),
+      resetRole: () => roleStore.reset(),
     });
 
   const { updateRoleSheet, openUpdateRoleSheet, closeUpdateRoleSheet } =
     useRoleUpdateSheet({
       updateRole: handleUpdateSubmit,
       isUpdatePending: isUpdatePending,
-      resetRole: () => roleManager.reset(),
+      resetRole: () => roleStore.reset(),
     });
 
   const { deleteRoleDialog, openDeleteRoleDialog, closeDeleteRoleDialog } =
     useRoleDeleteDialog({
-      roleLabel: roleManager.label,
-      deleteRole: () => deleteRole(roleManager.id),
+      roleLabel: roleStore.label,
+      deleteRole: () => deleteRole(roleStore.id),
       isDeletionPending,
-      resetRole: () => roleManager.reset(),
+      resetRole: () => roleStore.reset(),
     });
 
   const {
@@ -194,10 +207,10 @@ export default function Roles() {
     openDuplicateRoleDialog,
     closeDuplicateRoleDialog,
   } = useRoleDuplicateDialog({
-    roleLabel: roleManager.label,
-    duplicateRole: () => duplicateRole(roleManager.id),
+    roleLabel: roleStore.label,
+    duplicateRole: () => duplicateRole(roleStore.id),
     isDuplicationPending,
-    resetRole: () => roleManager.reset(),
+    resetRole: () => roleStore.reset(),
   });
 
   const context = {
@@ -222,12 +235,8 @@ export default function Roles() {
   const isPending =
     isRolesPending || paging || resizing || searching || sorting;
   return (
-    <RoleActionsContext.Provider value={context}>
-      <ContentSection
-        title="Roles"
-        desc="Define and assign roles to streamline permissions and access control for users."
-        className="w-full"
-      >
+    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+      <RoleActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
@@ -235,11 +244,11 @@ export default function Roles() {
           data={roles}
           isPending={isPending}
         />
-      </ContentSection>
-      {createRoleSheet}
-      {deleteRoleDialog}
-      {updateRoleSheet}
-      {duplicateRoleDialog}
-    </RoleActionsContext.Provider>
+        {createRoleSheet}
+        {deleteRoleDialog}
+        {updateRoleSheet}
+        {duplicateRoleDialog}
+      </RoleActionsContext.Provider>
+    </div>
   );
 }

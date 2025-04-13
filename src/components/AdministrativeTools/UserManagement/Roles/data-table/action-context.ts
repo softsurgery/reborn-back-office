@@ -1,19 +1,21 @@
 import React from "react";
 
-export const RoleActionsContext = React.createContext({
-  openCreateRoleSheet: () => {},
-  openUpdateRoleSheet: () => {},
-  openDeleteRoleDialog: () => {},
-  openDuplicateRoleDialog: () => {},
-  searchTerm: "",
-  setSearchTerm: (_value: string) => {},
-  page: 1,
-  totalPageCount: 0,
-  setPage: (_value: number) => {},
-  size: 1,
-  setSize: (_value: number) => {},
-  order: true,
-  sortKey: "",
-  setSortDetails: (_order: boolean, _sortKey: string) => {},
-});
+interface RoleActionsContextProps {
+    openCreateRoleSheet: () => void;
+    openUpdateRoleSheet: () => void;
+    openDeleteRoleDialog: () => void;
+    openDuplicateRoleDialog: () => void;
+    searchTerm: string;
+    setSearchTerm: (value: string) => void;
+    page: number;
+    totalPageCount: number;
+    setPage: (value: number) => void;
+    size: number;
+    setSize: (value: number) => void;
+    order: boolean;
+    sortKey: string;
+    setSortDetails: (order: boolean, sortKey: string) => void;
+}
+
+export const RoleActionsContext = React.createContext<Partial<RoleActionsContextProps>>({});
 export const useRoleActions =  () => React.useContext(RoleActionsContext)

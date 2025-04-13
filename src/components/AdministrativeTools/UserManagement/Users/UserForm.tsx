@@ -2,7 +2,6 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { useUserManager } from "./hooks/useUserManager";
 import {
   Select,
   SelectContent,
@@ -16,6 +15,7 @@ import { Role } from "@/types/user-management";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useUserStore } from "@/hooks/stores/useUserStore";
 
 interface UserFormProps {
   className?: string;
@@ -30,7 +30,7 @@ export const UserForm: React.FC<UserFormProps> = ({
   forceShowPasswordInputs = true,
   loading,
 }) => {
-  const userManager = useUserManager();
+  const userStore = useUserStore();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [showPasswordInputs, setShowPasswordInputs] = React.useState(false);
@@ -38,8 +38,8 @@ export const UserForm: React.FC<UserFormProps> = ({
   const handleShowPasswordInputs = (checked: CheckedState) => {
     const value = showPasswordInputs ? undefined : "";
     setShowPasswordInputs(checked as boolean);
-    userManager.set("password", value);
-    userManager.set("confirmPassword", value);
+    userStore.set("password", value);
+    userStore.set("confirmPassword", value);
   };
 
   return (
@@ -47,28 +47,42 @@ export const UserForm: React.FC<UserFormProps> = ({
       {/* General information */}
       <div className="my-2 flex flex-col gap-2">
         <h1 className="text-lg my-2 font-bold">General Information</h1>
-        <div className="flex flex-row gap-2">
-          {/* firstName */}
-          <div className="w-1/2">
-            <Label>Firstname</Label>
-            <div className="mt-1">
-              <Input
-                placeholder="Ex. John"
-                value={userManager.firstName}
-                onChange={(e) => userManager.set("firstName", e.target.value)}
-              />
-            </div>
+        {/* firstName */}
+        <div>
+          <Label>Firstname</Label>
+          <div className="mt-1">
+            <Input
+              placeholder="Ex. John"
+              value={userStore.firstName || undefined}
+              onChange={(e) => {
+                userStore.set("firstName", e.target.value);
+                userStore.resetError("firstName");
+              }}
+            />
+            {userStore.errors.firstName?.[0] && (
+              <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+                {userStore.errors.firstName?.[0]}
+              </span>
+            )}
           </div>
-          {/* lastName */}
-          <div className="w-1/2">
-            <Label>Lastname</Label>
-            <div className="mt-1">
-              <Input
-                placeholder="Ex. Doe"
-                value={userManager.lastName}
-                onChange={(e) => userManager.set("lastName", e.target.value)}
-              />
-            </div>
+        </div>
+        {/* lastName */}
+        <div>
+          <Label>Lastname</Label>
+          <div className="mt-1">
+            <Input
+              placeholder="Ex. Doe"
+              value={userStore.lastName || undefined}
+              onChange={(e) => {
+                userStore.set("lastName", e.target.value);
+                userStore.resetError("lastName");
+              }}
+            />
+            {userStore.errors.lastName?.[0] && (
+              <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+                {userStore.errors.lastName?.[0]}
+              </span>
+            )}
           </div>
         </div>
         {/* email */}
@@ -78,11 +92,19 @@ export const UserForm: React.FC<UserFormProps> = ({
             <Input
               type="email"
               placeholder="Ex. This is awesome!"
-              value={userManager.email}
-              onChange={(e) => userManager.set("email", e.target.value)}
+              value={userStore.email || undefined}
+              onChange={(e) => {
+                userStore.set("email", e.target.value);
+                userStore.resetError("email");
+              }}
               autoComplete="off"
             />
           </div>
+          {userStore.errors.email?.[0] && (
+            <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+              {userStore.errors.email?.[0]}
+            </span>
+          )}
         </div>
         {/* dateOfBirth */}
         <div>
@@ -91,14 +113,20 @@ export const UserForm: React.FC<UserFormProps> = ({
             <DatePicker
               className="w-full"
               value={
-                (userManager?.dateOfBirth &&
-                  new Date(userManager.dateOfBirth)) ||
+                (userStore?.dateOfBirth && new Date(userStore.dateOfBirth)) ||
                 undefined
               }
-              onChange={(value: Date) => {
-                userManager.set("dateOfBirth", new Date(value));
+              onChange={(value: Date | null) => {
+                userStore.set("dateOfBirth", value);
+                userStore.resetError("dateOfBirth");
               }}
+              nullable
             />
+            {userStore.errors.dateOfBirth?.[0] && (
+              <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+                {userStore.errors.dateOfBirth?.[0]}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -111,9 +139,17 @@ export const UserForm: React.FC<UserFormProps> = ({
           <div className="mt-1">
             <Input
               placeholder="Ex. Awesome Administrator"
-              value={userManager.username}
-              onChange={(e) => userManager.set("username", e.target.value)}
+              value={userStore.username || undefined}
+              onChange={(e) => {
+                userStore.set("username", e.target.value);
+                userStore.resetError("username");
+              }}
             />
+            {userStore.errors.username?.[0] && (
+              <span className="text-red-500 leading-3 text-xs mt-1">
+                {userStore.errors.username?.[0]}
+              </span>
+            )}
           </div>
         </div>
         {!forceShowPasswordInputs && (
@@ -130,13 +166,13 @@ export const UserForm: React.FC<UserFormProps> = ({
               >
                 Update User Password
               </label>
-              <p className="text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 Check this option if you want to change{" "}
                 <span className="opacity-70">
-                  {userManager.lastName} {userManager.firstName}
+                  {userStore.lastName} {userStore.firstName}
                 </span>
                 &apos;s password
-              </p>
+              </span>
             </div>
           </div>
         )}
@@ -148,8 +184,11 @@ export const UserForm: React.FC<UserFormProps> = ({
                 <Input
                   type={showPassword ? "text" : "password"}
                   className="pr-10"
-                  value={userManager.password}
-                  onChange={(e) => userManager.set("password", e.target.value)}
+                  value={userStore.password || undefined}
+                  onChange={(e) => {
+                    userStore.set("password", e.target.value);
+                    userStore.resetError("password");
+                  }}
                   autoComplete="new-password"
                 />
                 <Button
@@ -159,6 +198,11 @@ export const UserForm: React.FC<UserFormProps> = ({
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </Button>
+                {userStore.errors.password?.[0] && (
+                  <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+                    {userStore.errors.password?.[0]}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -172,10 +216,11 @@ export const UserForm: React.FC<UserFormProps> = ({
                 <Input
                   type={showConfirmPassword ? "text" : "password"}
                   className="pr-10"
-                  value={userManager.confirmPassword}
-                  onChange={(e) =>
-                    userManager.set("confirmPassword", e.target.value)
-                  }
+                  value={userStore.confirmPassword}
+                  onChange={(e) => {
+                    userStore.set("confirmPassword", e.target.value);
+                    userStore.resetError("confirmPassword");
+                  }}
                   autoComplete="new-password"
                 />
                 <Button
@@ -189,6 +234,11 @@ export const UserForm: React.FC<UserFormProps> = ({
                     <Eye size={18} />
                   )}
                 </Button>
+                {userStore.errors.confirmPassword?.[0] && (
+                  <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+                    {userStore.errors.confirmPassword?.[0]}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -200,9 +250,10 @@ export const UserForm: React.FC<UserFormProps> = ({
           <div className="w-full mt-1">
             <Select
               onValueChange={(value) => {
-                userManager.set("roleId", parseInt(value));
+                userStore.set("roleId", parseInt(value));
+                userStore.resetError("roleId");
               }}
-              value={userManager.roleId?.toString() || ""}
+              value={userStore.roleId?.toString() || ""}
             >
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="Role..." />
@@ -219,6 +270,11 @@ export const UserForm: React.FC<UserFormProps> = ({
                 ))}
               </SelectContent>
             </Select>
+            {userStore.errors.roleId?.[0] && (
+              <span className="text-red-500 leading-0 text-xs mt-1 leading-3">
+                {userStore.errors.roleId?.[0]}
+              </span>
+            )}
           </div>
         </div>
         {/* require password */}
@@ -231,10 +287,10 @@ export const UserForm: React.FC<UserFormProps> = ({
             >
               Require Password Update
             </label>
-            <p className="text-sm text-muted-foreground">
+            <span className="text-sm text-muted-foreground">
               Users will be prompted to update their password on their next
               login.
-            </p>
+            </span>
           </div>
         </div>
       </div>

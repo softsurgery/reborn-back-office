@@ -21,16 +21,23 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
-  const { page, totalPageCount, setPage, size, setSize } = useRoleActions();
-
+  const {
+    page: contextPage,
+    totalPageCount: contextPageCount,
+    setPage,
+    size,
+    setSize,
+  } = useRoleActions();
+  const page = contextPage || 0;
+  const totalPageCount = contextPageCount || 0;
   return (
     <div className="flex items-center justify-between pt-4">
       <div className="flex items-center space-x-2 ">
         <Select
-          value={size.toString()}
+          value={size?.toString()}
           onValueChange={(value) => {
-            setPage(1);
-            setSize(parseInt(value));
+            setPage?.(1);
+            setSize?.(parseInt(value));
           }}
         >
           <SelectTrigger className="h-8 w-[100px] -mt-1">
@@ -54,7 +61,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => setPage(1)}
+            onClick={() => setPage?.(1)}
             disabled={page == 1}
           >
             <DoubleArrowLeftIcon className="h-4 w-4" />
@@ -62,7 +69,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => setPage(page - 1)}
+            onClick={() => setPage?.(page - 1)}
             disabled={page <= 1}
           >
             <ChevronLeftIcon className="h-4 w-4" />
@@ -70,7 +77,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => setPage(page + 1)}
+            onClick={() => setPage?.(page + 1)}
             disabled={page >= totalPageCount}
           >
             <ChevronRightIcon className="h-4 w-4" />
@@ -78,7 +85,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => setPage(totalPageCount)}
+            onClick={() => setPage?.(totalPageCount)}
             disabled={page == totalPageCount}
           >
             <DoubleArrowRightIcon className="h-4 w-4" />

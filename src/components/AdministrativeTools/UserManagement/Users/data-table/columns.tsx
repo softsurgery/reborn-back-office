@@ -4,13 +4,12 @@ import { User } from "@/types/user-management";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { transformDate } from "@/lib/date.lib";
 import { format } from "date-fns";
 
 export const getUserColumns = (): ColumnDef<User>[] => {
   return [
     {
-      accessorKey: "ID",
+      accessorKey: "id",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="ID" attribute="id" />
       ),
@@ -19,7 +18,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "Username",
+      accessorKey: "username",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -34,7 +33,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "E-Mail",
+      accessorKey: "email",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -47,7 +46,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "Firstname",
+      accessorKey: "firstName",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -66,7 +65,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "Lastname",
+      accessorKey: "lastName",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -85,7 +84,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "Date of Birth",
+      accessorKey: "dateOfBirth",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -95,7 +94,8 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       ),
       cell: ({ row }) => (
         <div>
-          {format(row.original.dateOfBirth, 'yyyy-MM-dd') || (
+          {(row.original.dateOfBirth &&
+            format(row.original.dateOfBirth, "yyyy-MM-dd")) || (
             <span className="opacity-70">Not Defined</span>
           )}
         </div>
@@ -104,7 +104,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "Role",
+      accessorKey: "roleId",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -123,7 +123,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "Active",
+      accessorKey: "active",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}

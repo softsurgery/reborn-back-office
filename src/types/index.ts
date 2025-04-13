@@ -4,4 +4,4 @@ export * from "./feedback";
 export * from "./bug";
 
 //utilities
-export * from "./utilities";
+export * from "./utils";

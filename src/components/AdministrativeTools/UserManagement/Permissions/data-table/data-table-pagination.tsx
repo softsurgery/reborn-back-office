@@ -1,22 +1,28 @@
-import { Table } from '@tanstack/react-table';
+import { Table } from "@tanstack/react-table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { usePermissionActions } from './ActionContext';
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import {
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { usePermissionActions } from "./ActionContext";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
-  const { page, totalPageCount, setPage, size, setSize } = usePermissionActions();
+export function DataTablePagination<TData>({
+  table,
+}: DataTablePaginationProps<TData>) {
+  const { page, totalPageCount, setPage, size, setSize } =
+    usePermissionActions();
 
   return (
     <div className="flex items-center justify-between pt-4">
@@ -26,7 +32,8 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
           onValueChange={(value) => {
             setPage(1);
             setSize(parseInt(value));
-          }}>
+          }}
+        >
           <SelectTrigger className="h-8 w-[100px] -mt-1">
             <SelectValue placeholder={table.getState().pagination.pageSize} />
           </SelectTrigger>
@@ -42,35 +49,39 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-         {`${page} of ${totalPageCount} pages`}
+          {`${page} of ${totalPageCount} pages`}
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => setPage(1)}
-            disabled={page == 1}>
+            disabled={page == 1}
+          >
             <DoubleArrowLeftIcon className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
             onClick={() => setPage(page - 1)}
-            disabled={page <= 1}>
+            disabled={page <= 1}
+          >
             <ChevronLeftIcon className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
             onClick={() => setPage(page + 1)}
-            disabled={page >= totalPageCount}>
+            disabled={page >= totalPageCount}
+          >
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => setPage(totalPageCount)}
-            disabled={page == totalPageCount}>
+            disabled={page == totalPageCount}
+          >
             <DoubleArrowRightIcon className="h-4 w-4" />
           </Button>
         </div>

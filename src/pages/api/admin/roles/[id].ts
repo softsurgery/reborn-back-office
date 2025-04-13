@@ -1,3 +1,4 @@
+// pages/api/permission/[id].ts
 import { NextApiRequest, NextApiResponse } from "next";
 import container from "@/lib/container";
 
@@ -18,23 +19,32 @@ export default async function handler(
       case "GET": {
         const role = await roleService.getRoleById(Number(id));
         if (!role) {
-          return res.status(404).json({ error: "Role not found" });
+          return res.status(404).json({ error: "Role not found", code: 404 });
         }
         return res.status(200).json(role);
       }
       case "PUT": {
-        const { permissionIds, ...payload } = req.body;
-        const updatedRole = await roleService.updateRole(Number(id), payload, permissionIds);
-        return res.status(200).json(updatedRole);
+        const updatedRole = await roleService.updateRole(Number(id), req.body);
+        return res.status(200).json({
+          message: "Role Updated Successfuly",
+          code: 200,
+          data: updatedRole,
+        });
       }
       case "DELETE": {
-        await roleService.deleteRole(Number(id));
-        return res.status(204).end();
+        const role = await roleService.deleteRole(Number(id));
+        return res.status(200).json({
+          message: "Role Deleted Successfully",
+          code: 200,
+          data: role,
+        });
       }
       default:
-        return res.status(405).json({ error: "Method Not Allowed" });
+        return res.status(405).json({ error: "Method Not Allowed", code: 405 });
     }
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error", details: error });
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", code: 500, details: error });
   }
 }

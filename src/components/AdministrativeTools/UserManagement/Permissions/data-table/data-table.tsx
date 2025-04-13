@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,21 +11,21 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState
-} from '@tanstack/react-table';
-import React from 'react';
-import { DataTableToolbar } from './data-table-toolbar';
+  VisibilityState,
+} from "@tanstack/react-table";
+import React from "react";
+import { DataTableToolbar } from "./data-table-toolbar";
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import { PackageOpen } from 'lucide-react';
-import { DataTablePagination } from './data-table-pagination';
-import { Spinner } from '@/components/Common/Spinner';
+  TableRow,
+} from "@/components/ui/table";
+import { PackageOpen } from "lucide-react";
+import { DataTablePagination } from "./data-table-pagination";
+import { Spinner } from "@/components/Common/Spinner";
 interface DataTableProps<TData, TValue> {
   className?: string;
   containerClassName?: string;
@@ -39,11 +39,14 @@ export function DataTable<TData, TValue>({
   containerClassName,
   columns,
   data,
-  isPending
+  isPending,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
@@ -53,7 +56,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnVisibility,
       rowSelection,
-      columnFilters
+      columnFilters,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -68,15 +71,15 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     initialState: {
       pagination: {
-        pageSize: 50
-      }
-    }
+        pageSize: 50,
+      },
+    },
   });
 
   return (
-    <div className={cn(className, 'space-y-6')}>
+    <div className={cn(className, "space-y-6")}>
       <DataTableToolbar table={table} />
-      <div className={cn('rounded-md border', containerClassName)}>
+      <div className={cn("rounded-md border", containerClassName)}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -86,7 +89,10 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -96,17 +102,26 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length && !isPending ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell className="h-11" key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : !isPending ? (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   <div className="flex items-center justify-center gap-2 font-bold">
                     No Results <PackageOpen />
                   </div>
@@ -114,7 +129,10 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center ">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center "
+                >
                   <div className="flex items-center justify-center gap-2 font-bold">
                     Loading Data, Please Wait... <Spinner />
                   </div>

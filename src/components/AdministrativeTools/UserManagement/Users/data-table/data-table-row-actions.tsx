@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useUserActions } from "./action-context";
 import { User } from "@/types/user-management";
-import { useUserManager } from "../hooks/useUserManager";
+import { useUserStore } from "@/hooks/stores/useUserStore";
 
 interface DataTableRowActionsProps {
   row: Row<User>;
@@ -33,14 +33,10 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
     openDeactivateUserDialog,
   } = useUserActions();
 
-  const userManager = useUserManager();
+  const userStore = useUserStore();
 
   const targetUser = () => {
-    console.log(user);
-    userManager.setUser(user);
-    userManager.set("dateOfBirth", new Date(user.dateOfBirth));
-    userManager.set("password", undefined);
-    userManager.set("confirmPassword", undefined);
+    userStore.setUser(user);
   };
 
   return (

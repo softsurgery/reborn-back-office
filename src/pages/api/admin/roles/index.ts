@@ -13,16 +13,19 @@ export default async function handler(
         return res.status(200).json(roles);
       }
       case "POST": {
-        const { permissionIds, ...payload } = req.body;
-        const role = await roleService.createRole(payload, permissionIds);
-        return res.status(201).json(role);
+        const role = await roleService.createRole(req.body);
+        return res.status(200).json({
+          message: "Role Created Successfully",
+          code: 200,
+          data: role,
+        });
       }
       default:
-        return res.status(405).json({ error: "Method Not Allowed" });
+        return res.status(405).json({ error: "Method Not Allowed", code: 405 });
     }
   } catch (error) {
     return res
       .status(500)
-      .json({ error: "Internal Server Error", details: error });
+      .json({ error: "Internal Server Error", code: 500, details: error });
   }
 }

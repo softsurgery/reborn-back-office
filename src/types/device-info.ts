@@ -1,7 +1,7 @@
 import { Feedback } from "./feedback";
-import { DatabaseEntity } from "./utilities/database-entity";
+import { DatabaseEntity } from "./utils/database-entity";
 
-export interface DeviceInfo extends DatabaseEntity{
+export interface DeviceInfo extends DatabaseEntity {
   id: number;
   platform: string | null;
   model: string;

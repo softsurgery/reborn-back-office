@@ -28,51 +28,49 @@ export class RoleService {
     return this.roleRepository.findById(id);
   }
 
-  async createRole(data: Partial<Role>, permissionIds: number[]): Promise<Role> {
-    const role: Role = await this.roleRepository.create(data);
+  async createRole(data: Partial<Role>): Promise<Role> {
+    const { permissions, ...rest } = data;
+    const role: Role = await this.roleRepository.create(rest);
     await this.rolePermissionRepository.createMany(
-      permissionIds.map((permissionId) => ({
+      data?.permissions?.map((permission) => ({
         roleId: role.id,
-        permissionId: permissionId,
-      }))
+        permissionId: permission.permissionId,
+      })) || []
     );
     return role;
   }
 
-  async updateRole(
-    id: number,
-    data: Partial<Role>,
-    permissionIds: number[]
-  ): Promise<Role> {
-    await this.roleRepository.update(id, data);
+  async updateRole(id: number, data: Partial<Role>): Promise<Role> {
+    const { permissions, ...rest } = data;
+    await this.roleRepository.update(id, rest);
 
-    const updatedRole = (
-      await this.roleRepository.findOneByCondition({
-        filter: `id||$eq||${id}`,
-        join: "permissions.permission",
-      })
-    )
-
-    const existingPermissions = updatedRole?.permissions?.map((p: RolePermission) => {
-      return {
-        id: p.id,
-        permissionId: p.permissionId,
-        roleId: p.roleId,
-      }
+    const updatedRole = await this.roleRepository.findOneByCondition({
+      filter: `id||$eq||${id}`,
+      join: "permissions.permission",
     });
 
+    const existingPermissions = updatedRole?.permissions?.map(
+      (p: RolePermission) => {
+        return {
+          id: p.id,
+          permissionId: p.permissionId,
+          roleId: p.roleId,
+        };
+      }
+    );
     await this.roleRepository.updateAssociations<Partial<RolePermission>>({
       existingItems: existingPermissions || [],
-      updatedItems: permissionIds.map((permissionId) => ({
-        permissionId,
-        roleId: updatedRole?.id,
-      })),
+      updatedItems:
+        permissions?.map((permission) => ({
+          permissionId: permission.permissionId,
+          roleId: updatedRole?.id,
+        })) || [],
       keys: ["permissionId", "roleId"],
       onDelete: async (id) => {
-        return await this.rolePermissionRepository.delete(id);
+        return this.rolePermissionRepository.delete(id);
       },
       onCreate: async (permission) => {
-        return await this.rolePermissionRepository.create({
+        return this.rolePermissionRepository.create({
           permissionId: permission.permissionId,
           roleId: permission.roleId,
         });
@@ -88,13 +86,16 @@ export class RoleService {
       join: "permissions.permission",
     });
     if (role) {
-      const { id, createdAt, updatedAt, permissions, ...duplicatedData } = role
-      return await this.createRole({ ...duplicatedData, label: `${duplicatedData.label} Duplicate` }, permissions?.map((p) => p.permissionId) || []);
+      return this.createRole({
+        label: `${role.label} Duplicate`,
+        description: role.description,
+        permissions: role?.permissions,
+      });
     }
   }
 
   async deleteRole(id: number): Promise<Role> {
-    return this.roleRepository.delete(id);
+    return this.roleRepository.softDelete(id);
   }
 
   async countRoles(where: any = {}): Promise<number> {
