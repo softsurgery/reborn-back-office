@@ -2,7 +2,7 @@ import React from "react";
 import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useRoles = (enabled: boolean) => {
+export const useRoles = (enabled?: boolean) => {
   const { isFetching: isFetchRolesPending, data: rolesResp,refetch: refetchRoles } =
     useQuery({
       queryKey: ["roles"],

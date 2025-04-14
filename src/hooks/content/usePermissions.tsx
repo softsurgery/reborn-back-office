@@ -6,7 +6,7 @@ export const usePermissions = () => {
   const { isFetching: isFetchPermissionsPending, data: permissionsResp } =
     useQuery({
       queryKey: ["permissions"],
-      queryFn: () => api.permission.findAll(),
+      queryFn: () => api.admin.permission.findAll(),
     });
 
   const permissions = React.useMemo(() => {

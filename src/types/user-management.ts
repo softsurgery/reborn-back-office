@@ -13,6 +13,13 @@ export interface User extends DatabaseEntity {
   image: string | null;
   roleId: number | null;
   role?: Role | null;
+  appUsers?: AppUser[];
+}
+
+export interface AppUser extends DatabaseEntity {
+  id: number;
+  userId: string;
+  user?: User;
 }
 
 export interface Role extends DatabaseEntity {
