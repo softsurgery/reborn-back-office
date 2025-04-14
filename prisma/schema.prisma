@@ -24,6 +24,16 @@ model User {
   image         String?
   roleId        Int?
   role          Role?     @relation(fields: [roleId], references: [id])
+  appUsers      AppUser[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+}
+
+model AppUser {
+  id            Int    @id @default(autoincrement())
+  userId        String
+  user          User      @relation(fields: [userId],references:[id])  
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
