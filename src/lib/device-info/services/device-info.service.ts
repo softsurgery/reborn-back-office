@@ -19,7 +19,7 @@ export class DeviceInfoService {
     return this.deviceInfoRepository.findByCondition(queryObject);
   }
 
-  async getDeviceInfoById(id: string): Promise<DeviceInfo | null> {
+  async getDeviceInfoById(id: number): Promise<DeviceInfo | null> {
     return this.deviceInfoRepository.findById(id);
   }
 
@@ -33,13 +33,13 @@ export class DeviceInfoService {
   }
 
   async updateDeviceInfo(
-    id: string,
+    id: number,
     data: Partial<DeviceInfo>
   ): Promise<DeviceInfo> {
     return this.deviceInfoRepository.update(id, data);
   }
 
-  async deleteDeviceInfo(id: string): Promise<DeviceInfo> {
+  async deleteDeviceInfo(id: number): Promise<DeviceInfo> {
     return this.deviceInfoRepository.delete(id);
   }
 
