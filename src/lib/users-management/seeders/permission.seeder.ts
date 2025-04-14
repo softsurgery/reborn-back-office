@@ -5,7 +5,7 @@ import container from "@/lib/container";
 export async function seedPermissions() {
   const prisma = new PrismaClient();
 
-  const appMetadataService = container.SeederService;
+  // const appMetadataService = container.SeederService;
 
   try {
     const upsertPromises = permissions.map((permission) =>
@@ -21,7 +21,7 @@ export async function seedPermissions() {
       })
     );
     await Promise.all(upsertPromises);
-    await appMetadataService.confirmSeederObject("permissions");
+    // await appMetadataService.confirmSeederObject("permissions");
   } catch (error) {
     console.error("Error seeding permissions:", error);
   } finally {
