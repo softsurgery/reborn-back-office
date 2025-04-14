@@ -2,11 +2,12 @@ import React from "react";
 import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useRoles = () => {
-  const { isFetching: isFetchRolesPending, data: rolesResp } =
+export const useRoles = (enabled: boolean) => {
+  const { isFetching: isFetchRolesPending, data: rolesResp,refetch: refetchRoles } =
     useQuery({
       queryKey: ["roles"],
-      queryFn: () => api.role.findAll(),
+      queryFn: () => api.admin.role.findAll(),
+      enabled
     });
 
   const roles = React.useMemo(() => {
@@ -17,5 +18,6 @@ export const useRoles = () => {
   return {
     roles,
     isFetchRolesPending,
+    refetchRoles
   };
 };

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,7 +13,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import React from "react";
 import { DataTableToolbar } from "./data-table-toolbar";
 import {
   Table,
@@ -26,6 +25,7 @@ import {
 import { PackageOpen } from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 import { Spinner } from "@/components/Common/Spinner";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   className?: string;
@@ -33,6 +33,25 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isPending: boolean;
+  context: {
+    page: number;
+    totalPageCount: number;
+    setPage: (page: number) => void;
+    size: number;
+    setSize: (size: number) => void;
+    order: boolean;
+    sortKey: string;
+    setSortDetails: (order: boolean, sortKey: string) => void;
+    searchTerm: string;
+    setSearchTerm: (searchTerm: string) => void;
+    triggerInspect?: () => void;
+    triggerUpdate?: () => void;
+    triggerActivate?: () => void;
+    triggerDeactivate?: () => void;
+    triggerDuplicate?: () => void;
+    triggerDelete?: () => void;
+    targetEntity?: (entity: TData) => void;
+  }
 }
 
 export function DataTable<TData, TValue>({
@@ -41,14 +60,11 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   isPending,
+  context
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({
-      firstName: false,
-      lastName: false,
-      dateOfBirth: false,
-    });
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -83,7 +99,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className={cn(className, "space-y-6")}>
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} context={context}/>
       <div className={cn("rounded-md border", containerClassName)}>
         <Table>
           <TableHeader>
@@ -147,7 +163,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} context={context} />
     </div>
   );
 }

@@ -12,16 +12,22 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useBugActions } from "./action-context";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  context: {
+    page: number;
+    totalPageCount: number;
+    setPage: (page: number) => void;
+    size: number;
+    setSize: (size: number) => void;
+  };
 }
 
 export function DataTablePagination<TData>({
   table,
+  context
 }: DataTablePaginationProps<TData>) {
-  const { page, totalPageCount, setPage, size, setSize } = useBugActions();
 
   return (
     <>
@@ -32,10 +38,10 @@ export function DataTablePagination<TData>({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2 ">
           <Select
-            value={size.toString()}
+            value={context.size.toString()}
             onValueChange={(value) => {
-              setPage(1);
-              setSize(parseInt(value));
+              context.setPage(1);
+              context.setSize(parseInt(value));
             }}
           >
             <SelectTrigger className="h-8 w-[100px] -mt-1">
@@ -53,38 +59,38 @@ export function DataTablePagination<TData>({
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            Page {page} of {totalPageCount}
+            Page {context.page} of {context.totalPageCount}
           </div>
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => setPage(1)}
-              disabled={page == 1}
+              onClick={() => context.setPage(1)}
+              disabled={context.page == 1}
             >
               <DoubleArrowLeftIcon className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => setPage(page - 1)}
-              disabled={page <= 1}
+              onClick={() => context.setPage(context.page - 1)}
+              disabled={context.page <= 1}
             >
               <ChevronLeftIcon className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => setPage(page + 1)}
-              disabled={page >= totalPageCount}
+              onClick={() => context.setPage(context.page + 1)}
+              disabled={context.page >= context.totalPageCount}
             >
               <ChevronRightIcon className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => setPage(totalPageCount)}
-              disabled={page == totalPageCount}
+              onClick={() => context.setPage(context.totalPageCount)}
+              disabled={context.page == context.totalPageCount}
             >
               <DoubleArrowRightIcon className="h-4 w-4" />
             </Button>

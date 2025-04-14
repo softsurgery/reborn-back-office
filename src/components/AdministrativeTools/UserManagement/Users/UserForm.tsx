@@ -120,7 +120,6 @@ export const UserForm: React.FC<UserFormProps> = ({
                 userStore.set("dateOfBirth", value);
                 userStore.resetError("dateOfBirth");
               }}
-              nullable
             />
             {userStore.errors.dateOfBirth?.[0] && (
               <span className="text-red-500 leading-0 text-xs mt-1 leading-3">

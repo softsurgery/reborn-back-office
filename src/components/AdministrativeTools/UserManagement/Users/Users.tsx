@@ -5,9 +5,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { updateUserSchema } from "@/types/validations/user.validation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { UserActionsContext } from "./data-table/action-context";
-import { getUserColumns } from "./data-table/columns";
-import { DataTable } from "./data-table/data-table";
+import { getUserColumns } from "./columns";
 import { useUserCreateSheet } from "./modals/UserCreateSheet";
 import { useUserUpdateSheet } from "./modals/UserUpdateSheet";
 import { User } from "@/types/user-management";
@@ -18,6 +16,7 @@ import { useUserStore } from "@/hooks/stores/useUserStore";
 import { ServerResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { useIntro } from "@/context/IntroContext";
+import { DataTable } from "@/components/Common/Datatables/data-table";
 
 interface UsersProps {
   className?: string;
@@ -212,11 +211,11 @@ export default function Users({ className }: UsersProps) {
     });
 
   const context = {
-    openCreateUserSheet,
-    openUpdateUserSheet,
-    openActivateUserDialog,
-    openDeactivateUserDialog,
-    openDeleteUserDialog,
+    triggerCreate: openCreateUserSheet,
+    triggerUpdate: openUpdateUserSheet,
+    triggerActivate: openActivateUserDialog,
+    triggerDeactivate: openDeactivateUserDialog,
+    triggerDelete: openDeleteUserDialog,
     // openDuplicateUserDialog,
     //search, filtering, sorting & paging
     searchTerm,
@@ -237,20 +236,19 @@ export default function Users({ className }: UsersProps) {
 
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <UserActionsContext.Provider value={context}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={getUserColumns()}
-          data={users}
-          isPending={isPending}
-        />
-        {createUserSheet}
-        {updateUserSheet}
-        {deleteUserDialog}
-        {activateUserDialog}
-        {deactivateUserDialog}
-      </UserActionsContext.Provider>
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={getUserColumns(context)}
+        data={users}
+        isPending={isPending}
+        context={context}
+      />
+      {createUserSheet}
+      {updateUserSheet}
+      {deleteUserDialog}
+      {activateUserDialog}
+      {deactivateUserDialog}
     </div>
   );
 }

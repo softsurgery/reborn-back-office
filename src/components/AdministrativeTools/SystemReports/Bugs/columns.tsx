@@ -1,10 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { DataTableRowActions } from "./data-table-row-actions";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Bug } from "@/types/bug";
+import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
+import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
 
-export const getBugColumns = (): ColumnDef<Bug>[] => {
+export const getBugColumns = (context: any): ColumnDef<Bug>[] => {
   return [
     {
       accessorKey: "title",
@@ -13,6 +12,7 @@ export const getBugColumns = (): ColumnDef<Bug>[] => {
           column={column}
           title={"Title"}
           attribute="title"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row.original.title}</div>,
@@ -26,6 +26,7 @@ export const getBugColumns = (): ColumnDef<Bug>[] => {
           column={column}
           title={"Description"}
           attribute="description"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -41,6 +42,7 @@ export const getBugColumns = (): ColumnDef<Bug>[] => {
           column={column}
           title={"Category"}
           attribute="category"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row.original.category || "No Category"}</div>,
@@ -51,7 +53,7 @@ export const getBugColumns = (): ColumnDef<Bug>[] => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">
-          <DataTableRowActions row={row} />
+          <DataTableRowActions row={row} context={context} />
         </div>
       ),
     },

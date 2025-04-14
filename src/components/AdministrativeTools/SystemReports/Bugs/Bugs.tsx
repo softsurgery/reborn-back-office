@@ -1,23 +1,22 @@
 import React from "react";
 import { api } from "@/api";
-import ContentSection from "@/components/Common/ContentSection";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { BugActionsContext } from "./data-table/action-context";
-import { DataTable } from "./data-table/data-table";
-import { getBugColumns } from "./data-table/columns";
+import { BugActionsContext } from "./action-context";
+import { getBugColumns } from "./columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useBugManager } from "../../../../hooks/stores/useBugManager";
 import { useBugDeleteDialog } from "./modals/BugDeleteDialog";
 import { toast } from "sonner";
 import { useIntro } from "@/context/IntroContext";
 import { cn } from "@/lib/utils";
+import { DataTable } from "@/components/Common/Datatables/data-table";
 
 interface BugsProps {
   className?: string;
 }
 
-export default function Bugs({className}: BugsProps) {
+export default function Bugs({ className }: BugsProps) {
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
@@ -110,7 +109,7 @@ export default function Bugs({className}: BugsProps) {
     });
 
   const context = {
-    openDeleteBugDialog,
+    triggerDelete: openDeleteBugDialog,
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
@@ -128,16 +127,15 @@ export default function Bugs({className}: BugsProps) {
   const isPending = isBugsPending || paging || resizing || searching || sorting;
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <BugActionsContext.Provider value={context}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={getBugColumns()}
-          data={bugs}
-          isPending={isPending}
-        />
-        {deleteBugDialog}
-      </BugActionsContext.Provider>
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={getBugColumns(context)}
+        data={bugs}
+        isPending={isPending}
+        context={context}
+      />
+      {deleteBugDialog}
     </div>
   );
 }

@@ -1,17 +1,22 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 import { User } from "@/types/user-management";
-import { DataTableColumnHeader } from "./data-table-column-header";
 import { Badge } from "@/components/ui/badge";
-import { DataTableRowActions } from "./data-table-row-actions";
 import { format } from "date-fns";
+import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
+import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
 
-export const getUserColumns = (): ColumnDef<User>[] => {
+export const getUserColumns = (context: any): ColumnDef<User>[] => {
   return [
     {
       accessorKey: "id",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="ID" attribute="id" />
+        <DataTableColumnHeader
+          column={column}
+          title="ID"
+          attribute="id"
+          context={context}
+        />
       ),
       cell: ({ row }) => <div>{row.original.id}</div>,
       enableSorting: true,
@@ -24,6 +29,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="Username"
           attribute="username"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -39,6 +45,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="E-Mail"
           attribute="email"
+          context={context}
         />
       ),
       cell: ({ row }) => <div className="font-bold">{row.original.email}</div>,
@@ -52,6 +59,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="Firstname"
           attribute="firstName"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -71,6 +79,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="Lastname"
           attribute="lastName"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -90,6 +99,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="Date of Birth"
           attribute="dateOfBirth"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -110,6 +120,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="Role"
           attribute="role.label"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -129,6 +140,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
           column={column}
           title="Active"
           attribute="isActive"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -148,7 +160,7 @@ export const getUserColumns = (): ColumnDef<User>[] => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">
-          <DataTableRowActions row={row} />
+          <DataTableRowActions row={row} context={context} />
         </div>
       ),
     },

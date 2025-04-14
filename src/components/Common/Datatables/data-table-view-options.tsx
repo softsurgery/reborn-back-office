@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
+
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
 }
