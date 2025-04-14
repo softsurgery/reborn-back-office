@@ -9,7 +9,7 @@ import { DataTableRowActions } from "@/components/Common/Datatables/data-table-r
 export const getUserColumns = (context: any): ColumnDef<User>[] => {
   return [
     {
-      accessorKey: "id",
+      accessorKey: "ID",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -23,7 +23,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "username",
+      accessorKey: "Username",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -39,7 +39,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "email",
+      accessorKey: "E-mail",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -53,7 +53,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "firstName",
+      accessorKey: "FirstName",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -73,7 +73,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "lastName",
+      accessorKey: "LastName",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -93,7 +93,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "dateOfBirth",
+      accessorKey: "Date of Birth",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -114,7 +114,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "roleId",
+      accessorKey: "Role",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -134,7 +134,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "active",
+      accessorKey: "Active",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -152,6 +152,27 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
         >
           {row.original.isActive ? "Yes" : "No"}
         </Badge>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "Creation Date",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Created At"
+          attribute="createdAt"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => (
+        <div>
+          {(row.original.createdAt &&
+            format(row.original.createdAt, "yyyy-MM-dd")) || (
+            <span className="opacity-70">Not Defined</span>
+          )}
+        </div>
       ),
       enableSorting: true,
       enableHiding: true,

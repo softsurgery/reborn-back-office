@@ -15,7 +15,7 @@ export default async function handler(
     return res.status(400).json({ error: "Invalid ID", code: 400 });
   }
   try {
-    const user = await userService.activate(id);
+    const user = await userService.deactivate(id);
     return res
       .status(200)
       .json({

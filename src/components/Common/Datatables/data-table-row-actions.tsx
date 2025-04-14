@@ -7,28 +7,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DataTableConfig } from "@/types";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, Edit, Telescope, Trash2 } from "lucide-react";
+import { Edit, Telescope, Trash2 } from "lucide-react";
 import React from "react";
 
-interface DataTableRowActionsProps<T> {
-  row: Row<T>;
-  context: {
-    triggerInspect?: () => void;
-    triggerUpdate?: () => void;
-    triggerActivate?: () => void;
-    triggerDeactivate?: () => void;
-    triggerDuplicate?: () => void;
-    triggerDelete?: () => void;
-    targetEntity?: (entity: T) => void;
-  };
+interface DataTableRowActionsProps<TData> {
+  row: Row<TData>;
+  context: DataTableConfig<TData>;
 }
 
-export function DataTableRowActions<T>({
+export function DataTableRowActions<TData>({
   row,
   context,
-}: DataTableRowActionsProps<T>) {
+}: DataTableRowActionsProps<TData>) {
   const entity = row.original;
   return (
     <DropdownMenu>
@@ -43,12 +36,12 @@ export function DataTableRowActions<T>({
       <DropdownMenuContent align="center" className="w-[160px]">
         <DropdownMenuLabel className="text-center">Actions </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {context?.triggerInspect && (
+        {context?.inspectCallback && (
           <React.Fragment>
             <DropdownMenuItem
               onClick={() => {
                 context.targetEntity?.(entity);
-                context?.triggerInspect?.();
+                context?.inspectCallback?.();
               }}
             >
               <Telescope className="h-5 w-5 mr-2" /> Inspect
@@ -56,42 +49,46 @@ export function DataTableRowActions<T>({
             <DropdownMenuSeparator />
           </React.Fragment>
         )}
-        
-        {context?.triggerActivate && (
+
+        {Object.values(context?.additionalActions ?? {}).map((group, index) => {
+          return (
+            <React.Fragment key={index}>
+              {group.map((action, index) => {
+                if (action.isActionVisible && !action.isActionVisible(entity))
+                  return null;
+
+                return (
+                  <DropdownMenuItem
+                    key={index}
+                    onClick={() => {
+                      context.targetEntity?.(entity);
+                      action.actionCallback?.();
+                    }}
+                  >
+                    {action.actionIcon} {action.actionLabel}
+                  </DropdownMenuItem>
+                );
+              })}
+              <DropdownMenuSeparator />
+            </React.Fragment>
+          );
+        })}
+
+        {context?.updateCallback && (
           <DropdownMenuItem
             onClick={() => {
               context.targetEntity?.(entity);
-              context?.triggerActivate?.();
-            }}
-          >
-            <ArrowUp className="h-5 w-5 mr-2" /> Activate
-          </DropdownMenuItem>
-        )}
-        {context?.triggerDeactivate && (
-          <DropdownMenuItem
-            onClick={() => {
-              context.targetEntity?.(entity);
-              context?.triggerDeactivate?.();
-            }}
-          >
-            <ArrowDown className="h-5 w-5 mr-2" /> Deactivate
-          </DropdownMenuItem>
-        )}
-        {context?.triggerUpdate && (
-          <DropdownMenuItem
-            onClick={() => {
-              context.targetEntity?.(entity);
-              context?.triggerUpdate?.();
+              context?.updateCallback?.();
             }}
           >
             <Edit className="h-5 w-5 mr-2" /> Update
           </DropdownMenuItem>
         )}
-        {context?.triggerDelete && (
+        {context?.deleteCallback && (
           <DropdownMenuItem
             onClick={() => {
               context.targetEntity?.(entity);
-              context?.triggerDelete?.();
+              context?.deleteCallback?.();
             }}
           >
             <Trash2 className="h-5 w-5 mr-2" /> Delete
