@@ -26,32 +26,15 @@ import { PackageOpen } from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 import { Spinner } from "@/components/Common/Spinner";
 import { cn } from "@/lib/utils";
+import { DataTableConfig } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   className?: string;
   containerClassName?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  context: DataTableConfig<TData>;
   isPending: boolean;
-  context: {
-    page: number;
-    totalPageCount: number;
-    setPage: (page: number) => void;
-    size: number;
-    setSize: (size: number) => void;
-    order: boolean;
-    sortKey: string;
-    setSortDetails: (order: boolean, sortKey: string) => void;
-    searchTerm: string;
-    setSearchTerm: (searchTerm: string) => void;
-    triggerInspect?: () => void;
-    triggerUpdate?: () => void;
-    triggerActivate?: () => void;
-    triggerDeactivate?: () => void;
-    triggerDuplicate?: () => void;
-    triggerDelete?: () => void;
-    targetEntity?: (entity: TData) => void;
-  }
 }
 
 export function DataTable<TData, TValue>({
@@ -59,12 +42,16 @@ export function DataTable<TData, TValue>({
   containerClassName,
   columns,
   data,
+  context,
   isPending,
-  context
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>(
+      Object.fromEntries(
+        context?.invisibleColumns?.map((column) => [column, false]) || []
+      )
+    );
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -99,7 +86,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className={cn(className, "space-y-6")}>
-      <DataTableToolbar table={table} context={context}/>
+      <DataTableToolbar table={table} context={context} />
       <div className={cn("rounded-md border", containerClassName)}>
         <Table>
           <TableHeader>
@@ -141,7 +128,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center "
+                  className="h-24 text-center"
                 >
                   <div className="flex items-center justify-center gap-2 font-bold">
                     No Results <PackageOpen />

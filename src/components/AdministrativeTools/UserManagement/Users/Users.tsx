@@ -13,10 +13,12 @@ import { useUserDeleteDialog } from "./modals/UserDeleteDialog";
 import { useActivateUserDialog } from "./modals/UserActivateDialog";
 import { useDeactivateUserDialog } from "./modals/UserDeactivateDialog";
 import { useUserStore } from "@/hooks/stores/useUserStore";
-import { ServerResponse } from "@/types";
+import { DataTableConfig, ServerResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { useIntro } from "@/context/IntroContext";
 import { DataTable } from "@/components/Common/Datatables/data-table";
+import { ArrowDown, ArrowUp, X } from "lucide-react";
+import { createDataTableContext } from "@/components/Common/Datatables/data-table-context";
 
 interface UsersProps {
   className?: string;
@@ -48,7 +50,7 @@ export default function Users({ className }: UsersProps) {
     500
   );
 
-  const [size, setSize] = React.useState(5);
+  const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
     500
@@ -210,13 +212,28 @@ export default function Users({ className }: UsersProps) {
       resetUser: () => userStore.reset(),
     });
 
-  const context = {
-    triggerCreate: openCreateUserSheet,
-    triggerUpdate: openUpdateUserSheet,
-    triggerActivate: openActivateUserDialog,
-    triggerDeactivate: openDeactivateUserDialog,
-    triggerDelete: openDeleteUserDialog,
-    // openDuplicateUserDialog,
+  const context: DataTableConfig<User> = {
+    singularName: "User",
+    pluralName: "Users",
+    createCallback: openCreateUserSheet,
+    updateCallback: openUpdateUserSheet,
+    deleteCallback: openDeleteUserDialog,
+    additionalActions: {
+      1: [
+        {
+          actionCallback: openActivateUserDialog,
+          actionLabel: "Activate",
+          actionIcon: <ArrowUp />,
+          isActionVisible: (user: User) => !user.isActive,
+        },
+        {
+          actionCallback: openDeactivateUserDialog,
+          actionLabel: "Deactivate",
+          actionIcon: <ArrowDown />,
+          isActionVisible: (user: User) => !!user.isActive,
+        },
+      ],
+    },
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
@@ -229,21 +246,24 @@ export default function Users({ className }: UsersProps) {
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
+    targetEntity: (user: User) => userStore.setUser(user),
   };
+
+  const columns = getUserColumns(context);
 
   const isPending =
     isUsersPending || paging || resizing || searching || sorting;
 
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <DataTable
-        className="flex flex-col flex-1 overflow-hidden p-1"
-        containerClassName="overflow-auto"
-        columns={getUserColumns(context)}
-        data={users}
-        isPending={isPending}
-        context={context}
-      />
+        <DataTable
+          className="flex flex-col flex-1 overflow-hidden p-1"
+          containerClassName="overflow-auto"
+          columns={columns}
+          data={users}
+          context={context}
+          isPending={isPending}
+        />
       {createUserSheet}
       {updateUserSheet}
       {deleteUserDialog}
