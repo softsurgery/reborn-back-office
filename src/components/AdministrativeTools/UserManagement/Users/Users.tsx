@@ -18,7 +18,6 @@ import { cn } from "@/lib/utils";
 import { useIntro } from "@/context/IntroContext";
 import { DataTable } from "@/components/Common/Datatables/data-table";
 import { ArrowDown, ArrowUp, X } from "lucide-react";
-import { createDataTableContext } from "@/components/Common/Datatables/data-table-context";
 
 interface UsersProps {
   className?: string;
