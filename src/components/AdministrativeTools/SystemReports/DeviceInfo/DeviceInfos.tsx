@@ -61,7 +61,6 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
   const {
     data: deviceInfosResponse,
     isPending: isDeviceInfosPending,
-    refetch: refetchDeviceInfos,
   } = useQuery({
     queryKey: [
       "deviceInfos",
