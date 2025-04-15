@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { DataTableRowActions } from "./data-table-row-actions";
 import { Role } from "@/types/user-management";
+import { DataTableConfig } from "@/types";
+import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
+import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
 
-export const getRoleColumns = (): ColumnDef<Role>[] => {
+export const getRoleColumns = (context: DataTableConfig<Role>): ColumnDef<Role>[] => {
   return [
     {
       accessorKey: "label",
@@ -12,6 +13,7 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
           column={column}
           title="Label"
           attribute="label"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row.original.label}</div>,
@@ -25,6 +27,7 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
           column={column}
           title="Description"
           attribute="description"
+          context={context}
         />
       ),
       cell: ({ row }) => (
@@ -40,6 +43,7 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
           column={column}
           title="Permissions"
           attribute="permissions"
+          context={context}
         />
       ),
       cell: ({ row }) => {
@@ -75,7 +79,7 @@ export const getRoleColumns = (): ColumnDef<Role>[] => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">
-          <DataTableRowActions row={row} />
+          <DataTableRowActions row={row} context={context} />
         </div>
       ),
     },

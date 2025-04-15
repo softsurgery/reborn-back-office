@@ -42,7 +42,7 @@ export default function Permissions({ className }: PermissionsProps) {
     500
   );
 
-  const [size, setSize] = React.useState(5);
+  const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
     500
@@ -63,7 +63,6 @@ export default function Permissions({ className }: PermissionsProps) {
   const {
     data: permissionsResponse,
     isPending: isPermissionsPending,
-    refetch: refetchPermissions,
   } = useQuery({
     queryKey: [
       "permissions",
