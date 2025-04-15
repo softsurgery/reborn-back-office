@@ -1,9 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { DataTableRowActions } from "./data-table-row-actions";
 import { Feedback } from "@/types/feedback";
+import { DataTableConfig } from "@/types";
+import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
+import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
+import { splitCamelOrPascal } from "@/lib/string.lib";
 
-export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
+export const getFeedbackColumns = (
+  context: DataTableConfig<Feedback>
+): ColumnDef<Feedback>[] => {
   return [
     {
       accessorKey: "message",
@@ -12,6 +16,7 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
           column={column}
           title={"Message"}
           attribute="message"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row.original.message}</div>,
@@ -25,6 +30,7 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
           column={column}
           title={"Rating"}
           attribute="rating"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row.original.rating || "No Rating"}</div>,
@@ -38,9 +44,12 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
           column={column}
           title={"Category"}
           attribute="category"
+          context={context}
         />
       ),
-      cell: ({ row }) => <div>{row.original.category || "No Category"}</div>,
+      cell: ({ row }) => (
+        <div>{splitCamelOrPascal(row.original.category) || "No Category"}</div>
+      ),
       enableSorting: true,
       enableHiding: true,
     },
@@ -48,7 +57,7 @@ export const getFeedbackColumns = (): ColumnDef<Feedback>[] => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">
-          <DataTableRowActions row={row} />
+          <DataTableRowActions row={row} context={context} />
         </div>
       ),
     },

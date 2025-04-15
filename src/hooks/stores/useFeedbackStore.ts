@@ -1,26 +1,26 @@
 import { Feedback } from "@/types";
 import { create } from "zustand";
 
-interface FeedbackManagerData extends Partial<Feedback> {}
+interface FeedbackStoreData extends Partial<Feedback> {}
 
-interface FeedbackManager extends FeedbackManagerData {
-  set: (name: keyof FeedbackManagerData, value: any) => void;
+interface FeedbackStore extends FeedbackStoreData {
+  set: (name: keyof FeedbackStoreData, value: any) => void;
   reset: () => void;
   getFeedback: () => Partial<Feedback>;
   setFeedback: (data: Partial<Feedback>) => void;
 }
 
-const initialState: FeedbackManagerData = {
+const initialState: FeedbackStoreData = {
   id: undefined,
   message: "",
   category: undefined,
   rating: 0,
 };
 
-export const useFeedbackManager = create<FeedbackManager>((set, get) => ({
+export const useFeedbackStore = create<FeedbackStore>((set, get) => ({
   ...initialState,
 
-  set: (name: keyof FeedbackManager, value: any) => {
+  set: (name: keyof FeedbackStore, value: any) => {
     set((state) => ({
       ...state,
       [name]: value,
@@ -50,7 +50,7 @@ export const useFeedbackManager = create<FeedbackManager>((set, get) => ({
           message: data.message,
           category: data.category,
           rating: data.rating,
-        } as Partial<FeedbackManager>)
+        } as Partial<FeedbackStore>)
     );
   },
 }));

@@ -2,7 +2,6 @@ import React from "react";
 import { api } from "@/api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { BugActionsContext } from "./action-context";
 import { getBugColumns } from "./columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useBugManager } from "../../../../hooks/stores/useBugManager";
@@ -11,6 +10,7 @@ import { toast } from "sonner";
 import { useIntro } from "@/context/IntroContext";
 import { cn } from "@/lib/utils";
 import { DataTable } from "@/components/Common/Datatables/data-table";
+import { Bug, DataTableConfig } from "@/types";
 
 interface BugsProps {
   className?: string;
@@ -41,7 +41,7 @@ export default function Bugs({ className }: BugsProps) {
     500
   );
 
-  const [size, setSize] = React.useState(5);
+  const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
     500
@@ -108,8 +108,10 @@ export default function Bugs({ className }: BugsProps) {
       resetBug: () => bugManager.reset(),
     });
 
-  const context = {
-    triggerDelete: openDeleteBugDialog,
+  const context: DataTableConfig<Bug> = {
+    pluralName: "Bugs",
+    singularName: "Bug",
+    deleteCallback: openDeleteBugDialog,
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
@@ -124,16 +126,18 @@ export default function Bugs({ className }: BugsProps) {
       setSortDetails({ order, sortKey }),
   };
 
+  const columns = getBugColumns(context);
+
   const isPending = isBugsPending || paging || resizing || searching || sorting;
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
       <DataTable
         className="flex flex-col flex-1 overflow-hidden p-1"
         containerClassName="overflow-auto"
-        columns={getBugColumns(context)}
+        columns={columns}
         data={bugs}
-        isPending={isPending}
         context={context}
+        isPending={isPending}
       />
       {deleteBugDialog}
     </div>
