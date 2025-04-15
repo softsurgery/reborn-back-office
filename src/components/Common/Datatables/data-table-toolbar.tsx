@@ -15,7 +15,6 @@ export function DataTableToolbar<TData>({
   table,
   context,
 }: DataTableToolbarProps<TData>) {
-  console.log("DataTableToolbar", context);
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center space-x-2">
