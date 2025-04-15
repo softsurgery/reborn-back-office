@@ -1,11 +1,8 @@
 import React from "react";
 import { api } from "@/api";
-import ContentSection from "@/components/Common/ContentSection";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { RoleActionsContext } from "./data-table/action-context";
-import { DataTable } from "./data-table/data-table";
-import { getRoleColumns } from "./data-table/columns";
+import { getRoleColumns } from "./columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useRoleUpdateSheet } from "./modals/RoleUpdateSheet";
 import { useRoleDeleteDialog } from "./modals/RoleDeleteDialog";
@@ -14,9 +11,11 @@ import { toast } from "sonner";
 import { Role } from "@/types/user-management";
 import { useRoleStore } from "@/hooks/stores/useRoleStore";
 import { useRoleCreateSheet } from "./modals/RoleCreateSheet";
-import { ServerResponse, RolePermission } from "@/types";
+import { ServerResponse, RolePermission, DataTableConfig } from "@/types";
 import { cn } from "@/lib/utils";
 import { useIntro } from "@/context/IntroContext";
+import { DataTable } from "@/components/Common/Datatables/data-table";
+import { Copy } from "lucide-react";
 
 interface RolesProps {
   className?: string;
@@ -47,7 +46,7 @@ export default function Roles({ className }: RolesProps) {
     500
   );
 
-  const [size, setSize] = React.useState(5);
+  const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
     500
@@ -213,11 +212,22 @@ export default function Roles({ className }: RolesProps) {
     resetRole: () => roleStore.reset(),
   });
 
-  const context = {
-    openCreateRoleSheet,
-    openUpdateRoleSheet,
-    openDeleteRoleDialog,
-    openDuplicateRoleDialog,
+  const context: DataTableConfig<Role> = {
+    singularName: "Role",
+    pluralName: "Roles",
+    createCallback: openCreateRoleSheet,
+    updateCallback: openUpdateRoleSheet,
+    deleteCallback: openDeleteRoleDialog,
+    additionalActions: {
+      1: [
+        {
+          actionCallback: openDuplicateRoleDialog,
+          actionLabel: "Duplicate",
+          actionIcon: <Copy className="h-4 w-4" />,
+          isActionVisible: () => true,
+        },
+      ],
+    },
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
@@ -232,23 +242,24 @@ export default function Roles({ className }: RolesProps) {
       setSortDetails({ order, sortKey }),
   };
 
+  const columns = getRoleColumns(context);
+
   const isPending =
     isRolesPending || paging || resizing || searching || sorting;
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <RoleActionsContext.Provider value={context}>
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
-          columns={getRoleColumns()}
+          columns={columns}
           data={roles}
+          context={context}
           isPending={isPending}
         />
         {createRoleSheet}
         {deleteRoleDialog}
         {updateRoleSheet}
         {duplicateRoleDialog}
-      </RoleActionsContext.Provider>
     </div>
   );
 }

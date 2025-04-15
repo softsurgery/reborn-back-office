@@ -4,11 +4,12 @@ import { api } from "@/api";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
-import { DataTable } from "./data-table/data-table";
+import { DataTable } from "@/components/Common/Datatables/data-table";
 import { getPermissionColumns } from "./data-table/columns";
-import { PermissionActionsContext } from "./data-table/ActionContext";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useIntro } from "@/context/IntroContext";
+import { DataTableConfig } from "@/types";
+import { Permission } from "@prisma/client";
 
 interface PermissionsProps {
   className?: string;
@@ -41,7 +42,7 @@ export default function Permissions({ className }: PermissionsProps) {
     500
   );
 
-  const [size, setSize] = React.useState(5);
+  const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
     500
@@ -62,7 +63,6 @@ export default function Permissions({ className }: PermissionsProps) {
   const {
     data: permissionsResponse,
     isPending: isPermissionsPending,
-    refetch: refetchPermissions,
   } = useQuery({
     queryKey: [
       "permissions",
@@ -88,39 +88,36 @@ export default function Permissions({ className }: PermissionsProps) {
     return permissionsResponse.data;
   }, [permissionsResponse]);
 
-  const context = {
-    //search, filtering, sorting & paging
-    searchTerm,
-    setSearchTerm,
+  const context: DataTableConfig<Permission> = {
+    singularName: "Permission",
+    pluralName: "Permissions",
     page,
+    size,
     totalPageCount: permissionsResponse?.meta.pageCount || 0,
     setPage,
-    size,
     setSize,
     order: sortDetails.order,
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
-  };
+    searchTerm,
+    setSearchTerm,
+  }
+
+  const columns = getPermissionColumns(context);
 
   const isPending =
     isPermissionsPending || paging || resizing || searching || sorting;
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <PermissionActionsContext.Provider value={context}>
-        {/* <ContentSection
-          title="Permissions"
-          desc="Visualization of the permissions of the application"
-          className="w-full"
-        > */}
         <DataTable
           className="flex flex-col flex-1 overflow-hidden p-1"
           containerClassName="overflow-auto"
-          columns={getPermissionColumns()}
+          columns={columns}
           data={permissions}
+          context={context}
           isPending={isPending}
         />
-      </PermissionActionsContext.Provider>
     </div>
   );
 }

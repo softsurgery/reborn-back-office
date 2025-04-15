@@ -1,16 +1,14 @@
 import React from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { useRouter } from "next/router";
 import { useDebounce } from "@/hooks/useDebounce";
-import ContentSection from "@/components/Common/ContentSection";
-import { DataTable } from "./data-table/data-table";
-import { getDeviceInfoColumns } from "./data-table/columns";
-import { DeviceInfoActionsContext } from "./data-table/action-context";
+import { getDeviceInfoColumns } from "./columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { cn } from "@/lib/utils";
-import { createSearchFilterExpression } from "@/lib/object.util";
 import { useIntro } from "@/context/IntroContext";
+import { DataTable } from "@/components/Common/Datatables/data-table";
+import { DataTableConfig, DeviceInfo } from "@/types";
 
 interface DeviceInfosProps {
   className?: string;
@@ -19,7 +17,7 @@ interface DeviceInfosProps {
 export default function DeviceInfos({ className }: DeviceInfosProps) {
   //next-router
   const router = useRouter();
-  const {setIntro, clearIntro } = useIntro();
+  const { setIntro, clearIntro } = useIntro();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
@@ -29,11 +27,11 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
     setIntro?.(
       "DeviceInfos",
       "Manage device information associated with bugs and feedback to enhance debugging and platform optimization."
-    )
+    );
     return () => {
       clearRoutes?.();
       clearIntro?.();
-    }
+    };
   }, []);
 
   const [page, setPage] = React.useState(1);
@@ -63,7 +61,6 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
   const {
     data: deviceInfosResponse,
     isPending: isDeviceInfosPending,
-    refetch: refetchDeviceInfos,
   } = useQuery({
     queryKey: [
       "deviceInfos",
@@ -87,7 +84,11 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
     if (!deviceInfosResponse) return [];
     return deviceInfosResponse.data;
   }, [deviceInfosResponse]);
-  const context = {
+
+  const context: DataTableConfig<DeviceInfo> = {
+    singularName: "Device Info",
+    pluralName: "Device Infos",
+    //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
     page,
@@ -100,20 +101,21 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
   };
+  const columns = getDeviceInfoColumns(context);
 
   const isPending =
     isDeviceInfosPending || paging || resizing || searching || sorting;
+
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <DeviceInfoActionsContext.Provider value={context}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={getDeviceInfoColumns()}
-          data={deviceInfos}
-          isPending={isPending}
-        />
-      </DeviceInfoActionsContext.Provider>
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={columns}
+        data={deviceInfos}
+        context={context}
+        isPending={isPending}
+      />
     </div>
   );
 }

@@ -1,18 +1,16 @@
 import React from "react";
 import { api } from "@/api";
-import ContentSection from "@/components/Common/ContentSection";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FeedbackActionsContext } from "./data-table/action-context";
-import { DataTable } from "./data-table/data-table";
-import { getFeedbackColumns } from "./data-table/columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useFeedbackManager } from "./hooks/useFeedbackManager";
 import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
 import { toast } from "sonner";
-
 import { useIntro } from "@/context/IntroContext";
 import { cn } from "@/lib/utils";
+import { getFeedbackColumns } from "./columns";
+import { DataTable } from "@/components/Common/Datatables/data-table";
+import { DataTableConfig, Feedback } from "@/types";
+import { useFeedbackStore } from "@/hooks/stores/useFeedbackStore";
 
 interface BugsProps {
   className?: string;
@@ -36,7 +34,7 @@ export default function Feedbacks({ className }: BugsProps) {
     };
   }, []);
 
-  const feedbackManager = useFeedbackManager();
+  const feedbackStore = useFeedbackStore();
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
@@ -94,7 +92,7 @@ export default function Feedbacks({ className }: BugsProps) {
     onSuccess: () => {
       toast("Feedback Deleted Successfully");
       refetchFeedbacks();
-      feedbackManager.reset();
+      feedbackStore.reset();
       closeDeleteFeedbackDialog();
     },
     onError: (error) => {
@@ -107,14 +105,16 @@ export default function Feedbacks({ className }: BugsProps) {
     openDeleteFeedbackDialog,
     closeDeleteFeedbackDialog,
   } = useFeedbackDeleteDialog({
-    feedbackMessage: feedbackManager.message,
-    deleteFeedback: () => deleteFeedback(feedbackManager.id!),
+    feedbackMessage: feedbackStore.message,
+    deleteFeedback: () => deleteFeedback(feedbackStore.id!),
     isDeletionPending,
-    resetFeedback: () => feedbackManager.reset(),
+    resetFeedback: () => feedbackStore.reset(),
   });
 
-  const context = {
-    openDeleteFeedbackDialog,
+  const context: DataTableConfig<Feedback> = {
+    singularName: "Feedback",
+    pluralName: "Feedbacks",
+    deleteCallback:openDeleteFeedbackDialog,
     //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
@@ -129,20 +129,21 @@ export default function Feedbacks({ className }: BugsProps) {
       setSortDetails({ order, sortKey }),
   };
 
+  const columns = getFeedbackColumns(context);
+
   const isPending =
     isFeedbacksPending || paging || resizing || searching || sorting;
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-      <FeedbackActionsContext.Provider value={context}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={getFeedbackColumns()}
-          data={feedbacks}
-          isPending={isPending}
-        />
-        {deleteFeedbackDialog}
-      </FeedbackActionsContext.Provider>
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={columns}
+        data={feedbacks}
+        context={context}
+        isPending={isPending}
+      />
+      {deleteFeedbackDialog}
     </div>
   );
 }

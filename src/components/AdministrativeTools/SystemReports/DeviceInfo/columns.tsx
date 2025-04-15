@@ -1,9 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
 import { DeviceInfo } from "@/types/device-info";
-import { DataTableRowActions } from "./data-table-row-actions";
+import { DataTableConfig } from "@/types";
+import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
+import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
 
-export const getDeviceInfoColumns = (): ColumnDef<DeviceInfo>[] => {
+export const getDeviceInfoColumns = (
+  context: DataTableConfig<DeviceInfo>
+): ColumnDef<DeviceInfo>[] => {
   return [
     {
       accessorKey: "platform",
@@ -12,6 +15,7 @@ export const getDeviceInfoColumns = (): ColumnDef<DeviceInfo>[] => {
           column={column}
           title={"Platform"}
           attribute="platform"
+          context={context}
         />
       ),
       cell: ({ row }) => {
@@ -27,6 +31,7 @@ export const getDeviceInfoColumns = (): ColumnDef<DeviceInfo>[] => {
           column={column}
           title={"Model"}
           attribute="model"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row?.original?.model}</div>,
@@ -40,6 +45,7 @@ export const getDeviceInfoColumns = (): ColumnDef<DeviceInfo>[] => {
           column={column}
           title={"Version"}
           attribute="version"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row?.original?.version}</div>,
@@ -53,6 +59,7 @@ export const getDeviceInfoColumns = (): ColumnDef<DeviceInfo>[] => {
           column={column}
           title={"Manufacturer"}
           attribute="manufacturer"
+          context={context}
         />
       ),
       cell: ({ row }) => <div>{row?.original?.manufacturer}</div>,
@@ -63,7 +70,7 @@ export const getDeviceInfoColumns = (): ColumnDef<DeviceInfo>[] => {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">
-          <DataTableRowActions row={row} />
+          <DataTableRowActions row={row} context={context} />
         </div>
       ),
     },
