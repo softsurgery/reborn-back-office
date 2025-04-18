@@ -5,7 +5,7 @@ import { Region, ServerResponse } from "@/types";
 
 const findPaginated = async ({
   page = "1",
-  size = "5",
+  size = "10",
   sort,
   search = "",
   filter = "",
@@ -40,11 +40,10 @@ const findById = async (regionId: number): Promise<Region> => {
   return response.data;
 };
 
-const create = async (Region: Partial<Region>): Promise<Region> => {
-  const response = await axios.post<Region>(
-    "/api/admin/content/regions",
-    Region
-  );
+const create = async (
+  Region: Partial<Region>
+): Promise<ServerResponse<Region>> => {
+  const response = await axios.post("/api/admin/content/regions", Region);
   return response.data;
 };
 
@@ -59,7 +58,7 @@ const update = async (
   return response.data;
 };
 
-const remove = async (regionId: number): Promise<ServerResponse<Region>> => {
+const remove = async (regionId?: number): Promise<ServerResponse<Region>> => {
   const response = await axios.delete(`/api/admin/content/regions/${regionId}`);
   return response.data;
 };

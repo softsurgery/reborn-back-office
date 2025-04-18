@@ -12,6 +12,7 @@ import {
   Package,
   WandSparkles,
   Paperclip,
+  MapIcon,
 } from "lucide-react";
 
 import {
@@ -85,7 +86,7 @@ const data = {
         {
           title: "Regions",
           url: "/content/regions",
-          icon: MessageCircle,
+          icon: MapIcon,
         }
       ],
     },

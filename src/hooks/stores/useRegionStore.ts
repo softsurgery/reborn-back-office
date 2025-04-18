@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Region } from "@/types";
 
 interface RegionStoreData extends Partial<Region> {
-  id: number;
+  id?: number;
   label: string;
   errors: Record<string, string[]>;
 }
@@ -16,7 +16,7 @@ interface RegionStore extends RegionStoreData {
 }
 
 const initialState: RegionStoreData = {
-  id: 0,
+  id: undefined,
   label: "",
   errors: {},
 };
@@ -44,6 +44,7 @@ export const useRegionStore = create<RegionStore>((set, get) => ({
   getRegion: () => {
     const data = get();
     return {
+      id: data.id,
       label: data.label, 
     };
   },

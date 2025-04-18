@@ -30,7 +30,7 @@ export const useRegionUpdateSheet = ({
       "Use this form to update an existing region within the system. A region is identified by their unique id, Fill in all required fields to ensure the region is successfully updated.",
     children: (
       <div>
-        <RegionForm className="my-4" />
+        <RegionForm />
         <div className="flex gap-2 justify-end">
           <Button
             onClick={() => {

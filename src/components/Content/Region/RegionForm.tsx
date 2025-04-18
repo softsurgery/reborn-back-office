@@ -16,7 +16,7 @@ export const RegionForm = ({ className }: RegionFormProps) => {
       {
         name: "General Information",
         description: "General information about the region.",
-        includeHeader: true,
+        includeHeader: false,
         gridItems: [
           {
             id: 1,
@@ -27,6 +27,7 @@ export const RegionForm = ({ className }: RegionFormProps) => {
                 variant: "text",
                 required: true,
                 description: "The label for the region.",
+                error: regionStore.errors.label?.[0],
                 props: {
                   value: regionStore.label,
                   onChange: (value) => {
@@ -43,13 +44,8 @@ export const RegionForm = ({ className }: RegionFormProps) => {
   };
 
   return (
-    <div
-      className={cn(
-        "flex flex-col pb-20 overflow-hidden container mx-auto",
-        className
-      )}
-    >
-      <FormBuilder form={form} />
+    <div className={cn("my-5", className)}>
+      <FormBuilder form={form}  />
     </div>
   );
 };

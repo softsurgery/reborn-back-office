@@ -15,13 +15,9 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET": {
-        const region = await regionService.getRegionById(
-          Number(id)
-        );
+        const region = await regionService.getRegionById(Number(id));
         if (!region) {
-          return res
-            .status(404)
-            .json({ error: "Region not found", code: 404 });
+          return res.status(404).json({ error: "Region not found", code: 404 });
         }
         return res.status(200).json(region);
       }
@@ -30,11 +26,21 @@ export default async function handler(
           Number(id),
           req.body
         );
-        return res.status(200).json(updatedRegion);
+        return res.status(200).json({
+          message: "Region updated successfully",
+          code: 200,
+          data: updatedRegion,
+        });
       }
       case "DELETE": {
-        await regionService.deleteRegion(Number(id));
-        return res.status(204).end();
+        const region = await regionService.deleteRegion(Number(id));
+        return res
+          .status(200)
+          .json({
+            message: "Region deleted successfully",
+            code: 200,
+            data: region,
+          });
       }
       default:
         return res.status(405).json({ error: "Method Not Allowed", code: 405 });

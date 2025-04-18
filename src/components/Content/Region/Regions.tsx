@@ -1,5 +1,5 @@
 import React from "react";
-import { useMutation,useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
@@ -7,7 +7,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { DataTable } from "@/components/Common/Datatables/data-table";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useIntro } from "@/context/IntroContext";
-import { useRegionCreateSheet } from "./modals/RegionCreateSheet"
+import { useRegionCreateSheet } from "./modals/RegionCreateSheet";
 import { DataTableConfig, Region, ServerResponse } from "@/types";
 import { useRegionStore } from "@/hooks/stores/useRegionStore";
 import { getRegionColumns } from "./columns";
@@ -31,10 +31,7 @@ export default function Regions({ className }: RegionsProps) {
       { title: "Content", href: "/content" },
       { title: "Regions", href: "/content/regions" },
     ]);
-    setIntro?.(
-      "Regions",
-      "Visualization of the regions of the application"
-    );
+    setIntro?.("Regions", "Visualization of the regions of the application");
     return () => {
       clearRoutes?.();
       clearIntro?.();
@@ -97,15 +94,16 @@ export default function Regions({ className }: RegionsProps) {
   }, [regionsResponse]);
 
   const { mutate: createRegion, isPending: isCreationPending } = useMutation({
-    mutationFn: (region: Partial<Region>) => api.admin.content.region.create(region),
+    mutationFn: (region: Partial<Region>) =>
+      api.admin.content.region.create(region),
     onSuccess: () => {
-      toast("Region Created Successfully");
+      toast.success("Region Created Successfully");
       refetchRegions();
       regionStore.reset();
       closeCreateRegionSheet();
     },
     onError: (error) => {
-      toast(error.message);
+      toast.error(error.message);
     },
   });
 
@@ -113,30 +111,29 @@ export default function Regions({ className }: RegionsProps) {
     mutationFn: (data: { id?: number; region: Partial<Region> }) =>
       api.admin.content.region.update(data.id, data.region),
     onSuccess: (response: ServerResponse<Region>) => {
-      toast(response.message);
+      toast.success(response.message);
       refetchRegions();
       regionStore.reset();
       closeUpdateRegionSheet();
     },
     onError: (error) => {
-      toast(error.message);
+      toast.error(error.message);
     },
   });
 
   const { mutate: deleteRegion, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.admin.content.region.remove(id),
+    mutationFn: (id?: number) => api.admin.content.region.remove(id),
     onSuccess: (response: ServerResponse<Region>) => {
-      toast(response.message);
+      toast.success(response.message);
+      regionStore.reset();
       refetchRegions();
     },
-    onError: (error) => toast(error.message),
+    onError: (error) => toast.error(error.message),
   });
 
   const handleCreateSubmit = () => {
-    const data = regionStore.getRegion();
-    const result = regionSchema.safeParse({
-      ...data,
-    });
+    const { id, ...data } = regionStore.getRegion();
+    const result = regionSchema.safeParse(data);
     if (!result.success) {
       regionStore.set("errors", result.error.flatten().fieldErrors);
     } else {
@@ -145,14 +142,12 @@ export default function Regions({ className }: RegionsProps) {
   };
 
   const handleUpdateSubmit = () => {
-    const data = regionStore.getRegion();
-    const result = regionSchema.safeParse({
-      ...data,
-    });
+    const { id, ...data } = regionStore.getRegion();
+    const result = regionSchema.safeParse(data);
     if (!result.success) {
       regionStore.set("errors", result.error.flatten().fieldErrors);
     } else {
-      updateRegion({ id: regionStore.id, region: data });
+      updateRegion({ id, region: data });
     }
   };
 
@@ -163,17 +158,17 @@ export default function Regions({ className }: RegionsProps) {
       resetRegion: () => regionStore.reset(),
     });
 
-    const { updateRegionSheet, openUpdateRegionSheet, closeUpdateRegionSheet } =
+  const { updateRegionSheet, openUpdateRegionSheet, closeUpdateRegionSheet } =
     useRegionUpdateSheet({
       updateRegion: handleUpdateSubmit,
       isUpdatePending: isUpdatePending,
       resetRegion: () => regionStore.reset(),
     });
 
-    const { deleteRegionDialog, openDeleteRegionDialog } = useRegionDeleteDialog({
-      deleteRegion: () => deleteRegion(regionStore?.id),
-      isDeletePending: isDeletionPending,
-    });
+  const { deleteRegionDialog, openDeleteRegionDialog } = useRegionDeleteDialog({
+    deleteRegion: () => deleteRegion(regionStore?.id),
+    isDeletePending: isDeletionPending,
+  });
 
   const context: DataTableConfig<Region> = {
     singularName: "Region",
@@ -194,7 +189,7 @@ export default function Regions({ className }: RegionsProps) {
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
     targetEntity: (region: Region) => regionStore.setRegion(region),
-  }
+  };
 
   const columns = getRegionColumns(context);
 
@@ -202,17 +197,17 @@ export default function Regions({ className }: RegionsProps) {
     isRegionsPending || paging || resizing || searching || sorting;
   return (
     <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={columns}
-          data={regions}
-          context={context}
-          isPending={isPending}
-        />
-        {createRegionSheet}
-        {updateRegionSheet}
-        {deleteRegionDialog}
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={columns}
+        data={regions}
+        context={context}
+        isPending={isPending}
+      />
+      {createRegionSheet}
+      {updateRegionSheet}
+      {deleteRegionDialog}
     </div>
   );
 }

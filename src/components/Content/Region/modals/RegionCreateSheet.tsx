@@ -30,7 +30,7 @@ export const useRegionCreateSheet = ({
       "Use this form to define a new region within the system. A region is identified by their unique id, Fill in all required fields to ensure the region is successfully added.",
     children: (
       <div>
-        <RegionForm className="my-4" />
+        <RegionForm />
         <div className="flex gap-2 justify-end">
           <Button
             onClick={() => {

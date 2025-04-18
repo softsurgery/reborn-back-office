@@ -16,7 +16,7 @@ export default async function handler(
       }
       case "POST": {
         const region = await regionService.createRegion(req.body);
-        return res.status(201).json(region);
+        return res.status(200).json({message: "Region created successfully", code: 200, data: region});
       }
       default:
         return res.status(405).json({ error: "Method Not Allowed", code: 405 });
