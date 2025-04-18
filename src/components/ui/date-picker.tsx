@@ -10,7 +10,7 @@ import {
   setYear,
   startOfYear,
 } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./select";
+} from "@/components/ui/select";
 import { enUS, fr } from "date-fns/locale";
 import { Skeleton } from "./skeleton";
 
@@ -43,9 +43,10 @@ interface DatePickerProps {
   className?: string;
   containerClassName?: string;
   value?: Date;
-  onChange: (value: Date) => void;
+  onChange: (value: Date | null) => void;
   startYear?: number;
   endYear?: number;
+  nullable?: boolean;
   isPending?: boolean;
 }
 export function DatePicker({
@@ -55,6 +56,7 @@ export function DatePicker({
   onChange,
   startYear = getYear(new Date()) - 100,
   endYear = getYear(new Date()) + 100,
+  nullable = false,
   isPending,
 }: DatePickerProps) {
   const i18n = { language: "en" };
@@ -93,69 +95,86 @@ export function DatePicker({
   };
   if (isPending) return <Skeleton className={cn("h-9", className)} />;
   return (
-    <Popover modal>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "flex gap-2 justify-center items-center py-4",
-            !value && "text-muted-foreground",
-            className
-          )}
+    <div className="flex flex-row gap-2">
+      <Popover modal>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant={"outline"}
+            className={cn(
+              "flex gap-2 justify-center items-center py-4",
+              !value && "text-muted-foreground",
+              className
+            )}
+            onClick={() => onChange(new Date())}
+          >
+            <CalendarIcon className="h-4 w-4" />
+            <span className="text-xs">
+              {date
+                ? format(date, "PPP", {
+                    locale: i18n.language == "fr" ? fr : enUS,
+                  })
+                : "Pick a date..."}
+            </span>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className={cn("w-auto p-2 flex flex-col", containerClassName)}
         >
-          <CalendarIcon className="h-4 w-4" />
-          <span>
-            {date
-              ? format(date, "PPP", {
-                  locale: i18n.language == "fr" ? fr : enUS,
-                })
-              : "Pick a date..."}
-          </span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className={cn("w-auto p-2", containerClassName)}>
-        <div className="flex justify-between p-2">
-          <Select
-            onValueChange={handleMonthChange}
-            value={months[getMonth(date || new Date())]}
-          >
-            <SelectTrigger className="w-[110px]">
-              <SelectValue placeholder="Month" />
-            </SelectTrigger>
-            <SelectContent>
-              {months.map((month) => (
-                <SelectItem key={month} value={month}>
-                  {month}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            onValueChange={handleYearChange}
-            value={getYear(date || new Date()).toString()}
-          >
-            <SelectTrigger className="w-[110px]">
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent>
-              {years.map((year) => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+          <div className="flex justify-between p-2">
+            <Select
+              onValueChange={handleMonthChange}
+              value={months[getMonth(date || new Date())]}
+            >
+              <SelectTrigger className="w-[110px]">
+                <SelectValue placeholder="Month" />
+              </SelectTrigger>
+              <SelectContent>
+                {months.map((month) => (
+                  <SelectItem key={month} value={month}>
+                    {month}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select
+              onValueChange={handleYearChange}
+              value={getYear(date || new Date()).toString()}
+            >
+              <SelectTrigger className="w-[110px]">
+                <SelectValue placeholder="Year" />
+              </SelectTrigger>
+              <SelectContent>
+                {years.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={handleSelect}
-          initialFocus
-          month={date}
-          onMonthChange={onChange}
-        />
-      </PopoverContent>
-    </Popover>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={handleSelect}
+            initialFocus
+            month={date}
+            onMonthChange={onChange}
+          />
+        </PopoverContent>
+      </Popover>
+      {nullable && (
+        <Button
+          type="button"
+          size={"icon"}
+          variant={"ghost"}
+          onClick={() => onChange(null)}
+          disabled={value == null}
+        >
+          <X />
+        </Button>
+      )}
+    </div>
   );
 }
