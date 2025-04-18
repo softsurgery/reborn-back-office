@@ -41,29 +41,28 @@ const findById = async (regionId: number): Promise<Region> => {
 };
 
 const create = async (Region: Partial<Region>): Promise<Region> => {
-  const response = await axios.post<Region>("/api/admin/regions", Region);
+  const response = await axios.post<Region>(
+    "/api/admin/content/regions",
+    Region
+  );
   return response.data;
 };
 
 const update = async (
-  regionId: number,
-  Region: Partial<Region>
-): Promise<Region> => {
-  const response = await axios.put<Region>(
+  regionId?: number,
+  Region?: Partial<Region>
+): Promise<ServerResponse<Region>> => {
+  const response = await axios.put(
     `/api/admin/content/regions/${regionId}`,
     Region
   );
   return response.data;
 };
 
-const remove = async (regionId: number): Promise<void> => {
-  await axios.delete(`/api/admin/content/regions/${regionId}`);
+const remove = async (regionId: number): Promise<ServerResponse<Region>> => {
+  const response = await axios.delete(`/api/admin/content/regions/${regionId}`);
+  return response.data;
 };
-
-// const seed = async (): Promise<ServerResponse> => {
-//   const response = await axios.get("/api/admin/content/regions/seed");
-//   return response.data;
-// };
 
 export const region = {
   findPaginated,
@@ -72,5 +71,4 @@ export const region = {
   create,
   update,
   remove,
-//   seed,
 };

@@ -1,8 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
-import { Region } from "@/types";
+import { DataTableConfig, Region } from "@/types";
+import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
 
-export const getRegionColumns = (context: any): ColumnDef<Region>[] => {
+export const getRegionColumns = (
+  context: DataTableConfig<Region>
+): ColumnDef<Region>[] => {
   return [
     {
       accessorKey: "ID",
@@ -35,6 +38,14 @@ export const getRegionColumns = (context: any): ColumnDef<Region>[] => {
       },
       enableSorting: true,
       enableHiding: true,
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="flex justify-center">
+          <DataTableRowActions row={row} context={context} />
+        </div>
+      ),
     },
   ];
 };
