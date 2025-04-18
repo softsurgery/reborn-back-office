@@ -17,7 +17,7 @@ export const FormBuilder = ({
   includeHeader = false,
 }: FormBuilderProps) => {
   return (
-    <div className={cn("flex flex-col w-full px-2", className)}>
+    <div className={cn("flex flex-col w-full", className)}>
       {includeHeader && (
         <div>
           <div className="space-y-1 py-5 sm:py-0">
