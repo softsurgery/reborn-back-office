@@ -12,10 +12,13 @@ import { DeviceInfoService } from "./device-info/services/device-info.service";
 import { DeviceInfoRepository } from "./device-info/repositories/device-info.repository";
 import { BugService } from "./bug/service/bug.service";
 import { BugRepository } from "./bug/repositories/bug.repository";
+import { RegionService } from "./content/services/region.service";
+import { RegionRepository } from "./content/repositories/region.repository";
 
 const prisma = new PrismaClient();
 
-//file-managmement
+//content
+const regionService = new RegionService(new RegionRepository(prisma)); //region
 
 //user-management
 const userService = new UserService(new UserRepository(prisma)); //user
@@ -38,9 +41,13 @@ const feedbackService = new FeedbackService(
 const bugService = new BugService(new BugRepository(prisma), deviceInfoService); // bug
 
 const container = {
+  //content
+  RegionService: regionService,
+  //user-management
   UserService: userService,
   RoleService: roleService,
   PermissionService: permissionService,
+  //reporting
   FeedbackService: feedbackService,
   BugService: bugService,
   DeviceInfoService: deviceInfoService,

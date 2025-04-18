@@ -11,6 +11,8 @@ import {
   Bug,
   Package,
   WandSparkles,
+  Paperclip,
+  MapIcon,
 } from "lucide-react";
 
 import {
@@ -20,7 +22,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { MainNav } from "./MainNav";
-import { UserNav } from "./UserNav";
 import { TeamSwitcher } from "./TeamSwitcher";
 
 const data = {
@@ -74,6 +75,19 @@ const data = {
           url: "/system-reports/deviceInfos",
           icon: Tablet,
         },
+      ],
+    },
+    {
+      id: 3,
+      title: "Content Management",
+      url: "/content-management",
+      icon: Paperclip,
+      items: [
+        {
+          title: "Regions",
+          url: "/content/regions",
+          icon: MapIcon,
+        }
       ],
     },
   ],

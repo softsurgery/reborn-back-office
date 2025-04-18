@@ -31,12 +31,14 @@ model User {
 }
 
 model AppUser {
-  id            Int    @id @default(autoincrement())
-  userId        String
-  user          User      @relation(fields: [userId],references:[id])  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
+  id        Int       @id @default(autoincrement())
+  userId    String
+  regionId  Int
+  region    Region    @relation(fields: [regionId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Role {
@@ -97,14 +99,23 @@ model Feedback {
 }
 
 model Bug {
-  id        Int              @id @default(autoincrement())
-  title   String
-  description    String
-  category  BugCategory
-  deviceId  Int?
-  device    DeviceInfo?      @relation(fields: [deviceId], references: [id], onDelete: SetNull)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @default(now()) @updatedAt
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String
+  category    BugCategory
+  deviceId    Int?
+  device      DeviceInfo? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt
+  deletedAt   DateTime?
+}
+
+model Region {
+  id        Int       @id @default(autoincrement())
+  label     String
+  AppUser   AppUser[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
 }
 

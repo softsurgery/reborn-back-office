@@ -18,8 +18,8 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
-        <title>Regulatory</title>
-        <meta name="description" content="Regulatory" />
+        <title>Reborn Back Office</title>
+        <meta name="description" content="Reborn Back Office" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
