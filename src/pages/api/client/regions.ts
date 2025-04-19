@@ -1,4 +1,3 @@
-// pages/api/region/index.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import container from "@/lib/container";
 
@@ -11,8 +10,8 @@ export default async function handler(
     return res.status(405).json({ error: "Method Not Allowed", code: 405 });
   }
   try {
-    const paginatedRegions = await regionService.getPaginatedRegions(req.query);
-    return res.status(200).json(paginatedRegions);
+    const regions = await regionService.getAllRegions(req.query);
+    return res.status(200).json(regions);
   } catch (error) {
     return res
       .status(500)
