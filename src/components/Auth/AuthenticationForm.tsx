@@ -4,12 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GithubButton } from "./GithubButton";
 import { GoogleButton } from "./GoogleButton";
+import { signIn, useSession } from "next-auth/react";
 
 interface AuthenticationFormProps {
   className?: string;
 }
 
 export function AuthenticationForm({ className }: AuthenticationFormProps) {
+  const { data: session } = useSession();
+
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -43,7 +46,7 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
             Or continue with
           </span>
         </div>
-        <GithubButton />
+        <GithubButton onClick={() => signIn("github", { callbackUrl: "/" })} />
         <GoogleButton />
       </div>
       <div className="text-center text-sm">

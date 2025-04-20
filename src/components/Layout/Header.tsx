@@ -5,6 +5,7 @@ import { SidebarTrigger } from "../ui/sidebar";
 import { BreadcrumbCommon } from "../Common/Breadcrumb";
 import { ModeToggle } from "../Common/ModeToggle";
 import { LanguageSwitcher } from "../Common/LanguageSwitcher";
+import { SignoutButton } from "../Auth/SignoutButton";
 
 interface HeaderProps {
   className?: string;
@@ -25,6 +26,7 @@ export const Header = ({ className }: HeaderProps) => {
       <div className="flex justify-center items-center gap-4 ml-auto">
         <LanguageSwitcher />
         <ModeToggle />
+        <SignoutButton />
       </div>
     </header>
   );

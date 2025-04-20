@@ -20,7 +20,6 @@ const AuthProvider = ({ children }: Props) => {
   const [authenticated, setAuthenticated] = React.useState(false);
 
   React.useEffect(() => {
-    // Access localStorage only on the client side
     const token = localStorage.getItem('access_token');
     if (token) {
       setAuthenticated(true);
