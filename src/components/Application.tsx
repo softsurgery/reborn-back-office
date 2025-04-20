@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -20,7 +20,7 @@ const protectedHome = "/dashboard";
 function Application({ className, Component, pageProps }: ApplicationProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [hasMounted, setHasMounted] = useState(false);
+  const [hasMounted, setHasMounted] = React.useState(false);
 
   const isAuthPage = publicRoutes.some((route) =>
     router.pathname.startsWith(route)
