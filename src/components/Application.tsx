@@ -6,6 +6,7 @@ import { Spinner } from "./Common/Spinner";
 import { Layout } from "./Layout/Layout";
 import { cn } from "@/lib/utils";
 import { Toaster } from "./ui/sonner";
+import { AuthenticationLayout } from "./Auth/AuthenticationLayout";
 
 interface ApplicationProps {
   className?: string;
@@ -32,7 +33,7 @@ function Application({ className, Component, pageProps }: ApplicationProps) {
       )}
     >
       {router.pathname.includes("auth") ? (
-        <Component {...pageProps} />
+          <Component {...pageProps} />
       ) : (
         <Layout className="flex w-full">
           <Component {...pageProps} />
