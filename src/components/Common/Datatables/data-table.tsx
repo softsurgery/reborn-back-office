@@ -27,6 +27,7 @@ import { DataTablePagination } from "./data-table-pagination";
 import { Spinner } from "@/components/Common/Spinner";
 import { cn } from "@/lib/utils";
 import { DataTableConfig } from "@/types";
+import { useFooter } from "@/context/FooterContext";
 
 interface DataTableProps<TData, TValue> {
   className?: string;
@@ -44,8 +45,25 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   context,
+  footerPagination = true,
   isPending,
 }: DataTableProps<TData, TValue>) {
+  //set pagination in footer
+  const { setContent } = useFooter();
+  React.useEffect(() => {
+    if (footerPagination)
+      setContent?.(
+        <DataTablePagination
+          table={table}
+          context={context}
+          className="px-10"
+        />
+      );
+    return () => {
+      setContent?.(null);
+    };
+  }, [footerPagination, context.totalPageCount, context.size, context.page]);
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>(
@@ -86,7 +104,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className={cn(className, "space-y-6")}>
+    <div className={cn(className, "space-y-4")}>
       <DataTableToolbar table={table} context={context} />
       <div className={cn("rounded-md border", containerClassName)}>
         <Table>
@@ -151,7 +169,9 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} context={context} />
+      {!footerPagination && (
+        <DataTablePagination table={table} context={context} />
+      )}
     </div>
   );
 }

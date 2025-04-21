@@ -14,6 +14,7 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { DataTableConfig } from "@/types";
 import { cn } from "@/lib/utils";
+import { Toggle } from "@/components/ui/toggle";
 
 interface DataTablePaginationProps<TData> {
   className?: string;
@@ -29,27 +30,22 @@ export function DataTablePagination<TData>({
   return (
     <div className={cn("flex items-center justify-between", className)}>
       <div className="flex items-center space-x-2 ">
-        <Select
-          value={context.size.toString()}
-          onValueChange={(value) => {
-            context.setPage(1);
-            context.setSize(parseInt(value));
-          }}
-        >
-          <SelectTrigger >
-            <SelectValue placeholder={table.getState().pagination.pageSize} />
-          </SelectTrigger>
-          <SelectContent side="bottom" align="center">
-            {[10, 20, 50, 100].map((pageSize) => (
-              <SelectItem key={pageSize} value={`${pageSize}`}>
-                {pageSize}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center space-x-2">
+          {[10, 50, 100].map((size) => {
+            return (
+              <Toggle
+                key={size}
+                onClick={() => context.setSize(size)}
+                pressed={size == context.size}
+              >
+                {size}
+              </Toggle>
+            );
+          })}
+        </div>
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <div className="flex items-center justify-center text-xs font-medium">
           Page {context.page} of {context.totalPageCount}
         </div>
         <div className="flex items-center space-x-2">
