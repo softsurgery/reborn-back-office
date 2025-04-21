@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { DataTableViewOptions } from "./data-table-view-options";
-import { PlusIcon } from "lucide-react";
+import { PackagePlus, Plus, PlusIcon } from "lucide-react";
 import { DataTableConfig } from "@/types";
 
 interface DataTableToolbarProps<TData> {
@@ -25,29 +25,25 @@ export function DataTableToolbar<TData>({
             context.setPage(1);
             context?.setSearchTerm?.(event.target.value);
           }}
-          className="h-8 w-[150px] lg:w-[300px]"
+          className="h-8"
         />
         {context.searchTerm && (
           <Button
             variant="ghost"
             onClick={() => context?.setSearchTerm?.("")}
-            className="h-8 px-2 lg:px-3"
           >
             Reset
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
       </div>
+      <DataTableViewOptions table={table} />
       {context.createCallback && (
-        <Button
-          variant="outline"
-          onClick={() => context.createCallback?.()}
-          className="hidden h-8 w-8 p-0 lg:flex"
-        >
-          <PlusIcon className="h-4 w-4" />
+        <Button  onClick={() => context.createCallback?.()}>
+          <Plus className="h-4 w-4" />
+          New {context.singularName}
         </Button>
       )}
-      <DataTableViewOptions table={table} />
     </div>
   );
 }

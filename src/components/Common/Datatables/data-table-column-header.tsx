@@ -37,7 +37,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
+            className="text-center data-[state=open]:bg-accent -ml-3"
           >
             <span>{title}</span>
             {context.order === true && attribute == context.sortKey ? (

@@ -13,8 +13,10 @@ import {
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { DataTableConfig } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface DataTablePaginationProps<TData> {
+  className?: string;
   table: Table<TData>;
   context: DataTableConfig<TData>;
 }
@@ -22,9 +24,10 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
   context,
+  className,
 }: DataTablePaginationProps<TData>) {
   return (
-    <div className="flex items-center justify-between">
+    <div className={cn("flex items-center justify-between", className)}>
       <div className="flex items-center space-x-2 ">
         <Select
           value={context.size.toString()}
@@ -33,7 +36,7 @@ export function DataTablePagination<TData>({
             context.setSize(parseInt(value));
           }}
         >
-          <SelectTrigger className="h-8 w-[100px] -mt-1">
+          <SelectTrigger >
             <SelectValue placeholder={table.getState().pagination.pageSize} />
           </SelectTrigger>
           <SelectContent side="bottom" align="center">
@@ -44,7 +47,6 @@ export function DataTablePagination<TData>({
             ))}
           </SelectContent>
         </Select>
-        <p className="text-sm font-medium">Row per page</p>
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
