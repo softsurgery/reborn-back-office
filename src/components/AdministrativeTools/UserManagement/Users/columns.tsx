@@ -146,8 +146,8 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       cell: ({ row }) => (
         <Badge
           className={cn(
-            "font-bold text-white",
-            row.original.isActive ? "bg-green-600" : "bg-red-600"
+            "font-bold",
+            row.original.isActive ? "bg-primary" : "bg-secondary"
           )}
         >
           {row.original.isActive ? "Yes" : "No"}
