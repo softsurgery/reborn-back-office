@@ -107,7 +107,7 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
     isDeviceInfosPending || paging || resizing || searching || sorting;
 
   return (
-    <div className={cn("flex flex-col flex-1 mx-5 lg:mx-10", className)}>
+    <div className={cn("flex flex-col flex-1", className)}>
       <DataTable
         className="flex flex-col flex-1 overflow-hidden p-1"
         containerClassName="overflow-auto"
