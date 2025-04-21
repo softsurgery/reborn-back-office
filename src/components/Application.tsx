@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { Spinner } from "./Common/Spinner";
 import { Layout } from "./Layout/Layout";
 import { cn } from "@/lib/utils";
-import { Toaster } from "./ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 interface ApplicationProps {
   className?: string;
@@ -71,7 +71,7 @@ function Application({ className, Component, pageProps }: ApplicationProps) {
           <Component {...pageProps} />
         </Layout>
       )}
-      <Toaster />
+      <Toaster className="m-5" />
     </div>
   );
 }
