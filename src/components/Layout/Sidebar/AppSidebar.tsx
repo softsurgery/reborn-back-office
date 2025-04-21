@@ -27,7 +27,7 @@ import { TeamSwitcher } from "./TeamSwitcher";
 const data = {
   teams: [
     {
-      name: "Reborn",
+      name: "Reborn Back Office",
       logo: BriefcaseBusiness,
     },
   ],

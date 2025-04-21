@@ -6,6 +6,7 @@ import { BreadcrumbCommon } from "../Common/Breadcrumb";
 import { ModeToggle } from "../Common/ModeToggle";
 import { LanguageSwitcher } from "../Common/LanguageSwitcher";
 import { SignoutButton } from "../Auth/SignoutButton";
+import { Commander } from "../Common/Commander";
 
 interface HeaderProps {
   className?: string;
@@ -22,7 +23,7 @@ export const Header = ({ className }: HeaderProps) => {
       )}
     >
       <SidebarTrigger />
-      <BreadcrumbCommon hierarchy={routes} />
+        <Commander />
       <div className="flex justify-center items-center gap-4 ml-auto">
         <LanguageSwitcher />
         <ModeToggle />

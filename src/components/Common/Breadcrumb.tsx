@@ -9,50 +9,51 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/router";
 
+interface BreadcrumbItemType {
+  title: string;
+  href?: string;
+}
+
 interface BreadcrumbCommonProps {
   className?: string;
-  hierarchy?: { title: string; href?: string }[];
+  hierarchy?: BreadcrumbItemType[];
 }
 
 export const BreadcrumbCommon = ({
   className,
-  hierarchy,
+  hierarchy = [],
 }: BreadcrumbCommonProps) => {
   const router = useRouter();
-  const lastIndex = hierarchy ? hierarchy.length - 1 : 0;
+  const lastIndex = hierarchy.length - 1;
 
   return (
-    <Breadcrumb className={cn(className, "my-auto")} aria-label="breadcrumb">
-      <BreadcrumbList className="flex flex-wrap gap-1 sm:gap-2 items-center">
-        {hierarchy?.map((item, index) => (
-          <BreadcrumbItem
-            key={index}
-            className="flex items-center gap-1 sm:gap-2"
-          >
-            {item.href ? (
-              <BreadcrumbLink
-                className={cn(
-                  "font-semibold text-xs sm:text-sm md:text-base",
-                  item.href ? "cursor-pointer" : "cursor-default"
-                )}
-                onClick={() => {
-                  if (item.href) router.push(item.href);
-                }}
-              >
-                {item.title}
-              </BreadcrumbLink>
-            ) : (
-              <BreadcrumbPage className="font-medium text-xs sm:text-sm md:text-base">
-                {item.title}
-              </BreadcrumbPage>
-            )}
-            {index != lastIndex && (
-              <ChevronRight
-                className={cn("w-4 h-4 sm:w-5 sm:h-5", "text-gray-400")}
-              />
-            )}
-          </BreadcrumbItem>
-        ))}
+    <Breadcrumb className={cn("my-auto", className)} aria-label="Breadcrumb">
+      <BreadcrumbList className="flex flex-wrap items-center gap-1">
+        {hierarchy.map((item, index) => {
+          const isLast = index === lastIndex;
+
+          return (
+            <BreadcrumbItem key={index} className="flex items-center gap-1">
+              {item.href && !isLast ? (
+                <BreadcrumbLink
+                  className="text-xs font-semibold cursor-pointer"
+                  onClick={() => router.push(item.href!)}
+                >
+                  {item.title}
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage
+                  className="text-xs font-medium"
+                  aria-current="page"
+                >
+                  {item.title}
+                </BreadcrumbPage>
+              )}
+
+              {!isLast && <ChevronRight className="w-3 h-3 text-primary" />}
+            </BreadcrumbItem>
+          );
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   );

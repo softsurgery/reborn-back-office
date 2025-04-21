@@ -19,8 +19,6 @@ export function TeamSwitcher({
     plan: string;
   }[];
 }) {
-  // const { isMobile } = useSidebar();
-  // const [activeTeam, setActiveTeam] = React.useState(teams[0]);
   const [activeTeam] = React.useState(teams[0]);
 
   return (
@@ -28,10 +26,7 @@ export function TeamSwitcher({
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
+            <SidebarMenuButton size="lg" className="bg-sidebar-accent">
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <activeTeam.logo className="size-4" />
               </div>
