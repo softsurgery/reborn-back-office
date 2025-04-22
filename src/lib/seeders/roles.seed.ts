@@ -7,7 +7,7 @@ async function main() {
   console.log("Seeding Roles...");
 
   const permissions = await prisma.permission.findMany();
-  await prisma.role.createMany({
+  const roles = await prisma.role.createMany({
     data: [
       {
         id: "admin",
@@ -22,7 +22,7 @@ async function main() {
     ],
     skipDuplicates: true,
   });
-  await prisma.rolePermission.createMany({
+  if (roles.count != 0) await prisma.rolePermission.createMany({
     data: permissions.map((permission) => {
       return {
         roleId: "admin",
