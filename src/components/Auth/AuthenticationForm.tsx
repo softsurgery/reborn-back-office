@@ -47,7 +47,7 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
           </span>
         </div>
         <GithubButton onClick={() => signIn("github", { callbackUrl: "/" })} />
-        <GoogleButton />
+        <GoogleButton onClick={() => signIn("google", { callbackUrl: "/" })} />
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}

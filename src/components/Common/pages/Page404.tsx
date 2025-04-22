@@ -25,7 +25,7 @@ export default function Page404({ className }: Page404Props) {
           to explore on the homepage.
         </p>
         <Link
-          href="/dashboard"
+          href="/"
           className="inline-flex bg-primary-600 hover:bg-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
         >
           Go Back

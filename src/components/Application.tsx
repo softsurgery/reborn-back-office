@@ -15,7 +15,7 @@ interface ApplicationProps {
 }
 
 const publicRoutes = ["/auth"];
-const protectedHome = "/dashboard";
+const protectedHome = "/";
 
 function Application({ className, Component, pageProps }: ApplicationProps) {
   const router = useRouter();
