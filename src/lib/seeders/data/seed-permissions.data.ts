@@ -12,7 +12,7 @@ const entities = [
 
 const actions = ["create", "read", "update", "delete"];
 
-export const seedPermissionsData: Permission[] = entities.flatMap((entity) => {
+export const seedPermissionsData: Permission[] = (entities.flatMap((entity) => {
   return actions.map((action) => {
     const id = `${action.toUpperCase()}_${entity.toUpperCase()}`;
     
@@ -25,4 +25,4 @@ export const seedPermissionsData: Permission[] = entities.flatMap((entity) => {
       description,
     };
   });
-});
+}) as Permission[]);

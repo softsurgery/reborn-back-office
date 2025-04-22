@@ -9,8 +9,8 @@ interface RoleStore extends RoleStoreData {
   getRole: () => Partial<Role>;
   setRole: (data: Partial<Role>) => void;
   addPermission: (permission: Permission) => void;
-  removePermission: (index?: number) => void;
-  isPermissionSelected: (permissionId?: number) => boolean;
+  removePermission: (permissionId?: string) => void;
+  isPermissionSelected: (permissionId?: string) => boolean;
 }
 
 const initialState: RoleStoreData = {
@@ -55,7 +55,7 @@ export const useRoleStore = create<RoleStore>((set, get) => ({
 
   addPermission: (permission: Permission) => {
     const { id, permissions } = get();
-    if (!permissions?.some((p) => p.id === permission.id)) {
+    if (!permissions?.some((p) => p.permissionId === permission.id)) {
       set((state) => ({
         ...state,
         permissions: [
@@ -66,15 +66,15 @@ export const useRoleStore = create<RoleStore>((set, get) => ({
     }
   },
 
-  removePermission: (permissionId?: number) => {
+  removePermission: (permissionId?: string) => {
     set((state) => ({
       ...state,
-      permissions: state.permissions?.filter((p) => p.id !== permissionId),
+      permissions: state.permissions?.filter((p) => p.permissionId !== permissionId),
     }));
   },
 
-  isPermissionSelected: (permissionId?: number) => {
+  isPermissionSelected: (permissionId?: string) => {
     const { permissions } = get();
-    return permissions?.some((p) => p.id === permissionId) || false;
+    return permissions?.some((p) => p.permissionId === permissionId) || false;
   },
 }));

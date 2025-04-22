@@ -107,7 +107,7 @@ export default function Roles({ className }: RolesProps) {
   });
 
   const { mutate: updateRole, isPending: isUpdatePending } = useMutation({
-    mutationFn: (data: { id: number; role: Partial<Role> }) =>
+    mutationFn: (data: { id: string; role: Partial<Role> }) =>
       api.admin.role.update(data.id, data.role),
     onSuccess: (response: ServerResponse<Role>) => {
       toast(response.message);
@@ -121,7 +121,7 @@ export default function Roles({ className }: RolesProps) {
   });
 
   const { mutate: deleteRole, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: number) => api.admin.role.remove(id),
+    mutationFn: (id?: string) => api.admin.role.remove(id),
     onSuccess: (response: ServerResponse<Role>) => {
       toast(response.message);
       refetchRoles();
@@ -135,7 +135,7 @@ export default function Roles({ className }: RolesProps) {
 
   const { mutate: duplicateRole, isPending: isDuplicationPending } =
     useMutation({
-      mutationFn: (id?: number) => api.admin.role.duplicate(id),
+      mutationFn: (id?: string) => api.admin.role.duplicate(id),
       onSuccess: (response: ServerResponse<Role>) => {
         toast(response.message);
         refetchRoles();
@@ -154,7 +154,7 @@ export default function Roles({ className }: RolesProps) {
       description: data.description,
       permissions: roleStore.permissions?.map((permission: RolePermission) => {
         return {
-          permissionId: permission?.id,
+          permissionId: permission?.permissionId,
         } as RolePermission;
       }),
     };
@@ -171,7 +171,7 @@ export default function Roles({ className }: RolesProps) {
         permissions: roleStore.permissions?.map(
           (permission: RolePermission) => {
             return {
-              permissionId: permission?.id,
+              permissionId: permission?.permissionId,
             } as RolePermission;
           }
         ),

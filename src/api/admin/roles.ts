@@ -34,7 +34,7 @@ const findAll = async (): Promise<Role[]> => {
   return response.data;
 };
 
-const findById = async (roleId: number): Promise<Role> => {
+const findById = async (roleId: string): Promise<Role> => {
   const response = await axios.get<Role>(`/api/admin/roles/${roleId}`);
   return response.data;
 };
@@ -45,19 +45,19 @@ const create = async (role: Partial<Role>): Promise<ServerResponse<Role>> => {
 };
 
 const update = async (
-  roleId: number,
+  roleId: string,
   role: Partial<Role>
 ): Promise<ServerResponse<Role>> => {
   const response = await axios.put(`/api/admin/roles/${roleId}`, role);
   return response.data;
 };
 
-const duplicate = async (roleId?: number): Promise<ServerResponse<Role>> => {
+const duplicate = async (roleId?: string): Promise<ServerResponse<Role>> => {
   const response = await axios.get(`/api/admin/roles/duplicate/${roleId}`);
   return response.data;
 };
 
-const remove = async (roleId?: number): Promise<ServerResponse<Role>> => {
+const remove = async (roleId?: string): Promise<ServerResponse<Role>> => {
   const response = await axios.delete(`/api/admin/roles/${roleId}`);
   return response.data;
 };

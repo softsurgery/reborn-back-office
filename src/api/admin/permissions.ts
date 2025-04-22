@@ -1,8 +1,7 @@
 import axios from "axios";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Permission } from "@/types/user-management";
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
-import { ServerResponse } from "@/types";
+import { Permission,ServerResponse } from "@/types";
 
 const findPaginated = async ({
   page = "1",
@@ -34,7 +33,7 @@ const findAll = async (): Promise<Permission[]> => {
   return response.data;
 };
 
-const findById = async (permissionId: number): Promise<Permission> => {
+const findById = async (permissionId: string): Promise<Permission> => {
   const response = await axios.get<Permission>(
     `/api/permissions/${permissionId}`
   );
@@ -47,7 +46,7 @@ const create = async (Permission: Partial<Permission>): Promise<Permission> => {
 };
 
 const update = async (
-  permissionId: number,
+  permissionId: string,
   Permission: Partial<Permission>
 ): Promise<Permission> => {
   const response = await axios.put<Permission>(
@@ -57,7 +56,7 @@ const update = async (
   return response.data;
 };
 
-const remove = async (permissionId: number): Promise<void> => {
+const remove = async (permissionId: string): Promise<void> => {
   await axios.delete(`/api/admin/permissions/${permissionId}`);
 };
 
