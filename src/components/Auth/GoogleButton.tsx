@@ -9,6 +9,7 @@ interface GoogleButtonProps {
 export const GoogleButton = ({ className, onClick }: GoogleButtonProps) => {
   return (
     <Button
+      type="button"
       variant="outline"
       className={cn("w-full", className)}
       onClick={onClick}

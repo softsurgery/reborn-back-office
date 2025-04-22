@@ -58,6 +58,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
       firstName: data.firstName,
       lastName: data.lastName,
       dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
+      password: data.password,
       roleId: data.roleId,
     };
   },

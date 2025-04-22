@@ -9,6 +9,7 @@ interface GithubButtonProps {
 export const GithubButton = ({ className, onClick }: GithubButtonProps) => {
   return (
     <Button
+      type="button"
       variant="outline"
       className={cn("w-full", className)}
       onClick={onClick}

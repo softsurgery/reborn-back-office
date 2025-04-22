@@ -14,14 +14,12 @@ import { BugService } from "./bug/service/bug.service";
 import { BugRepository } from "./bug/repositories/bug.repository";
 import { RegionService } from "./content/services/region.service";
 import { RegionRepository } from "./content/repositories/region.repository";
-
-const prisma = new PrismaClient();
-
-//content
-const regionService = new RegionService(new RegionRepository(prisma)); //region
+import { AuthService } from "./auth";
+import prisma from "@/lib/prisma";
 
 //user-management
 const userService = new UserService(new UserRepository(prisma)); //user
+const authService = new AuthService(userService); //auth
 const roleService = new RoleService(
   new RoleRepository(prisma),
   new RolePermissionRepository(prisma)
@@ -40,10 +38,12 @@ const feedbackService = new FeedbackService(
 ); // feedback
 const bugService = new BugService(new BugRepository(prisma), deviceInfoService); // bug
 
+//content
+const regionService = new RegionService(new RegionRepository(prisma));
+
 const container = {
-  //content
-  RegionService: regionService,
   //user-management
+  AuthService: authService,
   UserService: userService,
   RoleService: roleService,
   PermissionService: permissionService,
@@ -51,6 +51,8 @@ const container = {
   FeedbackService: feedbackService,
   BugService: bugService,
   DeviceInfoService: deviceInfoService,
+  //content
+  RegionService: regionService,
 };
 
 export default container;

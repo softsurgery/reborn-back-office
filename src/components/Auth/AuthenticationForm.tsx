@@ -5,13 +5,33 @@ import { Label } from "@/components/ui/label";
 import { GithubButton } from "./GithubButton";
 import { GoogleButton } from "./GoogleButton";
 import { signIn, useSession } from "next-auth/react";
+import React from "react";
+import { useRouter } from "next/router";
+import { toast } from "sonner";
 
 interface AuthenticationFormProps {
   className?: string;
 }
 
 export function AuthenticationForm({ className }: AuthenticationFormProps) {
-  const { data: session } = useSession();
+  const [usernameOrEmail, setUsernameOrEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = await signIn("credentials", {
+      redirect: false,
+      usernameOrEmail,
+      password,
+    });
+    if (result?.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Welcome back!");
+      router.push("/");
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)}>
@@ -21,10 +41,15 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
           Enter your email below to login to your account
         </p>
       </div>
-      <div className="grid gap-4">
+      <form className="grid gap-4" onSubmit={handleSubmit}>
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Label htmlFor="email">Email/Username</Label>
+          <Input
+            id="email"
+            type="text"
+            value={usernameOrEmail}
+            onChange={(e) => setUsernameOrEmail(e.target.value)}
+          />
         </div>
         <div className="grid gap-2">
           <div className="flex items-center">
@@ -36,7 +61,13 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            type="password"
+            placeholder="•••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
         <Button type="submit" className="w-full">
           Login
@@ -48,7 +79,7 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
         </div>
         <GithubButton onClick={() => signIn("github", { callbackUrl: "/" })} />
         <GoogleButton onClick={() => signIn("google", { callbackUrl: "/" })} />
-      </div>
+      </form>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
         <a href="#" className="underline underline-offset-4">

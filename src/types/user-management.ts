@@ -22,6 +22,11 @@ export interface AppUser extends DatabaseEntity {
   user?: User;
 }
 
+export interface SigninPayload {
+  usernameOrEmail: string;
+  password: string;
+}
+
 export interface Role extends DatabaseEntity {
   id: number;
   label: string;
