@@ -1,6 +1,6 @@
 import container from "@/lib/container";
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
+import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthOptions } from "next-auth";
@@ -33,6 +33,51 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET as string,
     }),
   ],
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "github" || account?.provider === "google") {
+        const email = user.email;
+        const username =
+          (profile as GithubProfile).login || profile?.name || "unknown";
+
+        const existingUser = await container.UserService.getUserByCondition({
+          filter: `(email||$eq||${email})`,
+        });
+
+        if (!existingUser) {
+          await container.UserService.createUser({
+            email,
+            username,
+            isApproved: false,
+          });
+          return "/auth/pending";
+        }
+
+        if (!existingUser.isApproved) {
+          return "/auth/still-pending";
+        }
+      }
+
+      return true;
+    },
+
+    async jwt({ token, user }) {
+      if (user?.email) {
+        const dbUser = await container.UserService.getUserByCondition({
+          filter: `(email||$eq||${user.email})`,
+        });
+        token.isApproved = dbUser?.isApproved ?? false;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.isApproved = !!token.isApproved;
+      }
+      return session;
+    },
+  },
   pages: {
     signIn: "/auth",
   },
