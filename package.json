@@ -4,9 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma db push",
+    "postinstall": "prisma db push && npm run seed:all",
     "build": "next build",
     "start": "next start",
+    "seed:permissions": "ts-node --project tsconfig.local.json src/lib/seeders/permissions.seed.ts",
+    "seed:roles": "ts-node --project tsconfig.local.json src/lib/seeders/roles.seed.ts",
+    "seed:admin": "ts-node --project tsconfig.local.json src/lib/seeders/admin.seed.ts",
+    "seed:all": "npm run seed:permissions && npm run seed:roles && npm run seed:admin",
     "lint": "next lint"
   },
   "dependencies": {
@@ -77,6 +81,7 @@
     "prisma": "^6.5.0",
     "prisma-generator-typescript-interfaces": "^1.7.0",
     "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

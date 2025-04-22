@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { RoleService } from "./users-management/services/role.service";
 import { RoleRepository } from "./users-management/repositories/role.repository";
 import { PermissionService } from "./users-management/services/permission.service";

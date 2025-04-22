@@ -11,7 +11,7 @@ export interface User extends DatabaseEntity {
   email: string | null;
   emailVerified: Date | null;
   image: string | null;
-  roleId: number | null;
+  roleId: string | null;
   role?: Role | null;
   isApproved: boolean;
   appUsers?: AppUser[];
@@ -29,7 +29,7 @@ export interface SigninPayload {
 }
 
 export interface Role extends DatabaseEntity {
-  id: number;
+  id: string;
   label: string;
   description: string | null;
   permissions?: RolePermission[];
@@ -37,7 +37,7 @@ export interface Role extends DatabaseEntity {
 }
 
 export interface Permission extends DatabaseEntity {
-  id: number;
+  id: string;
   label: string;
   description: string | null;
   roles?: RolePermission[];
@@ -45,8 +45,8 @@ export interface Permission extends DatabaseEntity {
 
 export interface RolePermission extends DatabaseEntity {
   id: number;
-  roleId: number;
-  permissionId: number;
+  roleId: string;
+  permissionId: string;
   role?: Role;
   permission?: Permission;
 }

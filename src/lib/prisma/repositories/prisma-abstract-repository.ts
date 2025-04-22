@@ -125,8 +125,11 @@ export class BaseRepository<T> {
     return this.model.create({ data });
   }
 
-  async createMany(data: Partial<T>[]): Promise<T[]> {
-    return this.model.createMany({ data });
+  async createMany(
+    data: Partial<T>[],
+    skipDuplicate: boolean = true
+  ): Promise<T[]> {
+    return this.model.createMany({ data, skipDuplicate });
   }
 
   async update(id: number | string, data: Partial<T>): Promise<T> {

@@ -22,7 +22,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  roleId        Int?
+  roleId        String?
   role          Role?     @relation(fields: [roleId], references: [id])
   appUsers      AppUser[]
   isApproved    Boolean  @default(false)
@@ -43,7 +43,7 @@ model AppUser {
 }
 
 model Role {
-  id          Int              @id @default(autoincrement())
+  id          String              @id
   label       String
   description String?
   permissions RolePermission[]
@@ -54,7 +54,7 @@ model Role {
 }
 
 model Permission {
-  id          Int              @id @default(autoincrement())
+  id          String           @id
   label       String           @unique()
   description String?
   roles       RolePermission[]
@@ -65,8 +65,8 @@ model Permission {
 
 model RolePermission {
   id           Int        @id @default(autoincrement())
-  roleId       Int
-  permissionId Int
+  roleId       String
+  permissionId String
   role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
   createdAt    DateTime   @default(now())

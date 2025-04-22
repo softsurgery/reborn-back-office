@@ -27,6 +27,10 @@ export class PermissionService {
     return this.permissionRepository.create(data);
   }
 
+  async createManyPermissions(data: Partial<Permission>[]): Promise<Permission[]> {
+    return this.permissionRepository.createMany(data);
+  }
+
   async updatePermission(
     id: number,
     data: Partial<Permission>
