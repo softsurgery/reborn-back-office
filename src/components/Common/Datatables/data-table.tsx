@@ -102,7 +102,6 @@ export function DataTable<TData, TValue>({
       },
     },
   });
-
   return (
     <div className={cn(className, "space-y-4")}>
       <DataTableToolbar table={table} context={context} />

@@ -54,7 +54,7 @@ export const useUserCreateSheet = ({
         </div>
       </div>
     ),
-    className: "min-w-[25vw]",
+    className: "min-w-[50vw]",
     onToggle: resetUser,
   });
 

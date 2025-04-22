@@ -247,19 +247,19 @@ export default function Roles({ className }: RolesProps) {
   const isPending =
     isRolesPending || paging || resizing || searching || sorting;
   return (
-    <div className={cn("flex flex-col flex-1", className)}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={columns}
-          data={roles}
-          context={context}
-          isPending={isPending}
-        />
-        {createRoleSheet}
-        {deleteRoleDialog}
-        {updateRoleSheet}
-        {duplicateRoleDialog}
+    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={columns}
+        data={roles}
+        context={context}
+        isPending={isPending}
+      />
+      {createRoleSheet}
+      {deleteRoleDialog}
+      {updateRoleSheet}
+      {duplicateRoleDialog}
     </div>
   );
 }

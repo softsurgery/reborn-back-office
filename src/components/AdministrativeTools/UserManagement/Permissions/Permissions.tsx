@@ -60,28 +60,26 @@ export default function Permissions({ className }: PermissionsProps) {
   const { value: debouncedSearchTerm, loading: searching } =
     useDebounce<string>(searchTerm, 500);
 
-  const {
-    data: permissionsResponse,
-    isPending: isPermissionsPending,
-  } = useQuery({
-    queryKey: [
-      "permissions",
-      debouncedPage,
-      debouncedSize,
-      debouncedSortDetails.order,
-      debouncedSortDetails.sortKey,
-      debouncedSearchTerm,
-    ],
-    queryFn: () =>
-      api.admin.permission.findPaginated({
-        page: debouncedPage.toString(),
-        size: debouncedSize.toString(),
-        sort: `${debouncedSortDetails.sortKey}:${
-          debouncedSortDetails.order ? "ASC" : "DESC"
-        }`,
-        search: debouncedSearchTerm,
-      }),
-  });
+  const { data: permissionsResponse, isPending: isPermissionsPending } =
+    useQuery({
+      queryKey: [
+        "permissions",
+        debouncedPage,
+        debouncedSize,
+        debouncedSortDetails.order,
+        debouncedSortDetails.sortKey,
+        debouncedSearchTerm,
+      ],
+      queryFn: () =>
+        api.admin.permission.findPaginated({
+          page: debouncedPage.toString(),
+          size: debouncedSize.toString(),
+          sort: `${debouncedSortDetails.sortKey}:${
+            debouncedSortDetails.order ? "ASC" : "DESC"
+          }`,
+          search: debouncedSearchTerm,
+        }),
+    });
 
   const permissions = React.useMemo(() => {
     if (!permissionsResponse) return [];
@@ -102,22 +100,22 @@ export default function Permissions({ className }: PermissionsProps) {
       setSortDetails({ order, sortKey }),
     searchTerm,
     setSearchTerm,
-  }
+  };
 
   const columns = getPermissionColumns(context);
 
   const isPending =
     isPermissionsPending || paging || resizing || searching || sorting;
   return (
-    <div className={cn("flex flex-col flex-1", className)}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={columns}
-          data={permissions}
-          context={context}
-          isPending={isPending}
-        />
+    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
+      <DataTable
+        className="flex flex-col flex-1 overflow-hidden p-1"
+        containerClassName="overflow-auto"
+        columns={columns}
+        data={permissions}
+        context={context}
+        isPending={isPending}
+      />
     </div>
   );
 }

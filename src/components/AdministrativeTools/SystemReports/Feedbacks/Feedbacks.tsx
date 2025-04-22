@@ -134,7 +134,7 @@ export default function Feedbacks({ className }: BugsProps) {
   const isPending =
     isFeedbacksPending || paging || resizing || searching || sorting;
   return (
-    <div className={cn("flex flex-col flex-1", className)}>
+    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
       <DataTable
         className="flex flex-col flex-1 overflow-hidden p-1"
         containerClassName="overflow-auto"

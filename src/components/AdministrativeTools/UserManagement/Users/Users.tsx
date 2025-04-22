@@ -254,15 +254,15 @@ export default function Users({ className }: UsersProps) {
     isUsersPending || paging || resizing || searching || sorting;
 
   return (
-    <div className={cn("flex flex-col flex-1", className)}>
-        <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
-          columns={columns}
-          data={users}
-          context={context}
-          isPending={isPending}
-        />
+    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
+      <DataTable
+        className="flex flex-col flex-1 overflow-auto p-1"
+        containerClassName="overflow-auto"
+        columns={columns}
+        data={users}
+        context={context}
+        isPending={isPending}
+      />
       {createUserSheet}
       {updateUserSheet}
       {deleteUserDialog}
