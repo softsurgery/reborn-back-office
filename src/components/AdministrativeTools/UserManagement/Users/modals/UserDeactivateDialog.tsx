@@ -3,14 +3,14 @@ import { Spinner } from "@/components/Common/Spinner";
 import { Button } from "@/components/ui/button";
 
 interface UserDeactivateDialogProps {
-  userFullname?: string;
+  representation?: string;
   deactivateUser?: () => void;
   isDeactivationPending?: boolean;
   resetUser?: () => void;
 }
 
 export const useDeactivateUserDialog = ({
-  userFullname,
+  representation,
   deactivateUser,
   isDeactivationPending,
   resetUser,
@@ -22,7 +22,7 @@ export const useDeactivateUserDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Deactivate User <span className="font-light">{userFullname}</span> ?
+        Deactivate User <span className="font-light">{representation}</span> ?
       </div>
     ),
     description:

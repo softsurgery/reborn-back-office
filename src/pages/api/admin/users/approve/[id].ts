@@ -15,12 +15,10 @@ export default async function handler(
     return res.status(400).json({ error: "Invalid ID", code: 400 });
   }
   try {
-    const user = await userService.deactivate(id);
-    return res.status(200).json({
-      message: "User Deactivated Successfully",
-      code: 200,
-      data: user,
-    });
+    const user = await userService.approve(id);
+    return res
+      .status(200)
+      .json({ message: "User Approved Successfully", code: 200, data: user });
   } catch (error) {
     return res
       .status(500)

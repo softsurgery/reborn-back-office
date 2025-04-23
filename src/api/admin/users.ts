@@ -39,6 +39,16 @@ const deactivate = async (id?: string): Promise<ServerResponse<User>> => {
   return response.data;
 };
 
+const approve = async (id?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/approve/${id}`);
+  return response.data;
+};
+
+const disapprove = async (id?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/disapprove/${id}`);
+  return response.data;
+};
+
 const findAll = async (): Promise<User[]> => {
   const response = await axios.get<User[]>(`/api/admin/users`);
   return response.data;
@@ -85,5 +95,7 @@ export const user = {
   update,
   activate,
   deactivate,
+  approve,
+  disapprove,
   remove,
 };

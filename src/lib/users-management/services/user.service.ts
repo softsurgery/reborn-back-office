@@ -56,6 +56,15 @@ export class UserService {
     return this.userRepository.update(id, { ...user, isActive: false });
   }
 
+  async approve(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    return this.userRepository.update(id, { ...user, isApproved: true });
+  }
+  async disapprove(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    return this.userRepository.update(id, { ...user, isApproved: false });
+  }
+
   async deleteUser(id: string): Promise<User> {
     return this.userRepository.delete(id);
   }

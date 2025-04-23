@@ -17,7 +17,15 @@ import { DataTableConfig, ServerResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { useIntro } from "@/context/IntroContext";
 import { DataTable } from "@/components/Common/Datatables/data-table";
-import { ArrowDown, ArrowUp, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  UserRoundCheck,
+  UserRoundX,
+  X,
+} from "lucide-react";
+import { useApproveUserDialog } from "./modals/UserApproveDialog";
+import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 
 interface UsersProps {
   className?: string;
@@ -97,6 +105,13 @@ export default function Users({ className }: UsersProps) {
     return usersResponse.data;
   }, [usersResponse]);
 
+  const targetRepresentation = React.useMemo(() => {
+    if (userStore.firstName && userStore.lastName) {
+      return `${userStore.firstName} ${userStore.lastName}`;
+    }
+    return userStore.username || "";
+  }, [userStore.firstName, userStore.lastName, userStore.username]);
+
   const { mutate: createUser, isPending: isCreationPending } = useMutation({
     mutationFn: (user: Partial<User>) => api.admin.user.create(user),
     onSuccess: () => {
@@ -154,6 +169,25 @@ export default function Users({ className }: UsersProps) {
       onError: (error) => toast(error.message),
     });
 
+  const { mutate: approveUser, isPending: isApprovalPending } = useMutation({
+    mutationFn: (id?: string) => api.admin.user.approve(id),
+    onSuccess: (response: ServerResponse<User>) => {
+      toast(response.message);
+      refetchUsers();
+    },
+    onError: (error) => toast(error.message),
+  });
+
+  const { mutate: disapproveUser, isPending: isDisapprovalPending } =
+    useMutation({
+      mutationFn: (id?: string) => api.admin.user.disapprove(id),
+      onSuccess: (response: ServerResponse<User>) => {
+        refetchUsers();
+        toast(response.message);
+      },
+      onError: (error) => toast(error.message),
+    });
+
   const handleCreateSubmit = () => {
     const data = userStore.getUser();
     const result = updateUserSchema.safeParse({
@@ -203,7 +237,7 @@ export default function Users({ className }: UsersProps) {
   });
 
   const { activateUserDialog, openActivateUserDialog } = useActivateUserDialog({
-    userFullname: `${userStore.firstName} - ${userStore.lastName}`,
+    representation: targetRepresentation,
     activateUser: () => activateUser(userStore.id),
     isActivationPending,
     resetUser: () => userStore.reset(),
@@ -211,9 +245,24 @@ export default function Users({ className }: UsersProps) {
 
   const { deactivateUserDialog, openDeactivateUserDialog } =
     useDeactivateUserDialog({
-      userFullname: `${userStore.firstName} - ${userStore.lastName}`,
+      representation: targetRepresentation,
       deactivateUser: () => deactivateUser(userStore.id),
       isDeactivationPending,
+      resetUser: () => userStore.reset(),
+    });
+
+  const { approveUserDialog, openApproveUserDialog } = useApproveUserDialog({
+    representation: targetRepresentation,
+    approveUser: () => approveUser(userStore.id),
+    isApprovalPending,
+    resetUser: () => userStore.reset(),
+  });
+
+  const { disapproveUserDialog, openDisapproveUserDialog } =
+    useDisapproveUserDialog({
+      representation: targetRepresentation,
+      disapproveUser: () => disapproveUser(userStore.id),
+      isDisapprovalPending,
       resetUser: () => userStore.reset(),
     });
 
@@ -236,6 +285,20 @@ export default function Users({ className }: UsersProps) {
           actionLabel: "Deactivate",
           actionIcon: <ArrowDown />,
           isActionVisible: (user: User) => !!user.isActive,
+        },
+      ],
+      2: [
+        {
+          actionCallback: openApproveUserDialog,
+          actionLabel: "Approve",
+          actionIcon: <UserRoundCheck />,
+          isActionVisible: (user: User) => !user.isApproved,
+        },
+        {
+          actionCallback: openDisapproveUserDialog,
+          actionLabel: "Disapprove",
+          actionIcon: <UserRoundX />,
+          isActionVisible: (user: User) => !!user.isApproved,
         },
       ],
     },
@@ -274,6 +337,8 @@ export default function Users({ className }: UsersProps) {
       {deleteUserDialog}
       {activateUserDialog}
       {deactivateUserDialog}
+      {approveUserDialog}
+      {disapproveUserDialog}
     </div>
   );
 }

@@ -3,14 +3,14 @@ import { Spinner } from "@/components/Common/Spinner";
 import { Button } from "@/components/ui/button";
 
 interface UserActivateDialogProps {
-  userFullname?: string;
+  representation?: string;
   activateUser?: () => void;
   isActivationPending?: boolean;
   resetUser?: () => void;
 }
 
 export const useActivateUserDialog = ({
-  userFullname,
+  representation,
   activateUser,
   isActivationPending,
   resetUser,
@@ -22,7 +22,7 @@ export const useActivateUserDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Activate User <span className="font-light">{userFullname}</span> ?
+        Activate User <span className="font-light">{representation}</span> ?
       </div>
     ),
     description:

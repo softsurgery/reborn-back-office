@@ -157,6 +157,29 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       enableHiding: true,
     },
     {
+      accessorKey: "Approved",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Approved"
+          attribute="isApproved"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => (
+        <Badge
+          className={cn(
+            "font-bold text-foreground",
+            row.original.isApproved ? "bg-primary" : "bg-secondary"
+          )}
+        >
+          {row.original.isApproved ? "Yes" : "No"}
+        </Badge>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       accessorKey: "Creation Date",
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -169,7 +192,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       cell: ({ row }) => (
         <div>
           {(row.original.createdAt &&
-            format(row.original.createdAt, "yyyy-MM-dd")) || (
+            format(row.original.createdAt, "yyyy-MM-dd hh:mm")) || (
             <span className="opacity-70">Not Defined</span>
           )}
         </div>
