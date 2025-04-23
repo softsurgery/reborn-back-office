@@ -3,16 +3,22 @@ import { cn } from "@/lib/utils";
 
 interface GoogleButtonProps {
   className?: string;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
-export const GoogleButton = ({ className, onClick }: GoogleButtonProps) => {
+export const GoogleButton = ({
+  className,
+  disabled,
+  onClick,
+}: GoogleButtonProps) => {
   return (
     <Button
       type="button"
       variant="outline"
       className={cn("w-full", className)}
       onClick={onClick}
+      disabled={disabled}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

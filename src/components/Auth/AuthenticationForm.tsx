@@ -4,10 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GithubButton } from "./GithubButton";
 import { GoogleButton } from "./GoogleButton";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import React from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 interface AuthenticationFormProps {
   className?: string;
@@ -18,21 +19,37 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
   const [password, setPassword] = React.useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
-      redirect: false,
-      usernameOrEmail,
-      password,
-    });
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Welcome back!");
+  const { mutate: signInMutator, isPending: isSignInPending } = useMutation({
+    mutationFn: async (data: {
+      method: "credentials" | "github" | "google";
+      usernameOrEmail?: string;
+      password?: string;
+    }) => {
+      const result = await signIn(data.method, {
+        redirect: false,
+        callbackUrl: "/",
+        ...(data.method === "credentials" && {
+          usernameOrEmail: data.usernameOrEmail,
+          password: data.password,
+        }),
+      });
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+      return result;
+    },
+    onSuccess: () => {
       router.push("/");
-    }
-  };
+      toast.success("Welcome back!");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Something went wrong. Please try again.");
+    },
+  });
 
+  const handleSignIn = () => {
+    signInMutator({ method: "credentials", usernameOrEmail, password });
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -41,7 +58,8 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
           Enter your email below to login to your account
         </p>
       </div>
-      <form className="grid gap-4" onSubmit={handleSubmit}>
+
+      <div className="grid gap-4">
         <div className="grid gap-2">
           <Label htmlFor="email">Email/Username</Label>
           <Input
@@ -49,8 +67,10 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
             type="text"
             value={usernameOrEmail}
             onChange={(e) => setUsernameOrEmail(e.target.value)}
+            disabled={isSignInPending}
           />
         </div>
+
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
@@ -67,19 +87,35 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
             placeholder="•••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isSignInPending}
           />
         </div>
-        <Button type="submit" className="w-full">
+
+        <Button
+          type="button"
+          className="w-full"
+          onClick={handleSignIn}
+          disabled={isSignInPending}
+        >
           Login
         </Button>
+
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
             Or continue with
           </span>
         </div>
-        <GithubButton onClick={() => signIn("github", { callbackUrl: "/" })} />
-        <GoogleButton onClick={() => signIn("google", { callbackUrl: "/" })} />
-      </form>
+
+        <GithubButton
+          onClick={() => signInMutator({ method: "github" })}
+          disabled={isSignInPending}
+        />
+        <GoogleButton
+          onClick={() => signInMutator({ method: "google" })}
+          disabled={isSignInPending}
+        />
+      </div>
+
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
         <a href="#" className="underline underline-offset-4">

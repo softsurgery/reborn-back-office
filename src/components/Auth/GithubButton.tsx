@@ -3,16 +3,22 @@ import { cn } from "@/lib/utils";
 
 interface GithubButtonProps {
   className?: string;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
-export const GithubButton = ({ className, onClick }: GithubButtonProps) => {
+export const GithubButton = ({
+  className,
+  disabled,
+  onClick,
+}: GithubButtonProps) => {
   return (
     <Button
       type="button"
       variant="outline"
       className={cn("w-full", className)}
       onClick={onClick}
+      disabled={disabled}
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
