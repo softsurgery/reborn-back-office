@@ -39,6 +39,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           : user?.username || "",
       email: userData?.user.email || "",
       avatar: "/avatars/shadcn.jpg",
+      avataralt:
+        user?.firstName && user?.lastName
+          ? `${user?.firstName?.charAt(0).toUpperCase()}${user?.lastName?.charAt(0).toUpperCase()}`
+          : user?.username?.charAt(0).toUpperCase() || "",
     },
     teams: [
       {
