@@ -19,7 +19,7 @@ export class PermissionService {
     return this.permissionRepository.findByCondition(queryObject);
   }
 
-  async getPermissionById(id: number): Promise<Permission | null> {
+  async getPermissionById(id: string): Promise<Permission | null> {
     return this.permissionRepository.findById(id);
   }
 
@@ -32,13 +32,13 @@ export class PermissionService {
   }
 
   async updatePermission(
-    id: number,
+    id: string,
     data: Partial<Permission>
   ): Promise<Permission> {
     return this.permissionRepository.update(id, data);
   }
 
-  async deletePermission(id: number): Promise<Permission> {
+  async deletePermission(id: string): Promise<Permission> {
     return this.permissionRepository.softDelete(id);
   }
 

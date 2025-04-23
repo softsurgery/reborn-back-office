@@ -3,14 +3,14 @@ import { Spinner } from "@/components/Common/Spinner";
 import { Button } from "@/components/ui/button";
 
 interface RoleDeleteDialogProps {
-  roleLabel?: string;
+  representation?: string;
   deleteRole?: () => void;
   isDeletionPending?: boolean;
   resetRole?: () => void;
 }
 
 export const useRoleDeleteDialog = ({
-  roleLabel,
+  representation,
   deleteRole,
   isDeletionPending,
   resetRole
@@ -22,7 +22,7 @@ export const useRoleDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Role <span className="font-light">{roleLabel}</span> ?
+        Delete Role <span className="font-light">{representation}</span> ?
       </div>
     ),
     description:

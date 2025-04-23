@@ -24,7 +24,7 @@ export class RoleService {
     return this.roleRepository.findByCondition(queryObject);
   }
 
-  async getRoleById(id: number): Promise<Role | null> {
+  async getRoleById(id: string): Promise<Role | null> {
     return this.roleRepository.findById(id);
   }
 
@@ -40,7 +40,7 @@ export class RoleService {
     return role;
   }
 
-  async updateRole(id: number, data: Partial<Role>): Promise<Role> {
+  async updateRole(id: string, data: Partial<Role>): Promise<Role> {
     const { permissions, ...rest } = data;
     await this.roleRepository.update(id, rest);
 
@@ -80,7 +80,7 @@ export class RoleService {
     return updatedRole!;
   }
 
-  async duplicateRole(roleId: number) {
+  async duplicateRole(roleId: string) {
     const role = await this.roleRepository.findOneByCondition({
       filter: `id||$eq||${roleId}`,
       join: "permissions.permission",
@@ -94,7 +94,7 @@ export class RoleService {
     }
   }
 
-  async deleteRole(id: number): Promise<Role> {
+  async deleteRole(id: string): Promise<Role> {
     return this.roleRepository.softDelete(id);
   }
 

@@ -18,7 +18,7 @@ export default async function handler(
   }
 
   try {
-    const role = await roleService.duplicateRole(Number(id));
+    const role = await roleService.duplicateRole(id);
     return res
       .status(200)
       .json({ message: "Role Duplicated Successfully", code: 200, data: role });

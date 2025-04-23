@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { BaseRepository } from "@/lib/prisma/repositories/prisma-abstract-repository";
-import { RolePermission } from "@/types/user-management";
+import { RolePermission } from "@/types";
 
 export class RolePermissionRepository extends BaseRepository<RolePermission> {
   constructor(prisma: PrismaClient) {

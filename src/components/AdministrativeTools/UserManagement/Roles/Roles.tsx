@@ -195,7 +195,7 @@ export default function Roles({ className }: RolesProps) {
 
   const { deleteRoleDialog, openDeleteRoleDialog, closeDeleteRoleDialog } =
     useRoleDeleteDialog({
-      roleLabel: roleStore.label,
+      representation: roleStore.label,
       deleteRole: () => deleteRole(roleStore.id),
       isDeletionPending,
       resetRole: () => roleStore.reset(),
@@ -206,7 +206,7 @@ export default function Roles({ className }: RolesProps) {
     openDuplicateRoleDialog,
     closeDuplicateRoleDialog,
   } = useRoleDuplicateDialog({
-    roleLabel: roleStore.label,
+    representation: roleStore.label,
     duplicateRole: () => duplicateRole(roleStore.id),
     isDuplicationPending,
     resetRole: () => roleStore.reset(),
@@ -240,6 +240,7 @@ export default function Roles({ className }: RolesProps) {
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
+    targetEntity: (role: Role) => roleStore.setRole(role),
   };
 
   const columns = getRoleColumns(context);

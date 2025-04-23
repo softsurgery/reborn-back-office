@@ -15,9 +15,7 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET": {
-        const permission = await permissionService.getPermissionById(
-          Number(id)
-        );
+        const permission = await permissionService.getPermissionById(id);
         if (!permission) {
           return res
             .status(404)
@@ -27,13 +25,13 @@ export default async function handler(
       }
       case "PUT": {
         const updatedPermission = await permissionService.updatePermission(
-          Number(id),
+          id,
           req.body
         );
         return res.status(200).json(updatedPermission);
       }
       case "DELETE": {
-        await permissionService.deletePermission(Number(id));
+        await permissionService.deletePermission(id);
         return res.status(204).end();
       }
       default:

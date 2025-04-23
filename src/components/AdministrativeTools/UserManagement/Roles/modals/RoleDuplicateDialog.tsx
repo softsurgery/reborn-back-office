@@ -3,14 +3,14 @@ import { Spinner } from "@/components/Common/Spinner";
 import { Button } from "@/components/ui/button";
 
 interface RoleDuplicateDialogProps {
-  roleLabel?: string;
+  representation?: string;
   duplicateRole?: () => void;
   isDuplicationPending?: boolean;
   resetRole?: () => void;
 }
 
 export const useRoleDuplicateDialog = ({
-  roleLabel,
+  representation,
   duplicateRole,
   isDuplicationPending,
   resetRole,
@@ -22,7 +22,7 @@ export const useRoleDuplicateDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Duplicate Role <span className="font-light">{roleLabel}</span> ?
+        Duplicate Role <span className="font-light">{representation}</span> ?
       </div>
     ),
     description:

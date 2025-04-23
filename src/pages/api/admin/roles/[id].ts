@@ -17,14 +17,14 @@ export default async function handler(
   try {
     switch (req.method) {
       case "GET": {
-        const role = await roleService.getRoleById(Number(id));
+        const role = await roleService.getRoleById(id);
         if (!role) {
           return res.status(404).json({ error: "Role not found", code: 404 });
         }
         return res.status(200).json(role);
       }
       case "PUT": {
-        const updatedRole = await roleService.updateRole(Number(id), req.body);
+        const updatedRole = await roleService.updateRole(id, req.body);
         return res.status(200).json({
           message: "Role Updated Successfuly",
           code: 200,
@@ -32,7 +32,7 @@ export default async function handler(
         });
       }
       case "DELETE": {
-        const role = await roleService.deleteRole(Number(id));
+        const role = await roleService.deleteRole(id);
         return res.status(200).json({
           message: "Role Deleted Successfully",
           code: 200,
