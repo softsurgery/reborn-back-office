@@ -11,11 +11,8 @@ import { AppSidebar } from "./Sidebar/AppSidebar";
 import { Footer } from "./Footer";
 import { FooterContext } from "@/context/FooterContext";
 import { IntroContext } from "@/context/IntroContext";
-import { Separator } from "../ui/separator";
-import { BreadcrumbCommon } from "../Common/Breadcrumb";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import NotMobileSupported from "../Common/pages/NotMobileSupported";
-import Page from "@/pages/auth";
 import { PageHeader } from "./PageHeader";
 
 interface LayoutProps {
@@ -91,7 +88,6 @@ export const Layout = ({ children, className }: LayoutProps) => {
                     <main
                       className={cn(
                         "flex flex-col flex-1 overflow-hidden px-10",
-                        // "no-scrollbar",
                         className
                       )}
                     >
