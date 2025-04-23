@@ -3,7 +3,7 @@ import { api } from "@/api";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { updateUserSchema } from "@/types/validations/user.validation";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getUserColumns } from "./columns";
 import { useUserCreateSheet } from "./modals/UserCreateSheet";
@@ -24,6 +24,7 @@ interface UsersProps {
 }
 
 export default function Users({ className }: UsersProps) {
+  const queryClient = useQueryClient();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
@@ -117,6 +118,8 @@ export default function Users({ className }: UsersProps) {
       refetchUsers();
       userStore.reset();
       closeUpdateUserSheet();
+      //this instruction forces the user to be refetched again if the connected user is the one being updated
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
     onError: (error) => {
       toast(error.message);
@@ -168,10 +171,12 @@ export default function Users({ className }: UsersProps) {
     const data = userStore.getUser();
     const result = updateUserSchema.safeParse({
       ...data,
+      setManualPassword: userStore.setManualPassword,
       confirmPassword: userStore.confirmPassword,
     });
     if (!result.success) {
       userStore.set("errors", result.error.flatten().fieldErrors);
+      console.log(result.error.flatten().fieldErrors);
     } else {
       updateUser({ id: userStore.id, user: data });
     }

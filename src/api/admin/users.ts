@@ -49,6 +49,15 @@ const findById = async (userId: string): Promise<User> => {
   return response.data;
 };
 
+const findByEmail = async (email?: string): Promise<User> => {
+  const response = await axios.get<User[]>(`/api/admin/users`, {
+    params: {
+      filter: `email||$eq||${email}`,
+    },
+  });
+  return response.data[0];
+};
+
 const create = async (user: Partial<User>): Promise<ServerResponse<User>> => {
   const response = await axios.post("/api/admin/users", user);
   return response.data;
@@ -71,6 +80,7 @@ export const user = {
   findPaginated,
   findAll,
   findById,
+  findByEmail,
   create,
   update,
   activate,
