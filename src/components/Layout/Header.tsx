@@ -1,11 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { useBreadcrumb } from "../../context/BreadcrumbContext";
 import { SidebarTrigger } from "../ui/sidebar";
-import { BreadcrumbCommon } from "../Common/Breadcrumb";
 import { ModeToggle } from "../Common/ModeToggle";
 import { LanguageSwitcher } from "../Common/LanguageSwitcher";
-import { SignoutButton } from "../Auth/SignoutButton";
 import { Commander } from "../Common/Commander";
 
 interface HeaderProps {
@@ -13,8 +10,6 @@ interface HeaderProps {
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  const { routes } = useBreadcrumb();
-
   return (
     <header
       className={cn(
@@ -23,11 +18,10 @@ export const Header = ({ className }: HeaderProps) => {
       )}
     >
       <SidebarTrigger />
-        <Commander />
+      <Commander />
       <div className="flex justify-center items-center gap-4 ml-auto">
         <LanguageSwitcher />
         <ModeToggle />
-        <SignoutButton />
       </div>
     </header>
   );
