@@ -38,6 +38,7 @@ export const UserForm: React.FC<UserFormProps> = ({
   const handleShowPasswordInputs = (checked: CheckedState) => {
     const value = showPasswordInputs ? undefined : "";
     setShowPasswordInputs(checked as boolean);
+    userStore.set("setManualPassword", checked as boolean);
     userStore.set("password", value);
     userStore.set("confirmPassword", value);
   };
@@ -155,7 +156,7 @@ export const UserForm: React.FC<UserFormProps> = ({
           <div className="items-top flex space-x-2 my-4">
             <Checkbox
               id="show-password-inputs"
-              checked={showPasswordInputs}
+              checked={userStore.setManualPassword}
               onCheckedChange={handleShowPasswordInputs}
             />
             <div className="grid gap-1.5 leading-none">
