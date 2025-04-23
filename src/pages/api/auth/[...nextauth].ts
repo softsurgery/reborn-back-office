@@ -4,6 +4,7 @@ import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthOptions } from "next-auth";
+import e from "express";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -37,11 +38,12 @@ export const authOptions: AuthOptions = {
     async signIn({ user, account, profile }) {
       if (account?.provider === "github" || account?.provider === "google") {
         const email = user.email;
+        console.log(email);
         const username =
           (profile as GithubProfile).login || profile?.name || "unknown";
 
         const existingUser = await container.UserService.getUserByCondition({
-          filter: `(email||$eq||${email})`,
+          filter: `email||$eq||${email}`,
         });
 
         if (!existingUser) {
