@@ -3,12 +3,22 @@ import { Paginated } from "@/lib/prisma/interfaces/pagination";
 import { User } from "@/types/user-management";
 import { UserRepository } from "../repositories/user.repository";
 import { hashPassword } from "@/lib/utils/hash.util";
+import { CardinalKeyService } from "@/lib/cardinal/key.service";
 
 export class UserService {
   private userRepository: UserRepository;
+  private cardianlKeyService: CardinalKeyService;
 
-  constructor(userRepository: UserRepository) {
+  constructor(
+    userRepository: UserRepository,
+    cardianlKeyService: CardinalKeyService
+  ) {
     this.userRepository = userRepository;
+    this.cardianlKeyService = cardianlKeyService;
+  }
+
+  getUserIdentity(user: User): string {
+    return `${user.id}${user.username}`;
   }
 
   async getPaginatedUsers(queryObject: IQueryObject): Promise<Paginated<User>> {
@@ -28,15 +38,24 @@ export class UserService {
   }
 
   async createUser(data: Partial<User>): Promise<User> {
-    const user = await this.getUserByCondition({
+    //search for existing user
+    let user = await this.getUserByCondition({
       filter: `(username||$eq||${data.username};email||$eq||${data.email})`,
     });
     if (user) {
       throw new Error("User already exists");
     }
+    //create user
     const hashedPassword = data.password && (await hashPassword(data.password));
     data.password = hashedPassword;
-    return this.userRepository.create(data);
+    user = await this.userRepository.create(data);
+    //create cardinal key
+    await this.cardianlKeyService.createKey(
+      `${data.username}`,
+      this.getUserIdentity(user),
+      false
+    );
+    return user;
   }
 
   async updateUser(id: string, data: Partial<User>): Promise<User> {
@@ -49,23 +68,29 @@ export class UserService {
 
   async activate(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
+    if (user) this.cardianlKeyService.enableKey(this.getUserIdentity(user));
     return this.userRepository.update(id, { ...user, isActive: true });
   }
   async deactivate(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
+    if (user) this.cardianlKeyService.disableKey(this.getUserIdentity(user));
     return this.userRepository.update(id, { ...user, isActive: false });
   }
 
   async approve(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
+    if (user) this.cardianlKeyService.enableKey(this.getUserIdentity(user));
     return this.userRepository.update(id, { ...user, isApproved: true });
   }
   async disapprove(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
+    if (user) this.cardianlKeyService.disableKey(this.getUserIdentity(user));
     return this.userRepository.update(id, { ...user, isApproved: false });
   }
 
   async deleteUser(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    if (user) this.cardianlKeyService.disableKey(this.getUserIdentity(user));
     return this.userRepository.delete(id);
   }
 

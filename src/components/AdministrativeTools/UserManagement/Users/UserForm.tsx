@@ -250,19 +250,19 @@ export const UserForm: React.FC<UserFormProps> = ({
           <div className="w-full mt-1">
             <Select
               onValueChange={(value) => {
-                userStore.set("roleId", parseInt(value));
+                userStore.set("roleId", value);
                 userStore.resetError("roleId");
               }}
-              value={userStore.roleId?.toString() || ""}
+              value={userStore.roleId || ""}
             >
               <SelectTrigger className="mt-1">
-                <SelectValue placeholder="Role..." />
+                <SelectValue placeholder="Please select Role" />
               </SelectTrigger>
               <SelectContent>
                 {roles?.map((role: Partial<Role>) => (
                   <SelectItem
                     key={role.id}
-                    value={role.id?.toString() || ""}
+                    value={role.id || ""}
                     className="mx-1"
                   >
                     {role.label}

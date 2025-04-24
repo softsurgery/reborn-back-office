@@ -13,6 +13,7 @@ import {
   WandSparkles,
   Paperclip,
   MapIcon,
+  Bird,
 } from "lucide-react";
 
 import {
@@ -41,7 +42,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       avatar: "/avatars/shadcn.jpg",
       avataralt:
         user?.firstName && user?.lastName
-          ? `${user?.firstName?.charAt(0).toUpperCase()}${user?.lastName?.charAt(0).toUpperCase()}`
+          ? `${user?.firstName?.charAt(0).toUpperCase()}${user?.lastName
+              ?.charAt(0)
+              .toUpperCase()}`
           : user?.username?.charAt(0).toUpperCase() || "",
     },
     teams: [
@@ -90,7 +93,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: Bug,
           },
           {
-            title: "DeviceInfo",
+            title: "Devices",
             url: "/system-reports/deviceInfos",
             icon: Tablet,
           },
@@ -108,6 +111,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: MapIcon,
           },
         ],
+      },
+      {
+        id: 4,
+        title: "Cardinal",
+        url: "/content-management",
+        icon: Bird,
+        items: [],
       },
     ],
     projects: [

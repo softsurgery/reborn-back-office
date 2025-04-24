@@ -15,9 +15,15 @@ import { RegionService } from "./content/services/region.service";
 import { RegionRepository } from "./content/repositories/region.repository";
 import { AuthService } from "./auth";
 import prisma from "@/lib/prisma";
+import { CardinalKeyService } from "./cardinal/key.service";
 
+//cardinal
+const cardinalKeyService = new CardinalKeyService();
 //user-management
-const userService = new UserService(new UserRepository(prisma)); //user
+const userService = new UserService(
+  new UserRepository(prisma),
+  cardinalKeyService
+); //user
 const authService = new AuthService(userService); //auth
 const roleService = new RoleService(
   new RoleRepository(prisma),
