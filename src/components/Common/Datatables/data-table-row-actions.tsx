@@ -44,7 +44,7 @@ export function DataTableRowActions<TData>({
                 context?.inspectCallback?.();
               }}
             >
-              <Telescope className="h-5 w-5 mr-2" /> Inspect
+              <Telescope /> Inspect
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </React.Fragment>
@@ -69,7 +69,7 @@ export function DataTableRowActions<TData>({
                   </DropdownMenuItem>
                 );
               })}
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="border"/>
             </React.Fragment>
           );
         })}
@@ -81,7 +81,7 @@ export function DataTableRowActions<TData>({
               context?.updateCallback?.();
             }}
           >
-            <Edit className="h-5 w-5 mr-2" /> Update
+            <Edit /> Update
           </DropdownMenuItem>
         )}
         {context?.deleteCallback && (
@@ -91,7 +91,7 @@ export function DataTableRowActions<TData>({
               context?.deleteCallback?.();
             }}
           >
-            <Trash2 className="h-5 w-5 mr-2" /> Delete
+            <Trash2 /> Delete
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
