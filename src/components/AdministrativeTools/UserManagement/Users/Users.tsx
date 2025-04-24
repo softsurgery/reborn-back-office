@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRefreshUserDialog } from "./modals/UserRefreshDialog";
 
 interface UsersProps {
   className?: string;
@@ -188,6 +190,15 @@ export default function Users({ className }: UsersProps) {
       onError: (error) => toast(error.message),
     });
 
+  const { mutate: refreshUser, isPending: isRefreshPending } = useMutation({
+    mutationFn: (id?: string) => api.admin.user.refresh(id),
+    onSuccess: (response: ServerResponse<User>) => {
+      refetchUsers();
+      toast(response.message)
+    },
+    onError: (error) => toast(error.message),
+  });
+
   const handleCreateSubmit = () => {
     const data = userStore.getUser();
     const result = updateUserSchema.safeParse({
@@ -266,6 +277,13 @@ export default function Users({ className }: UsersProps) {
       resetUser: () => userStore.reset(),
     });
 
+  const { refreshUserDialog, openRefreshUserDialog } = useRefreshUserDialog({
+    representation: targetRepresentation,
+    refreshUser : () => refreshUser(userStore.id),
+    isRefreshPending,
+    resetUser: () => userStore.reset(),
+  });
+
   const context: DataTableConfig<User> = {
     singularName: "User",
     pluralName: "Users",
@@ -299,6 +317,13 @@ export default function Users({ className }: UsersProps) {
           actionLabel: "Disapprove",
           actionIcon: <UserRoundX />,
           isActionVisible: (user: User) => !!user.isApproved,
+        },
+      ],
+      3: [
+        {
+          actionCallback: openRefreshUserDialog,
+          actionLabel: "Refresh",
+          actionIcon: <ReloadIcon />,
         },
       ],
     },
@@ -339,6 +364,7 @@ export default function Users({ className }: UsersProps) {
       {deactivateUserDialog}
       {approveUserDialog}
       {disapproveUserDialog}
+      {refreshUserDialog}
     </div>
   );
 }

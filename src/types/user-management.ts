@@ -50,3 +50,10 @@ export interface RolePermission extends DatabaseEntity {
   role?: Role;
   permission?: Permission;
 }
+
+export interface CardinalApiKey {
+  id: string;
+  name: string;
+  key: string;
+  active: boolean;
+}

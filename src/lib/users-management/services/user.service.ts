@@ -1,20 +1,20 @@
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { User } from "@/types/user-management";
+import { User } from "@/types";
 import { UserRepository } from "../repositories/user.repository";
 import { hashPassword } from "@/lib/utils/hash.util";
-import { CardinalKeyService } from "@/lib/cardinal/key.service";
+import { CardinalApiKeyService } from "@/lib/cardinal/api-key.service";
 
 export class UserService {
   private userRepository: UserRepository;
-  private cardianlKeyService: CardinalKeyService;
+  private cardinalApiKeyService: CardinalApiKeyService;
 
   constructor(
     userRepository: UserRepository,
-    cardianlKeyService: CardinalKeyService
+    cardinalApiKeyService: CardinalApiKeyService
   ) {
     this.userRepository = userRepository;
-    this.cardianlKeyService = cardianlKeyService;
+    this.cardinalApiKeyService = cardinalApiKeyService;
   }
 
   getUserIdentity(user: User): string {
@@ -38,23 +38,28 @@ export class UserService {
   }
 
   async createUser(data: Partial<User>): Promise<User> {
-    //search for existing user
-    let user = await this.getUserByCondition({
+    const existingUser = await this.getUserByCondition({
       filter: `(username||$eq||${data.username};email||$eq||${data.email})`,
     });
-    if (user) {
+    if (existingUser) {
       throw new Error("User already exists");
     }
-    //create user
+
     const hashedPassword = data.password && (await hashPassword(data.password));
     data.password = hashedPassword;
-    user = await this.userRepository.create(data);
-    //create cardinal key
-    await this.cardianlKeyService.createKey(
+
+    const user = await this.userRepository.create(data);
+
+    const keyResult = await this.cardinalApiKeyService.createKey(
       `${data.username}`,
       this.getUserIdentity(user),
       false
     );
+
+    if ("error" in keyResult) {
+      throw new Error(`Failed to create API key: ${keyResult.error}`);
+    }
+
     return user;
   }
 
@@ -68,30 +73,83 @@ export class UserService {
 
   async activate(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
-    if (user) this.cardianlKeyService.enableKey(this.getUserIdentity(user));
+    if (user) {
+      const result = await this.cardinalApiKeyService.enableKey(
+        this.getUserIdentity(user)
+      );
+      if ("error" in result) {
+        throw new Error(`Failed to enable API key: ${result.error}`);
+      }
+    }
     return this.userRepository.update(id, { ...user, isActive: true });
   }
+
   async deactivate(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
-    if (user) this.cardianlKeyService.disableKey(this.getUserIdentity(user));
+    if (user) {
+      const result = await this.cardinalApiKeyService.disableKey(
+        this.getUserIdentity(user)
+      );
+      if ("error" in result) {
+        throw new Error(`Failed to disable API key: ${result.error}`);
+      }
+    }
     return this.userRepository.update(id, { ...user, isActive: false });
   }
 
   async approve(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
-    if (user) this.cardianlKeyService.enableKey(this.getUserIdentity(user));
+    if (user) {
+      const result = await this.cardinalApiKeyService.enableKey(
+        this.getUserIdentity(user)
+      );
+      if ("error" in result) {
+        throw new Error(`Failed to enable API key: ${result.error}`);
+      }
+    }
     return this.userRepository.update(id, { ...user, isApproved: true });
   }
+
   async disapprove(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
-    if (user) this.cardianlKeyService.disableKey(this.getUserIdentity(user));
+    if (user) {
+      const result = await this.cardinalApiKeyService.disableKey(
+        this.getUserIdentity(user)
+      );
+      if ("error" in result) {
+        throw new Error(`Failed to disable API key: ${result.error}`);
+      }
+    }
     return this.userRepository.update(id, { ...user, isApproved: false });
   }
 
   async deleteUser(id: string): Promise<User> {
     const user = await this.userRepository.findById(id);
-    if (user) this.cardianlKeyService.disableKey(this.getUserIdentity(user));
+    if (user) {
+      const result = await this.cardinalApiKeyService.disableKey(
+        this.getUserIdentity(user)
+      );
+      if ("error" in result) {
+        throw new Error(
+          `Failed to disable API key before delete: ${result.error}`
+        );
+      }
+    }
     return this.userRepository.delete(id);
+  }
+
+  async refreshUser(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    if (user) {
+      const result = await this.cardinalApiKeyService.refreshKey(
+        `${user.username}`,
+        this.getUserIdentity(user)
+      );
+      if ("error" in result) {
+        throw new Error(`Failed to refresh API key: ${result.error}`);
+      }
+    }
+    return this.userRepository.update(id, { ...user, isActive: true });
   }
 
   async countUsers(where: any = {}): Promise<number> {

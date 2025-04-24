@@ -86,6 +86,11 @@ const remove = async (userId?: string): Promise<ServerResponse<User>> => {
   return response.data;
 };
 
+const refresh = async (userId?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/refresh/${userId}`);
+  return response.data;
+};
+
 export const user = {
   findPaginated,
   findAll,
@@ -97,5 +102,6 @@ export const user = {
   deactivate,
   approve,
   disapprove,
+  refresh,
   remove,
 };
