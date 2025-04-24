@@ -20,13 +20,13 @@ import { DataTable } from "@/components/Common/Datatables/data-table";
 import {
   ArrowDown,
   ArrowUp,
+  RefreshCcw,
   UserRoundCheck,
   UserRoundX,
   X,
 } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRefreshUserDialog } from "./modals/UserRefreshDialog";
 
 interface UsersProps {
@@ -323,7 +323,7 @@ export default function Users({ className }: UsersProps) {
         {
           actionCallback: openRefreshUserDialog,
           actionLabel: "Refresh",
-          actionIcon: <ReloadIcon />,
+          actionIcon: <RefreshCcw />,
         },
       ],
     },
