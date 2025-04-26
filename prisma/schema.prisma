@@ -24,14 +24,14 @@ model User {
   image         String?
   roleId        String?
   role          Role?     @relation(fields: [roleId], references: [id])
-  appUsers      AppUser[]
+  mobileUser      MobileUser[]
   isApproved    Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   deletedAt     DateTime?
 }
 
-model AppUser {
+model MobileUser {
   id        Int       @id @default(autoincrement())
   userId    String
   regionId  Int
@@ -114,7 +114,7 @@ model Bug {
 model Region {
   id        Int       @id @default(autoincrement())
   label     String
-  AppUser   AppUser[]
+  MobileUser   MobileUser[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?

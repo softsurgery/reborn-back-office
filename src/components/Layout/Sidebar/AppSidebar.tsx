@@ -67,6 +67,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: Users,
           },
           {
+            title: "Mobile Users",
+            url: "/user-management/mobile-users",
+            icon: FileUser,
+          },
+          {
             title: "Roles",
             url: "/user-management/roles",
             icon: Package,
@@ -129,7 +134,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Private Resources",
             url: "/cardinal/private-resources",
             icon: FileLock,
-          }
+          },
         ],
       },
     ],
