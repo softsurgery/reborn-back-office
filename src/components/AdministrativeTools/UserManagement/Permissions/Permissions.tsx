@@ -9,7 +9,7 @@ import { getPermissionColumns } from "./data-table/columns";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useIntro } from "@/context/IntroContext";
 import { DataTableConfig } from "@/types";
-import { Permission } from "@prisma/client";
+import { Permission } from "@/types";
 
 interface PermissionsProps {
   className?: string;
