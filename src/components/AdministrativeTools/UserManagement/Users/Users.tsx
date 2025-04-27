@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
-import { useRefreshUserDialog } from "./modals/UserRefreshDialog";
 
 interface UsersProps {
   className?: string;
@@ -194,7 +193,7 @@ export default function Users({ className }: UsersProps) {
     mutationFn: (id?: string) => api.admin.user.refresh(id),
     onSuccess: (response: ServerResponse<User>) => {
       refetchUsers();
-      toast(response.message)
+      toast(response.message);
     },
     onError: (error) => toast(error.message),
   });
@@ -277,13 +276,6 @@ export default function Users({ className }: UsersProps) {
       resetUser: () => userStore.reset(),
     });
 
-  const { refreshUserDialog, openRefreshUserDialog } = useRefreshUserDialog({
-    representation: targetRepresentation,
-    refreshUser : () => refreshUser(userStore.id),
-    isRefreshPending,
-    resetUser: () => userStore.reset(),
-  });
-
   const context: DataTableConfig<User> = {
     singularName: "User",
     pluralName: "Users",
@@ -304,8 +296,6 @@ export default function Users({ className }: UsersProps) {
           actionIcon: <ArrowDown />,
           isActionVisible: (user: User) => !!user.isActive,
         },
-      ],
-      2: [
         {
           actionCallback: openApproveUserDialog,
           actionLabel: "Approve",
@@ -317,13 +307,6 @@ export default function Users({ className }: UsersProps) {
           actionLabel: "Disapprove",
           actionIcon: <UserRoundX />,
           isActionVisible: (user: User) => !!user.isApproved,
-        },
-      ],
-      3: [
-        {
-          actionCallback: openRefreshUserDialog,
-          actionLabel: "Refresh",
-          actionIcon: <RefreshCcw />,
         },
       ],
     },
@@ -364,7 +347,6 @@ export default function Users({ className }: UsersProps) {
       {deactivateUserDialog}
       {approveUserDialog}
       {disapproveUserDialog}
-      {refreshUserDialog}
     </div>
   );
 }
