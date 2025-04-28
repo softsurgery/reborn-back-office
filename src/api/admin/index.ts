@@ -5,10 +5,12 @@ import { feedback } from "./feedbacks";
 import { bug } from "./bugs";
 import { deviceInfo } from "./deviceInfos";
 import { content } from "./content";
+import { upload } from "./upload";
 
 
 export const admin = {
   content,
+  upload,
   permission,
   role,
   user,

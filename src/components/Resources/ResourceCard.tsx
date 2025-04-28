@@ -1,5 +1,10 @@
-import { Card, CardFooter } from "@/components/ui/card";
-import { Download } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Download, X } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -7,17 +12,31 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { formatFileSize, getMediaTypeLabel } from "@/lib/file.utils";
 import { FileIcon } from "./FileIcon";
+import { Upload } from "@/types";
+import { ResourceCardSkeleton } from "./ResourceCardSkeleton";
 
 interface ResourceCardProps {
   className?: string;
-  resource: any;
+  resource: Upload;
+  isPending?: boolean;
 }
 
-export const ResourceCard = ({ className, resource }: ResourceCardProps) => {
+export const ResourceCard = ({
+  className,
+  resource,
+  isPending,
+}: ResourceCardProps) => {
+  if (isPending) {
+    return <ResourceCardSkeleton className={className} />;
+  }
+
   return (
-    <Card key={resource.id} className={cn("overflow-hidden flex flex-col h-full", className)}>
-      <div className="p-4 flex-1">
-        <div className="aspect-video bg-muted rounded-md flex items-center justify-center mb-4 overflow-hidden">
+    <Card
+      key={resource.id}
+      className={cn("overflow-hidden flex flex-col h-full", className)}
+    >
+      <CardHeader className="bg-muted rounded-md flex flex-row  gap-4 items-center justify-between overflow-hidden">
+        <div>
           {resource.thumbnail ? (
             <Image
               src={resource.thumbnail || "/react.svg"}
@@ -27,35 +46,43 @@ export const ResourceCard = ({ className, resource }: ResourceCardProps) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <FileIcon type={resource.type} />
+            <FileIcon type={resource.mimetype || ""} size={32} />
           )}
         </div>
+        <h3 className="font-bold truncate" title={resource.filename}>
+          {resource.filename}
+        </h3>
 
-        <div className="space-y-3">
-          <div>
-            <h3 className="font-medium truncate" title={resource.name}>
-              {resource.name}
-            </h3>
-            <Badge variant="outline" className="mt-1">
-              {getMediaTypeLabel(resource.type)}
-            </Badge>
-          </div>
-
-          <div className="text-sm text-muted-foreground space-y-1">
-            <p>Size: {formatFileSize(resource.size)}</p>
-            <p>Uploaded: {format(resource.uploadedAt, "PPpp")}</p>
-            <p>By: {resource.uploadedBy}</p>
-          </div>
+        <Badge variant="outline" className="my-2">
+          {getMediaTypeLabel(resource.mimetype || "")}
+        </Badge>
+      </CardHeader>
+      <CardContent className="p-4 flex-1">
+        <div className="text-sm text-muted-foreground space-y-1">
+          <p>
+            <span className="font-bold">Size:</span>{" "}
+            {formatFileSize(resource.size)}
+          </p>
+          <p>
+            <span className="font-bold">Uploaded:</span>{" "}
+            {format(resource.createdAt, "PPpp")}
+          </p>
+          <p>
+            <span className="font-bold">By:</span> {resource.uploadedBy}
+          </p>
         </div>
-      </div>
-
-      <CardFooter className="bg-muted/50 p-4">
-        <Button asChild className="w-full" variant="outline">
-          <a href={resource.url} download>
-            <Download className="mr-2 h-4 w-4" />
+      </CardContent>
+      <CardFooter className="bg-muted/50 px-4 pt-2">
+        <div className="flex flex-row gap-4 justify-between w-full">
+          <Button className="w-full" variant="outline">
+            <Download />
             Download
-          </a>
-        </Button>
+          </Button>
+          <Button className="w-full" variant="secondary">
+            <X />
+            Delete
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

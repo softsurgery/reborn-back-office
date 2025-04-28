@@ -9,9 +9,12 @@ import {
   FileVideo,
 } from "lucide-react";
 
-export function FileIcon({ type }: { type: string }) {
-  const size = 40;
+interface FileIconProps {
+  type: string;
+  size: number;
+}
 
+export function FileIcon({ type, size = 40 }: FileIconProps) {
   if (type.startsWith("image/")) {
     return <FileImage size={size} className="text-blue-500" />;
   } else if (type.startsWith("video/")) {
