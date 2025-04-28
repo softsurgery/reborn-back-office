@@ -40,17 +40,7 @@ export const ResourceCard = ({
     >
       <CardHeader className="bg-muted rounded-md flex flex-row  gap-4 items-center justify-between overflow-hidden">
         <div>
-          {resource.thumbnail ? (
-            <Image
-              src={resource.thumbnail}
-              alt={resource.filename}
-              width={300}
-              height={200}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <FileIcon type={resource.mimetype || ""} size={32} />
-          )}
+          <FileIcon type={resource.mimetype || ""} size={32} />
         </div>
         <h3 className="font-bold truncate" title={resource.filename}>
           {resource.filename}
