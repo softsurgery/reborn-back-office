@@ -10,7 +10,7 @@ interface InfiniteUploadsProps {
 }
 
 export const useInfiniteUploads = ({
-  size = 10,
+  size = 12,
   search,
   sortKey,
   order,

@@ -30,6 +30,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   deletedAt     DateTime?
+  Upload        Upload[]
 }
 
 model AppUser {
@@ -128,6 +129,8 @@ model Upload {
   relativePath String    @db.VarChar(255)
   mimetype     String    @db.VarChar(255)
   size         Float
+  userId       String?
+  user         User?      @relation(fields: [userId], references: [id]) // Relating Upload to User
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now()) @updatedAt
   deletedAt    DateTime?

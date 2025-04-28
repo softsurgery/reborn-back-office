@@ -7,6 +7,11 @@ import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { PackageOpen } from "lucide-react";
 import { ResourcesActionBar } from "./ResourcesActionBar";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/api";
+import { toast } from "sonner";
+import { useUploadDeleteDialog } from "./modal/UploadDeleteDialog";
+import { Upload } from "@prisma/client";
 
 interface ResourcesProps {
   className?: string;
@@ -20,6 +25,7 @@ const ResourceCardSkeletons = () => {
 };
 
 export const Resources = ({ className, type }: ResourcesProps) => {
+  const [upload, setUploaded] = React.useState<Upload>();
   const pageName = `${type.charAt(0).toUpperCase()}${type.slice(1)} Resources`;
 
   const { setRoutes, clearRoutes } = useBreadcrumb();
@@ -37,12 +43,18 @@ export const Resources = ({ className, type }: ResourcesProps) => {
   const { value: debouncedSearchTerm, loading: searching } =
     useDebounce<string>(searchTerm, 500);
 
-  const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteUploads({
-      search: debouncedSearchTerm,
-      sortKey: debouncedSortDetails.sortKey,
-      order: debouncedSortDetails.order ? "ASC" : "DESC",
-    });
+  const {
+    data,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteUploads({
+    search: debouncedSearchTerm,
+    sortKey: debouncedSortDetails.sortKey,
+    order: debouncedSortDetails.order ? "ASC" : "DESC",
+  });
 
   useEffect(() => {
     setRoutes?.([
@@ -65,6 +77,23 @@ export const Resources = ({ className, type }: ResourcesProps) => {
       }
     }
   };
+
+  const { mutate: deleteUpload, isPending: isDeletionPending } = useMutation({
+    mutationFn: (slug: string) => api.admin.upload.deleteFile(slug),
+    onSuccess: (data) => {
+      toast.success(data.message);
+      refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { openDeleteUploadDialog, deleteUploadDialog } = useUploadDeleteDialog({
+    representation: upload?.filename,
+    deleteUpload: () => deleteUpload(upload?.slug as string),
+    isDeletionPending,
+  });
 
   return (
     <div
@@ -99,12 +128,20 @@ export const Resources = ({ className, type }: ResourcesProps) => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {data.map((resource) => (
-              <ResourceCard key={resource.id} resource={resource} />
+              <ResourceCard
+                key={resource.id}
+                resource={resource}
+                deleteResource={() => {
+                  setUploaded(resource);
+                  openDeleteUploadDialog();
+                }}
+              />
             ))}
             {isFetchingNextPage && <ResourceCardSkeletons />}
           </div>
         )}
       </div>
+      {deleteUploadDialog}
     </div>
   );
 };

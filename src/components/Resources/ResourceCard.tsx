@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Download, X } from "lucide-react";
+import { Download, Eye, X } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -14,16 +14,19 @@ import { formatFileSize, getMediaTypeLabel } from "@/lib/file.utils";
 import { FileIcon } from "./FileIcon";
 import { Upload } from "@/types";
 import { ResourceCardSkeleton } from "./ResourceCardSkeleton";
+import { api } from "@/api";
 
 interface ResourceCardProps {
   className?: string;
   resource: Upload;
+  deleteResource?: () => void;
   isPending?: boolean;
 }
 
 export const ResourceCard = ({
   className,
   resource,
+  deleteResource,
   isPending,
 }: ResourceCardProps) => {
   if (isPending) {
@@ -39,8 +42,8 @@ export const ResourceCard = ({
         <div>
           {resource.thumbnail ? (
             <Image
-              src={resource.thumbnail || "/react.svg"}
-              alt={resource.name}
+              src={resource.thumbnail}
+              alt={resource.filename}
               width={300}
               height={200}
               className="w-full h-full object-cover"
@@ -57,7 +60,7 @@ export const ResourceCard = ({
           {getMediaTypeLabel(resource.mimetype || "")}
         </Badge>
       </CardHeader>
-      <CardContent className="p-4 flex-1">
+      <CardContent className="px-6 flex-1">
         <div className="text-sm text-muted-foreground space-y-1">
           <p>
             <span className="font-bold">Size:</span>{" "}
@@ -68,21 +71,37 @@ export const ResourceCard = ({
             {format(resource.createdAt, "PPpp")}
           </p>
           <p>
-            <span className="font-bold">By:</span> {resource.uploadedBy}
+            <span className="font-bold">By:</span>{" "}
+            {resource.user?.username || "Unknown"}
           </p>
         </div>
       </CardContent>
-      <CardFooter className="bg-muted/50 px-4 pt-2">
-        <div className="flex flex-row gap-4 justify-between w-full">
+      <CardFooter className="flex flex-col gap-2 bg-muted/50 px-4 pt-2">
+        <div className="flex flex-row gap-2 justify-between w-full">
           <Button className="w-full" variant="outline">
-            <Download />
-            Download
+            <Eye />
+            Preview
           </Button>
-          <Button className="w-full" variant="secondary">
+          <Button
+            className="w-full"
+            variant="secondary"
+            onClick={deleteResource}
+          >
             <X />
             Delete
           </Button>
         </div>
+
+        <Button
+          className="w-full"
+          variant="outline"
+          onClick={() =>
+            api.admin.upload.downloadFile(resource.slug, resource.filename)
+          }
+        >
+          <Download />
+          Download
+        </Button>
       </CardFooter>
     </Card>
   );

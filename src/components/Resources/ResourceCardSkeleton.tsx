@@ -42,11 +42,12 @@ export const ResourceCardSkeleton = ({
         </div>
       </CardContent>
 
-      <CardFooter className="bg-muted/50 px-4 pt-2">
-        <div className="flex flex-row gap-4 justify-between w-full">
+      <CardFooter className="flex flex-col gap-2 bg-muted/50 px-4 pt-2">
+        <div className="flex flex-row gap-2 justify-between w-full">
           <Skeleton className="h-9 w-full" />
           <Skeleton className="h-9 w-full" />
         </div>
+        <Skeleton className="h-9 w-full" />
       </CardFooter>
     </Card>
   );

@@ -28,7 +28,7 @@ export default function FileUploader() {
     setError(null);
 
     try {
-      const response = await fetch("/api/upload", {
+      const response = await fetch("/api/admin/storage/upload", {
         method: "POST",
         body: formData,
       });

@@ -136,7 +136,7 @@ export class StorageService {
     return this.uploadRepository.findPaginated(queryObject);
   }
 
-  async getAllPermissions(queryObject: IQueryObject): Promise<Upload[]> {
+  async getAllUploads(queryObject: IQueryObject): Promise<Upload[]> {
     return this.uploadRepository.findByCondition(queryObject);
   }
 
@@ -168,12 +168,12 @@ export class StorageService {
     }
   }
 
-  async delete(id: number) {
-    const upload = await this.uploadRepository.findById(id);
+  async deleteBySlug(slug: string) {
+    const upload = await this.findBySlug(slug);
 
     if (!upload) {
       throw new FileNotFoundException(
-        `File with ID '${id}' not found. It might have already been deleted.`
+        `File with Slug '${slug}' not found. It might have already been deleted.`
       );
     }
 
@@ -181,11 +181,11 @@ export class StorageService {
 
     try {
       await fs.unlink(filePath);
-      await this.uploadRepository.delete(id);
+      await this.uploadRepository.delete(upload.id);
       return upload;
     } catch (error: any) {
       throw new StorageBadRequestException(
-        `Failed to delete file with ID '${id}': ${error.message}`
+        `Failed to delete file with slug '${slug}': ${error.message}`
       );
     }
   }
