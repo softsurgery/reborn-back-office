@@ -6,10 +6,12 @@ import { bug } from "./bugs";
 import { deviceInfo } from "./deviceInfos";
 import { content } from "./content";
 import { mobileUser } from "./mobile-user";
+import { upload } from "./upload";
 
 
 export const admin = {
   content,
+  upload,
   permission,
   role,
   user,

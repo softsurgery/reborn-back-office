@@ -2,7 +2,6 @@ import React from "react";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-
 import { Spinner } from "./Common/Spinner";
 import { Layout } from "./Layout/Layout";
 import { cn } from "@/lib/utils";

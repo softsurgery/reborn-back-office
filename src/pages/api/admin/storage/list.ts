@@ -5,22 +5,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const userService = container.UserService;
+  const storageService = container.StorageService;
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed", code: 405 });
   }
-  const { id } = req.query;
-
-  if (!id || Array.isArray(id)) {
-    return res.status(400).json({ error: "Invalid ID", code: 400 });
-  }
   try {
-    const user = await userService.refreshUser(id);
-    return res.status(200).json({
-      message: "User Refreshed Successfully",
-      code: 200,
-      data: user,
-    });
+    const users = await storageService.getPaginatedUploads(req.query);
+    return res.status(200).json(users);
   } catch (error) {
     return res
       .status(500)

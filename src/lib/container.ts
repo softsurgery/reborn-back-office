@@ -14,21 +14,17 @@ import { BugRepository } from "./bug/repositories/bug.repository";
 import { RegionService } from "./content/services/region.service";
 import { RegionRepository } from "./content/repositories/region.repository";
 import { AuthService } from "./auth";
-import prisma from "@/lib/prisma";
-import { CardinalApiKeyService } from "./cardinal/api-key.service";
 import { MobileUserService } from "./users-management/services/mobile-user.service";
 import { MobileUserRepository } from "./users-management/repositories/mobile-user.repository";
+import { UploadRepository } from "./storage/repositories/upload.repository";
+import { StorageService } from "./storage/services/upload.service";
+import prisma from "@/lib/prisma";
 
-//cardinal
-const cardinalApiKeyService = new CardinalApiKeyService();
 //user-management
 const mobileUserService = new MobileUserService(
   new MobileUserRepository(prisma)
 ); //appuser
-const userService = new UserService(
-  new UserRepository(prisma),
-  cardinalApiKeyService
-); //user
+const userService = new UserService(new UserRepository(prisma)); //user
 const authService = new AuthService(userService); //auth
 const roleService = new RoleService(
   new RoleRepository(prisma),
@@ -51,9 +47,11 @@ const bugService = new BugService(new BugRepository(prisma), deviceInfoService);
 //content
 const regionService = new RegionService(new RegionRepository(prisma));
 
+//upload
+const storageService = new StorageService(new UploadRepository(prisma));
+
 const container = {
-  //cardinal
-  CardinalApiKeyService: cardinalApiKeyService,
+  StorageService: storageService,
   //user-management
   AuthService: authService,
   MobileUserService: mobileUserService,

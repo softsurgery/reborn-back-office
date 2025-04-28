@@ -13,9 +13,9 @@ import {
   WandSparkles,
   Paperclip,
   MapIcon,
-  Bird,
   FileLock,
   FileUser,
+  CloudUpload,
 } from "lucide-react";
 
 import {
@@ -113,27 +113,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Paperclip,
         items: [
           {
-            title: "Regions",
-            url: "/content/regions",
-            icon: MapIcon,
-          },
-        ],
-      },
-      {
-        id: 4,
-        title: "Cardinal",
-        url: "/content-management",
-        icon: Bird,
-        items: [
-          {
-            title: "Public Resources",
-            url: "/cardinal/public-resources",
+            title: "Resources",
+            url: "/content/resources",
             icon: FileUser,
           },
           {
-            title: "Private Resources",
-            url: "/cardinal/private-resources",
-            icon: FileLock,
+            title: "Regions",
+            url: "/content/regions",
+            icon: MapIcon,
           },
         ],
       },

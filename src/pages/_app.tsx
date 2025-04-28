@@ -3,14 +3,13 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import Application from "@/components/Application";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { Inter } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { appWithTranslation } from "next-i18next";
 import nextI18nextConfig from "../../next-i18next.config";
 import { SessionProvider } from "next-auth/react";
 import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = { className: "font-inter" };
 const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {

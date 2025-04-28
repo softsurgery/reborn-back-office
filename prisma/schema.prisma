@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
 generator typescriptInterfaces {
@@ -29,6 +30,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   deletedAt     DateTime?
+  Upload        Upload[]
 }
 
 model MobileUser {
@@ -118,6 +120,20 @@ model Region {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
+}
+
+model Upload {
+  id           Int       @id @default(autoincrement())
+  slug         String    @db.VarChar(255)
+  filename     String    @db.VarChar(255)
+  relativePath String    @db.VarChar(255)
+  mimetype     String    @db.VarChar(255)
+  size         Float
+  userId       String?
+  user         User?      @relation(fields: [userId], references: [id]) // Relating Upload to User
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  deletedAt    DateTime?
 }
 
 enum FeedbackCategory {
