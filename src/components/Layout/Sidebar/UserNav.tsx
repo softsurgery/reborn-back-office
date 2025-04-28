@@ -107,7 +107,7 @@ export function UserNav({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut}>
               <LogOut />
-              Signout
+              Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
