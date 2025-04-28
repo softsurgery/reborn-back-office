@@ -15,6 +15,8 @@ import { RegionService } from "./content/services/region.service";
 import { RegionRepository } from "./content/repositories/region.repository";
 import { AuthService } from "./auth";
 import prisma from "@/lib/prisma";
+import { UploadRepository } from "./storage/repositories/upload.repository";
+import { StorageService } from "./storage/services/upload.service";
 
 //user-management
 const userService = new UserService(new UserRepository(prisma)); //user
@@ -40,7 +42,11 @@ const bugService = new BugService(new BugRepository(prisma), deviceInfoService);
 //content
 const regionService = new RegionService(new RegionRepository(prisma));
 
+//upload
+const storageService = new StorageService(new UploadRepository(prisma));
+
 const container = {
+  StorageService: storageService,
   //user-management
   AuthService: authService,
   UserService: userService,

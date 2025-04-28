@@ -6,7 +6,6 @@ import { ResourceCard } from "./ResourceCard";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
 
 interface ResourcesProps {
   className?: string;
