@@ -108,27 +108,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Paperclip,
         items: [
           {
+            title: "Resources",
+            url: "/content/resources",
+            icon: FileUser,
+          },
+          {
             title: "Regions",
             url: "/content/regions",
             icon: MapIcon,
           },
-        ],
-      },
-      {
-        id: 4,
-        title: "Resources",
-        icon: CloudUpload,
-        items: [
-          {
-            title: "Public Resources",
-            url: "/resources/public-resources",
-            icon: FileUser,
-          },
-          {
-            title: "Private Resources",
-            url: "/resources/private-resources",
-            icon: FileLock,
-          }
         ],
       },
     ],

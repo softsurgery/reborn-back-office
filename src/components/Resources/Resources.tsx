@@ -16,7 +16,6 @@ import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
 
 interface ResourcesProps {
   className?: string;
-  type: "public" | "private";
 }
 
 const ResourceCardSkeletons = () => {
@@ -25,9 +24,8 @@ const ResourceCardSkeletons = () => {
   ));
 };
 
-export const Resources = ({ className, type }: ResourcesProps) => {
+export const Resources = ({ className }: ResourcesProps) => {
   const [resource, setResource] = React.useState<Upload>();
-  const pageName = `${type.charAt(0).toUpperCase()}${type.slice(1)} Resources`;
 
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
@@ -59,10 +57,10 @@ export const Resources = ({ className, type }: ResourcesProps) => {
 
   useEffect(() => {
     setRoutes?.([
-      { title: "Resources" },
-      { title: pageName, href: `/cardinal/${type}-resources` },
+      { title: "Content" },
+      { title: "Resources", href: `/content/resources` },
     ]);
-    setIntro?.(pageName, `View, create, and manage your ${type} resources.`);
+    setIntro?.("Resources", `View, create, and manage your resources.`);
 
     return () => {
       clearRoutes?.();

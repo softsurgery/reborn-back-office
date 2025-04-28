@@ -40,7 +40,7 @@ export const ResourceCard = ({
       key={resource.id}
       className={cn("overflow-hidden flex flex-col h-full", className)}
     >
-      <CardHeader className="bg-muted rounded-md flex flex-row  gap-4 items-center justify-between overflow-hidden">
+      <CardHeader className="rounded-md flex flex-row  gap-4 items-center justify-between overflow-hidden py-4">
         <div>
           <FileIcon type={resource.mimetype || ""} size={32} />
         </div>
@@ -68,7 +68,7 @@ export const ResourceCard = ({
           </p>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col gap-2 bg-muted/50 px-4 pt-2">
+      <CardFooter className="flex flex-col gap-2 bg-muted/50 px-4 py-4">
         <div className="flex flex-row gap-2 justify-between w-full">
           <Button
             className="w-full"
