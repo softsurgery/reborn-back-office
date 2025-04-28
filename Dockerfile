@@ -3,24 +3,16 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
-# Install dependencies (but need prisma files first)
 COPY package.json yarn.lock ./
-
-# 👇 Copy only prisma files first
 COPY prisma ./prisma
 
 RUN apt-get update && apt-get install -y python3 g++ make
 
-# Now install
 RUN yarn install --ignore-scripts --frozen-lockfile
-
-# 🛠 Generate Prisma Client
 RUN yarn prisma generate 
 
-# Now copy the rest of the app
 COPY . .
 
-# Build the app
 RUN yarn build
 
 # Stage 2: Run
@@ -35,9 +27,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/next.config.js ./next.config.js
 
-# If prisma client needed at runtime
 COPY --from=builder /app/prisma ./prisma
+
+RUN mkdir -p /uploads/reborn
 
 EXPOSE 3000
 
-CMD printenv && yarn start
+CMD ["yarn", "start"]
