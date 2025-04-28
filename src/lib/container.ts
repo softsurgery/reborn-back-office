@@ -14,11 +14,16 @@ import { BugRepository } from "./bug/repositories/bug.repository";
 import { RegionService } from "./content/services/region.service";
 import { RegionRepository } from "./content/repositories/region.repository";
 import { AuthService } from "./auth";
-import prisma from "@/lib/prisma";
+import { MobileUserService } from "./users-management/services/mobile-user.service";
+import { MobileUserRepository } from "./users-management/repositories/mobile-user.repository";
 import { UploadRepository } from "./storage/repositories/upload.repository";
 import { StorageService } from "./storage/services/upload.service";
+import prisma from "@/lib/prisma";
 
 //user-management
+const mobileUserService = new MobileUserService(
+  new MobileUserRepository(prisma)
+); //appuser
 const userService = new UserService(new UserRepository(prisma)); //user
 const authService = new AuthService(userService); //auth
 const roleService = new RoleService(
@@ -49,6 +54,7 @@ const container = {
   StorageService: storageService,
   //user-management
   AuthService: authService,
+  MobileUserService: mobileUserService,
   UserService: userService,
   RoleService: roleService,
   PermissionService: permissionService,

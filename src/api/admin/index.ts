@@ -5,6 +5,7 @@ import { feedback } from "./feedbacks";
 import { bug } from "./bugs";
 import { deviceInfo } from "./deviceInfos";
 import { content } from "./content";
+import { mobileUser } from "./mobile-user";
 import { upload } from "./upload";
 
 
@@ -17,4 +18,5 @@ export const admin = {
   feedback,
   bug,
   deviceInfo,
+  mobileUser
 };

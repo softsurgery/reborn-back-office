@@ -1,3 +1,4 @@
+import { Region } from "@prisma/client";
 import { DatabaseEntity } from "./utils/database-entity";
 
 export interface User extends DatabaseEntity {
@@ -14,13 +15,15 @@ export interface User extends DatabaseEntity {
   roleId: string | null;
   role?: Role | null;
   isApproved: boolean;
-  appUsers?: AppUser[];
+  appUsers?: MobileUser[];
 }
 
-export interface AppUser extends DatabaseEntity {
+export interface MobileUser extends DatabaseEntity {
   id: number;
   userId: string;
   user?: User;
+  regionId: number;
+  region?: Region;
 }
 
 export interface SigninPayload {

@@ -1,8 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
-import { Permission } from "@/types";
+import { DataTableConfig, Permission } from "@/types";
 
-export const getPermissionColumns = (context: any): ColumnDef<Permission>[] => {
+export const getPermissionColumns = (context: DataTableConfig<Permission>): ColumnDef<Permission>[] => {
   return [
     {
       accessorKey: "label",
