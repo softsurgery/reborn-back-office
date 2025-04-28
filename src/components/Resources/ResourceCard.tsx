@@ -19,6 +19,7 @@ import { api } from "@/api";
 interface ResourceCardProps {
   className?: string;
   resource: Upload;
+  previewResource?: () => void;
   deleteResource?: () => void;
   isPending?: boolean;
 }
@@ -26,6 +27,7 @@ interface ResourceCardProps {
 export const ResourceCard = ({
   className,
   resource,
+  previewResource,
   deleteResource,
   isPending,
 }: ResourceCardProps) => {
@@ -68,7 +70,11 @@ export const ResourceCard = ({
       </CardContent>
       <CardFooter className="flex flex-col gap-2 bg-muted/50 px-4 pt-2">
         <div className="flex flex-row gap-2 justify-between w-full">
-          <Button className="w-full" variant="outline">
+          <Button
+            className="w-full"
+            variant="outline"
+            onClick={previewResource}
+          >
             <Eye />
             Preview
           </Button>

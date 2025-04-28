@@ -10,8 +10,9 @@ import { ResourcesActionBar } from "./ResourcesActionBar";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
-import { useUploadDeleteDialog } from "./modal/UploadDeleteDialog";
+import { useResourceDeleteDialog } from "./modal/ResourceDeleteDialog";
 import { Upload } from "@prisma/client";
+import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
 
 interface ResourcesProps {
   className?: string;
@@ -25,7 +26,7 @@ const ResourceCardSkeletons = () => {
 };
 
 export const Resources = ({ className, type }: ResourcesProps) => {
-  const [upload, setUploaded] = React.useState<Upload>();
+  const [resource, setResource] = React.useState<Upload>();
   const pageName = `${type.charAt(0).toUpperCase()}${type.slice(1)} Resources`;
 
   const { setRoutes, clearRoutes } = useBreadcrumb();
@@ -89,16 +90,22 @@ export const Resources = ({ className, type }: ResourcesProps) => {
     },
   });
 
-  const { openDeleteUploadDialog, deleteUploadDialog } = useUploadDeleteDialog({
-    representation: upload?.filename,
-    deleteUpload: () => deleteUpload(upload?.slug as string),
-    isDeletionPending,
-  });
+  const { deleteResourceDialog, openDeleteResourceDialog } =
+    useResourceDeleteDialog({
+      representation: resource?.filename,
+      deleteResource: () => deleteUpload(resource?.slug as string),
+      isDeletionPending,
+    });
+
+  const { previewResourceSheet, openPreviewResourceSheet } =
+    useResourcePreviewSheet({
+      representation: resource?.filename,
+    });
 
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 overflow-hidden container  rounded-xl p-2 pb-4",
+        "flex flex-col flex-1 overflow-hidden container rounded-xl p-2 pb-4",
         className
       )}
     >
@@ -111,7 +118,7 @@ export const Resources = ({ className, type }: ResourcesProps) => {
       {/* Content */}
       <div
         className={cn(
-          "flex flex-col overflow-auto no-scrollbar p-5 border rounded-xl",
+          "flex flex-col overflow-auto no-scrollbar pt-5 rounded-xl",
           data.length === 0 && !isPending && "flex-1"
         )}
         onScroll={handleScroll}
@@ -131,9 +138,13 @@ export const Resources = ({ className, type }: ResourcesProps) => {
               <ResourceCard
                 key={resource.id}
                 resource={resource}
+                previewResource={() => {
+                  setResource(resource);
+                  openPreviewResourceSheet();
+                }}
                 deleteResource={() => {
-                  setUploaded(resource);
-                  openDeleteUploadDialog();
+                  setResource(resource);
+                  openDeleteResourceDialog();
                 }}
               />
             ))}
@@ -141,7 +152,8 @@ export const Resources = ({ className, type }: ResourcesProps) => {
           </div>
         )}
       </div>
-      {deleteUploadDialog}
+      {previewResourceSheet}
+      {deleteResourceDialog}
     </div>
   );
 };

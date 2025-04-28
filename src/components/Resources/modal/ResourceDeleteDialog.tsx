@@ -2,37 +2,37 @@ import { useDialog } from "@/components/Common/Dialogs";
 import { Spinner } from "@/components/Common/Spinner";
 import { Button } from "@/components/ui/button";
 
-interface UploadDeleteDialogProps {
+interface ResourceDeleteDialogProps {
   representation?: string;
-  deleteUpload?: () => void;
+  deleteResource?: () => void;
   isDeletionPending?: boolean;
 }
 
-export const useUploadDeleteDialog = ({
+export const useResourceDeleteDialog = ({
   representation,
-  deleteUpload,
+  deleteResource,
   isDeletionPending,
-}: UploadDeleteDialogProps) => {
+}: ResourceDeleteDialogProps) => {
   const {
-    DialogFragment: deleteUploadDialog,
-    openDialog: openDeleteUploadDialog,
-    closeDialog: closeDeleteUploadDialog,
+    DialogFragment: deleteResourceDialog,
+    openDialog: openDeleteResourceDialog,
+    closeDialog: closeDeleteResourceDialog,
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Upload <span className="font-light">{representation}</span> ?
+        Delete Resource <span className="font-light">{representation}</span> ?
       </div>
     ),
     description:
-      "This action is irreversible and permanent. Deleting the upload will remove it from the system.",
+      "This action is irreversible and permanent. Deleting the resource will remove it from the system.",
     children: (
       <div>
         <div className="flex gap-2 justify-end">
           <Button
             variant={"destructive"}
             onClick={() => {
-              deleteUpload?.();
-              closeDeleteUploadDialog();
+              deleteResource?.();
+              closeDeleteResourceDialog();
             }}
           >
             Delete
@@ -41,7 +41,7 @@ export const useUploadDeleteDialog = ({
           <Button
             variant={"secondary"}
             onClick={() => {
-              closeDeleteUploadDialog();
+              closeDeleteResourceDialog();
             }}
           >
             Cancel
@@ -53,8 +53,8 @@ export const useUploadDeleteDialog = ({
   });
 
   return {
-    deleteUploadDialog,
-    openDeleteUploadDialog,
-    closeDeleteUploadDialog,
+    deleteResourceDialog,
+    openDeleteResourceDialog,
+    closeDeleteResourceDialog,
   };
 };
