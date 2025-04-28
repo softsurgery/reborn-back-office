@@ -1,6 +1,6 @@
 {
   "name": "reborn-back-office",
-  "version": "0.0.2-T",
+  "version": "0.0.3-T",
   "private": true,
   "scripts": {
     "dev": "next dev",
