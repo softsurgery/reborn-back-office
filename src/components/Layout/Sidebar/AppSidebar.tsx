@@ -117,17 +117,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         id: 4,
         title: "Resources",
-        url: "/content-management",
         icon: CloudUpload,
         items: [
           {
             title: "Public Resources",
-            url: "/cardinal/public-resources",
+            url: "/resources/public-resources",
             icon: FileUser,
           },
           {
             title: "Private Resources",
-            url: "/cardinal/private-resources",
+            url: "/resources/private-resources",
             icon: FileLock,
           }
         ],
