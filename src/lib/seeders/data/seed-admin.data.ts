@@ -9,6 +9,7 @@ export const seedAdminData = async (): Promise<User> => {
     password: hashedPassword,
     roleId: "admin",
     isApproved: true,
+    isActive: true,
   }as User;
 };
     
