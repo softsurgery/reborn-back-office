@@ -59,7 +59,12 @@ export function useSheet({
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
         side={suitableSide}
-        className={cn(suitableHeight, canScroll && "overflow-auto", className)}
+        className={cn(
+          suitableHeight,
+          "flex flex-col flex-1",
+          canScroll ? "overflow-auto" : "overflow-hidden",
+          className
+        )}
         onPointerDownOutside={(e) => {
           e.preventDefault();
         }}
