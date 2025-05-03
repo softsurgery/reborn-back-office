@@ -19,6 +19,7 @@ interface UseSheetOptions {
   description: React.ReactNode;
   side?: SheetSide;
   className?: string;
+  canScroll?: boolean;
   onToggle?: () => void;
 }
 
@@ -31,6 +32,7 @@ interface UseSheetReturn {
 export function useSheet({
   children,
   className = "",
+  canScroll = false,
   title,
   description,
   side,
@@ -57,7 +59,7 @@ export function useSheet({
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
         side={suitableSide}
-        className={cn(suitableHeight, "overflow-auto", className)}
+        className={cn(suitableHeight, canScroll && "overflow-auto", className)}
         onPointerDownOutside={(e) => {
           e.preventDefault();
         }}

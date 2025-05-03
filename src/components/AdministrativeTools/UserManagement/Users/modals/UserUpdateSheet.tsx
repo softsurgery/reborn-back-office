@@ -59,6 +59,7 @@ export const useUserUpdateSheet = ({
       </div>
     ),
     className: "min-w-[25vw]",
+    canScroll: true,
     onToggle: resetUser,
   });
 

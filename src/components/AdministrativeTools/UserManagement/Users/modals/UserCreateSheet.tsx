@@ -55,6 +55,7 @@ export const useUserCreateSheet = ({
       </div>
     ),
     className: "min-w-[50vw]",
+    canScroll: true,
     onToggle: resetUser,
   });
 

@@ -53,6 +53,7 @@ export const useRoleUpdateSheet = (
       </div>
     ),
     className: "min-w-[25vw]",
+    canScroll: true,
     onToggle: resetRole,
   });
 
