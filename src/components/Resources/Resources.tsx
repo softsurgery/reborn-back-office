@@ -11,9 +11,9 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
 import { useResourceDeleteDialog } from "./modal/ResourceDeleteDialog";
-import { Upload } from "@prisma/client";
 import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
 import { useResourceCreateSheet } from "./modal/ResourceCreateSheet";
+import { Upload } from "@/prisma/interfaces";
 
 interface ResourcesProps {
   className?: string;
@@ -26,7 +26,7 @@ const ResourceCardSkeletons = () => {
 };
 
 export const Resources = ({ className }: ResourcesProps) => {
-  const [resource, setResource] = React.useState<Upload>();
+  const [resource, setResource] = React.useState<Partial<Upload>>();
 
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
