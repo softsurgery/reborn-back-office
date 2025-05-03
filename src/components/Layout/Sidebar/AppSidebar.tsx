@@ -13,9 +13,7 @@ import {
   WandSparkles,
   Paperclip,
   MapIcon,
-  FileLock,
   FileUser,
-  CloudUpload,
 } from "lucide-react";
 
 import {
@@ -30,24 +28,22 @@ import { TeamSwitcher } from "./TeamSwitcher";
 import { UserNav } from "./UserNav";
 import { useSession } from "next-auth/react";
 import { useEmailUser } from "@/hooks/content/useEmailUser";
+import {
+  identifyUser,
+  identifyUserAvatar,
+} from "@/lib/users-management/utils/identify-user.util";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useSession();
   const { user } = useEmailUser(userData?.user.email);
+  const identity = React.useMemo(() => identifyUser(user), [user]);
+  const avatarIdentity = React.useMemo(() => identifyUserAvatar(user), [user]);
   const data = {
     user: {
-      name:
-        user?.firstName && user?.lastName
-          ? `${user.firstName} ${user.lastName}`
-          : user?.username || "",
+      name: identity,
       email: userData?.user.email || "",
       avatar: "/avatars/shadcn.jpg",
-      avataralt:
-        user?.firstName && user?.lastName
-          ? `${user?.firstName?.charAt(0).toUpperCase()}${user?.lastName
-              ?.charAt(0)
-              .toUpperCase()}`
-          : user?.username?.charAt(0).toUpperCase() || "",
+      avataralt: avatarIdentity,
     },
     teams: [
       {

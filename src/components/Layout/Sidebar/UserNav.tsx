@@ -29,10 +29,10 @@ export function UserNav({
   user,
 }: {
   user: {
-    name: string;
-    email: string;
-    avatar: string;
-    avataralt: string;
+    name?: string;
+    email?: string;
+    avatar?: string;
+    avataralt?: string;
   };
 }) {
   const { isMobile } = useSidebar();
