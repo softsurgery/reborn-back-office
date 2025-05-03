@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useResourceDeleteDialog } from "./modal/ResourceDeleteDialog";
 import { Upload } from "@prisma/client";
 import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
+import { useResourceCreateSheet } from "./modal/ResourceCreateSheet";
 
 interface ResourcesProps {
   className?: string;
@@ -88,6 +89,9 @@ export const Resources = ({ className }: ResourcesProps) => {
     },
   });
 
+  const { createResourceSheet, openCreateResourceSheet } =
+    useResourceCreateSheet({});
+
   const { deleteResourceDialog, openDeleteResourceDialog } =
     useResourceDeleteDialog({
       representation: resource?.filename,
@@ -109,6 +113,7 @@ export const Resources = ({ className }: ResourcesProps) => {
     >
       {/* Top bar */}
       <ResourcesActionBar
+        openCreateResourceSheet={openCreateResourceSheet}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
@@ -152,6 +157,7 @@ export const Resources = ({ className }: ResourcesProps) => {
       </div>
       {previewResourceSheet}
       {deleteResourceDialog}
+      {createResourceSheet}
     </div>
   );
 };

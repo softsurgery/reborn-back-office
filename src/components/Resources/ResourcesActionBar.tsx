@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 interface ResourcesActionBarProps {
   className?: string;
+  openCreateResourceSheet?: () => void;
   searchTerm?: string;
   setSearchTerm?: (term: string) => void;
 }
@@ -11,6 +12,7 @@ interface ResourcesActionBarProps {
 export const ResourcesActionBar = ({
   className,
   searchTerm,
+  openCreateResourceSheet,
   setSearchTerm,
 }: ResourcesActionBarProps) => {
   return (
@@ -26,7 +28,11 @@ export const ResourcesActionBar = ({
         value={searchTerm}
         onChange={(e) => setSearchTerm?.(e.target.value)}
       />
-      <Button variant="default" className="mb-4">
+      <Button
+        variant="default"
+        className="mb-4"
+        onClick={openCreateResourceSheet}
+      >
         Add Resource
       </Button>
     </div>

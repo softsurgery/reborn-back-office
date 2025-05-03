@@ -11,7 +11,7 @@ import {
 
 interface FileIconProps {
   type: string;
-  size: number;
+  size?: number;
 }
 
 export function FileIcon({ type, size = 40 }: FileIconProps) {
