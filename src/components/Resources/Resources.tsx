@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { useIntro } from "@/context/IntroContext";
 import { useInfiniteUploads } from "@/hooks/content/useInfiniteUploads";
@@ -14,6 +14,10 @@ import { useResourceDeleteDialog } from "./modal/ResourceDeleteDialog";
 import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
 import { useResourceCreateSheet } from "./modal/ResourceCreateSheet";
 import { Upload } from "@/prisma/interfaces";
+import { PrivilegedFile, ServerErrorResponse, ServerResponse } from "@/types";
+import { useSession } from "next-auth/react";
+import { useCurrentUser } from "@/hooks/content/useCurrentUser";
+import { useResourceStore } from "@/hooks/stores/useResourceStore";
 
 interface ResourcesProps {
   className?: string;
@@ -26,7 +30,9 @@ const ResourceCardSkeletons = () => {
 };
 
 export const Resources = ({ className }: ResourcesProps) => {
-  const [resource, setResource] = React.useState<Partial<Upload>>();
+  const resourceStore = useResourceStore();
+  const [resource, setResource] = React.useState<Upload>();
+  const { user } = useCurrentUser();
 
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
@@ -56,7 +62,7 @@ export const Resources = ({ className }: ResourcesProps) => {
     order: debouncedSortDetails.order ? "ASC" : "DESC",
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     setRoutes?.([
       { title: "Content" },
       { title: "Resources", href: `/content/resources` },
@@ -78,6 +84,20 @@ export const Resources = ({ className }: ResourcesProps) => {
     }
   };
 
+  const { mutate: uploadFiles, isPending: isUploadingPending } = useMutation({
+    mutationFn: () =>
+      api.admin.upload.uploadFiles(resourceStore.files, user?.id as string),
+    onSuccess: (data: ServerResponse<Upload[]>) => {
+      toast.success(data.message);
+      refetch();
+      closeCreateResourceSheet();
+      resourceStore.reset();
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data.error);
+    },
+  });
+
   const { mutate: deleteUpload, isPending: isDeletionPending } = useMutation({
     mutationFn: (slug: string) => api.admin.upload.deleteFile(slug),
     onSuccess: (data) => {
@@ -89,8 +109,14 @@ export const Resources = ({ className }: ResourcesProps) => {
     },
   });
 
-  const { createResourceSheet, openCreateResourceSheet } =
-    useResourceCreateSheet({});
+  const {
+    createResourceSheet,
+    openCreateResourceSheet,
+    closeCreateResourceSheet,
+  } = useResourceCreateSheet({
+    uploadFiles,
+    isUploadingPending,
+  });
 
   const { deleteResourceDialog, openDeleteResourceDialog } =
     useResourceDeleteDialog({

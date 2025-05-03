@@ -37,7 +37,7 @@ export const useInfiniteUploads = ({
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.meta?.hasNextPage ? lastPage.meta.page + 1 : undefined,
-    enabled: true,
+    enabled,
   });
 
   return {

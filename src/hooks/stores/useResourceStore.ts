@@ -1,9 +1,5 @@
+import { PrivilegedFile } from "@/types";
 import { create } from "zustand";
-
-export interface PrivilegedFile {
-  file: File;
-  isPublic: boolean;
-}
 
 interface ResourceData {
   files: PrivilegedFile[];

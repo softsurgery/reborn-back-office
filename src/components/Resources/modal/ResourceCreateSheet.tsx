@@ -2,9 +2,15 @@ import { useSheet } from "@/components/Common/Sheets";
 import { PackagePlus } from "lucide-react";
 import { ResourceForm } from "../ResourceForm";
 
-interface ResourceCreateSheet {}
+interface ResourceCreateSheet {
+  uploadFiles?: () => void;
+  isUploadingPending?: boolean;
+}
 
-export const useResourceCreateSheet = ({}: ResourceCreateSheet) => {
+export const useResourceCreateSheet = ({
+  uploadFiles,
+  isUploadingPending,
+}: ResourceCreateSheet) => {
   const {
     SheetFragment: createResourceSheet,
     openSheet: openCreateResourceSheet,
@@ -17,7 +23,13 @@ export const useResourceCreateSheet = ({}: ResourceCreateSheet) => {
       </div>
     ),
     description: `This is a create window for resources`,
-    children: <ResourceForm className="my-2" />,
+    children: (
+      <ResourceForm
+        className="my-2"
+        uploadFiles={uploadFiles}
+        isUploadingPending={isUploadingPending}
+      />
+    ),
     className: "min-w-[30vw]",
   });
 

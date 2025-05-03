@@ -5,16 +5,16 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Download, Eye, X } from "lucide-react";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { formatFileSize, getMediaTypeLabel } from "@/lib/file.utils";
 import { FileIcon } from "./FileIcon";
-import { Upload } from "@/types";
 import { ResourceCardSkeleton } from "./ResourceCardSkeleton";
 import { api } from "@/api";
+import { Upload } from "@/prisma/interfaces";
+import { identifyUser } from "@/lib/users-management/utils/identify-user.util";
 
 interface ResourceCardProps {
   className?: string;
@@ -64,11 +64,11 @@ export const ResourceCard = ({
           </p>
           <p>
             <span className="font-bold">By:</span>{" "}
-            {resource.user?.username || "Unknown"}
+            {identifyUser(resource.user!)}
           </p>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col gap-2 bg-muted/50 px-4 py-4">
+      <CardFooter className="flex flex-col gap-2 bg-muted/50 p-4">
         <div className="flex flex-row gap-2 justify-between w-full">
           <Button
             className="w-full"
@@ -80,7 +80,7 @@ export const ResourceCard = ({
           </Button>
           <Button
             className="w-full"
-            variant="secondary"
+            variant="destructive"
             onClick={deleteResource}
           >
             <X />

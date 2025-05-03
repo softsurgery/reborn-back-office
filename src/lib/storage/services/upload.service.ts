@@ -8,7 +8,12 @@ import { StorageBadRequestException } from "../errors/storage.bad-request.error"
 import { FileNotFoundException } from "../errors/file.not-found.error";
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Upload } from "@/types";
+import { NextApiRequest } from "next";
+import {
+  parseBooleanField,
+  parseStringField,
+} from "@/lib/object.util";
+import { Upload } from "@/prisma/interfaces";
 
 export class StorageService {
   private uploadRepository: UploadRepository;
@@ -18,113 +23,140 @@ export class StorageService {
     this.uploadRepository = uploadRepository;
   }
 
-  async store(req: any) {
-    return new Promise((resolve, reject) => {
-      const form = formidable({
-        uploadDir: this.uploadPath,
-        keepExtensions: true,
+  async storeParsed(fields: formidable.Fields, file: formidable.File) {
+    const slug = uuidv4();
+    const filename = file.originalFilename || "";
+    const mimetype = file.mimetype || "";
+    const size = file.size;
+    const extension = mime.extension(mimetype) || "";
+
+    const isPublic = parseBooleanField(fields.isPublic);
+    const userId = parseStringField(fields.userId);
+
+    if (!userId) {
+      throw new StorageBadRequestException("User ID is required");
+    }
+
+    let relativePath = extension ? `${slug}.${extension}` : slug;
+    const destinationFile = join(this.uploadPath, relativePath);
+
+    try {
+      await fs.mkdir(this.uploadPath, { recursive: true });
+      await fs.rename(file.filepath, destinationFile);
+
+      return this.uploadRepository.create({
+        slug,
+        filename,
+        mimetype,
+        size,
+        relativePath,
+        userId,
+        isPublic,
       });
+    } catch (error: any) {
+      throw new StorageBadRequestException(
+        `Failed to store file: ${error.message}`
+      );
+    }
+  }
 
-      // Parse the request
-      form.parse(req, async (err, fields, files) => {
-        if (err) {
-          return reject(
-            new StorageBadRequestException(
-              "Error processing the file. " + err.message
-            )
-          );
-        }
+  async storeMultipleParsed(
+    fields: formidable.Fields,
+    files: formidable.File[]
+  ) {
+    const userId = parseStringField(fields.userId);
 
-        const file = files.file?.[0];
-        if (!file) {
-          return reject(new StorageBadRequestException("No file uploaded."));
-        }
-        const slug = uuidv4();
-        const filename = file.originalFilename || "";
-        const mimetype = file.mimetype || "";
-        const size = file.size;
+    if (!userId) {
+      throw new StorageBadRequestException("User ID is required");
+    }
 
-        const extension = mime.extension(mimetype) || "";
-        let relativePath = slug;
+    try {
+      const uploadedFiles = await Promise.all(
+        files.map(async (file, index) => {
+          const slug = uuidv4();
+          const filename = file.originalFilename || "";
+          const mimetype = file.mimetype || "";
+          const size = file.size;
+          const extension = mime.extension(mimetype) || "";
 
-        if (extension) {
-          relativePath = `${slug}.${extension}`;
-        }
+          let isPublic = false;
+          const isPublicKey = `isPublic_${index}`;
 
-        const destinationFile = join(this.uploadPath, relativePath);
+          if (fields[isPublicKey] !== undefined) {
+            isPublic = parseBooleanField(fields[isPublicKey]);
+          } else if (Array.isArray(fields.isPublic)) {
+            isPublic = fields.isPublic[index] === "true";
+          } else if (typeof fields.isPublic === "string") {
+            isPublic = fields.isPublic === "true";
+          }
 
-        try {
+          const relativePath = extension ? `${slug}.${extension}` : slug;
+          const destinationFile = join(this.uploadPath, relativePath);
+
           await fs.mkdir(this.uploadPath, { recursive: true });
           await fs.rename(file.filepath, destinationFile);
-          const upload = await this.uploadRepository.create({
+
+          return this.uploadRepository.create({
             slug,
             filename,
             mimetype,
             size,
             relativePath,
+            userId,
+            isPublic,
           });
-          resolve(upload);
-        } catch (error: any) {
-          reject(
-            new StorageBadRequestException(
-              `Failed to store file: ${error.message}`
-            )
-          );
-        }
-      });
-    });
+        })
+      );
+
+      return uploadedFiles;
+    } catch (error: any) {
+      throw new StorageBadRequestException(
+        `Failed to store files: ${error.message}`
+      );
+    }
   }
 
-  async storeMultiple(req: any) {
+  async store(req: NextApiRequest) {
+    const { fields, files } = await this.parseForm(req);
+
+    const file = files.file?.[0];
+    if (!file) {
+      throw new StorageBadRequestException("No file uploaded.");
+    }
+
+    return this.storeParsed(fields, file);
+  }
+
+  async storeMultiple(req: NextApiRequest) {
+    const { fields, files } = await this.parseForm(req);
+
+    const uploadedFiles = files.file;
+    if (!uploadedFiles || !Array.isArray(uploadedFiles)) {
+      throw new StorageBadRequestException("No files uploaded.");
+    }
+
+    return this.storeMultipleParsed(fields, uploadedFiles);
+  }
+
+  parseForm(
+    req: NextApiRequest
+  ): Promise<{ fields: formidable.Fields; files: formidable.Files }> {
+    const form = formidable({
+      uploadDir: this.uploadPath,
+      keepExtensions: true,
+      multiples: true,
+    });
+
     return new Promise((resolve, reject) => {
-      const form = formidable({
-        uploadDir: this.uploadPath,
-        keepExtensions: true,
-      });
-
-      form.parse(req, async (err, fields, files) => {
+      form.parse(req, (err, fields, files) => {
         if (err) {
-          return reject(
-            new StorageBadRequestException("Error processing the files.")
-          );
-        }
-
-        if (!files?.file) {
-          return reject(new StorageBadRequestException("No files uploaded."));
-        }
-
-        try {
-          const uploadedFiles = await Promise.all(
-            files?.file.map(async (file: any) => {
-              const slug = uuidv4();
-              const filename = file.originalFilename || "";
-              const mimetype = file.mimetype || "";
-              const size = file.size;
-              const extension = mime.extension(mimetype) || "";
-              let relativePath = slug;
-              if (extension) {
-                relativePath = `${slug}.${extension}`;
-              }
-              const destinationFile = join(this.uploadPath, relativePath);
-              await fs.mkdir(this.uploadPath, { recursive: true });
-              await fs.rename(file.filepath, destinationFile);
-              return this.uploadRepository.create({
-                slug,
-                filename,
-                mimetype,
-                size,
-                relativePath,
-              });
-            })
-          );
-
-          resolve(uploadedFiles);
-        } catch (error: any) {
           reject(
             new StorageBadRequestException(
-              `Failed to store files: ${error.message}`
+              "Error processing the file(s): " + err.message
             )
           );
+        } else {
+          resolve({ fields, files });
         }
       });
     });
