@@ -19,6 +19,7 @@ import { MobileUserRepository } from "./users-management/repositories/mobile-use
 import { UploadRepository } from "./storage/repositories/upload.repository";
 import { StorageService } from "./storage/services/upload.service";
 import prisma from "@/lib/prisma";
+import { mailService } from "./mail";
 
 //user-management
 const mobileUserService = new MobileUserService(
@@ -64,6 +65,7 @@ const container = {
   DeviceInfoService: deviceInfoService,
   //content
   RegionService: regionService,
+  MailService: mailService,
 };
 
 export default container;
