@@ -6,7 +6,7 @@ export const identifyUser = (user: User | null) => {
     ? `${user?.firstName?.charAt(0).toUpperCase() + user?.firstName.slice(1)} ${
         user?.lastName?.charAt(0).toUpperCase() + user?.lastName.slice(1)
       }`
-    : user?.username?.charAt(0).toUpperCase();
+    : user?.username;
 };
 
 export const identifyUserAvatar = (user: User | null) => {
