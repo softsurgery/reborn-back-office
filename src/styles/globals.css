@@ -198,3 +198,15 @@ input[type="number"] {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.fullscreen {
+  height: 100vh;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* CSS specific to iOS devices */
+  .fullscreen {
+    height: -webkit-fill-available;
+  }
+}
+

@@ -2,8 +2,13 @@ import Image from "next/image";
 import logo from "/public/next.svg";
 import { AuthenticationForm } from "./AuthenticationForm";
 import { Box } from "lucide-react";
+import React from "react";
+import { ForgotPasswordForm } from "./ForgetPasswordForm";
+
+type Screen = "login" | "forgot-password" | "reset-password";
 
 export const AuthenticationLayout = () => {
+  const [screen, setSecreen] = React.useState<Screen>("login");
   return (
     <div className="grid min-h-svh lg:grid-cols-2 no-select">
       <div className="flex flex-col gap-4 p-6 md:p-10 overflow-auto">
@@ -18,7 +23,8 @@ export const AuthenticationLayout = () => {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full">
             <div className="bg-background flex flex-col items-center gap-4 justify-center h-full my-4">
-              <AuthenticationForm />
+              {screen === "login" && <AuthenticationForm goToForgotPassword={() => setSecreen("forgot-password")} />}
+              {screen === "forgot-password" && <ForgotPasswordForm goToAuthentication={() => setSecreen("login")} />}
             </div>
           </div>
         </div>
