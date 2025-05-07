@@ -22,6 +22,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
@@ -139,8 +140,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
     ],
   };
+  const { open, toggleSidebar } = useSidebar();
+
+  const hoverToggledRef = React.useRef(false);
+
+  const handleMouseEnter = () => {
+    if (!open) {
+      toggleSidebar();
+      hoverToggledRef.current = true;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverToggledRef.current) {
+      toggleSidebar();
+      hoverToggledRef.current = false;
+    }
+  };
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <SidebarHeader>
         {/* @ts-ignore */}
         <TeamSwitcher teams={data.teams} />
