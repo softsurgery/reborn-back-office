@@ -131,7 +131,8 @@ export function parseSort(sort?: string): object[] | undefined {
   return orderBy;
 }
 
-function inferType(value: string): any {
+function inferType(value: string | null): any {
+  if (!value) return null;
   if (!isNaN(Number(value))) {
     return Number(value);
   } else if (value === "true" || value === "false") {

@@ -77,7 +77,7 @@ export function AuthenticationForm({ className,goToForgotPassword }: Authenticat
             <Label htmlFor="password">Password</Label>
             <a
               onClick={goToForgotPassword}
-              className="ml-auto text-sm underline-offset-4 hover:underline"
+              className="ml-auto text-sm underline-offset-4 hover:underline cursor-pointer"
             >
               Forgot your password?
             </a>

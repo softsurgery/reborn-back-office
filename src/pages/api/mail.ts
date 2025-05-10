@@ -2,7 +2,6 @@ import container from '@/lib/container';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-      console.log(process.env.SMTP_USER, process.env.SMTP_PASS)
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }

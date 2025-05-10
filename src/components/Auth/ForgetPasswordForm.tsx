@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/api";
+import { ServerErrorResponse, ServerResponse } from "@/types";
 
 interface ForgotPasswordFormProps {
   className?: string;
@@ -14,30 +17,26 @@ export const ForgotPasswordForm = ({
   className,
   goToAuthentication,
 }: ForgotPasswordFormProps) => {
-  const [usernameOrEmail, setUsernameOrEmail] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [emailOrUsername, setEmailOrUsername] = React.useState("");
+
+  const { mutate: sendResetLink, isPending } = useMutation({
+    mutationFn: async () => api.auth.forgetPassword(emailOrUsername),
+    onSuccess: (data: ServerResponse) => {
+      toast.success(data.message);
+      goToAuthentication();
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data.error);
+      setEmailOrUsername("");
+    },
+  });
 
   const handleSubmit = async () => {
-    if (!usernameOrEmail) {
+    if (!emailOrUsername) {
       toast.error("Please enter your email address.");
       return;
     }
-
-    setLoading(true);
-    try {
-      const response = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ usernameOrEmail }),
-      });
-
-      if (!response.ok) throw new Error("Failed to send reset link.");
-      toast.success("Password reset link sent to your email.");
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
+    sendResetLink();
   };
 
   return (
@@ -55,8 +54,9 @@ export const ForgotPasswordForm = ({
           <Input
             id="email"
             type="text"
-            value={usernameOrEmail}
-            onChange={(e) => setUsernameOrEmail(e.target.value)}
+            placeholder="Please enter your email or username"
+            value={emailOrUsername}
+            onChange={(e) => setEmailOrUsername(e.target.value)}
           />
         </div>
 
@@ -65,12 +65,16 @@ export const ForgotPasswordForm = ({
             variant="outline"
             className="w-full"
             onClick={goToAuthentication}
-            disabled={loading}
+            disabled={isPending}
           >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={loading} className="w-full">
-            {loading ? "Sending..." : "Send Reset Link"}
+          <Button
+            onClick={handleSubmit}
+            disabled={isPending}
+            className="w-full"
+          >
+            {isPending ? "Sending..." : "Send Reset Link"}
           </Button>
         </div>
       </div>

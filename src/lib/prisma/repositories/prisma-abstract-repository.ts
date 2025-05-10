@@ -77,8 +77,8 @@ export class BaseRepository<T> {
 
   async findByCondition(
     queryObject: IQueryObject,
-    options: IOptionsObject = {},
-    supportSoftDelete: boolean = false
+    supportSoftDelete: boolean = false,
+    options: IOptionsObject = {}
   ): Promise<T[]> {
     const { filter, sort, fields, join, search } = queryObject;
 
@@ -100,13 +100,13 @@ export class BaseRepository<T> {
 
   async findOneByCondition(
     queryObject: IQueryObject,
-    options: IOptionsObject = {},
-    supportSoftDelete: boolean = false
+    supportSoftDelete: boolean = false,
+    options: IOptionsObject = {}
   ): Promise<T | null> {
     const models = await this.findByCondition(
       queryObject,
-      options,
-      supportSoftDelete
+      supportSoftDelete,
+      options
     );
     return models.length > 0 ? models[0] : null;
   }

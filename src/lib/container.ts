@@ -19,14 +19,25 @@ import { MobileUserRepository } from "./users-management/repositories/mobile-use
 import { UploadRepository } from "./storage/repositories/upload.repository";
 import { StorageService } from "./storage/services/upload.service";
 import prisma from "@/lib/prisma";
-import { mailService } from "./mail";
+import { ResetTokenService } from "./users-management/services/reset-token.service";
+import { ResetTokenRepository } from "./users-management/repositories/rest-token.reporitory";
+import { MailService } from "./mail/services/mail.service";
+
+const mailService = new MailService();
 
 //user-management
 const mobileUserService = new MobileUserService(
   new MobileUserRepository(prisma)
 ); //appuser
 const userService = new UserService(new UserRepository(prisma)); //user
-const authService = new AuthService(userService); //auth
+const resetTokenService = new ResetTokenService(
+  new ResetTokenRepository(prisma)
+); //reset-token
+const authService = new AuthService(
+  userService,
+  resetTokenService,
+  mailService
+); //auth
 const roleService = new RoleService(
   new RoleRepository(prisma),
   new RolePermissionRepository(prisma)
@@ -59,6 +70,7 @@ const container = {
   UserService: userService,
   RoleService: roleService,
   PermissionService: permissionService,
+  ResetTokenService: resetTokenService,
   //reporting
   FeedbackService: feedbackService,
   BugService: bugService,

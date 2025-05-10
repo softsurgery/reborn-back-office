@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/sidebar";
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
-import { UserNav } from "./UserNav";
 import { useSession } from "next-auth/react";
 import { useEmailUser } from "@/hooks/content/useEmailUser";
 import {
@@ -35,17 +34,8 @@ import {
 } from "@/lib/users-management/utils/identify-user.util";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: userData } = useSession();
-  const { user } = useEmailUser(userData?.user.email);
-  const identity = React.useMemo(() => identifyUser(user), [user]);
-  const avatarIdentity = React.useMemo(() => identifyUserAvatar(user), [user]);
+  
   const data = {
-    user: {
-      name: identity,
-      email: userData?.user.email || "",
-      avatar: "/avatars/shadcn.jpg",
-      avataralt: avatarIdentity,
-    },
     teams: [
       {
         name: "Reborn Back Office",
@@ -144,14 +134,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const hoverToggledRef = React.useRef(false);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (e : React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+    e.stopPropagation();
     if (!open) {
       toggleSidebar();
       hoverToggledRef.current = true;
     }
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (e : React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+    e.stopPropagation();
     if (hoverToggledRef.current) {
       toggleSidebar();
       hoverToggledRef.current = false;
@@ -173,9 +165,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {/* @ts-ignore */}
         <MainNav items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <UserNav user={data.user} />
-      </SidebarFooter>
+      {/* <SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   );

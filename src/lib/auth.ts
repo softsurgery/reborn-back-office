@@ -1,13 +1,25 @@
 import { UserService } from "@/lib/users-management/services/user.service";
 import { comparePasswords } from "@/lib/utils/hash.util";
+import crypto from "crypto";
+import { addMinutes } from "date-fns";
 import { SigninPayload, User } from "@/types";
 import jwt from "jsonwebtoken";
+import { ResetTokenService } from "./users-management/services/reset-token.service";
+import { MailService } from "./mail/services/mail.service";
 
 export class AuthService {
   private userService: UserService;
+  private resetTokenService: ResetTokenService;
+  private mailService: MailService;
 
-  constructor(userService: UserService) {
+  constructor(
+    userService: UserService,
+    restTokenService: ResetTokenService,
+    mailService: MailService
+  ) {
     this.userService = userService;
+    this.resetTokenService = restTokenService;
+    this.mailService = mailService;
   }
 
   private generateTokens(user: User) {
@@ -91,5 +103,42 @@ export class AuthService {
     } catch (err) {
       throw new Error("Invalid or expired refresh token.");
     }
+  }
+
+  async requestPasswordReset(usernameOrEmail: string) {
+    const user = await this.userService.getUserByEmailOrUsername(
+      usernameOrEmail
+    );
+    if (user) {
+      const token = crypto.randomBytes(32).toString("hex");
+      const expires = addMinutes(new Date(), 15);
+
+      await this.resetTokenService.createResetToken({
+        userId: user.id,
+        token,
+        expires,
+      });
+
+      const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
+      if (user.email)
+        await this.mailService.sendMail(
+          user?.email,
+          "Password Reset Request",
+          `<p>Click <a href="${resetUrl}">here</a> to reset your password.</p>`
+        );
+    }
+  }
+
+  async getUserByResetToken(token: string) {
+    const resetToken = await this.resetTokenService.getValidResetToken(token);
+    console.log("hh", resetToken);
+    if (!resetToken) {
+      throw new Error("Invalid or expired reset token");
+    }
+    const user = await this.userService.getUserById(resetToken.userId);
+    if (!user) {
+      throw new Error("User not found for this reset token");
+    }
+    return user;
   }
 }

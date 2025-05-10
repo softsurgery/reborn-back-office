@@ -27,6 +27,16 @@ export class UserService {
     return this.userRepository.findOneByCondition(queryObject);
   }
 
+  async getUserByEmailOrUsername(
+    emailOrUsername: string
+  ): Promise<User | null> {
+    const user = await this.userRepository.findOneByCondition({
+      filter: `(email||$eq||${emailOrUsername};username||$eq||${emailOrUsername})`,
+    });
+    if (!user) throw new Error("User not found");
+    else return user;
+  }
+
   async createUser(data: Partial<User>): Promise<User> {
     const existingUser = await this.getUserByCondition({
       filter: `(username||$eq||${data.username};email||$eq||${data.email})`,
@@ -47,6 +57,11 @@ export class UserService {
       data.password = hashedPassword;
     }
     return this.userRepository.update(id, data);
+  }
+
+  async updateUserPassword(id: string, password: string): Promise<User> {
+    const hashedPassword = await hashPassword(password);
+    return this.userRepository.update(id, { password: hashedPassword });
   }
 
   async activate(id: string): Promise<User> {

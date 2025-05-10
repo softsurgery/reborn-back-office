@@ -1,0 +1,96 @@
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/api";
+import { toast } from "sonner";
+import { ServerErrorResponse, ServerResponse } from "@/types";
+
+interface ResetPasswordFormProps {
+  className?: string;
+  token: string | null;
+  goToAuthentication: () => void;
+}
+
+export const ResetPasswordForm = ({
+  className,
+  token,
+  goToAuthentication,
+}: ResetPasswordFormProps) => {
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const { mutate: resetPassword, isPending } = useMutation({
+    mutationFn: async () => api.auth.resetPassword(token as string, password),
+    onSuccess: (data: ServerResponse) => {
+      toast.success(data.message);
+      goToAuthentication();
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data.error);
+    },
+  });
+
+  const handleSubmit = async () => {
+    if (!password) {
+      toast.error("Please enter a password");
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+    resetPassword();
+  };
+
+  return (
+    <div className={cn("flex flex-col gap-6 w-[350px]", className)}>
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1 className="text-2xl font-bold">Reset Password</h1>
+        <p className="text-balance text-sm text-muted-foreground">
+          Enter your new password below.
+        </p>
+      </div>
+
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
+            type="password"
+            placeholder="•••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="confirm-password">Confirm Password</Label>
+          <Input
+            type="password"
+            placeholder="•••••••"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={goToAuthentication}
+          >
+            Cancel
+          </Button>
+          <Button className="w-full" onClick={handleSubmit}>
+            Reset
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
