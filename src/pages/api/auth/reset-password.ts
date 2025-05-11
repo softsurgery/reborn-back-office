@@ -15,10 +15,10 @@ export default async function handler(
     await userService.updateUserPassword(user.id, password);
     await resetTokenService.invalidateResetToken(user.id);
 
-    res.json({ message: "Password successfully reset", code: 200 });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Internal Server Error", code: 500, details: error });
+    res.json({ message: "Password successfully reset, Please login again" });
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal Server Error";
+    res.status(500).json({ error: errorMessage, code: 500, details: error });
   }
 }

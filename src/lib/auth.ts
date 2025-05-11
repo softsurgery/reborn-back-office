@@ -119,7 +119,7 @@ export class AuthService {
         expires,
       });
 
-      const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
+      const resetUrl = `${process.env.NEXTAUTH_URL}/auth?target=reset-password&token=${token}`;
       if (user.email)
         await this.mailService.sendMail(
           user?.email,
@@ -131,7 +131,6 @@ export class AuthService {
 
   async getUserByResetToken(token: string) {
     const resetToken = await this.resetTokenService.getValidResetToken(token);
-    console.log("hh", resetToken);
     if (!resetToken) {
       throw new Error("Invalid or expired reset token");
     }

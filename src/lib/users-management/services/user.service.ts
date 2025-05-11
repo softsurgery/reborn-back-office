@@ -33,7 +33,7 @@ export class UserService {
     const user = await this.userRepository.findOneByCondition({
       filter: `(email||$eq||${emailOrUsername};username||$eq||${emailOrUsername})`,
     });
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error("User does not exist");
     else return user;
   }
 

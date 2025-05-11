@@ -9,13 +9,17 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import { PasswordField } from "../Common/PasswordField";
 
 interface AuthenticationFormProps {
   className?: string;
   goToForgotPassword: () => void;
 }
 
-export function AuthenticationForm({ className,goToForgotPassword }: AuthenticationFormProps) {
+export function AuthenticationForm({
+  className,
+  goToForgotPassword,
+}: AuthenticationFormProps) {
   const [usernameOrEmail, setUsernameOrEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const router = useRouter();
@@ -82,10 +86,7 @@ export function AuthenticationForm({ className,goToForgotPassword }: Authenticat
               Forgot your password?
             </a>
           </div>
-          <Input
-            id="password"
-            type="password"
-            placeholder="•••••••"
+          <PasswordField
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isSignInPending}

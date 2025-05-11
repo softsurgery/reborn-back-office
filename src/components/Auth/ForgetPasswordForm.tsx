@@ -33,7 +33,9 @@ export const ForgotPasswordForm = ({
 
   const handleSubmit = async () => {
     if (!emailOrUsername) {
-      toast.error("Please enter your email address.");
+      toast.error(
+        "Please enter your email or username to receive a reset link."
+      );
       return;
     }
     sendResetLink();
@@ -57,6 +59,7 @@ export const ForgotPasswordForm = ({
             placeholder="Please enter your email or username"
             value={emailOrUsername}
             onChange={(e) => setEmailOrUsername(e.target.value)}
+            disabled={isPending}
           />
         </div>
 
@@ -71,8 +74,8 @@ export const ForgotPasswordForm = ({
           </Button>
           <Button
             onClick={handleSubmit}
-            disabled={isPending}
             className="w-full"
+            disabled={isPending}
           >
             {isPending ? "Sending..." : "Send Reset Link"}
           </Button>

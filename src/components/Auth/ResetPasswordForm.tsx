@@ -1,12 +1,12 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
 import { ServerErrorResponse, ServerResponse } from "@/types";
+import { PasswordField } from "../Common/PasswordField";
 
 interface ResetPasswordFormProps {
   className?: string;
@@ -61,32 +61,40 @@ export const ResetPasswordForm = ({
       <div className="grid gap-4">
         <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
-          <Input
-            type="password"
-            placeholder="•••••••"
+          <PasswordField
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isPending}
           />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="confirm-password">Confirm Password</Label>
-          <Input
-            type="password"
-            placeholder="•••••••"
+          <PasswordField
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            disabled={isPending}
           />
         </div>
+        {password != confirmPassword && (
+          <span className="font-medium text-xs text-red-500 leading-3">
+            Password does not match
+          </span>
+        )}
 
         <div className="flex flex-row gap-2">
           <Button
             variant="outline"
             className="w-full"
             onClick={goToAuthentication}
+            disabled={isPending}
           >
             Cancel
           </Button>
-          <Button className="w-full" onClick={handleSubmit}>
+          <Button
+            className="w-full"
+            onClick={handleSubmit}
+            disabled={isPending}
+          >
             Reset
           </Button>
         </div>
