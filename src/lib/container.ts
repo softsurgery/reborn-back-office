@@ -22,8 +22,12 @@ import prisma from "@/lib/prisma";
 import { ResetTokenService } from "./users-management/services/reset-token.service";
 import { ResetTokenRepository } from "./users-management/repositories/rest-token.reporitory";
 import { MailService } from "./mail/services/mail.service";
+import { TemplateService } from "./mail/services/template.service";
+import { TemplateRepository } from "./mail/repositories/template.repository";
 
-const mailService = new MailService();
+const templateService = new TemplateService(new TemplateRepository(prisma));
+
+const mailService = new MailService(templateService);
 
 //user-management
 const mobileUserService = new MobileUserService(

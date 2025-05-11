@@ -120,12 +120,17 @@ export class AuthService {
       });
 
       const resetUrl = `${process.env.NEXTAUTH_URL}/auth?target=reset-password&token=${token}`;
-      if (user.email)
-        await this.mailService.sendMail(
+      if (user.email) {
+        await this.mailService.sendTemplate(
           user?.email,
           "Password Reset Request",
-          `<p>Click <a href="${resetUrl}">here</a> to reset your password.</p>`
+          "forget-password",
+          {
+            username: user.username,
+            resetUrl,
+          }
         );
+      }
     }
   }
 

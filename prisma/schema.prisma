@@ -149,6 +149,16 @@ model Upload {
   deletedAt    DateTime?
 }
 
+model Template {
+  id               Int      @id @default(autoincrement())
+  name             String   @unique
+  markdownContent  String?  @db.Text
+  styleheetContent String?  @db.Text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+  deletedAt        DateTime?
+}
+
 enum FeedbackCategory {
   FeatureRequest
   GeneralFeedback

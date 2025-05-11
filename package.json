@@ -10,7 +10,8 @@
     "seed:permissions": "ts-node --project tsconfig.local.json src/lib/seeders/permissions.seed.ts",
     "seed:roles": "ts-node --project tsconfig.local.json src/lib/seeders/roles.seed.ts",
     "seed:admin": "ts-node --project tsconfig.local.json src/lib/seeders/admin.seed.ts",
-    "seed:all": "npm run seed:permissions && npm run seed:roles && npm run seed:admin",
+    "seed:template" : "ts-node --project tsconfig.local.json src/lib/seeders/template.seed.ts",
+    "seed:all": "npm run seed:permissions && npm run seed:roles && npm run seed:admin && npm run seed:template",
     "lint": "next lint"
   },
   "dependencies": {
