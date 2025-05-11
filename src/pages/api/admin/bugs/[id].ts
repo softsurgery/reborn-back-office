@@ -30,7 +30,6 @@ export default async function handler(
         });
       }
       case "DELETE": {
-        console.log("failed");
         const deletedBug = await bugService.deleteBug(Number(id));
         return res.status(200).json({
           message: "Bug deleted successfully",

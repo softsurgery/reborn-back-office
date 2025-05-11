@@ -220,7 +220,6 @@ export default function Users({ className }: UsersProps) {
     });
     if (!result.success) {
       userStore.set("errors", result.error.flatten().fieldErrors);
-      console.log(result.error.flatten().fieldErrors);
     } else {
       if (!userStore.setManualPassword) delete data.password;
       updateUser({ id: userStore.id, user: data });

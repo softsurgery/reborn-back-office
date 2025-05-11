@@ -27,7 +27,6 @@ export class TemplateService {
     const template = await this.templateRepository.findOneByCondition({
       filter: `name||$eq||${name}`,
     });
-    console.log(template);
     return template;
   }
 
