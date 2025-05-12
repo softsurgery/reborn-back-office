@@ -11,8 +11,6 @@ import { AppSidebar } from "./Sidebar/AppSidebar";
 import { Footer } from "./Footer";
 import { FooterContext } from "@/context/FooterContext";
 import { IntroContext } from "@/context/IntroContext";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import NotMobileSupported from "../Common/pages/NotMobileSupported";
 import { PageHeader } from "./PageHeader";
 
 interface LayoutProps {
@@ -44,9 +42,9 @@ export const Layout = ({ children, className }: LayoutProps) => {
   const introContext = {
     title,
     description,
-    setIntro: (title: string, description: string) => {
+    setIntro: (title: string, description?: string) => {
       setTitle(title);
-      setDescription(description);
+      setDescription(description || "");
     },
     clearIntro: () => {
       setTitle("");
@@ -54,19 +52,6 @@ export const Layout = ({ children, className }: LayoutProps) => {
     },
   };
 
-  const isMobile = useMediaQuery("(max-width: 767px)");
-
-  if (isMobile) {
-    return (
-      <div
-        className={cn(
-          "flex justify-center items-center overflow-hidden fullscreen"
-        )}
-      >
-        <NotMobileSupported />
-      </div>
-    );
-  }
   return (
     <div
       className={cn(
@@ -84,7 +69,9 @@ export const Layout = ({ children, className }: LayoutProps) => {
                   {/* Header , Main & Footer */}
                   <div className="flex flex-col flex-1 overflow-hidden">
                     <Header />
-                    <PageHeader className="py-5 px-10" />
+                    {(title || description) && (
+                      <PageHeader className="py-5 px-10" />
+                    )}
                     <main
                       className={cn(
                         "flex flex-col flex-1 overflow-hidden px-10",

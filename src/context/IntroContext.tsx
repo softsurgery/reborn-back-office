@@ -3,7 +3,7 @@ import React from "react";
 interface IntroContextProps {
   title: string;
   description: string;
-  setIntro: (title: string, description: string) => void;
+  setIntro: (title: string, description?: string) => void;
   clearIntro: () => void;
 }
 
