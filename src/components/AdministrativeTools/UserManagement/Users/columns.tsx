@@ -144,12 +144,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <Badge
-          className={cn(
-            "font-bold text-foreground",
-            row.original.isActive ? "bg-primary" : "bg-secondary"
-          )}
-        >
+        <Badge variant={row.original.isActive ? "default" : "secondary"}>
           {row.original.isActive ? "Yes" : "No"}
         </Badge>
       ),
@@ -167,12 +162,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
         />
       ),
       cell: ({ row }) => (
-        <Badge
-          className={cn(
-            "font-bold text-foreground",
-            row.original.isApproved ? "bg-primary" : "bg-secondary"
-          )}
-        >
+        <Badge variant={row.original.isActive ? "default" : "secondary"}>
           {row.original.isApproved ? "Yes" : "No"}
         </Badge>
       ),
