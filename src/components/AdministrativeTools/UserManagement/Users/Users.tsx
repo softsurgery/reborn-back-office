@@ -20,10 +20,8 @@ import { DataTable } from "@/components/Common/Datatables/data-table";
 import {
   ArrowDown,
   ArrowUp,
-  RefreshCcw,
   UserRoundCheck,
   UserRoundX,
-  X,
 } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
@@ -190,15 +188,6 @@ export default function Users({ className }: UsersProps) {
       },
       onError: (error) => toast(error.message),
     });
-
-  const { mutate: refreshUser, isPending: isRefreshPending } = useMutation({
-    mutationFn: (id?: string) => api.admin.user.refresh(id),
-    onSuccess: (response: ServerResponse<User>) => {
-      refetchUsers();
-      toast(response.message);
-    },
-    onError: (error) => toast(error.message),
-  });
 
   const handleCreateSubmit = () => {
     const data = userStore.getUser();

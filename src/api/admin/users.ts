@@ -1,9 +1,11 @@
 import axios from "axios";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { User } from "@/types/user-management";
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { ServerResponse } from "@/types";
+import { User } from "@/prisma/interfaces";
+import { Server } from "http";
 
+//base ***************************************************************************************
 const findPaginated = async ({
   page = "1",
   size = "5",
@@ -29,26 +31,6 @@ const findPaginated = async ({
   return response.data;
 };
 
-const activate = async (id?: string): Promise<ServerResponse<User>> => {
-  const response = await axios.get(`/api/admin/users/activate/${id}`);
-  return response.data;
-};
-
-const deactivate = async (id?: string): Promise<ServerResponse<User>> => {
-  const response = await axios.get(`/api/admin/users/deactivate/${id}`);
-  return response.data;
-};
-
-const approve = async (id?: string): Promise<ServerResponse<User>> => {
-  const response = await axios.get(`/api/admin/users/approve/${id}`);
-  return response.data;
-};
-
-const disapprove = async (id?: string): Promise<ServerResponse<User>> => {
-  const response = await axios.get(`/api/admin/users/disapprove/${id}`);
-  return response.data;
-};
-
 const findAll = async (): Promise<User[]> => {
   const response = await axios.get<User[]>(`/api/admin/users`);
   return response.data;
@@ -61,16 +43,6 @@ const findById = async (userId?: string, join?: string): Promise<User> => {
     },
   });
   return response.data;
-};
-
-const findByEmail = async (email?: string, join?: string): Promise<User> => {
-  const response = await axios.get<User[]>(`/api/admin/users`, {
-    params: {
-      filter: `email||$eq||${email}`,
-      join,
-    },
-  });
-  return response.data[0];
 };
 
 const create = async (user: Partial<User>): Promise<ServerResponse<User>> => {
@@ -91,22 +63,62 @@ const remove = async (userId?: string): Promise<ServerResponse<User>> => {
   return response.data;
 };
 
-const refresh = async (userId?: string): Promise<ServerResponse<User>> => {
-  const response = await axios.get(`/api/admin/users/refresh/${userId}`);
+//utilities ***************************************************************************************
+
+const activate = async (id?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/activate/${id}`);
+  return response.data;
+};
+
+const deactivate = async (id?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/deactivate/${id}`);
+  return response.data;
+};
+
+const approve = async (id?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/approve/${id}`);
+  return response.data;
+};
+
+const disapprove = async (id?: string): Promise<ServerResponse<User>> => {
+  const response = await axios.get(`/api/admin/users/disapprove/${id}`);
+  return response.data;
+};
+
+const findByEmail = async (email?: string, join?: string): Promise<User> => {
+  const response = await axios.get<User[]>(`/api/admin/users`, {
+    params: {
+      filter: `email||$eq||${email}`,
+      join,
+    },
+  });
+  return response.data[0];
+};
+
+const hasPermissions = async (
+  id?: string,
+  permissions?: string[]
+): Promise<ServerResponse<boolean>> => {
+  const response = await axios.post(`/api/admin/users/has-permissions`, {
+    id,
+    permissions,
+  });
   return response.data;
 };
 
 export const user = {
+  // base
   findPaginated,
   findAll,
   findById,
-  findByEmail,
   create,
   update,
+  remove,
+  //utilties
   activate,
   deactivate,
   approve,
   disapprove,
-  refresh,
-  remove,
+  findByEmail,
+  hasPermissions,
 };
