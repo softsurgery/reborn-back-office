@@ -31,16 +31,16 @@ export const BaseProfile = ({
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 overflow-auto container mx-auto my-5",
+        "flex flex-col flex-1 overflow-hidden no-scrollbar container mx-auto",
         className
       )}
     >
-      <div className="flex flex-col  gap-5 h-full">
+      <div className="flex flex-col flex-1 overflow-hidden gap-5 h-full">
         {/* Profile Sidebar */}
         <UserCard user={user} className="h-fit" />
 
         {/* Main Content */}
-        <Tabs defaultValue="about">
+        <Tabs defaultValue="about" className="flex flex-col flex-1 overflow-hidden">
           <TabsList className="grid grid-cols-3 mb-4">
             <TabsTrigger value="about" className="flex items-center gap-2">
               <UserIcon className="h-4 w-4" />
@@ -55,18 +55,19 @@ export const BaseProfile = ({
               <span>Settings</span>
             </TabsTrigger>
           </TabsList>
+          <div className="flex flex-col flex-1 overflow-auto py-4 no-scrollbar">
+            <TabsContent value="about">
+              <About />
+            </TabsContent>
 
-          <TabsContent value="about">
-            <About />
-          </TabsContent>
+            <TabsContent value="activity">
+              <Activity />
+            </TabsContent>
 
-          <TabsContent value="activity">
-            <Activity />
-          </TabsContent>
-
-          <TabsContent value="settings">
-            <Settings />
-          </TabsContent>
+            <TabsContent value="settings">
+              <Settings />
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>
