@@ -13,7 +13,7 @@ import { BugService } from "./bug/service/bug.service";
 import { BugRepository } from "./bug/repositories/bug.repository";
 import { RegionService } from "./content/services/region.service";
 import { RegionRepository } from "./content/repositories/region.repository";
-import { AuthService } from "./auth";
+import { AuthService } from "./auth/auth";
 import { MobileUserService } from "./users-management/services/mobile-user.service";
 import { MobileUserRepository } from "./users-management/repositories/mobile-user.repository";
 import { UploadRepository } from "./storage/repositories/upload.repository";

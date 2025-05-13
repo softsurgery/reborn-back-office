@@ -4,8 +4,8 @@ import crypto from "crypto";
 import { addMinutes } from "date-fns";
 import { SigninPayload, User } from "@/types";
 import jwt from "jsonwebtoken";
-import { ResetTokenService } from "./users-management/services/reset-token.service";
-import { MailService } from "./mail/services/mail.service";
+import { ResetTokenService } from "../users-management/services/reset-token.service";
+import { MailService } from "../mail/services/mail.service";
 
 export class AuthService {
   private userService: UserService;
