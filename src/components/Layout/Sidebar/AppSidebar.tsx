@@ -27,7 +27,7 @@ import {
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
 import { useSession } from "next-auth/react";
-import { useEmailUser } from "@/hooks/content/useEmailUser";
+import { useEmailUser } from "@/hooks/content/User/useEmailUser";
 import {
   identifyUser,
   identifyUserAvatar,

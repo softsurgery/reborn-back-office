@@ -6,7 +6,7 @@ import { LanguageSwitcher } from "../Common/LanguageSwitcher";
 import { Commander } from "../Common/Commander";
 import { UserNav } from "./UserNav";
 import { useSession } from "next-auth/react";
-import { useEmailUser } from "@/hooks/content/useEmailUser";
+import { useEmailUser } from "@/hooks/content/User/useEmailUser";
 import { identifyUser, identifyUserAvatar } from "@/lib/users-management/utils/identify-user.util";
 
 interface HeaderProps {

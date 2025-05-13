@@ -16,7 +16,7 @@ import { useResourceCreateSheet } from "./modal/ResourceCreateSheet";
 import { Upload } from "@/prisma/interfaces";
 import { PrivilegedFile, ServerErrorResponse, ServerResponse } from "@/types";
 import { useSession } from "next-auth/react";
-import { useCurrentUser } from "@/hooks/content/useCurrentUser";
+import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import { useResourceStore } from "@/hooks/stores/useResourceStore";
 
 interface ResourcesProps {

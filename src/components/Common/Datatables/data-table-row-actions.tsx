@@ -46,7 +46,7 @@ export function DataTableRowActions<TData>({
             >
               <Telescope /> Inspect
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="border" />
           </React.Fragment>
         )}
 
@@ -69,7 +69,7 @@ export function DataTableRowActions<TData>({
                   </DropdownMenuItem>
                 );
               })}
-              <DropdownMenuSeparator className="border"/>
+              <DropdownMenuSeparator className="border" />
             </React.Fragment>
           );
         })}

@@ -54,8 +54,12 @@ const findAll = async (): Promise<User[]> => {
   return response.data;
 };
 
-const findById = async (userId: string): Promise<User> => {
-  const response = await axios.get<User>(`/api/admin/users/${userId}`);
+const findById = async (userId?: string, join?: string): Promise<User> => {
+  const response = await axios.get<User>(`/api/admin/users/${userId}`, {
+    params: {
+      join,
+    },
+  });
   return response.data;
 };
 

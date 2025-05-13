@@ -27,12 +27,14 @@ import {
 } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
+import { useRouter } from "next/router";
 
 interface UsersProps {
   className?: string;
 }
 
 export default function Users({ className }: UsersProps) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
@@ -278,6 +280,9 @@ export default function Users({ className }: UsersProps) {
   const context: DataTableConfig<User> = {
     singularName: "User",
     pluralName: "Users",
+    inspectCallback: () => {
+      router.push(`/profile/${userStore.id}`);
+    },
     createCallback: openCreateUserSheet,
     updateCallback: openUpdateUserSheet,
     deleteCallback: openDeleteUserDialog,
