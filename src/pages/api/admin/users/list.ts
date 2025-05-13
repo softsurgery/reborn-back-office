@@ -1,11 +1,8 @@
-// pages/api/permission/index.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import container from "@/lib/container";
+import { withAuth } from "@/lib/auth/withAuth";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const userService = container.UserService;
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed", code: 405 });
@@ -19,3 +16,5 @@ export default async function handler(
       .json({ error: "Internal Server Error", code: 500, details: error });
   }
 }
+
+export default withAuth(["READ_USER"])(handler);

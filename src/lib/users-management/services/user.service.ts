@@ -1,8 +1,8 @@
 import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
 import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { User } from "@/types";
 import { UserRepository } from "../repositories/user.repository";
 import { hashPassword } from "@/lib/utils/hash.util";
+import { User } from "@/prisma/interfaces";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -11,6 +11,7 @@ export class UserService {
     this.userRepository = userRepository;
   }
 
+  //base ***************************************************************************************
   async getPaginatedUsers(queryObject: IQueryObject): Promise<Paginated<User>> {
     return this.userRepository.findPaginated(queryObject);
   }
@@ -25,16 +26,6 @@ export class UserService {
 
   async getUserByCondition(queryObject: IQueryObject) {
     return this.userRepository.findOneByCondition(queryObject);
-  }
-
-  async getUserByEmailOrUsername(
-    emailOrUsername: string
-  ): Promise<User | null> {
-    const user = await this.userRepository.findOneByCondition({
-      filter: `(email||$eq||${emailOrUsername};username||$eq||${emailOrUsername})`,
-    });
-    if (!user) throw new Error("User does not exist");
-    else return user;
   }
 
   async createUser(data: Partial<User>): Promise<User> {
@@ -57,6 +48,27 @@ export class UserService {
       data.password = hashedPassword;
     }
     return this.userRepository.update(id, data);
+  }
+
+  async deleteUser(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+    return this.userRepository.delete(id);
+  }
+
+  async countUsers(where: any = {}): Promise<number> {
+    return this.userRepository.count(where);
+  }
+
+  //utilities ***************************************************************************************
+
+  async getUserByEmailOrUsername(
+    emailOrUsername: string
+  ): Promise<User | null> {
+    const user = await this.userRepository.findOneByCondition({
+      filter: `(email||$eq||${emailOrUsername};username||$eq||${emailOrUsername})`,
+    });
+    if (!user) throw new Error("User does not exist");
+    else return user;
   }
 
   async updateUserPassword(id: string, password: string): Promise<User> {
@@ -84,12 +96,15 @@ export class UserService {
     return this.userRepository.update(id, { ...user, isApproved: false });
   }
 
-  async deleteUser(id: string): Promise<User> {
-    const user = await this.userRepository.findById(id);
-    return this.userRepository.delete(id);
-  }
-
-  async countUsers(where: any = {}): Promise<number> {
-    return this.userRepository.count(where);
+  async hasPermissions(id: string, permissions: string[]): Promise<boolean> {
+    const user = await this.userRepository.findOneByCondition({
+      filter: `id||$eq||${id}`,
+      join: "role.permissions",
+    });
+    if (!user) return false;
+    const userPermissions = user?.role?.permissions?.map(
+      (rolePermission) => rolePermission?.permissionId
+    );
+    return permissions.every((permission) => userPermissions?.includes(permission));
   }
 }

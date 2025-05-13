@@ -1,5 +1,4 @@
 import React from "react";
-import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import {
   BarChart2,
   User as UserIcon,
@@ -40,7 +39,10 @@ export const BaseProfile = ({
         <UserCard user={user} className="h-fit" />
 
         {/* Main Content */}
-        <Tabs defaultValue="about" className="flex flex-col flex-1 overflow-hidden">
+        <Tabs
+          defaultValue="about"
+          className="flex flex-col flex-1 overflow-hidden"
+        >
           <TabsList className="grid grid-cols-3 mb-4">
             <TabsTrigger value="about" className="flex items-center gap-2">
               <UserIcon className="h-4 w-4" />
