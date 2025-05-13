@@ -12,6 +12,7 @@ import { Footer } from "./Footer";
 import { FooterContext } from "@/context/FooterContext";
 import { IntroContext } from "@/context/IntroContext";
 import { PageHeader } from "./PageHeader";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -52,6 +53,7 @@ export const Layout = ({ children, className }: LayoutProps) => {
     },
   };
 
+  const isMobile = useMediaQuery("(max-width: 425px)");
   return (
     <div
       className={cn(
@@ -70,11 +72,14 @@ export const Layout = ({ children, className }: LayoutProps) => {
                   <div className="flex flex-col flex-1 overflow-hidden">
                     <Header />
                     {(title || description) && (
-                      <PageHeader className="py-5 px-10" />
+                      <PageHeader
+                        className={cn("py-5", isMobile ? "px-4" : "px-10")}
+                      />
                     )}
                     <main
                       className={cn(
-                        "flex flex-col flex-1 overflow-hidden px-10",
+                        "flex flex-col flex-1 overflow-hidden",
+                        isMobile ? "px-4" : "px-10",
                         className
                       )}
                     >
