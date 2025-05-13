@@ -2,14 +2,18 @@ import React from "react";
 import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useEmailUser = (email?: string, enabled?: boolean) => {
+export const useEmailUser = (
+  email?: string,
+  join?: string,
+  enabled?: boolean
+) => {
   const {
     isFetching: isFetchUserPending,
     data: userResp,
     refetch: refetchUser,
   } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => api.admin.user.findByEmail(email),
+    queryKey: ["user", email, join],
+    queryFn: () => api.admin.user.findByEmail(email, join),
     enabled: enabled && !!email,
   });
 

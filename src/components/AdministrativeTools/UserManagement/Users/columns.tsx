@@ -9,20 +9,6 @@ import { DataTableRowActions } from "@/components/Common/Datatables/data-table-r
 export const getUserColumns = (context: any): ColumnDef<User>[] => {
   return [
     {
-      accessorKey: "ID",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="ID"
-          attribute="id"
-          context={context}
-        />
-      ),
-      cell: ({ row }) => <div>{row.original.id}</div>,
-      enableSorting: true,
-      enableHiding: true,
-    },
-    {
       accessorKey: "Username",
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -65,7 +51,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       cell: ({ row }) => (
         <div>
           {row.original.firstName || (
-            <span className="opacity-70">Not Defined</span>
+            <span className="opacity-70">-</span>
           )}
         </div>
       ),
@@ -85,7 +71,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       cell: ({ row }) => (
         <div>
           {row.original.lastName || (
-            <span className="opacity-70">Not Defined</span>
+            <span className="opacity-70">-</span>
           )}
         </div>
       ),
@@ -106,7 +92,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
         <div>
           {(row.original.dateOfBirth &&
             format(row.original.dateOfBirth, "yyyy-MM-dd")) || (
-            <span className="opacity-70">Not Defined</span>
+            <span className="opacity-70">-</span>
           )}
         </div>
       ),
@@ -126,7 +112,7 @@ export const getUserColumns = (context: any): ColumnDef<User>[] => {
       cell: ({ row }) => (
         <div>
           {row.original?.role?.label || (
-            <span className="opacity-70">No Role Assigned Yet</span>
+            <span className="opacity-70">-</span>
           )}
         </div>
       ),

@@ -59,10 +59,11 @@ const findById = async (userId: string): Promise<User> => {
   return response.data;
 };
 
-const findByEmail = async (email?: string): Promise<User> => {
+const findByEmail = async (email?: string, join?: string): Promise<User> => {
   const response = await axios.get<User[]>(`/api/admin/users`, {
     params: {
       filter: `email||$eq||${email}`,
+      join,
     },
   });
   return response.data[0];
