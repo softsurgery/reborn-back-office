@@ -1,5 +1,5 @@
 interface DataTableRowAdditionalAction<T> {
-  actionCallback?: () => void;
+  actionCallback?: (entity: T) => void;
   actionLabel: string;
   actionIcon: React.ReactNode;
   isActionVisible?: (entity: T) => boolean;
@@ -22,10 +22,10 @@ export interface DataTableConfig<T> {
   searchTerm?: string;
   setSearchTerm?: (searchTerm: string) => void;
   //actions
-  inspectCallback?: () => void;
+  inspectCallback?: (entity: T) => void;
   createCallback?: () => void;
-  updateCallback?: () => void;
-  deleteCallback?: () => void;
+  updateCallback?: (entity: T) => void;
+  deleteCallback?: (entity: T) => void;
   additionalActions?: Record<number, DataTableRowAdditionalAction<T>[]>;
   //utility
   targetEntity?: (entity: T) => void;

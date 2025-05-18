@@ -41,7 +41,7 @@ export function DataTableRowActions<TData>({
             <DropdownMenuItem
               onClick={() => {
                 context.targetEntity?.(entity);
-                context?.inspectCallback?.();
+                context?.inspectCallback?.(entity);
               }}
             >
               <Telescope /> Inspect
@@ -62,7 +62,7 @@ export function DataTableRowActions<TData>({
                     key={index}
                     onClick={() => {
                       context.targetEntity?.(entity);
-                      action.actionCallback?.();
+                      action.actionCallback?.(entity);
                     }}
                   >
                     {action.actionIcon} {action.actionLabel}
@@ -78,7 +78,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem
             onClick={() => {
               context.targetEntity?.(entity);
-              context?.updateCallback?.();
+              context?.updateCallback?.(entity);
             }}
           >
             <Edit /> Update
@@ -88,7 +88,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem
             onClick={() => {
               context.targetEntity?.(entity);
-              context?.deleteCallback?.();
+              context?.deleteCallback?.(entity);
             }}
           >
             <Trash2 /> Delete
