@@ -17,15 +17,13 @@ import { DataTableConfig, ServerResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { useIntro } from "@/context/IntroContext";
 import { DataTable } from "@/components/Common/Datatables/data-table";
-import {
-  ArrowDown,
-  ArrowUp,
-  UserRoundCheck,
-  UserRoundX,
-} from "lucide-react";
+import { ArrowDown, ArrowUp, UserRoundCheck, UserRoundX } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useRouter } from "next/router";
+import { useCurrentPermissions } from "@/hooks/content/User/useCurrentPermissions";
+import { Spinner } from "@/components/Common/Spinner";
+import ForbiddenPage from "@/components/Common/pages/ForbiddenPage";
 
 interface UsersProps {
   className?: string;
@@ -33,23 +31,26 @@ interface UsersProps {
 
 export default function Users({ className }: UsersProps) {
   const router = useRouter();
+  const { granted, isFetchingGranted } = useCurrentPermissions(["READ_USER"]);
   const queryClient = useQueryClient();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
-    setRoutes?.([
-      { title: "User Management" },
-      { title: "Users", href: "/users-management/users" },
-    ]);
-    setIntro?.(
-      "Users",
-      "View, manage, and customize user accounts to streamline access and ensure security."
-    );
+    if (granted) {
+      setRoutes?.([
+        { title: "User Management" },
+        { title: "Users", href: "/users-management/users" },
+      ]);
+      setIntro?.(
+        "Users",
+        "View, manage, and customize user accounts to streamline access and ensure security."
+      );
+    }
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [granted]);
 
   const userStore = useUserStore();
 
@@ -269,8 +270,8 @@ export default function Users({ className }: UsersProps) {
   const context: DataTableConfig<User> = {
     singularName: "User",
     pluralName: "Users",
-    inspectCallback: () => {
-      router.push(`/profile/${userStore.id}`);
+    inspectCallback: (entity: User) => {
+      router.push(`/profile/${entity.id}`);
     },
     createCallback: openCreateUserSheet,
     updateCallback: openUpdateUserSheet,
@@ -323,23 +324,27 @@ export default function Users({ className }: UsersProps) {
   const isPending =
     isUsersPending || paging || resizing || searching || sorting;
 
-  return (
-    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
-      <DataTable
-        className="flex flex-col flex-1 overflow-auto p-1"
-        containerClassName="overflow-auto"
-        columns={columns}
-        data={users}
-        context={context}
-        isPending={isPending}
-      />
-      {createUserSheet}
-      {updateUserSheet}
-      {deleteUserDialog}
-      {activateUserDialog}
-      {deactivateUserDialog}
-      {approveUserDialog}
-      {disapproveUserDialog}
-    </div>
-  );
+  if (isFetchingGranted) {
+    return <Spinner className="h-screen" />;
+  } else if (!granted) return <ForbiddenPage />;
+  else
+    return (
+      <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
+        <DataTable
+          className="flex flex-col flex-1 overflow-auto p-1"
+          containerClassName="overflow-auto"
+          columns={columns}
+          data={users}
+          context={context}
+          isPending={isPending}
+        />
+        {createUserSheet}
+        {updateUserSheet}
+        {deleteUserDialog}
+        {activateUserDialog}
+        {deactivateUserDialog}
+        {approveUserDialog}
+        {disapproveUserDialog}
+      </div>
+    );
 }

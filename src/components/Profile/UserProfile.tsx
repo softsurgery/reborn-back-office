@@ -16,6 +16,7 @@ export const UserProfile = ({ className, id }: UserProfileProps) => {
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
+    
     const identification = identifyUser(user);
     if (user) {
       setRoutes?.([{ title: "Profile" }]);

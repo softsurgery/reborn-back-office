@@ -16,9 +16,14 @@ export function withAuth(permissions: string[] = []) {
       (req as any).user = token;
 
       if (permissions.length > 0) {
-        const hasPermissions = await container.UserService.hasPermissions(token.sub, permissions);
+        const hasPermissions = await container.UserService.hasPermissions(
+          token.sub,
+          permissions
+        );
         if (!hasPermissions) {
-          return res.status(403).json({ error: "Forbidden - insufficient permissions" });
+          return res
+            .status(403)
+            .json({ error: "Forbidden - insufficient permissions", code: 403 });
         }
       }
 
