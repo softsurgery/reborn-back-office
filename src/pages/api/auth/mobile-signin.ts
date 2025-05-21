@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import container from "@/lib/container";
+import { identifyUser } from "@/lib/users-management/utils/identify-user.util";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,7 +18,7 @@ export default async function handler(
       });
 
     return res.status(200).json({
-      message: `Successfully logged in as ${user.username}`,
+      message: `Successfully logged in as ${identifyUser(user)}`,
       code: 200,
       data: { accessToken, refreshToken },
     });
