@@ -1,6 +1,6 @@
 import React from "react";
-import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useIntro } from "@/context/IntroContext";
+import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
+import { useIntro } from "@/contexts/IntroContext";
 import { useInfiniteUploads } from "@/hooks/content/useInfiniteUploads";
 import { ResourceCard } from "./ResourceCard";
 import { cn } from "@/lib/utils";

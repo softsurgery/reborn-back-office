@@ -1,62 +1,76 @@
 import { z } from "zod";
 
+// Translation function - this should be passed as a parameter or imported from your i18n setup
+// For now, using a placeholder that returns the key
+
 const baseUserSchema = z.object({
   username: z
     .string()
     .regex(/^[a-zA-Z0-9_]+$/, {
-      message:
-        "Invalid Username, it must contain only letters, numbers, or underscores",
+      message: "userManagement.validation.invalidUsernameFormat",
     })
     .min(3, {
-      message: "Invalid Username, must be at least 3 characters long",
+      message: "userManagement.validation.invalidUsernameLength",
     }),
-  email: z.string().email({ message: "Invalid E-mail" }),
+  email: z
+    .string()
+    .email({ message: "userManagement.validation.invalidEmail" }),
 
   firstName: z
     .string()
-    .min(3, { message: "Invalid Firstname, must be at least 3 characters" })
-    .max(25, { message: "Firstname must not exceed 25 characters" })
+    .min(3, {
+      message: "userManagement.validation.invalidFirstNameLength",
+    })
+    .max(25, {
+      message: "userManagement.validation.firstNameTooLong",
+    })
     .regex(/^[a-zA-Z\s]+$/, {
-      message: "Firstname must contain only letters and spaces",
+      message: "userManagement.validation.invalidFirstNameFormat",
     }),
   lastName: z
     .string()
-    .min(3, { message: "Invalid Lastname, must be at least 3 characters" })
-    .max(25, { message: "Lastname must not exceed 25 characters" })
+    .min(3, {
+      message: "userManagement.validation.invalidLastNameLength",
+    })
+    .max(25, { message: "userManagement.validation.lastNameTooLong" })
     .regex(/^[a-zA-Z\s]+$/, {
-      message: "Lastname must contain only letters and spaces",
+      message: "userManagement.validation.invalidLastNameFormat",
     }),
-  dateOfBirth: z.preprocess(
-    (value) =>
-      value === null || value === "" ? null : new Date(value as string),
-    z.union([z.date(), z.null()]).refine(
-      (birthDate) => {
-        if (!birthDate) return true;
+  dateOfBirth: z
+    .preprocess(
+      (value) =>
+        value === null || value === "" ? null : new Date(value as string),
+      z.union([z.date(), z.null()]).refine(
+        (birthDate) => {
+          if (!birthDate) return true;
 
-        const today = new Date();
-        const age = today.getFullYear() - birthDate.getFullYear();
-        const isBirthdayPassed =
-          today.getMonth() > birthDate.getMonth() ||
-          (today.getMonth() === birthDate.getMonth() &&
-            today.getDate() >= birthDate.getDate());
+          const today = new Date();
+          const age = today.getFullYear() - birthDate.getFullYear();
+          const isBirthdayPassed =
+            today.getMonth() > birthDate.getMonth() ||
+            (today.getMonth() === birthDate.getMonth() &&
+              today.getDate() >= birthDate.getDate());
 
-        return age > 13 || (age === 13 && isBirthdayPassed);
-      },
-      { message: "User must be at least 13 years old" }
+          return age > 13 || (age === 13 && isBirthdayPassed);
+        },
+        { message: "userManagement.validation.invalidAge" }
+      )
     )
-  ),
+    .optional(),
 });
 
 const createUserSchema = baseUserSchema
   .extend({
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" }),
+    password: z.string().min(8, {
+      message: "userManagement.validation.invalidPasswordLength",
+    }),
     confirmPassword: z.string().optional(),
-    roleId: z.string({ message: "Please select a role" }),
+    roleId: z.string({
+      message: "userManagement.validation.roleRequired",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "userManagement.validation.passwordMismatch",
     path: ["confirmPassword"],
   });
 
@@ -69,30 +83,41 @@ const isConfirmPasswordValid = (data: {
   return data.password === data.confirmPassword;
 };
 
-const updateUserSchema = baseUserSchema
-  .extend({
-    setManualPassword: z.boolean().optional(),
-    password: z.string().optional(),
-    confirmPassword: z.string().optional(),
-    roleId: z.string({ message: "Please select a role" }),
-  })
-  .superRefine((data, ctx) => {
-    if (data.setManualPassword) {
-      if (!data.password || data.password.length < 8) {
-        ctx.addIssue({
-          path: ["password"],
-          message: "Password must be at least 8 characters long",
-          code: z.ZodIssueCode.custom,
-        });
-      }
+function updateUserSchema(requirePasswordUpdate: boolean) {
+  return baseUserSchema
+    .extend({
+      password: requirePasswordUpdate
+        ? z
+            .string()
+            .min(8, {
+              message: "userManagement.validation.invalidPasswordLength",
+            })
+            .optional()
+        : z.string().optional(),
+      confirmPassword: z.string().optional(),
+      roleId: z.string({
+        message: "userManagement.validation.roleRequired",
+      }),
+    })
+    .superRefine((data, ctx) => {
+      if (requirePasswordUpdate) {
+        if (!data.password || data.password.length < 8) {
+          ctx.addIssue({
+            path: ["password"],
+            message: "userManagement.validation.invalidPasswordLength",
+            code: "custom",
+          });
+        }
 
-      if (data.password !== data.confirmPassword) {
-        ctx.addIssue({
-          path: ["confirmPassword"],
-          message: "Passwords do not match",
-          code: z.ZodIssueCode.custom,
-        });
+        if (data.password !== data.confirmPassword) {
+          ctx.addIssue({
+            path: ["confirmPassword"],
+            message: "userManagement.validation.passwordMismatch",
+            code: "custom",
+          });
+        }
       }
-    }
-  });
+    });
+}
+
 export { baseUserSchema, createUserSchema, updateUserSchema };

@@ -1,19 +1,17 @@
-import axios from "axios";
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
-import { Permission,ServerResponse } from "@/types";
+import { Paginated, QueryParams, ResponsePermissionDto } from "@/types";
+import axios from "../axios";
 
 const findPaginated = async ({
   page = "1",
-  size = "5",
+  limit = "5",
   sort,
   search = "",
   filter = "",
   join = "",
-}: IQueryObject): Promise<Paginated<Permission>> => {
+}: QueryParams): Promise<Paginated<ResponsePermissionDto>> => {
   const params: { [key: string]: any } = {
     page,
-    size,
+    limit,
     sort,
   };
 
@@ -21,56 +19,34 @@ const findPaginated = async ({
   if (filter) params.filter = filter;
   if (join) params.join = join;
 
-  const response = await axios.get<Paginated<Permission>>(
-    `/api/admin/permissions/list?`,
+  const response = await axios.get<Paginated<ResponsePermissionDto>>(
+    `/admin/permission/list`,
     { params }
   );
   return response.data;
 };
 
-const findAll = async (): Promise<Permission[]> => {
-  const response = await axios.get<Permission[]>(`/api/admin/permissions`);
-  return response.data;
-};
-
-const findById = async (permissionId: string): Promise<Permission> => {
-  const response = await axios.get<Permission>(
-    `/api/permissions/${permissionId}`
+const findAll = async (): Promise<ResponsePermissionDto[]> => {
+  const response = await axios.get<ResponsePermissionDto[]>(
+    `/admin/permission/all`
   );
   return response.data;
 };
 
-const create = async (Permission: Partial<Permission>): Promise<Permission> => {
-  const response = await axios.post<Permission>("/api/admin/permissions", Permission);
-  return response.data;
-};
-
-const update = async (
-  permissionId: string,
-  Permission: Partial<Permission>
-): Promise<Permission> => {
-  const response = await axios.put<Permission>(
-    `/api/permissions/${permissionId}`,
-    Permission
+const findById = async (id: string): Promise<ResponsePermissionDto> => {
+  const response = await axios.get<ResponsePermissionDto>(
+    `/admin/permission/${id}`
   );
   return response.data;
 };
 
-const remove = async (permissionId: string): Promise<void> => {
-  await axios.delete(`/api/admin/permissions/${permissionId}`);
-};
-
-const seed = async (): Promise<ServerResponse> => {
-  const response = await axios.get("/api/admin/permissions/seed");
-  return response.data;
+const remove = async (id: string): Promise<void> => {
+  await axios.delete(`/api/permissions/${id}`);
 };
 
 export const permission = {
   findPaginated,
   findAll,
   findById,
-  create,
-  update,
   remove,
-  seed,
 };

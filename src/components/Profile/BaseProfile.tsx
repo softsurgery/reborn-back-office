@@ -6,16 +6,16 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserCard } from "./UserCard";
-import { Spinner } from "../Common/Spinner";
+import { Spinner } from "../shared/Spinner";
 import { About } from "./cards/About";
 import { Activity } from "./cards/Activity";
 import { Settings } from "./cards/Settings";
-import { User } from "@/prisma/interfaces";
+import { ResponseUserDto } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface BaseProfileProps {
   className?: string;
-  user?: User | null;
+  user?: ResponseUserDto | null;
   isFetchUserPending?: boolean;
 }
 

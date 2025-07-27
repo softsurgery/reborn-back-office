@@ -1,20 +1,23 @@
-import axios from "axios";
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Role } from "@/types/user-management";
-import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
-import { ServerResponse } from "@/types";
+import {
+  CreateRoleDto,
+  Paginated,
+  QueryParams,
+  ResponseRoleDto,
+  UpdateRoleDto,
+} from "@/types";
+import axios from "../axios";
 
 const findPaginated = async ({
   page = "1",
-  size = "5",
+  limit = "5",
   sort,
   search = "",
   filter = "",
   join = "permissions.permission",
-}: IQueryObject): Promise<Paginated<Role>> => {
+}: QueryParams): Promise<Paginated<ResponseRoleDto>> => {
   const params: { [key: string]: any } = {
     page,
-    size,
+    limit,
     sort,
   };
 
@@ -22,43 +25,47 @@ const findPaginated = async ({
   if (filter) params.filter = filter;
   if (join) params.join = join;
 
-  const response = await axios.get<Paginated<Role>>(`/api/admin/roles/list`, {
-    params,
-  });
+  const response = await axios.get<Paginated<ResponseRoleDto>>(
+    `/admin/role/list`,
+    {
+      params,
+    }
+  );
 
   return response.data;
 };
 
-const findAll = async (): Promise<Role[]> => {
-  const response = await axios.get<Role[]>(`/api/admin/roles`);
+const findAll = async (): Promise<ResponseRoleDto[]> => {
+  const response = await axios.get<ResponseRoleDto[]>(`/admin/role/all`);
   return response.data;
 };
 
-const findById = async (roleId: string): Promise<Role> => {
-  const response = await axios.get<Role>(`/api/admin/roles/${roleId}`);
+const findById = async (id: string): Promise<ResponseRoleDto> => {
+  const response = await axios.get<ResponseRoleDto>(`/admin/role/${id}`);
   return response.data;
 };
 
-const create = async (role: Partial<Role>): Promise<ServerResponse<Role>> => {
-  const response = await axios.post("/api/admin/roles", role);
+const create = async (role: CreateRoleDto): Promise<ResponseRoleDto> => {
+  const response = await axios.post("/admin/role", role);
   return response.data;
 };
 
 const update = async (
-  roleId: string,
-  role: Partial<Role>
-): Promise<ServerResponse<Role>> => {
-  const response = await axios.put(`/api/admin/roles/${roleId}`, role);
+  id?: string,
+  role?: UpdateRoleDto
+): Promise<ResponseRoleDto> => {
+  const response = await axios.put(`/admin/role/${id}`, role);
   return response.data;
 };
 
-const duplicate = async (roleId?: string): Promise<ServerResponse<Role>> => {
-  const response = await axios.get(`/api/admin/roles/duplicate/${roleId}`);
+//have to be implemented
+const duplicate = async (id?: string): Promise<ResponseRoleDto> => {
+  const response = await axios.post(`/admin/role/duplicate/${id}`);
   return response.data;
 };
 
-const remove = async (roleId?: string): Promise<ServerResponse<Role>> => {
-  const response = await axios.delete(`/api/admin/roles/${roleId}`);
+const remove = async (id?: string): Promise<ResponseRoleDto> => {
+  const response = await axios.delete(`/admin/role/${id}`);
   return response.data;
 };
 

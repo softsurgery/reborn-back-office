@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
 import { ServerErrorResponse, ServerResponse } from "@/types";
-import { PasswordField } from "../Common/PasswordField";
+import { PasswordField } from "../shared/PasswordField";
 
 interface ResetPasswordFormProps {
   className?: string;
@@ -23,13 +23,20 @@ export const ResetPasswordForm = ({
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const { mutate: resetPassword, isPending } = useMutation({
-    mutationFn: async () => api.auth.resetPassword(token as string, password),
+    mutationFn: async () => {
+      const result = await api.auth.resetPassword(token as string, password);
+      return {
+        code: 200,
+        message: result.message,
+        data: undefined,
+      } as ServerResponse<undefined>;
+    },
     onSuccess: (data: ServerResponse) => {
       toast.success(data.message);
       goToAuthentication();
     },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data.error);
+    onError: () => {
+      toast.error("Failed to reset password");
     },
   });
 

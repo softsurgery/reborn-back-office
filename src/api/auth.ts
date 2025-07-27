@@ -1,21 +1,44 @@
-import axios from "axios";
+import {
+  OAuthPayload,
+  ResponseSigninDto,
+  ResponseSignupDto,
+  SigninPayload,
+  SignupPayload,
+} from "@/types";
+import axios from "./axios";
 
-const forgetPassword = async (emailOrUsername: string) => {
-  const response = await axios.post("/api/auth/forgot-password", {
-    emailOrUsername,
-  });
+const signIn = async (payload: SigninPayload): Promise<ResponseSigninDto> => {
+  const response = await axios.post<ResponseSigninDto>(
+    "/auth/sign-in",
+    payload
+  );
   return response.data;
 };
 
-const resetPassword = async (token: string, password: string) => {
-  const response = await axios.post("/api/auth/reset-password", {
-    token,
-    password,
-  });
+const signUp = async (payload: SignupPayload): Promise<ResponseSignupDto> => {
+  const response = await axios.post("/auth/sign-up", payload);
+  return response.data;
+};
+
+const oauth = async (payload: OAuthPayload): Promise<ResponseSigninDto> => {
+  const response = await axios.post<ResponseSigninDto>("/auth/oauth", payload);
+  return response.data;
+};
+
+const resetPassword = async (
+  token: string,
+  password: string
+): Promise<{ message: string }> => {
+  const response = await axios.post<{ message: string }>(
+    `/auth/reset-password/${token}`,
+    { password }
+  );
   return response.data;
 };
 
 export const auth = {
-  forgetPassword,
+  signIn,
+  signUp,
+  oauth,
   resetPassword,
 };

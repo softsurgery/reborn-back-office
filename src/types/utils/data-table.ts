@@ -22,12 +22,22 @@ export interface DataTableConfig<T> {
   searchTerm?: string;
   setSearchTerm?: (searchTerm: string) => void;
   //actions
-  inspectCallback?: (entity: T) => void;
   createCallback?: () => void;
+  inspectCallback?: (entity: T) => void;
   updateCallback?: (entity: T) => void;
   deleteCallback?: (entity: T) => void;
   additionalActions?: Record<number, DataTableRowAdditionalAction<T>[]>;
   //utility
   targetEntity?: (entity: T) => void;
   invisibleColumns?: string[];
+}
+
+export enum DataTableCellVariant {
+  TEXT = "text",
+  NUMBER = "number",
+  DATE = "date",
+  DATE_TIME = "date-time",
+  CURRENCY = "currency",
+  EMAIL = "email",
+  PHONE = "phone",
 }

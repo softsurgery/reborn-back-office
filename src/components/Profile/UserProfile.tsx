@@ -1,8 +1,8 @@
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import { BaseProfile } from "./BaseProfile";
 import { useIdentifiedUser } from "@/hooks/content/User/useIdentifiedUser";
-import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useIntro } from "@/context/IntroContext";
+import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
+import { useIntro } from "@/contexts/IntroContext";
 import React from "react";
 import { identifyUser } from "@/lib/users-management/utils/identify-user.util";
 
@@ -16,7 +16,6 @@ export const UserProfile = ({ className, id }: UserProfileProps) => {
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
-    
     const identification = identifyUser(user);
     if (user) {
       setRoutes?.([{ title: "Profile" }]);

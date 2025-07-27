@@ -1,5 +1,5 @@
-import { useDialog } from "@/components/Common/Dialogs";
-import { Spinner } from "@/components/Common/Spinner";
+import { useDialog } from "@/components/shared/Dialogs";
+import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
 
 interface RegionDeleteDialogProps {

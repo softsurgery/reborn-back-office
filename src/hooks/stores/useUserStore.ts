@@ -1,78 +1,63 @@
-import { User } from "@/types/user-management";
 import { create } from "zustand";
+import {
+  CreateUserDto,
+  createUserDtoFactory,
+  ResponseUserDto,
+  UpdateUserDto,
+  updateUserDtoFactory,
+} from "@/types";
+import { setDeepValue } from "@/lib/object.util";
 
-interface UserStoreData extends Partial<User> {
-  setManualPassword?: boolean;
+interface UserStoreData {
+  response?: ResponseUserDto;
+  createDto: CreateUserDto;
+  updateDto: UpdateUserDto;
+  setManualPassword: boolean;
   confirmPassword?: string;
-  errors: Record<string, string[]>;
+  createDtoErrors: Record<string, any>;
+  updateDtoErrors: Record<string, any>;
 }
 
-interface UserStore extends UserStoreData {
-  set: (name: keyof UserStoreData, value: any) => void;
-  resetError: (name?: keyof UserStoreData) => void;
+export interface UserStore extends UserStoreData {
+  set: <T>(name: keyof UserStoreData, value: T) => void;
+  setNested: <T>(path: string, value: T) => void;
   reset: () => void;
-  getUser: () => Partial<User>;
-  setUser: (data: Partial<User>) => void;
 }
 
 const initialState: UserStoreData = {
-  id: "",
-  username: "",
-  email: "",
-  firstName: "",
-  lastName: "",
-  dateOfBirth: null,
-  roleId: undefined,
-  password: "",
+  createDto: createUserDtoFactory(),
+  updateDto: updateUserDtoFactory(),
   setManualPassword: false,
   confirmPassword: "",
-  errors: {},
+  createDtoErrors: {},
+  updateDtoErrors: {},
 };
 
 export const useUserStore = create<UserStore>((set, get) => ({
   ...initialState,
-
-  set: (name: keyof UserStoreData, value: any) => {
+  set: (name, value) => {
     set((state) => ({
       ...state,
       [name]: value,
     }));
   },
-  resetError: (name?: keyof UserStoreData) => {
-    if (name)
-      set((state) => ({
+  setNested: (path, value) => {
+    const [rootKey, ...restPath] = path.split(".");
+    const nestedPath = restPath.join(".");
+    set((state) => {
+      const updatedRoot = setDeepValue(
+        { ...(state[rootKey as keyof UserStoreData] as object) },
+        nestedPath,
+        value
+      );
+      return {
         ...state,
-        errors: { ...state.errors, [name]: [] },
-      }));
-    else set((state) => ({ ...state, errors: {} }));
+        [rootKey]: updatedRoot,
+      };
+    });
   },
+
   reset: () => {
     set({ ...initialState });
-  },
-
-  getUser: () => {
-    const data = get();
-    return {
-      username: data.username,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
-      password: data.password,
-      roleId: data.roleId,
-    };
-  },
-
-  setUser: (data: Partial<User>) => {
-    set((state) => ({
-      ...state,
-      id: data.id,
-      username: data.username,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      dateOfBirth: data.dateOfBirth,
-      roleId: data.roleId,
-    }));
   },
 }));

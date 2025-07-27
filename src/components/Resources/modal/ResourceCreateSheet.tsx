@@ -1,4 +1,4 @@
-import { useSheet } from "@/components/Common/Sheets";
+import { useSheet } from "@/components/shared/Sheets";
 import { PackagePlus } from "lucide-react";
 import { ResourceForm } from "../ResourceForm";
 

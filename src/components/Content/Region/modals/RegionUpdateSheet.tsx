@@ -1,8 +1,8 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RegionForm } from "../RegionForm";
-import { useSheet } from "@/components/Common/Sheets";
-import { Spinner } from "@/components/Common/Spinner";
+import { useSheet } from "@/components/shared/Sheets";
+import { Spinner } from "@/components/shared/Spinner";
 
 interface RegionUpdateSheet {
   updateRegion?: () => void;

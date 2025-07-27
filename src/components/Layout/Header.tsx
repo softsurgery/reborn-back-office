@@ -1,9 +1,9 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../ui/sidebar";
-import { ModeToggle } from "../Common/ModeToggle";
-import { LanguageSwitcher } from "../Common/LanguageSwitcher";
-import { Commander } from "../Common/Commander";
+import { ModeToggle } from "../shared/ModeToggle";
+import { LanguageSwitcher } from "../shared/LanguageSwitcher";
+import { Commander } from "../shared/Commander";
 import { UserNav } from "./UserNav";
 import { useSession } from "next-auth/react";
 import { useEmailUser } from "@/hooks/content/User/useEmailUser";

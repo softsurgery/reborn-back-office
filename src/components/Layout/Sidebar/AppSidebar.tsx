@@ -54,11 +54,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: Users,
           },
           {
-            title: "Mobile Users",
-            url: "/user-management/mobile-users",
-            icon: FileUser,
-          },
-          {
             title: "Roles",
             url: "/user-management/roles",
             icon: Package,

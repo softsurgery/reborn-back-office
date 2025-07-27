@@ -1,7 +1,7 @@
 import { Separator } from "@radix-ui/react-separator";
-import { BreadcrumbCommon } from "../Common/Breadcrumb";
-import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useIntro } from "@/context/IntroContext";
+import { BreadcrumbCommon } from "../shared/Breadcrumb";
+import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
+import { useIntro } from "@/contexts/IntroContext";
 
 interface PageHeaderProps {
   className?: string;

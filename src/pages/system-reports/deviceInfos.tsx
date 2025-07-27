@@ -1,7 +1,5 @@
-import DeviceInfos from "@/components/AdministrativeTools/SystemReports/DeviceInfo/DeviceInfos";
+import DeviceInfos from "@/components/administrative-tools/system-reports/DeviceInfo/DeviceInfos";
 
 export default function page() {
-  return (
-      <DeviceInfos />
-  );
+  return <DeviceInfos />;
 }

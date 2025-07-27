@@ -1,7 +1,7 @@
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import { BaseProfile } from "./BaseProfile";
-import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import { useIntro } from "@/context/IntroContext";
+import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
+import { useIntro } from "@/contexts/IntroContext";
 import React from "react";
 import { identifyUser } from "@/lib/users-management/utils/identify-user.util";
 

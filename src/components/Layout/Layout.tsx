@@ -4,13 +4,13 @@ import { Header } from "./Header";
 import {
   BreadcrumbContext,
   BreadcrumbRoute,
-} from "../../context/BreadcrumbContext";
+} from "../../contexts/BreadcrumbContext";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppVersion } from "./AppVersion";
 import { AppSidebar } from "./Sidebar/AppSidebar";
 import { Footer } from "./Footer";
-import { FooterContext } from "@/context/FooterContext";
-import { IntroContext } from "@/context/IntroContext";
+import { FooterContext } from "@/contexts/FooterContext";
+import { IntroContext } from "@/contexts/IntroContext";
 import { PageHeader } from "./PageHeader";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 

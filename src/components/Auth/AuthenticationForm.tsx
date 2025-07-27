@@ -1,4 +1,3 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,20 +5,17 @@ import { Label } from "@/components/ui/label";
 import { GithubButton } from "./GithubButton";
 import { GoogleButton } from "./GoogleButton";
 import { signIn } from "next-auth/react";
+import React from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { PasswordField } from "../Common/PasswordField";
+import { ServerErrorResponse } from "@/types";
 
 interface AuthenticationFormProps {
   className?: string;
-  goToForgotPassword: () => void;
 }
 
-export function AuthenticationForm({
-  className,
-  goToForgotPassword,
-}: AuthenticationFormProps) {
+export function AuthenticationForm({ className }: AuthenticationFormProps) {
   const [usernameOrEmail, setUsernameOrEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const router = useRouter();
@@ -47,16 +43,30 @@ export function AuthenticationForm({
       router.push("/");
       toast.success("Welcome back!");
     },
-    onError: (error: Error) => {
-      toast.error(error.message || "Something went wrong. Please try again.");
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
     },
   });
 
   const handleSignIn = () => {
     signInMutator({ method: "credentials", usernameOrEmail, password });
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !isSignInPending) {
+      handleSignIn();
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isSignInPending) {
+      handleSignIn();
+    }
+  };
+
   return (
-    <div className={cn("flex flex-col gap-6 w-[350px]", className)}>
+    <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-balance text-sm text-muted-foreground">
@@ -64,7 +74,7 @@ export function AuthenticationForm({
         </p>
       </div>
 
-      <div className="grid gap-4">
+      <form onSubmit={handleFormSubmit} className="grid gap-4">
         <div className="grid gap-2">
           <Label htmlFor="email">Email/Username</Label>
           <Input
@@ -72,6 +82,7 @@ export function AuthenticationForm({
             type="text"
             value={usernameOrEmail}
             onChange={(e) => setUsernameOrEmail(e.target.value)}
+            onKeyDown={handleKeyDown}
             disabled={isSignInPending}
           />
         </div>
@@ -80,25 +91,24 @@ export function AuthenticationForm({
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
             <a
-              onClick={goToForgotPassword}
-              className="ml-auto text-sm underline-offset-4 hover:underline cursor-pointer"
+              href="#"
+              className="ml-auto text-sm underline-offset-4 hover:underline"
             >
               Forgot your password?
             </a>
           </div>
-          <PasswordField
+          <Input
+            id="password"
+            type="password"
+            placeholder="•••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
             disabled={isSignInPending}
           />
         </div>
 
-        <Button
-          type="button"
-          className="w-full"
-          onClick={handleSignIn}
-          disabled={isSignInPending}
-        >
+        <Button type="submit" className="w-full" disabled={isSignInPending}>
           Login
         </Button>
 
@@ -116,7 +126,7 @@ export function AuthenticationForm({
           onClick={() => signInMutator({ method: "google" })}
           disabled={isSignInPending}
         />
-      </div>
+      </form>
 
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}

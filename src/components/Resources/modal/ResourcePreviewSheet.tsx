@@ -1,4 +1,4 @@
-import { useSheet } from "@/components/Common/Sheets";
+import { useSheet } from "@/components/shared/Sheets";
 import { Eye } from "lucide-react";
 
 interface ResourcePreviewSheet {

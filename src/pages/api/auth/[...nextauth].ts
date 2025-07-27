@@ -1,11 +1,12 @@
-import container from "@/lib/container";
-import NextAuth from "next-auth";
-import GithubProvider, { GithubProfile } from "next-auth/providers/github";
+//@ts-nocheck
+import NextAuth, { NextAuthOptions } from "next-auth";
+import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthOptions } from "next-auth";
+import { api } from "@/api";
+import { OAuthProvider } from "@/types";
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -15,13 +16,18 @@ export const authOptions: AuthOptions = {
       },
       authorize: async (credentials) => {
         if (!credentials) return null;
-        const { usernameOrEmail, password } = credentials!;
+        const { usernameOrEmail, password } = credentials;
 
-        return container.AuthService.signin({ usernameOrEmail, password })
-          .then(({ user }) => user)
-          .catch((err) => {
-            throw new Error(err.message);
-          });
+        try {
+          const data = await api.auth.signIn({ usernameOrEmail, password });
+          return {
+            ...data.user,
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+          };
+        } catch (err: any) {
+          throw new Error(err.response.data.message);
+        }
       },
     }),
     GithubProvider({
@@ -34,46 +40,54 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "github" || account?.provider === "google") {
-        const email = user.email;
-        const username =
-          (profile as GithubProfile).login || profile?.name || "unknown";
-
-        const existingUser = await container.UserService.getUserByCondition({
-          filter: `email||$eq||${email}`,
-        });
-
-        if (!existingUser) {
-          await container.UserService.createUser({
-            email,
-            username,
-            isApproved: false,
-          });
-          return "/auth/pending";
+    async signIn({ account, user }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        const idToken = account.id_token || account.access_token;
+        if (!idToken) {
+          console.warn("No ID token found for OAuth provider");
+          return false;
         }
-
-        if (!existingUser.isApproved) {
-          return "/auth/still-pending";
+        try {
+          // Call your backend OAuth login
+          const data = await api.auth.oauth({
+            provider: account.provider as OAuthProvider,
+            idToken,
+          });
+          // Attach tokens directly to user for jwt callback
+          user.access_token = data.access_token;
+          user.refresh_token = data.refresh_token;
+          return true;
+        } catch (err: any) {
+          console.error("OAuth sign-in failed:", err);
+          return false;
         }
       }
-
       return true;
     },
 
     async jwt({ token, user }) {
-      if (user?.email) {
-        const dbUser = await container.UserService.getUserByCondition({
-          filter: `(email||$eq||${user.email})`,
-        });
-        token.isApproved = dbUser?.isApproved ?? false;
+      if (user) {
+        token.access_token = user.access_token;
+        token.refresh_token = user.refresh_token;
+        token.id = user.id;
+        token.email = user.email;
+        token.username = user.username;
       }
       return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.isApproved = !!token.isApproved;
+        // @ts-ignore
+        session.user.access_token = token.access_token;
+        // @ts-ignore
+        session.user.refresh_token = token.refresh_token;
+        // @ts-ignore
+        session.user.id = token.id;
+        // @ts-ignore
+        session.user.email = token.email;
+        // @ts-ignore
+        session.user.username = token.username;
       }
       return session;
     },

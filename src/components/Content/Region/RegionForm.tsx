@@ -1,4 +1,4 @@
-import { FormBuilder } from "@/components/Common/FormBuilder/FormBuilder";
+import { FormBuilder } from "@/components/shared/form-builder";
 import { useRegionStore } from "@/hooks/stores/useRegionStore";
 import { cn } from "@/lib/utils";
 import { DynamicForm } from "@/types";
