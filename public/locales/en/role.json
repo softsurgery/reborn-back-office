@@ -1,0 +1,100 @@
+{
+    "page": {
+        "title": "Roles",
+        "description": "This page displays role information, where you can view role details, create new roles, edit existing ones, or remove roles from the system."
+    },
+    "columns": {
+        "label": "Label",
+        "description": "Description",
+        "permissions": "Permissions",
+        "noDescription": "No Description",
+        "noPermissions": "No Permissions"
+    },
+    "actions": {
+        "duplicate": "Duplicate"
+    },
+    "context": {
+        "singularName": "Role",
+        "pluralName": "Roles"
+    },
+    "sheet": {
+        "create": {
+            "title": "New Role",
+            "description": "Use this form to define a new role within the system. A role determines the access level and permissions granted to users assigned to it."
+        },
+        "update": {
+            "title": "Update Role",
+            "description": "Use this form to update role within the system. A role determines the access level and permissions granted to users assigned to it."
+        }
+    },
+    "dialogs": {
+        "delete": {
+            "title": "Delete Role",
+            "description": "This action is permanent and cannot be undone. All associations with this role will also be removed.",
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        },
+        "duplicate": {
+            "title": "Duplicate Role",
+            "description": "This action will duplicate the role, including all its associations. You can undo this action later if needed.",
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        }
+    },
+    "forms": {
+        "create": {
+            "title": "Create Role",
+            "description": "Create a new role with the specified permissions.",
+            "fields": {
+                "label": {
+                    "label": "Label",
+                    "placeholder": "Ex. Awesome Administrator",
+                    "description": "Role's label."
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "This is awesome!",
+                    "description": "Role's description."
+                },
+                "permissions": {
+                    "label": "Permissions",
+                    "description": "Select the permissions for this role."
+                }
+            }
+        },
+        "update": {
+            "title": "Update Role",
+            "description": "Update a new role with the specified permissions.",
+            "fields": {
+                "label": {
+                    "label": "Label",
+                    "placeholder": "Ex. Awesome Administrator",
+                    "description": "Role's label."
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "This is awesome!",
+                    "description": "Role's description."
+                },
+                "permissions": {
+                    "label": "Permissions",
+                    "description": "Select the permissions for this role."
+                }
+            }
+        },
+        "buttons": {
+            "save": "Save",
+            "cancel": "Cancel"
+        }
+    },
+    "messages": {
+        "createSuccess": "Role created successfully",
+        "updateSuccess": "Role updated successfully",
+        "deleteSuccess": "Role deleted successfully",
+        "duplicateSuccess": "Role duplicated successfully",
+        "createError": "Failed to create role",
+        "updateError": "Failed to update role",
+        "deleteError": "Failed to delete role",
+        "duplicateError": "Failed to duplicate role"
+    }
+}

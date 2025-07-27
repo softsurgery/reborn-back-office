@@ -1,0 +1,14 @@
+{
+    "page": {
+        "title": "Permissions",
+        "description": "Cette page affiche les informations sur les permissions, où vous pouvez voir la visualisation des permissions."
+    },
+    "columns": {
+        "label": "Libellé",
+        "description": "Description"
+    },
+    "context": {
+        "singularName": "Permission",
+        "pluralName": "Permissions"
+    }
+}

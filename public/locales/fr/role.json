@@ -1,0 +1,99 @@
+{
+    "singularName": "Rôle",
+    "pluralName": "Rôles",
+    "page": {
+        "title": "Rôles",
+        "description": "Cette page affiche les informations sur les rôles, où vous pouvez voir les détails des rôles, créer de nouveaux rôles, modifier ceux existants, ou supprimer des rôles du système."
+    },
+    "columns": {
+        "label": "Libellé",
+        "description": "Description",
+        "permissions": "Permissions",
+        "noDescription": "Aucune Description",
+        "noPermissions": "Aucune Permission"
+    },
+    "actions": {
+        "duplicate": "Dupliquer"
+    },
+
+    "sheet": {
+        "create": {
+            "title": "Nouveau Rôle",
+            "description": "Utilisez ce formulaire pour définir un nouveau rôle dans le système. Un rôle détermine le niveau d'accès et les permissions accordées aux utilisateurs qui lui sont assignés."
+        },
+        "update": {
+            "title": "Modifier le Rôle",
+            "description": "Utilisez ce formulaire pour modifier un rôle dans le système. Un rôle détermine le niveau d'accès et les permissions accordées aux utilisateurs qui lui sont assignés."
+        }
+    },
+    "dialogs": {
+        "delete": {
+            "title": "Supprimer le Rôle",
+            "description": "Cette action est permanente et ne peut pas être annulée. Toutes les associations avec ce rôle seront également supprimées.",
+            "confirm": "Confirmer",
+            "cancel": "Annuler"
+        },
+        "duplicate": {
+            "title": "Dupliquer le Rôle",
+            "description": "Cette action dupliquera le rôle, y compris toutes ses associations. Vous pouvez annuler cette action plus tard si nécessaire.",
+            "confirm": "Confirmer",
+            "cancel": "Annuler"
+        }
+    },
+    "forms": {
+        "create": {
+            "title": "Créer un Rôle",
+            "description": "Créer un nouveau rôle avec les permissions spécifiées.",
+            "fields": {
+                "label": {
+                    "label": "Libellé",
+                    "placeholder": "Ex. Administrateur Génial",
+                    "description": "Libellé du rôle."
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "C'est génial!",
+                    "description": "Description du rôle."
+                },
+                "permissions": {
+                    "label": "Permissions",
+                    "description": "Sélectionnez les permissions pour ce rôle."
+                }
+            }
+        },
+        "update": {
+            "title": "Modifier le Rôle",
+            "description": "Modifier un nouveau rôle avec les permissions spécifiées.",
+            "fields": {
+                "label": {
+                    "label": "Libellé",
+                    "placeholder": "Ex. Administrateur Génial",
+                    "description": "Libellé du rôle."
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "C'est génial!",
+                    "description": "Description du rôle."
+                },
+                "permissions": {
+                    "label": "Permissions",
+                    "description": "Sélectionnez les permissions pour ce rôle."
+                }
+            }
+        },
+        "buttons": {
+            "save": "Enregistrer",
+            "cancel": "Annuler"
+        }
+    },
+    "messages": {
+        "createSuccess": "Rôle créé avec succès",
+        "updateSuccess": "Rôle mis à jour avec succès",
+        "deleteSuccess": "Rôle supprimé avec succès",
+        "duplicateSuccess": "Rôle dupliqué avec succès",
+        "createError": "Échec de la création du rôle",
+        "updateError": "Échec de la mise à jour du rôle",
+        "deleteError": "Échec de la suppression du rôle",
+        "duplicateError": "Échec de la duplication du rôle"
+    }
+}
