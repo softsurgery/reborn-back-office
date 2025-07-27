@@ -1,5 +1,7 @@
 {
     "page": {
+        "singularName": "Role",
+        "pluralName": "Roles",
         "title": "Roles",
         "description": "This page displays role information, where you can view role details, create new roles, edit existing ones, or remove roles from the system."
     },
@@ -12,10 +14,6 @@
     },
     "actions": {
         "duplicate": "Duplicate"
-    },
-    "context": {
-        "singularName": "Role",
-        "pluralName": "Roles"
     },
     "sheet": {
         "create": {

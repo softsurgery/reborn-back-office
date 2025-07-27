@@ -1,7 +1,7 @@
 {
-    "singularName": "Rôle",
-    "pluralName": "Rôles",
     "page": {
+        "singularName": "Rôle",
+        "pluralName": "Rôles",
         "title": "Rôles",
         "description": "Cette page affiche les informations sur les rôles, où vous pouvez voir les détails des rôles, créer de nouveaux rôles, modifier ceux existants, ou supprimer des rôles du système."
     },
@@ -15,7 +15,6 @@
     "actions": {
         "duplicate": "Dupliquer"
     },
-
     "sheet": {
         "create": {
             "title": "Nouveau Rôle",

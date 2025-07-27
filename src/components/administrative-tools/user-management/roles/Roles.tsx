@@ -202,8 +202,8 @@ export default function Roles({ className }: RolesProps) {
   });
 
   const context: DataTableConfig<ResponseRoleDto> = {
-    singularName: t("singularName"),
-    pluralName: t("pluralName"),
+    singularName: t("page.singularName"),
+    pluralName: t("page.pluralName"),
     createCallback: openCreateRoleSheet,
     updateCallback: openUpdateRoleSheet,
     deleteCallback: openDeleteRoleDialog,
