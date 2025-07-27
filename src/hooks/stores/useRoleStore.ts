@@ -1,80 +1,121 @@
-import { Permission, Role, RolePermission } from "@/types";
+import {
+  CreateRoleDto,
+  ResponsePermissionDto,
+  ResponseRoleDto,
+  UpdateRoleDto,
+} from "@/types";
 import { create } from "zustand";
 
-interface RoleStoreData extends Partial<Role> {}
+interface RoleStoreData {
+  response?: ResponseRoleDto;
+  createDto: CreateRoleDto;
+  updateDto: UpdateRoleDto;
+  createDtoErrors: Record<string, string[]>;
+  updateDtoErrors: Record<string, string[]>;
+}
 
-interface RoleStore extends RoleStoreData {
-  set: (name: keyof RoleStoreData, value: any) => void;
+export interface RoleStore extends RoleStoreData {
+  set: <T>(name: keyof RoleStoreData, value: T) => void;
+  setNested: <T>(path: string, value: T) => void;
+  addPermission: (
+    permission: ResponsePermissionDto,
+    dto: "create" | "update"
+  ) => void;
+  removePermission: (permissionId: string, dto: "create" | "update") => void;
+  isPermissionSelected: (
+    permissionId: string,
+    dto: "create" | "update"
+  ) => boolean;
   reset: () => void;
-  getRole: () => Partial<Role>;
-  setRole: (data: Partial<Role>) => void;
-  addPermission: (permission: Permission) => void;
-  removePermission: (permissionId?: string) => void;
-  isPermissionSelected: (permissionId?: string) => boolean;
 }
 
 const initialState: RoleStoreData = {
-  id: undefined,
-  label: "",
-  description: "",
-  permissions: [],
+  createDto: {
+    label: "",
+    description: "",
+    permissions: [],
+  },
+  updateDto: {
+    label: "",
+    description: "",
+    permissions: [],
+  },
+  createDtoErrors: {},
+  updateDtoErrors: {},
 };
 
 export const useRoleStore = create<RoleStore>((set, get) => ({
   ...initialState,
 
-  set: (name: keyof RoleStore, value: any) => {
+  set: (name, value) => {
     set((state) => ({
       ...state,
       [name]: value,
     }));
   },
 
+  setNested: (path, value) => {
+    set((state) => {
+      const keys = path.split(".");
+      const newState = { ...state };
+
+      let current: any = newState;
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (typeof current[key] !== "object" || current[key] === null) {
+          current[key] = {};
+        } else {
+          current[key] = { ...current[key] };
+        }
+        current = current[key];
+      }
+
+      current[keys[keys.length - 1]] = value;
+
+      return newState;
+    });
+  },
+
+  addPermission: (permission, dto) => {
+    set((state) => {
+      const dtoKey = dto === "create" ? "createDto" : "updateDto";
+      const permissions = state[dtoKey].permissions || [];
+      if (!permissions.find((p) => p.permissionId === permission.id)) {
+        return {
+          ...state,
+          [dtoKey]: {
+            ...state[dtoKey],
+            permissions: [...permissions, { permissionId: permission.id }],
+          },
+        };
+      }
+      return state;
+    });
+  },
+
+  removePermission: (permissionId, dto) => {
+    set((state) => {
+      const dtoKey = dto === "create" ? "createDto" : "updateDto";
+      const permissions = state[dtoKey].permissions || [];
+      return {
+        ...state,
+        [dtoKey]: {
+          ...state[dtoKey],
+          permissions: permissions.filter(
+            (p) => p.permissionId !== permissionId
+          ),
+        },
+      };
+    });
+  },
+
+  isPermissionSelected: (permissionId, dto) => {
+    const dtoKey = dto === "create" ? "createDto" : "updateDto";
+    const permissions = get()[dtoKey].permissions || [];
+    return permissions.some((p) => p.permissionId === permissionId);
+  },
+
   reset: () => {
     set({ ...initialState });
-  },
-
-  getRole: () => {
-    const data = get();
-    return {
-      id: data.id,
-      label: data.label,
-      description: data.description,
-    };
-  },
-
-  setRole: (data: Partial<Role>) => {
-    set((state) => ({
-      ...state,
-      id: data.id,
-      label: data.label,
-      description: data.description,
-      permissions: data.permissions,
-    }));
-  },
-
-  addPermission: (permission: Permission) => {
-    const { id, permissions } = get();
-    if (!permissions?.some((p) => p.permissionId === permission.id)) {
-      set((state) => ({
-        ...state,
-        permissions: [
-          ...(permissions || []),
-          { permissionId: permission.id, roleId: id } as RolePermission,
-        ],
-      }));
-    }
-  },
-
-  removePermission: (permissionId?: string) => {
-    set((state) => ({
-      ...state,
-      permissions: state.permissions?.filter((p) => p.permissionId !== permissionId),
-    }));
-  },
-
-  isPermissionSelected: (permissionId?: string) => {
-    const { permissions } = get();
-    return permissions?.some((p) => p.permissionId === permissionId) || false;
   },
 }));
