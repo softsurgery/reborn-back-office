@@ -26,12 +26,6 @@ import {
 } from "@/components/ui/sidebar";
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
-import { useSession } from "next-auth/react";
-import { useEmailUser } from "@/hooks/content/User/useEmailUser";
-import {
-  identifyUser,
-  identifyUserAvatar,
-} from "@/lib/users-management/utils/identify-user.util";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   
