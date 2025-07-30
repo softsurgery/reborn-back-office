@@ -1,11 +1,16 @@
-import { Feedback } from "./feedback";
 import { DatabaseEntity } from "./utils/database-entity";
 
-export interface DeviceInfo extends DatabaseEntity {
+export interface ResponseDeviceInfoDto extends DatabaseEntity {
   id: number;
-  platform: string | null;
-  model: string;
-  version: string | null;
-  manufacturer: string | null;
-  feedbacks?: Feedback[];
+  model?: string;
+  platform?: string;
+  version?: string;
+  manufacturer?: string;
+}
+
+export interface CreateDeviceInfoDto {
+  model?: string;
+  platform?: string;
+  version?: string;
+  manufacturer?: string;
 }

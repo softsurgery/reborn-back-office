@@ -1,82 +1,54 @@
-import { Feedback } from "@/types/feedback";
+import { setDeepValue } from "@/lib/object.util";
+import { CreateDeviceInfoDto, ResponseDeviceInfoDto } from "@/types";
 import { create } from "zustand";
 
 interface DeviceInfoStoreData {
-  id?: number;
-  platform?: string | null;
-  model?: string;
-  version?: string | null;
-  manufacturer?: string | null;
-  feedbacks?: Feedback[];
+  response?: ResponseDeviceInfoDto;
+  createDto: CreateDeviceInfoDto;
+  createDtoErrors?: Record<string, string[]>;
+
 }
 
 interface DeviceInfoStore extends DeviceInfoStoreData {
-  deviceInfos: DeviceInfoStoreData[];
-  setDeviceInfos: (deviceInfos: DeviceInfoStoreData[]) => void;
-  removeDeviceInfo: (id: number) => void;
-  set: (name: keyof DeviceInfoStoreData, value: any) => void;
+  set: <T>(name: keyof DeviceInfoStore, value: T) => void;
+  setNested: <T>(path: string, value: T) => void;
   reset: () => void;
-  getDeviceInfo: () => Partial<DeviceInfoStoreData>;
-  setDeviceInfo: (data: Partial<DeviceInfoStoreData>) => void;
 }
 
 const initialState: DeviceInfoStoreData = {
-  id: undefined,
-  platform: null,
-  model: "",
-  version: null,
-  manufacturer: null,
-  feedbacks: [],
+  createDto: {
+    model: undefined,
+    platform: undefined,
+    version: undefined,
+    manufacturer: undefined,
+  },
+  createDtoErrors: {},
 };
 
 export const useDeviceInfoStore = create<DeviceInfoStore>((set, get) => ({
   ...initialState,
-  deviceInfos: [],
-
-  setDeviceInfos: (deviceInfos) => {
-    set({ deviceInfos });
-  },
-
-  removeDeviceInfo: (id) => {
-    set((state) => ({
-      deviceInfos: state.deviceInfos.filter(
-        (deviceInfo) => deviceInfo.id !== id
-      ),
-    }));
-  },
-
-  set: (name: keyof DeviceInfoStoreData, value: any) => {
+  set: (name, value) => {
     set((state) => ({
       ...state,
       [name]: value,
     }));
   },
-
+  setNested: (path, value) => {
+    const [rootKey, ...restPath] = path.split(".");
+    const nestedPath = restPath.join(".");
+    set((state) => {
+      const updatedRoot = setDeepValue(
+        { ...state[rootKey as keyof DeviceInfoStore] },
+        nestedPath,
+        value
+      );
+      return {
+        ...state,
+        [rootKey]: updatedRoot,
+      };
+    });
+  },
   reset: () => {
     set({ ...initialState });
-  },
-
-  getDeviceInfo: () => {
-    const data = get();
-    return {
-      id: data.id,
-      platform: data.platform,
-      model: data.model,
-      version: data.version,
-      manufacturer: data.manufacturer,
-      feedbacks: data.feedbacks,
-    };
-  },
-
-  setDeviceInfo: (data: Partial<DeviceInfoStoreData>) => {
-    set((state) => ({
-      ...state,
-      id: data.id,
-      platform: data.platform,
-      model: data.model,
-      version: data.version,
-      manufacturer: data.manufacturer,
-      feedbacks: data.feedbacks,
-    }));
   },
 }));

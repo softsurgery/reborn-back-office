@@ -1,50 +1,56 @@
-import axios from "axios";
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { DeviceInfo } from "@/types";
+import axios from "../axios";
+import { Paginated, QueryParams, ResponseDeviceInfoDto } from "@/types";
 
-const findPaginated = async (
-  page: number = 1,
-  size: number = 5,
-  sort: string,
-  filter: string = "",
-  fields: string[] = [],
-  join: string[] = []
-): Promise<Paginated<DeviceInfo>> => {
-  const response = await axios.get<Paginated<DeviceInfo>>(`/api/admin/deviceInfos/list?`, {
-    params: {
-      page,
-      size,
-      sort,
-      filter,
-      fields: fields ? fields.join(",") : "",
-      join: join ? join.join(",") : "",
-    },
-  });
+const findPaginated = async ({
+  page = "1",
+  limit = "5",
+  sort,
+  filter = "",
+  search = "",
+}: QueryParams): Promise<Paginated<ResponseDeviceInfoDto>> => {
+  const response = await axios.get<Paginated<ResponseDeviceInfoDto>>(
+    `/api/admin/device-info/list`,
+    {
+      params: {
+        page,
+        limit,
+        sort,
+        filter,
+        search,
+      },
+    }
+  );
   return response.data;
 };
 
-const findAll = async (): Promise<DeviceInfo[]> => {
-  const response = await axios.get<DeviceInfo[]>(`/api/admin/deviceInfos`);
+const findAll = async (): Promise<ResponseDeviceInfoDto[]> => {
+  const response = await axios.get<ResponseDeviceInfoDto[]>(
+    `/api/admin/device-info`
+  );
   return response.data;
 };
 
-const findById = async (deviceInfoId: number): Promise<DeviceInfo> => {
-  const response = await axios.get<DeviceInfo>(`/api/admin/deviceInfos/${deviceInfoId}`);
+const findById = async (
+  deviceInfoId: number
+): Promise<ResponseDeviceInfoDto> => {
+  const response = await axios.get<ResponseDeviceInfoDto>(
+    `/api/admin/device-info/${deviceInfoId}`
+  );
   return response.data;
 };
 
-const create = async (DeviceInfo: Partial<DeviceInfo>): Promise<DeviceInfo> => {
-  const response = await axios.post<DeviceInfo>("/api/admin/deviceInfos", DeviceInfo);
+const create = async (
+  DeviceInfo: Partial<ResponseDeviceInfoDto>
+): Promise<ResponseDeviceInfoDto> => {
+  const response = await axios.post<ResponseDeviceInfoDto>(
+    "/api/admin/device-info",
+    DeviceInfo
+  );
   return response.data;
 };
 
-const update = async (deviceInfoId: number, DeviceInfo: Partial<DeviceInfo>): Promise<DeviceInfo> => {
-  const response = await axios.put<DeviceInfo>(`/api/admin/deviceInfos/${deviceInfoId}`, DeviceInfo);
-  return response.data;
-};
-
-const remove = async (deviceInfoId: number): Promise<DeviceInfo> => {
-  const response = await axios.delete(`/api/admin/deviceInfos/${deviceInfoId}`);
+const remove = async (deviceInfoId: number): Promise<ResponseDeviceInfoDto> => {
+  const response = await axios.delete(`/api/admin/device-info/${deviceInfoId}`);
   return response.data;
 };
 
@@ -54,6 +60,5 @@ export const deviceInfo = {
   findAll,
   findById,
   create,
-  update,
   remove,
 };

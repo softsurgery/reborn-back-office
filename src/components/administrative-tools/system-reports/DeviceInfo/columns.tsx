@@ -1,12 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DeviceInfo } from "@/types/device-info";
-import { DataTableConfig } from "@/types";
-import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
-import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
+import { DataTableConfig, ResponseDeviceInfoDto } from "@/types";
+import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
+import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
+
 
 export const getDeviceInfoColumns = (
-  context: DataTableConfig<DeviceInfo>
-): ColumnDef<DeviceInfo>[] => {
+  context: DataTableConfig<ResponseDeviceInfoDto>
+): ColumnDef<ResponseDeviceInfoDto>[] => {
   return [
     {
       accessorKey: "platform",
