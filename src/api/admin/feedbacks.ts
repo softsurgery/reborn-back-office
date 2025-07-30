@@ -1,71 +1,81 @@
-import axios from "axios";
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Feedback, ServerResponse } from "@/types";
+import axios from "../axios";
+import {
+  CreateFeedbackDto,
+  Paginated,
+  QueryParams,
+  ResponseFeedbackDto,
+  UpdateFeedbackDto,
+} from "@/types";
 
-const findPaginated = async (
-  page: number = 1,
-  size: number = 5,
-  sort: string,
-  filter: string = "",
-  fields: string[] = [],
-  join: string[] = []
-): Promise<Paginated<Feedback>> => {
-  const response = await axios.get<Paginated<Feedback>>(
-    `/api/admin/feedbacks/list?`,
+const findPaginated = async ({
+  page = "1",
+  limit = "5",
+  sort,
+  search = "",
+  filter = "",
+  join = "permissions.permission",
+}: QueryParams): Promise<Paginated<ResponseFeedbackDto>> => {
+  const params: { [key: string]: any } = {
+    page,
+    limit,
+    sort,
+  };
+
+  if (search) params.search = search;
+  if (filter) params.filter = filter;
+  if (join) params.join = join;
+
+  const response = await axios.get<Paginated<ResponseFeedbackDto>>(
+    `/admin/feedback/list`,
     {
-      params: {
-        page,
-        size,
-        sort,
-        filter,
-        fields: fields ? fields.join(",") : "",
-        join: join ? join.join(",") : "",
-      },
+      params,
     }
+  );
+
+  return response.data;
+};
+
+const findAll = async (): Promise<ResponseFeedbackDto[]> => {
+  const response = await axios.get<ResponseFeedbackDto[]>(
+    `/admin/feedback/all`
   );
   return response.data;
 };
 
-const findAll = async (): Promise<Feedback[]> => {
-  const response = await axios.get<Feedback[]>(`/api/admin/feedbacks`);
-  return response.data;
-};
-
-const findById = async (feedbackId: number): Promise<Feedback> => {
-  const response = await axios.get<Feedback>(
-    `/api/admin/feedbacks/${feedbackId}`
+const findById = async (feedbackId: number): Promise<ResponseFeedbackDto> => {
+  const response = await axios.get<ResponseFeedbackDto>(
+    `/admin/feedback/${feedbackId}`
   );
   return response.data;
 };
 
 const create = async (
-  Feedback: Partial<Feedback>
-): Promise<Feedback> => {
-  const response = await axios.post<Feedback>(
-    "/api/admin/feedbacks",
+  Feedback: CreateFeedbackDto
+): Promise<ResponseFeedbackDto> => {
+  const response = await axios.post<ResponseFeedbackDto>(
+    "/admin/feedback",
     Feedback
   );
   return response.data;
 };
 
 const update = async (
-  feedbackId: number,
-  Feedback: Partial<Feedback>
-): Promise<Feedback> => {
-  const response = await axios.put<Feedback>(
-    `/api/admin/feedbacks/${feedbackId}`,
+  feedbackId?: number,
+  Feedback?: UpdateFeedbackDto
+): Promise<ResponseFeedbackDto> => {
+  const response = await axios.put<ResponseFeedbackDto>(
+    `/admin/feedback/${feedbackId}`,
     Feedback
   );
   return response.data;
 };
 
-const remove = async (feedbackId: number): Promise<Feedback> => {
-  const response = await axios.delete(`/api/admin/feedbacks/${feedbackId}`);
+const remove = async (feedbackId?: number): Promise<ResponseFeedbackDto> => {
+  const response = await axios.delete(`/admin/feedback/${feedbackId}`);
   return response.data;
 };
 
 export const feedback = {
-  // Feedbacks
   findPaginated,
   findAll,
   findById,

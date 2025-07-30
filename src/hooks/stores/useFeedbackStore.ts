@@ -1,56 +1,54 @@
-import { Feedback } from "@/types";
+import { setDeepValue } from "@/lib/object.util";
+import { CreateFeedbackDto, ResponseFeedbackDto } from "@/types";
 import { create } from "zustand";
 
-interface FeedbackStoreData extends Partial<Feedback> {}
+interface FeedbackStoreData  {
+  response?: ResponseFeedbackDto;
+  createDto: CreateFeedbackDto;
+  createDtoErrors?: Record<string, string[]>;
+}
 
 interface FeedbackStore extends FeedbackStoreData {
-  set: (name: keyof FeedbackStoreData, value: any) => void;
+  set: <T>(name: keyof FeedbackStoreData, value: T) => void;
+  setNested: <T>(path: string, value: T) => void;
   reset: () => void;
-  getFeedback: () => Partial<Feedback>;
-  setFeedback: (data: Partial<Feedback>) => void;
 }
 
 const initialState: FeedbackStoreData = {
-  id: undefined,
-  message: "",
-  category: undefined,
-  rating: 0,
+  response: undefined,
+  createDto: {
+    message: "",
+    category: "unknown",
+    rating: 0,
+  },
+  createDtoErrors: undefined,
 };
 
 export const useFeedbackStore = create<FeedbackStore>((set, get) => ({
   ...initialState,
-
-  set: (name: keyof FeedbackStore, value: any) => {
-    set((state) => ({
-      ...state,
-      [name]: value,
-    }));
-  },
-
-  reset: () => {
-    set({ ...initialState });
-  },
-
-  getFeedback: () => {
-    const data = get();
-    return {
-      id: data.id,
-      message: data.message,
-      category: data.category,
-      rating: data.rating,
-    };
-  },
-
-  setFeedback: (data: Partial<Feedback>) => {
-    set(
-      (state) =>
-        ({
+    set: (name, value) => {
+      set((state) => ({
+        ...state,
+        [name]: value,
+      }));
+    },
+    setNested: (path, value) => {
+      const [rootKey, ...restPath] = path.split(".");
+      const nestedPath = restPath.join(".");
+      set((state) => {
+        const updatedRoot = setDeepValue(
+          { ...state[rootKey as keyof FeedbackStore] },
+          nestedPath,
+          value
+        );
+        return {
           ...state,
-          id: data.id,
-          message: data.message,
-          category: data.category,
-          rating: data.rating,
-        } as Partial<FeedbackStore>)
-    );
-  },
-}));
+          [rootKey]: updatedRoot,
+        };
+      });
+    },
+    reset: () => {
+      set({ ...initialState });
+    },
+  }));
+  

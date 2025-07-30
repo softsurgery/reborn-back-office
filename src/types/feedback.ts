@@ -1,13 +1,22 @@
-import { DeviceInfo } from "./device-info";
+import { CreateDeviceInfoDto, ResponseDeviceInfoDto } from "./device-info";
 import { DatabaseEntity } from "./utils/database-entity";
 
-export type FeedbackCategory = "FeatureRequest" | "GeneralFeedback" | "Other";
+export type FeedbackCategory = "FeatureRequest" | "GeneralFeedback" | "Other" | "unknown";
 
-export interface Feedback extends DatabaseEntity {
+export interface ResponseFeedbackDto extends DatabaseEntity {
   id: number;
-  message: string;
-  rating: number;
   category: FeedbackCategory;
-  deviceId: number | null;
-  device?: DeviceInfo | null;
+  message: string;
+  rating?: number;
+  device: ResponseDeviceInfoDto;
+  deviceId: number;
 }
+
+export interface CreateFeedbackDto {
+  category: FeedbackCategory;
+  message: string;
+  rating?: number;
+  device?: CreateDeviceInfoDto;
+}
+
+export interface UpdateFeedbackDto extends CreateFeedbackDto {}

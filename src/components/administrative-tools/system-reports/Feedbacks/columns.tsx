@@ -1,13 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Feedback } from "@/types/feedback";
+import { ResponseFeedbackDto } from "@/types/feedback";
 import { DataTableConfig } from "@/types";
-import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
-import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
 import { splitCamelOrPascal } from "@/lib/string.lib";
+import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
+import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 
 export const getFeedbackColumns = (
-  context: DataTableConfig<Feedback>
-): ColumnDef<Feedback>[] => {
+  context: DataTableConfig<ResponseFeedbackDto>
+): ColumnDef<ResponseFeedbackDto>[] => {
   return [
     {
       accessorKey: "message",

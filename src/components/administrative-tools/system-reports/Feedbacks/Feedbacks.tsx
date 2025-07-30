@@ -8,9 +8,9 @@ import { toast } from "sonner";
 import { useIntro } from "@/contexts/IntroContext";
 import { cn } from "@/lib/utils";
 import { getFeedbackColumns } from "./columns";
-import { DataTable } from "@/components/shared/data-table";
-import { DataTableConfig, Feedback } from "@/types";
+import { DataTableConfig, ResponseFeedbackDto } from "@/types";
 import { useFeedbackStore } from "@/hooks/stores/useFeedbackStore";
+import { DataTable } from "@/components/shared/data-tables/data-table";
 
 interface BugsProps {
   className?: string;
@@ -73,13 +73,14 @@ export default function Feedbacks({ className }: BugsProps) {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.admin.feedback.findPaginated(
-        debouncedPage,
-        debouncedSize,
-        `${debouncedSortDetails.sortKey}:${
+      api.admin.feedback.findPaginated({
+        page: debouncedPage.toString(),
+        limit: debouncedSize.toString(),
+        sort: `${debouncedSortDetails.sortKey},${
           debouncedSortDetails.order ? "ASC" : "DESC"
-        }`
-      ),
+        }`,
+        search: debouncedSearchTerm,
+      }),
   });
 
   const feedbacks = React.useMemo(() => {
@@ -105,13 +106,13 @@ export default function Feedbacks({ className }: BugsProps) {
     openDeleteFeedbackDialog,
     closeDeleteFeedbackDialog,
   } = useFeedbackDeleteDialog({
-    feedbackMessage: feedbackStore.message,
-    deleteFeedback: () => deleteFeedback(feedbackStore.id!),
+    feedbackMessage: feedbackStore.response?.message,
+    deleteFeedback: () => deleteFeedback(feedbackStore.response?.id!),
     isDeletionPending,
     resetFeedback: () => feedbackStore.reset(),
   });
 
-  const context: DataTableConfig<Feedback> = {
+  const context: DataTableConfig<ResponseFeedbackDto> = {
     singularName: "Feedback",
     pluralName: "Feedbacks",
     deleteCallback: openDeleteFeedbackDialog,
