@@ -1,4 +1,4 @@
-import { DeviceInfo } from "./device-info";
+import { ResponseDeviceInfoDto } from "./device-info";
 import { DatabaseEntity } from "./utils/database-entity";
 
 export type BugCategory =
@@ -8,11 +8,20 @@ export type BugCategory =
   | "FeatureNotWorking"
   | "Other";
 
-export interface Bug extends DatabaseEntity {
+export interface ResponseBugDto extends DatabaseEntity {
   id: number;
   title: string;
   description: string;
   category: BugCategory;
-  deviceId: number | null;
-  device?: DeviceInfo | null;
+  deviceId: number;
+  device?: ResponseDeviceInfoDto;
 }
+
+export interface CreateBugDto {
+  title: string;
+  description: string;
+  category: BugCategory;
+  deviceId: number;
+}
+
+export interface UpdateBugDto extends CreateBugDto {}

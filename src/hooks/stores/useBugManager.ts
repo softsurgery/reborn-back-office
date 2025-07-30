@@ -1,72 +1,53 @@
-import { Bug, BugCategory } from "@/types/bug";
+import { setDeepValue } from "@/lib/object.util";
+import { ResponseBugDto, CreateBugDto } from "@/types/bug";
 import { create } from "zustand";
 
 interface BugManagerData {
-  id?: number;
-  title?: string;
-  description?: string;
-  category?: BugCategory;
+  response?: ResponseBugDto;
+  createDto: CreateBugDto;
+  createDtoErrors?: Record<string, string[]>;
 }
 
 interface BugManager extends BugManagerData {
-  bugs: Bug[]; 
-  setBugs: (bugs: Bug[]) => void; 
-  removeBug: (id: number) => void; 
-  set: (name: keyof BugManagerData, value: any) => void;
+  set: <T>(name: keyof BugManagerData, value: T) => void;
+  setNested: <T>(path: string, value: T) => void;
   reset: () => void;
-  getBug: () => Partial<Bug>;
-  setBug: (data: Partial<Bug>) => void;
 }
 
 const initialState: BugManagerData = {
-  id: undefined,
-  title: "",
-  description: "",
-  category: undefined,
+  createDto: {
+    title: "",
+    description: "",
+    category: "Other",
+    deviceId: 0,
+  },
+  createDtoErrors: {},
 };
 
 export const useBugManager = create<BugManager>((set, get) => ({
   ...initialState,
-  bugs: [], 
-
-  setBugs: (bugs) => {
-    set({ bugs });
-  },
-
-  removeBug: (id) => {
-    set((state) => ({
-      bugs: state.bugs.filter((bug) => bug.id !== id),
-    }));
-  },
-
-  set: (name: keyof BugManager, value: any) => {
+  set: (name, value) => {
     set((state) => ({
       ...state,
       [name]: value,
     }));
   },
-
+  setNested: (path, value) => {
+    const [rootKey, ...restPath] = path.split(".");
+    const nestedPath = restPath.join(".");
+    set((state) => {
+      const updatedRoot = setDeepValue(
+        { ...state[rootKey as keyof BugManager] },
+        nestedPath,
+        value
+      );
+      return {
+        ...state,
+        [rootKey]: updatedRoot,
+      };
+    });
+  },
   reset: () => {
     set({ ...initialState });
-  },
-
-  getBug: () => {
-    const data = get();
-    return {
-      id: data.id,
-      title: data.title,
-      description: data.description,
-      category: data.category,
-    };
-  },
-
-  setBug: (data: Partial<Bug>) => {
-    set((state) => ({
-      ...state,
-      id: data.id,
-      title: data.title,
-      description: data.description,
-      category: data.category,
-    }));
   },
 }));

@@ -9,8 +9,9 @@ import { useBugDeleteDialog } from "./modals/BugDeleteDialog";
 import { toast } from "sonner";
 import { useIntro } from "@/contexts/IntroContext";
 import { cn } from "@/lib/utils";
-import { DataTable } from "@/components/shared/data-table";
-import { Bug, DataTableConfig } from "@/types";
+
+import { ResponseBugDto, DataTableConfig } from "@/types";
+import { DataTable } from "@/components/shared/data-tables/data-table";
 
 interface BugsProps {
   className?: string;
@@ -73,13 +74,14 @@ export default function Bugs({ className }: BugsProps) {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.admin.bug.findPaginated(
-        debouncedPage,
-        debouncedSize,
-        `${debouncedSortDetails.sortKey}:${
+      api.admin.bug.findPaginated({
+        page: debouncedPage.toString(),
+        limit: debouncedSize.toString(),
+        sort: `${debouncedSortDetails.sortKey},${
           debouncedSortDetails.order ? "ASC" : "DESC"
-        }`
-      ),
+        }`,
+        search: debouncedSearchTerm,
+      }),
   });
 
   const bugs = React.useMemo(() => {
@@ -102,17 +104,16 @@ export default function Bugs({ className }: BugsProps) {
 
   const { deleteBugDialog, openDeleteBugDialog, closeDeleteBugDialog } =
     useBugDeleteDialog({
-      bugMessage: bugManager.title,
-      deleteBug: () => deleteBug(bugManager.id!),
+      bugMessage: bugManager.response?.title,
+      deleteBug: () => deleteBug(bugManager.response?.id!),
       isDeletionPending,
       resetBug: () => bugManager.reset(),
     });
 
-  const context: DataTableConfig<Bug> = {
+  const context: DataTableConfig<ResponseBugDto> = {
     pluralName: "Bugs",
     singularName: "Bug",
     deleteCallback: openDeleteBugDialog,
-    //search, filtering, sorting & paging
     searchTerm,
     setSearchTerm,
     page,

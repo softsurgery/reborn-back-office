@@ -1,55 +1,75 @@
-import axios from "axios";
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { Bug, ServerResponse } from "@/types";
+import { CreateBugDto, Paginated, QueryParams, ResponseBugDto, UpdateBugDto } from "@/types";
+import axios from "../axios";
 
-const findPaginated = async (
-  page: number = 1,
-  size: number = 5,
-  sort: string,
-  filter: string = "",
-  fields: string[] = [],
-  join: string[] = []
-): Promise<Paginated<Bug>> => {
-  const response = await axios.get<Paginated<Bug>>(`/api/admin/bugs/list?`, {
-    params: {
-      page,
-      size,
-      sort,
-      filter,
-      fields: fields ? fields.join(",") : "",
-      join: join ? join.join(",") : "",
-    },
-  });
+const findPaginated = async ({
+  page = "1",
+  limit = "5",
+  sort,
+  search = "",
+  filter = "",
+  join = "permissions.permission",
+}: QueryParams): Promise<Paginated<ResponseBugDto>> => {
+  const params: { [key: string]: any } = {
+    page,
+    limit,
+    sort,
+  };
+
+  if (search) params.search = search;
+  if (filter) params.filter = filter;
+  if (join) params.join = join;
+
+  const response = await axios.get<Paginated<ResponseBugDto>>(
+    `/admin/bug/list`,
+    {
+      params,
+    }
+  );
+
   return response.data;
 };
 
-const findAll = async (): Promise<Bug[]> => {
-  const response = await axios.get<Bug[]>(`/api/admin/bugs`);
+const findAll = async (): Promise<ResponseBugDto[]> => {
+  const response = await axios.get<ResponseBugDto[]>(
+    `/admin/bug/all`
+  );
   return response.data;
 };
 
-const findById = async (bugId: number): Promise<Bug> => {
-  const response = await axios.get<Bug>(`/api/admin/bugs/${bugId}`);
+const findById = async (bugId: number): Promise<ResponseBugDto> => {
+  const response = await axios.get<ResponseBugDto>(
+    `/admin/bug/${bugId}`
+  );
   return response.data;
 };
 
-const create = async (Bug: Partial<Bug>): Promise<Bug> => {
-  const response = await axios.post<Bug>("/api/admin/bugs", Bug);
+const create = async (
+  Bug: CreateBugDto
+): Promise<ResponseBugDto> => {
+  const response = await axios.post<ResponseBugDto>(
+    "/admin/bug",
+    Bug
+  );
   return response.data;
 };
 
-const update = async (bugId: number, Bug: Partial<Bug>): Promise<Bug> => {
-  const response = await axios.put<Bug>(`/api/admin/bugs/${bugId}`, Bug);
+const update = async (
+  bugId?: number,
+  Bug?: UpdateBugDto
+): Promise<ResponseBugDto> => {
+  const response = await axios.put<ResponseBugDto>(
+    `/admin/bug/${bugId}`,
+    Bug
+  );
   return response.data;
 };
 
-const remove = async (bugId: number): Promise<Bug> => {
-  const response = await axios.delete(`/api/admin/bugs/${bugId}`);
+const remove = async (bugId?: number): Promise<ResponseBugDto> => {
+  const response = await axios.delete(`/admin/bug/${bugId}`);
   return response.data;
 };
 
 export const bug = {
-  // Bugs
   findPaginated,
   findAll,
   findById,

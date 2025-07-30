@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Bug } from "@/types/bug";
-import { DataTableColumnHeader } from "@/components/shared/data-table-column-header";
-import { DataTableRowActions } from "@/components/shared/data-table-row-actions";
+import { ResponseBugDto } from "@/types/bug";
+import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
+import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 
-export const getBugColumns = (context: any): ColumnDef<Bug>[] => {
+
+export const getBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
   return [
     {
       accessorKey: "title",
