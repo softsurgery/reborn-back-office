@@ -2,9 +2,9 @@ import React from "react";
 import { api } from "@/api";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getBugColumns } from "./columns";
+import { useBugColumns } from "./columns";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
-import { useBugManager } from "../../../../hooks/stores/useBugManager";
+import { useBugStore } from "../../../../hooks/stores/useBugStore";
 import { useBugDeleteDialog } from "./modals/BugDeleteDialog";
 import { toast } from "sonner";
 import { useIntro } from "@/contexts/IntroContext";
@@ -13,11 +13,11 @@ import { cn } from "@/lib/utils";
 import { ResponseBugDto, DataTableConfig } from "@/types";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 
-interface BugsProps {
+interface BugReportPortalProps {
   className?: string;
 }
 
-export default function Bugs({ className }: BugsProps) {
+export default function BugReportPortal({ className }: BugReportPortalProps) {
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
@@ -35,7 +35,7 @@ export default function Bugs({ className }: BugsProps) {
     };
   }, []);
 
-  const bugManager = useBugManager();
+  const bugStore = useBugStore();
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
@@ -94,7 +94,7 @@ export default function Bugs({ className }: BugsProps) {
     onSuccess: () => {
       toast("Bug Deleted Successfully");
       refetchBugs();
-      bugManager.reset();
+      bugStore.reset();
       closeDeleteBugDialog();
     },
     onError: (error) => {
@@ -104,10 +104,10 @@ export default function Bugs({ className }: BugsProps) {
 
   const { deleteBugDialog, openDeleteBugDialog, closeDeleteBugDialog } =
     useBugDeleteDialog({
-      bugMessage: bugManager.response?.title,
-      deleteBug: () => deleteBug(bugManager.response?.id!),
+      bugMessage: bugStore.response?.title,
+      deleteBug: () => deleteBug(bugStore.response?.id!),
       isDeletionPending,
-      resetBug: () => bugManager.reset(),
+      resetBug: () => bugStore.reset(),
     });
 
   const context: DataTableConfig<ResponseBugDto> = {
@@ -125,10 +125,10 @@ export default function Bugs({ className }: BugsProps) {
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
-    targetEntity: (bug: ResponseBugDto) => bugManager.set("response", bug),
+    targetEntity: (bug: ResponseBugDto) => bugStore.set("response", bug),
   };
 
-  const columns = getBugColumns(context);
+  const columns = useBugColumns(context);
 
   const isPending = isBugsPending || paging || resizing || searching || sorting;
   return (

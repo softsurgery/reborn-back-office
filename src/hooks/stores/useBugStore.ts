@@ -1,30 +1,20 @@
 import { setDeepValue } from "@/lib/object.util";
-import { ResponseBugDto, CreateBugDto } from "@/types/bug";
+import { ResponseBugDto } from "@/types/system-reports";
 import { create } from "zustand";
 
-interface BugManagerData {
+interface BugData {
   response?: ResponseBugDto;
-  createDto: CreateBugDto;
-  createDtoErrors?: Record<string, string[]>;
 }
 
-interface BugManager extends BugManagerData {
-  set: <T>(name: keyof BugManagerData, value: T) => void;
+interface BugStore extends BugData {
+  set: <K extends keyof BugData>(name: K, value: BugData[K]) => void;
   setNested: <T>(path: string, value: T) => void;
   reset: () => void;
 }
 
-const initialState: BugManagerData = {
-  createDto: {
-    title: "",
-    description: "",
-    category: "Other",
-    deviceId: 0,
-  },
-  createDtoErrors: {},
-};
+const initialState: BugData = {};
 
-export const useBugManager = create<BugManager>((set, get) => ({
+export const useBugStore = create<BugStore>((set, get) => ({
   ...initialState,
   set: (name, value) => {
     set((state) => ({
@@ -37,7 +27,7 @@ export const useBugManager = create<BugManager>((set, get) => ({
     const nestedPath = restPath.join(".");
     set((state) => {
       const updatedRoot = setDeepValue(
-        { ...state[rootKey as keyof BugManager] },
+        { ...state[rootKey as keyof BugStore] },
         nestedPath,
         value
       );

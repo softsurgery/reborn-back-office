@@ -1,5 +1,5 @@
-import Bugs from "@/components/administrative-tools/system-reports/Bugs/Bugs";
+import BugReportPortal from "@/components/administrative-tools/system-reports/bug-report/BugReportPortal";
 
 export default function page() {
-  return <Bugs />;
+  return <BugReportPortal />;
 }

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useAuthPersistStore } from "@/hooks/stores/useAuthPersistStore";
 import { useSession } from "next-auth/react";
 import React from "react";

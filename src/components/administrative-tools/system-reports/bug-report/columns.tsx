@@ -1,10 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ResponseBugDto } from "@/types/bug";
+import { ResponseBugDto } from "@/types/system-reports";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 
-
-export const getBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
+export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
   return [
     {
       accessorKey: "title",
@@ -46,7 +45,7 @@ export const getBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
           context={context}
         />
       ),
-      cell: ({ row }) => <div>{row.original.category || "No Category"}</div>,
+      cell: ({ row }) => <div>{row.original.variant || "No Variant"}</div>,
       enableSorting: true,
       enableHiding: true,
     },

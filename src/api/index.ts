@@ -7,5 +7,5 @@ export const api = {
   admin,
   auth,
   feedback,
-  bug
+  bug,
 };

@@ -4,9 +4,7 @@ export * from "./content";
 
 export * from "./user-management";
 export * from "./storage";
-export * from "./device-info";
-export * from "./feedback";
-export * from "./bug";
+export * from "./system-reports";
 
 //utilities
 export * from "./utils";

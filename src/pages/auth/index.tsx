@@ -1,4 +1,4 @@
-import { AuthenticationLayout } from "@/components/auth/AuthenticationLayout";
+import { AuthenticationLayout } from "@/components/Auth/AuthenticationLayout";
 
 export default function Page() {
   return <AuthenticationLayout />;
