@@ -22,7 +22,7 @@ export const useBugDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Are you sure you want to delete ?
+        Delete Bug <span className="font-light">{bugMessage}</span> ?
       </div>
     ),
     description: "This action is permanent and cannot be undone.",

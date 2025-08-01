@@ -74,7 +74,7 @@ export default function Bugs({ className }: BugsProps) {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.admin.bug.findPaginated({
+      api.bug.findPaginated({
         page: debouncedPage.toString(),
         limit: debouncedSize.toString(),
         sort: `${debouncedSortDetails.sortKey},${
@@ -90,7 +90,7 @@ export default function Bugs({ className }: BugsProps) {
   }, [bugsResponse]);
 
   const { mutate: deleteBug, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.admin.bug.remove(id),
+    mutationFn: (id: number) => api.bug.remove(id),
     onSuccess: () => {
       toast("Bug Deleted Successfully");
       refetchBugs();
@@ -125,6 +125,7 @@ export default function Bugs({ className }: BugsProps) {
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
+    targetEntity: (bug: ResponseBugDto) => bugManager.set("response", bug),
   };
 
   const columns = getBugColumns(context);

@@ -17,11 +17,3 @@ export interface ResponseBugDto extends DatabaseEntity {
   device?: ResponseDeviceInfoDto;
 }
 
-export interface CreateBugDto {
-  title: string;
-  description: string;
-  category: BugCategory;
-  deviceId: number;
-}
-
-export interface UpdateBugDto extends CreateBugDto {}

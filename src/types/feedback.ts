@@ -12,11 +12,3 @@ export interface ResponseFeedbackDto extends DatabaseEntity {
   deviceId: number;
 }
 
-export interface CreateFeedbackDto {
-  category: FeedbackCategory;
-  message: string;
-  rating?: number;
-  device?: CreateDeviceInfoDto;
-}
-
-export interface UpdateFeedbackDto extends CreateFeedbackDto {}

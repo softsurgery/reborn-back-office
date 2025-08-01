@@ -9,7 +9,7 @@ const findPaginated = async ({
   search = "",
 }: QueryParams): Promise<Paginated<ResponseDeviceInfoDto>> => {
   const response = await axios.get<Paginated<ResponseDeviceInfoDto>>(
-    `/api/admin/device-info/list`,
+    `/admin/device-info/list`,
     {
       params: {
         page,
@@ -25,7 +25,7 @@ const findPaginated = async ({
 
 const findAll = async (): Promise<ResponseDeviceInfoDto[]> => {
   const response = await axios.get<ResponseDeviceInfoDto[]>(
-    `/api/admin/device-info`
+    `/admin/device-info`
   );
   return response.data;
 };
@@ -34,7 +34,7 @@ const findById = async (
   deviceInfoId: number
 ): Promise<ResponseDeviceInfoDto> => {
   const response = await axios.get<ResponseDeviceInfoDto>(
-    `/api/admin/device-info/${deviceInfoId}`
+    `/admin/device-info/${deviceInfoId}`
   );
   return response.data;
 };
@@ -43,14 +43,14 @@ const create = async (
   DeviceInfo: Partial<ResponseDeviceInfoDto>
 ): Promise<ResponseDeviceInfoDto> => {
   const response = await axios.post<ResponseDeviceInfoDto>(
-    "/api/admin/device-info",
+    "/admin/device-info",
     DeviceInfo
   );
   return response.data;
 };
 
 const remove = async (deviceInfoId: number): Promise<ResponseDeviceInfoDto> => {
-  const response = await axios.delete(`/api/admin/device-info/${deviceInfoId}`);
+  const response = await axios.delete(`/admin/device-info/${deviceInfoId}`);
   return response.data;
 };
 

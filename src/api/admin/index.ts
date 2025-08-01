@@ -1,13 +1,10 @@
 import { permission } from "./permissions";
 import { role } from "./roles";
 import { user } from "./users";
-import { feedback } from "./feedbacks";
-import { bug } from "./bugs";
 import { deviceInfo } from "./deviceInfos";
 import { content } from "./content";
 import { mobileUser } from "./mobile-user";
 import { upload } from "./upload";
-
 
 export const admin = {
   content,
@@ -15,8 +12,6 @@ export const admin = {
   permission,
   role,
   user,
-  feedback,
-  bug,
   deviceInfo,
-  mobileUser
+  mobileUser,
 };

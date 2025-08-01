@@ -73,7 +73,7 @@ export default function Feedbacks({ className }: BugsProps) {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.admin.feedback.findPaginated({
+      api.feedback.findPaginated({
         page: debouncedPage.toString(),
         limit: debouncedSize.toString(),
         sort: `${debouncedSortDetails.sortKey},${
@@ -89,7 +89,7 @@ export default function Feedbacks({ className }: BugsProps) {
   }, [feedbacksResponse]);
 
   const { mutate: deleteFeedback, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id: number) => api.admin.feedback.remove(id),
+    mutationFn: (id: number) => api.feedback.remove(id),
     onSuccess: () => {
       toast("Feedback Deleted Successfully");
       refetchFeedbacks();
@@ -128,6 +128,8 @@ export default function Feedbacks({ className }: BugsProps) {
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
+    targetEntity: (feedback: ResponseFeedbackDto) =>
+      feedbackStore.set("response", feedback),
   };
 
   const columns = getFeedbackColumns(context);
