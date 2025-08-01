@@ -1,36 +1,36 @@
-import { FormBuilder } from "@/components/shared/form-builder";
+import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
+import { FieldVariant, FormStructure } from "@/components/shared/form-builder/types";
 import { useRegionStore } from "@/hooks/stores/useRegionStore";
 import { cn } from "@/lib/utils";
-import { DynamicForm } from "@/types";
 interface RegionFormProps {
   className?: string;
 }
 
 export const RegionForm = ({ className }: RegionFormProps) => {
   const regionStore = useRegionStore();
-  const form: DynamicForm = {
-    name: "Region Information",
+  const form: FormStructure = {
+    title: "Region Information",
     description: "Fill in the required fields to create a new region.",
     orientation: "vertical",
-    grids: [
+    fieldsets: [
       {
-        name: "General Information",
+        title: "General Information",
         description: "General information about the region.",
         includeHeader: false,
-        gridItems: [
+        rows: [
           {
-            id: 1,
             fields: [
               {
+                id: "label",
                 label: "Region Label",
                 className: "w-full",
-                variant: "text",
+                variant: FieldVariant.TEXT,
                 required: true,
                 description: "The label for the region.",
                 error: regionStore.errors.label?.[0],
                 props: {
                   value: regionStore.label,
-                  onChange: (value) => {
+                  onChange: (value: string) => {
                     regionStore.set("label", value);
                     regionStore.resetError("label");
                   },
@@ -45,7 +45,7 @@ export const RegionForm = ({ className }: RegionFormProps) => {
 
   return (
     <div className={cn("my-5", className)}>
-      <FormBuilder form={form}  />
+      <FormBuilder structure={form}  />
     </div>
   );
 };

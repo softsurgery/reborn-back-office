@@ -13,12 +13,11 @@ import { formatFileSize, getMediaTypeLabel } from "@/lib/file.utils";
 import { FileIcon } from "./FileIcon";
 import { ResourceCardSkeleton } from "./ResourceCardSkeleton";
 import { api } from "@/api";
-import { Upload } from "@/prisma/interfaces";
 import { identifyUser } from "@/lib/users-management/utils/identify-user.util";
 
 interface ResourceCardProps {
   className?: string;
-  resource: Upload;
+  resource: any;
   previewResource?: () => void;
   deleteResource?: () => void;
   isPending?: boolean;

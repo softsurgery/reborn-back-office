@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,10 +18,10 @@ export const ForgotPasswordForm = ({
   className,
   goToAuthentication,
 }: ForgotPasswordFormProps) => {
-  const [emailOrUsername, setEmailOrUsername] = React.useState("");
+  const [usernameOrEmail, setEmailOrUsername] = React.useState("");
 
   const { mutate: sendResetLink, isPending } = useMutation({
-    mutationFn: async () => api.auth.forgetPassword(emailOrUsername),
+    mutationFn: async () => api.auth.forgetPassword({ usernameOrEmail }),
     onSuccess: (data: ServerResponse) => {
       toast.success(data.message);
       goToAuthentication();

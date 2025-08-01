@@ -1,5 +1,7 @@
 import {
   OAuthPayload,
+  RequestResetTokenDto,
+  ResponseResetTokenDto,
   ResponseSigninDto,
   ResponseSignupDto,
   SigninPayload,
@@ -36,9 +38,19 @@ const resetPassword = async (
   return response.data;
 };
 
+const forgetPassword = async (
+  requestResetTokenDto: RequestResetTokenDto
+): Promise<ResponseResetTokenDto> => {
+  const response = await axios.post(
+    "/auth/forgot-password",
+    requestResetTokenDto
+  );
+  return response.data;
+};
 export const auth = {
   signIn,
   signUp,
   oauth,
   resetPassword,
+  forgetPassword,
 };

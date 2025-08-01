@@ -1,4 +1,4 @@
-import Permissions from "@/components/administrative-tools/user-management/Permissions/Permissions";
+import Permissions from "@/components/administrative-tools/user-management/permissions/Permissions";
 
 export default function page() {
   return <Permissions />;

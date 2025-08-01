@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { useResourceDeleteDialog } from "./modal/ResourceDeleteDialog";
 import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
 import { useResourceCreateSheet } from "./modal/ResourceCreateSheet";
-import { Upload } from "@/prisma/interfaces";
 import { PrivilegedFile, ServerErrorResponse, ServerResponse } from "@/types";
 import { useSession } from "next-auth/react";
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
@@ -31,7 +30,7 @@ const ResourceCardSkeletons = () => {
 
 export const Resources = ({ className }: ResourcesProps) => {
   const resourceStore = useResourceStore();
-  const [resource, setResource] = React.useState<Upload>();
+  const [resource, setResource] = React.useState<any>();
   const { user } = useCurrentUser();
 
   const { setRoutes, clearRoutes } = useBreadcrumb();
@@ -87,14 +86,14 @@ export const Resources = ({ className }: ResourcesProps) => {
   const { mutate: uploadFiles, isPending: isUploadingPending } = useMutation({
     mutationFn: () =>
       api.admin.upload.uploadFiles(resourceStore.files, user?.id as string),
-    onSuccess: (data: ServerResponse<Upload[]>) => {
+    onSuccess: (data: ServerResponse<any[]>) => {
       toast.success(data.message);
       refetch();
       closeCreateResourceSheet();
       resourceStore.reset();
     },
     onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data.error);
+      toast.error('Failed to upload files: ' + error.response?.data.message);
     },
   });
 

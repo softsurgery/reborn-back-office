@@ -1,7 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "@/components/Common/Datatables/data-table-column-header";
 import { DataTableConfig, Region } from "@/types";
-import { DataTableRowActions } from "@/components/Common/Datatables/data-table-row-actions";
+import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
+import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
+
 
 export const getRegionColumns = (
   context: DataTableConfig<Region>

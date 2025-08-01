@@ -1,20 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   identifyUser,
   identifyUserAvatar,
 } from "@/lib/users-management/utils/identify-user.util";
-import { User } from "@/prisma/interfaces";
-import { CalendarDays, Mail, MapPin } from "lucide-react";
-import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { ResponseUserDto } from "@/types";
 
 interface UserCardProps {
   className?: string;
-  user: User;
+  user: ResponseUserDto;
 }
 
 export const UserCard = ({ className, user }: UserCardProps) => {

@@ -1,20 +1,18 @@
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
-import { Upload } from "@/prisma/interfaces";
-import { ServerResponse } from "@/types";
+
+import { Paginated, QueryParams, ServerResponse } from "@/types";
 import axios from "axios";
 
 const findPaginated = async ({
   page = "1",
-  size = "5",
+  limit = "5",
   sort,
   search = "",
   filter = "",
   join = "user",
-}: IQueryObject): Promise<Paginated<Upload>> => {
+}: QueryParams): Promise<Paginated<any>> => {
   const params: { [key: string]: any } = {
     page,
-    size,
+    limit,
     sort,
   };
 
@@ -22,7 +20,7 @@ const findPaginated = async ({
   if (filter) params.filter = filter;
   if (join) params.join = join;
 
-  const response = await axios.get<Paginated<Upload>>(
+  const response = await axios.get<Paginated<any>>(
     `/api/admin/storage/list`,
     {
       params,
@@ -35,7 +33,7 @@ const findPaginated = async ({
 const uploadFiles = async (
   files: { file: File; isPublic: boolean }[],
   userId: string
-): Promise<ServerResponse<Upload[]>> => {
+): Promise<ServerResponse<any[]>> => {
   const formData = new FormData();
 
   files.forEach(({ file, isPublic }, index) => {
@@ -70,7 +68,7 @@ const downloadFile = async (slug: string, filename?: string) => {
   URL.revokeObjectURL(url);
 };
 
-const deleteFile = async (slug: string): Promise<ServerResponse<Upload>> => {
+const deleteFile = async (slug: string): Promise<ServerResponse<any>> => {
   const response = await axios.delete(`/api/admin/storage/${slug}`);
   return response.data;
 };

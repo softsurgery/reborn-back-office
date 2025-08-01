@@ -36,12 +36,12 @@ export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
       enableHiding: true,
     },
     {
-      accessorKey: "category",
+      accessorKey: "variant",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Category"}
-          attribute="category"
+          title={"Variant"}
+          attribute="variant"
           context={context}
         />
       ),

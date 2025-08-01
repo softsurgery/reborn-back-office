@@ -19,7 +19,7 @@ export const useCurrentPermissions = (
   });
 
   const granted = React.useMemo(() => {
-    return grantedResp?.data || false;
+    return grantedResp || false;
   }, [grantedResp]);
 
   return {

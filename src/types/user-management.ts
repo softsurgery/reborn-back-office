@@ -1,4 +1,3 @@
-
 import { DatabaseEntity } from "./utils/database-entity";
 
 export interface ResponseUserDto extends DatabaseEntity {
@@ -81,4 +80,12 @@ export interface ResponsePermissionDto extends DatabaseEntity {
   label: string;
   description?: string;
   roles?: ResponseRolePermissionDto[];
+}
+
+export interface RequestResetTokenDto {
+  usernameOrEmail: string;
+}
+export interface ResponseResetTokenDto {
+  email: string;
+  success: boolean;
 }

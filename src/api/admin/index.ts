@@ -3,7 +3,6 @@ import { role } from "./roles";
 import { user } from "./users";
 import { deviceInfo } from "./deviceInfos";
 import { content } from "./content";
-import { mobileUser } from "./mobile-user";
 import { upload } from "./upload";
 
 export const admin = {
@@ -13,5 +12,4 @@ export const admin = {
   role,
   user,
   deviceInfo,
-  mobileUser,
 };

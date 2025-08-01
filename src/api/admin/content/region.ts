@@ -1,19 +1,17 @@
 import axios from "axios";
-import { Paginated } from "@/lib/prisma/interfaces/pagination";
-import { IQueryObject } from "@/lib/prisma/interfaces/query-params";
-import { Region, ServerResponse } from "@/types";
+import { Paginated, QueryParams, Region, ServerResponse } from "@/types";
 
 const findPaginated = async ({
   page = "1",
-  size = "10",
+  limit = "10",
   sort,
   search = "",
   filter = "",
   join = "",
-}: IQueryObject): Promise<Paginated<Region>> => {
+}: QueryParams): Promise<Paginated<Region>> => {
   const params: { [key: string]: any } = {
     page,
-    size,
+    limit,
     sort,
   };
 

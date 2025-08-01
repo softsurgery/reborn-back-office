@@ -1,6 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ResponseFeedbackDto } from "@/types/feedback";
-import { DataTableConfig } from "@/types";
+import { DataTableConfig, ResponseFeedbackDto } from "@/types";
 import { splitCamelOrPascal } from "@/lib/string.lib";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";

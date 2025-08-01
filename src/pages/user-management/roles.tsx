@@ -1,4 +1,4 @@
-import Roles from "@/components/administrative-tools/user-management/Roles/Roles";
+import Roles from "@/components/administrative-tools/user-management/roles/Roles";
 
 export default function page() {
   return <Roles />;

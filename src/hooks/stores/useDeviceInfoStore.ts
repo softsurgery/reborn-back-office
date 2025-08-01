@@ -1,12 +1,9 @@
 import { setDeepValue } from "@/lib/object.util";
-import { CreateDeviceInfoDto, ResponseDeviceInfoDto } from "@/types";
+import { ResponseDeviceInfoDto } from "@/types";
 import { create } from "zustand";
 
 interface DeviceInfoStoreData {
   response?: ResponseDeviceInfoDto;
-  createDto: CreateDeviceInfoDto;
-  createDtoErrors?: Record<string, string[]>;
-
 }
 
 interface DeviceInfoStore extends DeviceInfoStoreData {
@@ -15,15 +12,7 @@ interface DeviceInfoStore extends DeviceInfoStoreData {
   reset: () => void;
 }
 
-const initialState: DeviceInfoStoreData = {
-  createDto: {
-    model: undefined,
-    platform: undefined,
-    version: undefined,
-    manufacturer: undefined,
-  },
-  createDtoErrors: {},
-};
+const initialState: DeviceInfoStoreData = {};
 
 export const useDeviceInfoStore = create<DeviceInfoStore>((set, get) => ({
   ...initialState,

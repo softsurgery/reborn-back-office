@@ -30,7 +30,7 @@ export const useInfiniteUploads = ({
 
       return api.admin.upload.findPaginated({
         page: pageParam.toString(),
-        size: size.toString(),
+        limit: size.toString(),
         search: search || "",
       });
     },

@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { enUS, fr } from "date-fns/locale";
-import { Skeleton } from "./skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function getLocalizedMonths(locale: Locale) {
   const months = eachMonthOfInterval({
@@ -47,6 +47,8 @@ interface DatePickerProps {
   startYear?: number;
   endYear?: number;
   nullable?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
   isPending?: boolean;
 }
 export function DatePicker({
@@ -57,6 +59,8 @@ export function DatePicker({
   startYear = getYear(new Date()) - 100,
   endYear = getYear(new Date()) + 100,
   nullable = false,
+  disabled = false,
+  placeholder,
   isPending,
 }: DatePickerProps) {
   const i18n = { language: "en" };
@@ -87,7 +91,6 @@ export function DatePicker({
       onChange(newDate);
     }
   };
-
   const handleSelect = (selectedData: Date | undefined) => {
     if (selectedData) {
       onChange(selectedData);
@@ -106,7 +109,10 @@ export function DatePicker({
               !value && "text-muted-foreground",
               className
             )}
-            onClick={() => onChange(new Date())}
+            onClick={() => {
+              if (!value) onChange(new Date());
+            }}
+            disabled={disabled}
           >
             <CalendarIcon className="h-4 w-4" />
             <span className="text-xs">
@@ -114,7 +120,7 @@ export function DatePicker({
                 ? format(date, "PPP", {
                     locale: i18n.language == "fr" ? fr : enUS,
                   })
-                : "Pick a date..."}
+                : placeholder || "Pick a date..."} 
             </span>
           </Button>
         </PopoverTrigger>

@@ -45,10 +45,6 @@ export const AuthenticationLayout = () => {
             <div className="bg-background flex flex-col items-center gap-4 justify-center h-full my-4">
               {target === "login" && (
                 <AuthenticationForm
-                  goToForgotPassword={() => {
-                    setTarget("forgot-password");
-                    setQueryParams(router, { target: "forgot-password" });
-                  }}
                 />
               )}
               {target === "forgot-password" && (

@@ -8,7 +8,7 @@ import { appWithTranslation } from "next-i18next";
 import nextI18nextConfig from "../../next-i18next.config";
 import { SessionProvider } from "next-auth/react";
 import "@/styles/globals.css";
-import { AuthTokenSync } from "@/components/Auth/AuthTokenSync";
+import { AuthTokenSync } from "@/components/auth/AuthTokenSync";
 
 const inter = { className: "font-inter" };
 const queryClient = new QueryClient();

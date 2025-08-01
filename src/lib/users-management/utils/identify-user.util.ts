@@ -1,6 +1,7 @@
-import { User } from "@/prisma/interfaces";
+import { ResponseUserDto } from "@/types";
 
-export const identifyUser = (user: User | null) => {
+
+export const identifyUser = (user: ResponseUserDto | null) => {
   if (!user) return "unknown";
   return user?.firstName && user?.lastName
     ? `${user?.firstName?.charAt(0).toUpperCase() + user?.firstName.slice(1)} ${
@@ -9,7 +10,7 @@ export const identifyUser = (user: User | null) => {
     : user?.username || "unknown";
 };
 
-export const identifyUserAvatar = (user: User | null) => {
+export const identifyUserAvatar = (user: ResponseUserDto | null) => {
   if (!user) return "?";
   return user?.firstName && user?.lastName
     ? `${user?.firstName?.charAt(0).toUpperCase()}${user?.lastName

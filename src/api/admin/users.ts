@@ -58,8 +58,10 @@ const findAll = async (): Promise<ResponseUserDto[]> => {
   return response.data;
 };
 
-const findById = async (userId: string): Promise<ResponseUserDto> => {
-  const response = await axios.get<ResponseUserDto>(`/admin/user/${userId}`);
+const findById = async (userId?: string, join?: string): Promise<ResponseUserDto> => {
+  const response = await axios.get<ResponseUserDto>(`/admin/user/${userId}`, {
+    params: { join },
+  });
   return response.data;
 };
 
@@ -91,6 +93,11 @@ const remove = async (userId?: string): Promise<ResponseUserDto> => {
   return response.data;
 };
 
+const hasPermissions = async (userId?: string, permissions?: string[]): Promise<boolean> => {
+  const response = await axios.get(`/admin/user/${userId}/permissions`);
+  return permissions?.every((permission) => response.data.includes(permission)) || false;
+};
+
 export const user = {
   findPaginated,
   findAll,
@@ -103,4 +110,5 @@ export const user = {
   approve,
   disapprove,
   remove,
+  hasPermissions,
 };

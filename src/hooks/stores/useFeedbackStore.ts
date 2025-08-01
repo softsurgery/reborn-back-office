@@ -1,54 +1,45 @@
 import { setDeepValue } from "@/lib/object.util";
-import { CreateFeedbackDto, ResponseFeedbackDto } from "@/types";
+import { ResponseFeedbackDto } from "@/types";
 import { create } from "zustand";
 
-interface FeedbackStoreData  {
+interface FeedbackStoreData {
   response?: ResponseFeedbackDto;
-  createDto: CreateFeedbackDto;
-  createDtoErrors?: Record<string, string[]>;
 }
 
 interface FeedbackStore extends FeedbackStoreData {
-  set: <T>(name: keyof FeedbackStoreData, value: T) => void;
+  set: <K extends keyof FeedbackStoreData>(name: K, value: FeedbackStoreData[K]) => void;
   setNested: <T>(path: string, value: T) => void;
   reset: () => void;
 }
 
 const initialState: FeedbackStoreData = {
   response: undefined,
-  createDto: {
-    message: "",
-    category: "unknown",
-    rating: 0,
-  },
-  createDtoErrors: undefined,
 };
 
 export const useFeedbackStore = create<FeedbackStore>((set, get) => ({
   ...initialState,
-    set: (name, value) => {
-      set((state) => ({
+  set: (name, value) => {
+    set((state) => ({
+      ...state,
+      [name]: value,
+    }));
+  },
+  setNested: (path, value) => {
+    const [rootKey, ...restPath] = path.split(".");
+    const nestedPath = restPath.join(".");
+    set((state) => {
+      const updatedRoot = setDeepValue(
+        { ...state[rootKey as keyof FeedbackStore] },
+        nestedPath,
+        value
+      );
+      return {
         ...state,
-        [name]: value,
-      }));
-    },
-    setNested: (path, value) => {
-      const [rootKey, ...restPath] = path.split(".");
-      const nestedPath = restPath.join(".");
-      set((state) => {
-        const updatedRoot = setDeepValue(
-          { ...state[rootKey as keyof FeedbackStore] },
-          nestedPath,
-          value
-        );
-        return {
-          ...state,
-          [rootKey]: updatedRoot,
-        };
-      });
-    },
-    reset: () => {
-      set({ ...initialState });
-    },
-  }));
-  
+        [rootKey]: updatedRoot,
+      };
+    });
+  },
+  reset: () => {
+    set({ ...initialState });
+  },
+}));

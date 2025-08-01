@@ -4,7 +4,6 @@ import { api } from "@/api";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
-import { DataTable } from "@/components/shared/data-table";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useRegionCreateSheet } from "./modals/RegionCreateSheet";
@@ -15,6 +14,7 @@ import { toast } from "sonner";
 import { regionSchema } from "@/types/validations/region.validation";
 import { useRegionUpdateSheet } from "./modals/RegionUpdateSheet";
 import { useRegionDeleteDialog } from "./modals/RegionDeleteDialog";
+import { DataTable } from "@/components/shared/data-tables/data-table";
 
 interface RegionsProps {
   className?: string;
@@ -80,8 +80,8 @@ export default function Regions({ className }: RegionsProps) {
     queryFn: () =>
       api.admin.content.region.findPaginated({
         page: debouncedPage.toString(),
-        size: debouncedSize.toString(),
-        sort: `${debouncedSortDetails.sortKey}:${
+        limit: debouncedSize.toString(),
+        sort: `${debouncedSortDetails.sortKey},${
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
         search: debouncedSearchTerm,
