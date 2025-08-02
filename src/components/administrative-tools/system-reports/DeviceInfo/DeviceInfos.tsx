@@ -27,13 +27,13 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
         href: "/administrative-tools/user-management",
       },
       {
-        title: "DeviceInfo",
+        title: "Device Info",
         href: "/administrative-tools/user-management/deviceInfo",
       },
     ]);
     setIntro?.(
-      "DeviceInfos",
-      "Visualization of the deviceInfos of the application"
+      "Device Info",
+      "Visualization of the device infos of the application"
     );
     return () => {
       clearRoutes?.();
@@ -55,7 +55,7 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
 
   const [sortDetails, setSortDetails] = React.useState({
     order: true,
-    sortKey: "label",
+    sortKey: "id",
   });
   const { value: debouncedSortDetails, loading: sorting } = useDebounce<
     typeof sortDetails
@@ -95,8 +95,8 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
   }, [deviceInfosResponse]);
 
   const context: DataTableConfig<ResponseDeviceInfoDto> = {
-    singularName: "DeviceInfo",
-    pluralName: "DeviceInfos",
+    singularName: "Device Info",
+    pluralName: "Device Infos",
     page,
     size,
     totalPageCount: deviceInfosResponse?.meta.pageCount || 0,
