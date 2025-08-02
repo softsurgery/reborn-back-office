@@ -66,13 +66,5 @@ export const getDeviceInfoColumns = (
       enableSorting: true,
       enableHiding: true,
     },
-    {
-      id: "actions",
-      cell: ({ row }) => (
-        <div className="flex justify-center">
-          <DataTableRowActions row={row} context={context} />
-        </div>
-      ),
-    },
   ];
 };
