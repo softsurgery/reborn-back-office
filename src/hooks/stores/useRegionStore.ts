@@ -1,58 +1,63 @@
 import { create } from "zustand";
-import { Region } from "@/types";
+import {
+  CreateRegionDto,
+  ResponseRegionDto,
+  UpdateRegionDto,
+} from "@/types";
+import { setDeepValue } from "@/lib/object.util";
 
-interface RegionStoreData extends Partial<Region> {
-  id?: number;
-  label: string;
-  errors: Record<string, string[]>;
+interface RegionStoreData {
+  response?: ResponseRegionDto;
+  createDto: CreateRegionDto;
+  updateDto: UpdateRegionDto;
+  createDtoErrors: Record<string, string[]>;
+  updateDtoErrors: Record<string, string[]>;
 }
 
-interface RegionStore extends RegionStoreData {
-  set: (name: keyof RegionStoreData, value: any) => void;
-  resetError: (name?: keyof RegionStoreData) => void;
+export interface RegionStore extends RegionStoreData {
+  set: <K extends keyof RegionStoreData>(
+    name: K,
+    value: RegionStoreData[K]
+  ) => void;
+  setNested: <T>(path: string, value: T) => void;
   reset: () => void;
-  getRegion: () => Partial<Region>;
-  setRegion: (data: Partial<Region>) => void;
 }
 
 const initialState: RegionStoreData = {
-  id: undefined,
-  label: "",
-  errors: {},
+  createDto: {
+    label: "",
+  },
+  updateDto: {
+    label: "",
+  },
+  createDtoErrors: {},
+  updateDtoErrors: {},
 };
 
 export const useRegionStore = create<RegionStore>((set, get) => ({
   ...initialState,
-
-  set: (name: keyof RegionStoreData, value: any) => {
+  set: (name, value) => {
     set((state) => ({
       ...state,
       [name]: value,
     }));
   },
-  resetError: (name?: keyof RegionStoreData) => {
-    if (name)
-      set((state) => ({
+  setNested: (path, value) => {
+    const [rootKey, ...restPath] = path.split(".");
+    const nestedPath = restPath.join(".");
+    set((state) => {
+      const updatedRoot = setDeepValue(
+        { ...state[rootKey as keyof RegionStoreData] },
+        nestedPath,
+        value
+      );
+      return {
         ...state,
-        errors: { ...state.errors, [name]: [] },
-      }));
-    else set((state) => ({ ...state, errors: {} }));
+        [rootKey]: updatedRoot,
+      };
+    });
   },
   reset: () => {
     set({ ...initialState });
-  },
-  getRegion: () => {
-    const data = get();
-    return {
-      id: data.id,
-      label: data.label, 
-    };
-  },
-  setRegion: (data: Partial<Region>) => {
-    set((state) => ({
-      ...state,
-      id: data.id,
-      label: data.label,
-    }));
   },
 }));

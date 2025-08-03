@@ -1,12 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableConfig, Region } from "@/types";
+import { DataTableConfig, ResponseRegionDto } from "@/types";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 
 
 export const getRegionColumns = (
-  context: DataTableConfig<Region>
-): ColumnDef<Region>[] => {
+  context: DataTableConfig<ResponseRegionDto>
+): ColumnDef<ResponseRegionDto>[] => {
   return [
     {
       accessorKey: "ID",

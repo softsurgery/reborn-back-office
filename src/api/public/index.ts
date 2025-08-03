@@ -1,5 +1,5 @@
 import { region } from "./region";
 
-export const content = {
+export const _public = {
   region,
 };

@@ -1,10 +1,9 @@
-import { MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { RegionForm } from "../RegionForm";
+import { Globe } from "lucide-react";
+import { RegionCreateForm } from "../forms/RegionCreateForm";
 import { useSheet } from "@/components/shared/Sheets";
-import { Spinner } from "@/components/shared/Spinner";
+import { useTranslation } from "react-i18next";
 
-interface RegionCreateSheet {
+interface RegionCreateSheetProps {
   createRegion?: () => void;
   isCreatePending?: boolean;
   resetRegion?: () => void;
@@ -14,7 +13,9 @@ export const useRegionCreateSheet = ({
   createRegion,
   isCreatePending,
   resetRegion,
-}: RegionCreateSheet) => {
+}: RegionCreateSheetProps) => {
+  const { t } = useTranslation("region");
+
   const {
     SheetFragment: createRegionSheet,
     openSheet: openCreateRegionSheet,
@@ -22,35 +23,21 @@ export const useRegionCreateSheet = ({
   } = useSheet({
     title: (
       <div className="flex items-center gap-2">
-        <MessageCircle />
-        New Region
+        <Globe />
+        Create Region
       </div>
     ),
-    description:
-      "Use this form to define a new region within the system. A region is identified by their unique id, Fill in all required fields to ensure the region is successfully added.",
+    description: "Fill out the region details below.",
     children: (
-      <div>
-        <RegionForm />
-        <div className="flex gap-2 justify-end">
-          <Button
-            onClick={() => {
-              createRegion?.();
-            }}
-          >
-            Save
-            <Spinner show={isCreatePending} />
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => {
-              resetRegion?.();
-              closeCreateRegionSheet();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
+      <RegionCreateForm
+        className="my-4"
+        regionCallback={createRegion}
+        cancelCallback={() => {
+          closeCreateRegionSheet?.();
+          resetRegion?.();
+        }}
+        isPending={isCreatePending}
+      />
     ),
     className: "min-w-[25vw]",
     onToggle: resetRegion,

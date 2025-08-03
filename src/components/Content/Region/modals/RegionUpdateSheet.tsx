@@ -1,8 +1,8 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { RegionForm } from "../RegionForm";
 import { useSheet } from "@/components/shared/Sheets";
 import { Spinner } from "@/components/shared/Spinner";
+import { RegionUpdateForm } from "../forms/RegionUpdateForm";
 
 interface RegionUpdateSheet {
   updateRegion?: () => void;
@@ -29,28 +29,13 @@ export const useRegionUpdateSheet = ({
     description:
       "Use this form to update an existing region within the system. A region is identified by their unique id, Fill in all required fields to ensure the region is successfully updated.",
     children: (
-      <div>
-        <RegionForm />
-        <div className="flex gap-2 justify-end">
-          <Button
-            onClick={() => {
-              updateRegion?.();
-            }}
-          >
-            Save
-            <Spinner show={isUpdatePending} />
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => {
-              resetRegion?.();
-              closeUpdateRegionSheet();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
+      <RegionUpdateForm
+        regionCallback={updateRegion}
+        cancelCallback={() => {
+          closeUpdateRegionSheet?.();
+          resetRegion?.();
+        }}
+      />
     ),
     className: "min-w-[25vw]",
     onToggle: resetRegion,

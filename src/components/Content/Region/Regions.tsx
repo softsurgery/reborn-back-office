@@ -7,7 +7,14 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useRegionCreateSheet } from "./modals/RegionCreateSheet";
-import { DataTableConfig, Region, ServerResponse } from "@/types";
+import {
+  CreateRegionDto,
+  DataTableConfig,
+  ResponseRegionDto,
+  ServerErrorResponse,
+  ServerResponse,
+  UpdateRegionDto,
+} from "@/types";
 import { useRegionStore } from "@/hooks/stores/useRegionStore";
 import { getRegionColumns } from "./columns";
 import { toast } from "sonner";
@@ -54,7 +61,7 @@ export default function Regions({ className }: RegionsProps) {
 
   const [sortDetails, setSortDetails] = React.useState({
     order: true,
-    sortKey: "label",
+    sortKey: "id",
   });
   const { value: debouncedSortDetails, loading: sorting } = useDebounce<
     typeof sortDetails
@@ -78,7 +85,7 @@ export default function Regions({ className }: RegionsProps) {
       debouncedSearchTerm,
     ],
     queryFn: () =>
-      api.admin.content.region.findPaginated({
+      api._public.region.findPaginated({
         page: debouncedPage.toString(),
         limit: debouncedSize.toString(),
         sort: `${debouncedSortDetails.sortKey},${
@@ -94,8 +101,7 @@ export default function Regions({ className }: RegionsProps) {
   }, [regionsResponse]);
 
   const { mutate: createRegion, isPending: isCreationPending } = useMutation({
-    mutationFn: (region: Partial<Region>) =>
-      api.admin.content.region.create(region),
+    mutationFn: (region: CreateRegionDto) => api._public.region.create(region),
     onSuccess: () => {
       toast.success("Region Created Successfully");
       refetchRegions();
@@ -108,10 +114,10 @@ export default function Regions({ className }: RegionsProps) {
   });
 
   const { mutate: updateRegion, isPending: isUpdatePending } = useMutation({
-    mutationFn: (data: { id?: number; region: Partial<Region> }) =>
-      api.admin.content.region.update(data.id, data.region),
-    onSuccess: (response: ServerResponse<Region>) => {
-      toast.success(response.message);
+    mutationFn: (data: { id?: number; region: UpdateRegionDto }) =>
+      api._public.region.update(data.id, data.region),
+    onSuccess: () => {
+      toast.success("Region Updated Successfully");
       refetchRegions();
       regionStore.reset();
       closeUpdateRegionSheet();
@@ -122,9 +128,9 @@ export default function Regions({ className }: RegionsProps) {
   });
 
   const { mutate: deleteRegion, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: number) => api.admin.content.region.remove(id),
-    onSuccess: (response: ServerResponse<Region>) => {
-      toast.success(response.message);
+    mutationFn: (id?: number) => api._public.region.remove(id),
+    onSuccess: () => {
+      toast.success("Region Deleted Successfully");
       regionStore.reset();
       refetchRegions();
     },
@@ -132,23 +138,13 @@ export default function Regions({ className }: RegionsProps) {
   });
 
   const handleCreateSubmit = () => {
-    const { id, ...data } = regionStore.getRegion();
-    const result = regionSchema.safeParse(data);
-    if (!result.success) {
-      regionStore.set("errors", result.error.flatten().fieldErrors);
-    } else {
-      createRegion(data);
-    }
+    const data = regionStore.createDto;
+    createRegion(data);
   };
 
   const handleUpdateSubmit = () => {
-    const { id, ...data } = regionStore.getRegion();
-    const result = regionSchema.safeParse(data);
-    if (!result.success) {
-      regionStore.set("errors", result.error.flatten().fieldErrors);
-    } else {
-      updateRegion({ id, region: data });
-    }
+    const data = regionStore.updateDto;
+    updateRegion({ id: regionStore.response?.id, region: data });
   };
 
   const { createRegionSheet, openCreateRegionSheet, closeCreateRegionSheet } =
@@ -166,11 +162,11 @@ export default function Regions({ className }: RegionsProps) {
     });
 
   const { deleteRegionDialog, openDeleteRegionDialog } = useRegionDeleteDialog({
-    deleteRegion: () => deleteRegion(regionStore?.id),
+    deleteRegion: () => deleteRegion(regionStore?.response?.id),
     isDeletePending: isDeletionPending,
   });
 
-  const context: DataTableConfig<Region> = {
+  const context: DataTableConfig<ResponseRegionDto> = {
     singularName: "Region",
     pluralName: "Regions",
     createCallback: openCreateRegionSheet,
@@ -188,7 +184,10 @@ export default function Regions({ className }: RegionsProps) {
     sortKey: sortDetails.sortKey,
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
-    targetEntity: (region: Region) => regionStore.setRegion(region),
+    targetEntity: (region: ResponseRegionDto) => {
+      regionStore.set("response", region);
+      regionStore.set("updateDto", { label: region.label });
+    },
   };
 
   const columns = getRegionColumns(context);
@@ -196,7 +195,7 @@ export default function Regions({ className }: RegionsProps) {
   const isPending =
     isRegionsPending || paging || resizing || searching || sorting;
   return (
-    <div className={cn("flex flex-col flex-1", className)}>
+    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
       <DataTable
         className="flex flex-col flex-1 overflow-hidden p-1"
         containerClassName="overflow-auto"
