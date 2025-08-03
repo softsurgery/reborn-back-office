@@ -1,3 +1,4 @@
+import { ResponseRegionDto } from "./content";
 import { DatabaseEntity } from "./utils/database-entity";
 
 export interface ResponseUserDto extends DatabaseEntity {
@@ -12,6 +13,8 @@ export interface ResponseUserDto extends DatabaseEntity {
   emailVerified?: Date;
   role: ResponseRoleDto;
   roleId: string;
+  profile: ResponseProfileDto;
+  profileId: string;
 }
 
 export interface CreateUserDto {
@@ -24,6 +27,7 @@ export interface CreateUserDto {
   username: string;
   email: string;
   roleId?: string;
+  profile?: CreateProfileDto;
 }
 
 export const createUserDtoFactory = (): CreateUserDto => ({
@@ -89,3 +93,31 @@ export interface ResponseResetTokenDto {
   email: string;
   success: boolean;
 }
+
+export enum Gender {
+  Male = "Male",
+  Female = "Female",
+}
+
+export interface ResponseProfileDto extends DatabaseEntity {
+  id: number;
+  phone?: string;
+  cin?: string;
+  bio?: string;
+  gender?: Gender;
+  isPrivate?: boolean;
+  region?: ResponseRegionDto;
+  regionId?: number;
+  user: ResponseUserDto;
+}
+
+export interface CreateProfileDto {
+  phone?: string;
+  cin?: string;
+  bio?: string;
+  gender?: Gender;
+  isPrivate?: boolean;
+  regionId?: number;
+}
+
+export interface UpdateProfileDto extends Partial<CreateProfileDto> {}
