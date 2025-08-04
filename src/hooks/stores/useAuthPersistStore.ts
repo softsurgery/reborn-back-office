@@ -20,6 +20,14 @@ const authPersistStore: AuthPersistData = {
   isAuthenticated: false,
 };
 
+const isClient = typeof window !== "undefined";
+
+const fallbackStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
+
 export const useAuthPersistStore = create(
   persist<AuthPersistStore>(
     (set) => ({
@@ -31,7 +39,9 @@ export const useAuthPersistStore = create(
     }),
     {
       name: "auth-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() =>
+        isClient ? localStorage : fallbackStorage
+      ),
     }
   )
 );
