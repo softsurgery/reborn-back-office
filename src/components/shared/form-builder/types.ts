@@ -76,7 +76,7 @@ export interface TelFieldProps extends BaseFieldProps {
 
 export interface NumberFieldProps extends BaseFieldProps {
   value?: number | null;
-  onChange?: (e: string) => void;
+  onChange?: (e: number) => void;
   min?: number;
   max?: number;
 }

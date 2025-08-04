@@ -8,7 +8,11 @@ interface PasswordFieldProps extends React.ComponentProps<"input"> {
   className?: string;
 }
 
-export const PasswordField = ({ className, ...props }: PasswordFieldProps) => {
+export const PasswordField = ({
+  className,
+  placeholder,
+  ...props
+}: PasswordFieldProps) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   return (
@@ -16,11 +20,13 @@ export const PasswordField = ({ className, ...props }: PasswordFieldProps) => {
       <div className="relative">
         <Input
           type={showPassword ? "text" : "password"}
-          placeholder="•••••••"
+          placeholder={placeholder || "Enter password"}
           className="pr-10"
+          autoComplete="new-password"
           {...props}
         />
         <Button
+          type="button"
           onClick={togglePasswordVisibility}
           variant={"link"}
           className="absolute inset-y-0 right-0 flex items-center pr-3"

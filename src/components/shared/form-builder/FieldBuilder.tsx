@@ -19,6 +19,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Field, SelectOption } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
+import { PasswordField } from "../PasswordField";
 
 interface FieldBuilderProps {
   field?: Field<any>;
@@ -133,31 +134,16 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
       );
     case "password":
       return (
-        <div className="relative">
-          <Input
-            type={showPassword ? "text" : "password"}
-            className={cn(
-              "pr-10",
-              field.error &&
-                "border-destructive focus-visible:ring-destructive",
-              field?.className
-            )}
-            value={field?.props?.value as string}
-            onChange={(e) => field?.props?.onChange?.(e.target.value)}
-            autoComplete="new-password"
-          />
-          <Button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            variant={"link"}
-            className={cn(
-              "absolute inset-y-0 right-0 flex items-center pr-3",
-              field.error && "text-destructive"
-            )}
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </Button>
-        </div>
+        <PasswordField
+          {...field.props}
+          className={cn(
+            "pr-10",
+            field.error && "border-destructive focus-visible:ring-destructive",
+            field?.className
+          )}
+          value={field?.props?.value as string}
+          onChange={(e) => field?.props?.onChange?.(e.target.value)}
+        />
       );
     case "switch":
       return (
