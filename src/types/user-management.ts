@@ -30,31 +30,7 @@ export interface CreateUserDto {
   profile?: CreateProfileDto;
 }
 
-export const createUserDtoFactory = (): CreateUserDto => ({
-  firstName: "",
-  lastName: "",
-  dateOfBirth: undefined,
-  isActive: true,
-  isApproved: false,
-  password: "",
-  username: "",
-  email: "",
-  roleId: undefined,
-});
-
 export interface UpdateUserDto extends Partial<CreateUserDto> {}
-
-export const updateUserDtoFactory = (): UpdateUserDto => ({
-  firstName: "",
-  lastName: "",
-  dateOfBirth: undefined,
-  isActive: true,
-  isApproved: false,
-  password: "",
-  username: "",
-  email: "",
-  roleId: undefined,
-});
 
 export interface ResponseRoleDto extends DatabaseEntity {
   id: string;
@@ -120,22 +96,4 @@ export interface CreateProfileDto {
   regionId?: number;
 }
 
-export const createProfileDtoFactory = (): CreateProfileDto => ({
-  phone: "",
-  cin: "",
-  bio: "",
-  gender: Gender.Male,
-  isPrivate: false,
-  regionId: undefined,
-});
-
 export interface UpdateProfileDto extends Partial<CreateProfileDto> {}
-
-export const updateProfileDtoFactory = (): UpdateProfileDto => ({
-  phone: "",
-  cin: "",
-  bio: "",
-  gender: Gender.Male,
-  isPrivate: false,
-  regionId: undefined,
-});

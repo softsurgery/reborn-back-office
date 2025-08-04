@@ -9,7 +9,6 @@ import { defineStepper } from "@/components/ui/stepper";
 import { useCreateUserFormStructure } from "./useCreateUserFormStructure";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { useRegions } from "@/hooks/content/useRegions";
-import { useProfileStore } from "@/hooks/stores/useProfileStore";
 import {
   createUserSchema,
   profileSchema,
@@ -43,15 +42,13 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
 }) => {
   const userStore = useUserStore();
   const { regions, isFetchRegionsPending } = useRegions();
-  const profileStore = useProfileStore();
   const { roles, isFetchRolesPending } = useRoles();
   const { userFormStructure, profileFormStructure } =
     useCreateUserFormStructure({
       userStore,
-      profileStore,
       regions: mapToSelectOptions({
         data: isFetchRegionsPending ? [] : regions,
-        labelKey: "name",
+        labelKey: "label",
         valueKey: "id",
       }),
       roles: mapToSelectOptions({
@@ -64,9 +61,12 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
   const validateStep = React.useCallback(
     (stepId: string) => {
       if (stepId === "user-information") {
-        const userResult = createUserSchema.safeParse(userStore.createDto);
+        const userResult = createUserSchema.safeParse({
+          ...userStore.createDto,
+          confirmPassword: userStore.confirmPassword,
+        });
         if (!userResult.success) {
-          userStore.setNested(
+          userStore.set(
             "createDtoErrors",
             userResult.error.flatten().fieldErrors
           );
@@ -76,9 +76,11 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
       }
 
       if (stepId === "profile-information") {
-        const profileResult = profileSchema.safeParse(profileStore.createDto);
+        const profileResult = profileSchema.safeParse(
+          userStore.createDto.profile
+        );
         if (!profileResult.success) {
-          profileStore.setNested(
+          userStore.set(
             "createDtoErrors",
             profileResult.error.flatten().fieldErrors
           );
@@ -88,14 +90,11 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
       }
       return true;
     },
-    [userStore, profileStore]
+    [userStore]
   );
 
   const handleSubmit = () => {
-    createUser?.({
-      ...userStore.createDto,
-      profile: profileStore.createDto,
-    });
+    createUser?.(userStore.createDto);
   };
 
   return (

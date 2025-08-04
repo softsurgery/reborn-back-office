@@ -75,15 +75,6 @@ const createUserSchema = baseUserSchema
     path: ["confirmPassword"],
   });
 
-// Helper function for password validation
-const isConfirmPasswordValid = (data: {
-  password?: string;
-  confirmPassword?: string;
-}) => {
-  if (!data.password) return true;
-  return data.password === data.confirmPassword;
-};
-
 function updateUserSchema(requirePasswordUpdate: boolean) {
   return baseUserSchema
     .extend({
@@ -125,31 +116,29 @@ const profileSchema = z.object({
   phone: z
     .string()
     .optional()
-    .refine((value) => {
-      if (!value) return true;
-      const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-      return phoneRegex.test(value);
-    }, {
-      message: "userManagement.validation.invalidPhoneFormat",
-    }),
+    .refine(
+      (value) => {
+        if (!value) return true;
+        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+        return phoneRegex.test(value);
+      },
+      {
+        message: "userManagement.validation.invalidPhoneFormat",
+      }
+    ),
   cin: z
-    .string()
-    .optional()
-    .refine((value) => {
-      if (!value) return true;
-      const cinRegex = /^[A-Z]{1,2}\d{6}$/;
-      return cinRegex.test(value);
-    }, {
-      message: "userManagement.validation.invalidCinFormat",
-    }),
+    .string({
+      message: "userManagement.validation.cinRequired",
+    })
+    .length(8, {})
+    .optional(),
   bio: z
     .string()
-    .max(500, {
+    .max(255, {
       message: "userManagement.validation.bioTooLong",
     })
     .optional(),
   isPrivate: z.boolean().optional(),
 });
-
 
 export { baseUserSchema, createUserSchema, updateUserSchema, profileSchema };

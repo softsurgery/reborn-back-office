@@ -1,11 +1,5 @@
 import { create } from "zustand";
-import {
-  CreateUserDto,
-  createUserDtoFactory,
-  ResponseUserDto,
-  UpdateUserDto,
-  updateUserDtoFactory,
-} from "@/types";
+import { CreateUserDto, Gender, ResponseUserDto, UpdateUserDto } from "@/types";
 import { setDeepValue } from "@/lib/object.util";
 
 interface UserStoreData {
@@ -18,20 +12,56 @@ interface UserStoreData {
   updateDtoErrors: Record<string, any>;
 }
 
-export interface UserStore extends UserStoreData {
-  set: <T>(name: keyof UserStoreData, value: T) => void;
-  setNested: <T>(path: string, value: T) => void;
-  reset: () => void;
-}
-
 const initialState: UserStoreData = {
-  createDto: createUserDtoFactory(),
-  updateDto: updateUserDtoFactory(),
+  createDto: {
+    firstName: "",
+    lastName: "",
+    dateOfBirth: undefined,
+    isActive: true,
+    isApproved: true,
+    password: "",
+    username: "",
+    email: "",
+    roleId: "",
+    profile: {
+      phone: "",
+      cin: "",
+      bio: "",
+      gender: undefined,
+      isPrivate: false,
+      regionId: undefined,
+    },
+  },
+  updateDto: {
+    firstName: "",
+    lastName: "",
+    dateOfBirth: undefined,
+    isActive: true,
+    isApproved: true,
+    password: "",
+    username: "",
+    email: "",
+    roleId: "",
+    profile: {
+      phone: "",
+      cin: "",
+      bio: "",
+      gender: undefined,
+      isPrivate: false,
+      regionId: undefined,
+    },
+  },
   setManualPassword: false,
   confirmPassword: "",
   createDtoErrors: {},
   updateDtoErrors: {},
 };
+
+export interface UserStore extends UserStoreData {
+  set: <T>(name: keyof UserStoreData, value: T) => void;
+  setNested: <T>(path: string, value: T) => void;
+  reset: () => void;
+}
 
 export const useUserStore = create<UserStore>((set, get) => ({
   ...initialState,

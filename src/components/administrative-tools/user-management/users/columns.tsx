@@ -6,11 +6,13 @@ import { DataTableColumnHeader } from "@/components/shared/data-tables/data-tabl
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import { DataTableCellVariant, ResponseUserDto } from "@/types";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
-import { use } from "react";
 import { useTranslation } from "react-i18next";
 
-export const useUserColumns = (context: any, t: any): ColumnDef<ResponseUserDto>[] => {
-   const { t: tCommon} = useTranslation("common");
+export const useUserColumns = (
+  context: any,
+  t: any
+): ColumnDef<ResponseUserDto>[] => {
+  const { t: tCommon } = useTranslation("common");
   return [
     {
       accessorKey: `${t("userManagement.table.username")}`,
@@ -146,7 +148,9 @@ export const useUserColumns = (context: any, t: any): ColumnDef<ResponseUserDto>
           variant={row.original.isActive ? "default" : "secondary"}
           className={cn("font-bold")}
         >
-          {row.original.isActive ? tCommon("common.buttons.yes") : tCommon("common.buttons.no")}
+          {row.original.isActive
+            ? tCommon("common.buttons.yes")
+            : tCommon("common.buttons.no")}
         </Badge>
       ),
       enableSorting: true,
@@ -167,7 +171,9 @@ export const useUserColumns = (context: any, t: any): ColumnDef<ResponseUserDto>
           variant={row.original.isApproved ? "default" : "secondary"}
           className={cn("font-bold")}
         >
-          {row.original.isApproved ? tCommon("common.buttons.yes") : tCommon("common.buttons.no")}
+          {row.original.isApproved
+            ? tCommon("common.buttons.yes")
+            : tCommon("common.buttons.no")}
         </Badge>
       ),
       enableSorting: true,

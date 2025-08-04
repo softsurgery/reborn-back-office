@@ -29,7 +29,6 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
-import { useProfileStore } from "@/hooks/stores/useProfileStore";
 
 interface UsersProps {
   className?: string;
@@ -60,7 +59,6 @@ export default function Users({ className }: UsersProps) {
   }, [ready, t]);
 
   const userStore = useUserStore();
-  const profileStore = useProfileStore();
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -121,7 +119,6 @@ export default function Users({ className }: UsersProps) {
       toast(t("userManagement.messages.userCreatedSuccess"));
       closeCreateUserSheet();
       userStore.reset();
-      profileStore.reset();
       refetchUsers();
     },
     onError: (error: ServerErrorResponse) => {
@@ -194,7 +191,6 @@ export default function Users({ className }: UsersProps) {
       },
     });
 
-
   const handleUpdateSubmit = () => {
     const data = userStore.updateDto;
     const result = updateUserSchema(userStore.setManualPassword).safeParse({
@@ -211,7 +207,6 @@ export default function Users({ className }: UsersProps) {
 
   const handleReset = () => {
     userStore.reset();
-    profileStore.reset();
   };
 
   const { createUserSheet, openCreateUserSheet, closeCreateUserSheet } =
