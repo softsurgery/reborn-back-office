@@ -947,6 +947,18 @@
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.10.5.tgz"
   integrity sha512-kkKUDVlII2DQiKy7UstOR1ErJP8kUKAQ4oa+SQtM0K+lPdmmjj0YnnxBgtTVYH7mUKtbsxeFC9y0AmK7Yb78/A==
 
+"@stepperize/core@1.2.6":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@stepperize/core/-/core-1.2.6.tgz#b039f22ae8f0b2ca8dbdffecfec37aefd6917375"
+  integrity sha512-6qUGCyI/Rq9tskBCwzJFwOpnT+uCRJTjwCwMiymnCA3utkvejOvfj6EPte21lMJNiqMuMhhKNFukX6ooI/2uSQ==
+
+"@stepperize/react@^5.1.6":
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/@stepperize/react/-/react-5.1.6.tgz#c1ce66b2e6adc95be44d9be9e1ec3b4e30cd6ac1"
+  integrity sha512-XYDcZih8aqXWudyseTNiZLfD8mDZGbiDjd4pN+Xt5J2Z/N6rq4Xn7KLFxoc3jguWdokcseiv6hkBBVpEzTwfVQ==
+  dependencies:
+    "@stepperize/core" "1.2.6"
+
 "@swc/helpers@0.5.2":
   version "0.5.2"
   resolved "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.2.tgz"
