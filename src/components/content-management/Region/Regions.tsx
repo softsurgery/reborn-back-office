@@ -11,14 +11,11 @@ import {
   CreateRegionDto,
   DataTableConfig,
   ResponseRegionDto,
-  ServerErrorResponse,
-  ServerResponse,
   UpdateRegionDto,
 } from "@/types";
 import { useRegionStore } from "@/hooks/stores/useRegionStore";
 import { getRegionColumns } from "./columns";
 import { toast } from "sonner";
-import { regionSchema } from "@/types/validations/region.validation";
 import { useRegionUpdateSheet } from "./modals/RegionUpdateSheet";
 import { useRegionDeleteDialog } from "./modals/RegionDeleteDialog";
 import { DataTable } from "@/components/shared/data-tables/data-table";

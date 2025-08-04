@@ -1,4 +1,4 @@
-import Regions from "@/components/Content/Region/Regions";
+import Regions from "@/components/content-management/Region/Regions";
 
 export default function page() {
   return <Regions />;
