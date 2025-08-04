@@ -1,5 +1,11 @@
 import axios from "../axios";
-import { CreateRegionDto, Paginated, QueryParams, ResponseRegionDto, ServerResponse, UpdateRegionDto } from "@/types";
+import {
+  CreateRegionDto,
+  Paginated,
+  QueryParams,
+  ResponseRegionDto,
+  UpdateRegionDto,
+} from "@/types";
 
 const findPaginated = async ({
   page = "1",
@@ -27,37 +33,32 @@ const findPaginated = async ({
 };
 
 const findAll = async (): Promise<ResponseRegionDto[]> => {
-  const response = await axios.get<ResponseRegionDto[]>(`/public/region`);
+  const response = await axios.get<ResponseRegionDto[]>(`/public/region/all`);
   return response.data;
 };
 
-const findById = async (regionId: number): Promise<ResponseRegionDto> => {
-  const response = await axios.get<ResponseRegionDto>(
-    `/public/region/${regionId}`
-  );
+const findById = async (id: number): Promise<ResponseRegionDto> => {
+  const response = await axios.get<ResponseRegionDto>(`/public/region/${id}`);
   return response.data;
 };
 
 const create = async (
-  Region: CreateRegionDto
+  createRegionDto: CreateRegionDto
 ): Promise<CreateRegionDto> => {
-  const response = await axios.post("/public/region", Region);
+  const response = await axios.post("/public/region", createRegionDto);
   return response.data;
 };
 
 const update = async (
-  regionId?: number,
-  Region?: UpdateRegionDto
+  id?: number,
+  updateRegionDto?: UpdateRegionDto
 ): Promise<UpdateRegionDto> => {
-  const response = await axios.put(
-    `/public/region/${regionId}`,
-    Region
-  );
+  const response = await axios.put(`/public/region/${id}`, updateRegionDto);
   return response.data;
 };
 
-const remove = async (regionId?: number): Promise<ResponseRegionDto> => {
-  const response = await axios.delete(`/public/region/${regionId}`);
+const remove = async (id?: number): Promise<ResponseRegionDto> => {
+  const response = await axios.delete(`/public/region/${id}`);
   return response.data;
 };
 
