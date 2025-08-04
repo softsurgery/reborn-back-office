@@ -1,5 +1,5 @@
-import { Resources } from "@/components/Resources/Resources";
+import Uploads from "@/components/content-management/uploads/Uploads";
 
 export default function Page() {
-  return <Resources />;
+  return <Uploads />;
 }
