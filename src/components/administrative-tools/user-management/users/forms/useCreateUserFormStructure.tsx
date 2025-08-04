@@ -6,18 +6,24 @@ import {
   PasswordFieldProps,
   SelectFieldProps,
   SelectOption,
+  SwitchFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
+import { ProfileStore } from "@/hooks/stores/useProfileStore";
 import { UserStore } from "@/hooks/stores/useUserStore";
 import { useTranslation } from "react-i18next";
 
 interface useCreateUserFormStructureProps {
   userStore: UserStore;
+  profileStore: ProfileStore;
+  regions: SelectOption[];
   roles: SelectOption[];
 }
 
 export const useCreateUserFormStructure = ({
   userStore,
+  profileStore,
+  regions,
   roles,
 }: useCreateUserFormStructureProps) => {
   const { t: tUser } = useTranslation("user-management");
@@ -200,8 +206,141 @@ export const useCreateUserFormStructure = ({
       },
     ],
   };
+// Profile Form Structure
 
-  return {
+const phoneField: Field<TextFieldProps> = {
+  id: "phone",
+  label: "Phone",
+  variant: FieldVariant.NUMBER,
+  required: true,
+  placeholder: "123-456-7890",
+  description: "Enter your phone number",
+  error: profileStore.createDtoErrors?.phone?.[0],
+  props: {
+    value: profileStore.createDto.phone || undefined,
+    onChange: (value) => {
+      profileStore.setNested("createDto.phone", value);
+      profileStore.setNested("createDtoErrors.phone", []);
+    },
+  },
+};
+
+const cinField: Field<TextFieldProps> = {
+  id: "cin",
+  label: "CIN",
+  variant: FieldVariant.NUMBER,
+  required: true,
+  placeholder: "CIN Number",
+  description: "Enter your CIN number",
+  error: profileStore.createDtoErrors?.cin?.[0],
+  props: {
+    value: profileStore.createDto.cin || undefined,
+    onChange: (value) => {
+      profileStore.setNested("createDto.cin", value);
+      profileStore.setNested("createDtoErrors.cin", []);
+    },
+  },
+};
+
+const bioField: Field<TextFieldProps> = {
+  id: "bio",
+  label: "Bio",
+  variant: FieldVariant.TEXTAREA,
+  required: false,
+  placeholder: "Tell us about yourself",
+  description: "Enter a short bio",
+  error: profileStore.createDtoErrors?.bio?.[0],
+  props: {
+    value: profileStore.createDto.bio || undefined,
+    onChange: (value) => {
+      profileStore.setNested("createDto.bio", value);
+      profileStore.setNested("createDtoErrors.bio", []);
+    },
+  },
+};
+
+const genderField: Field<SelectFieldProps> = {
+  id: "gender",
+  label: "Gender",
+  variant: FieldVariant.SELECT,
+  required: true,
+  placeholder: "Select your gender",
+  description: "Choose your gender",
+  error: profileStore.createDtoErrors?.gender?.[0],
+  props: {
+    options: [
+      { value: "male", label: "Male" },
+      { value: "female", label: "Female" },
+    ],
+    value: profileStore.createDto.gender || undefined,
+    onValueChange: (value) => {
+      profileStore.setNested("createDto.gender", value);
+      profileStore.setNested("createDtoErrors.gender", []);
+    },
+  },
+};
+
+const isPrivateField: Field<SwitchFieldProps> = {
+  id: "isPrivate",
+  label: "Profile Privacy",
+  variant: FieldVariant.SWITCH,
+  required: true,
+  placeholder: "Select privacy setting",
+  description: "Choose whether your profile is private or public",
+  error: profileStore.createDtoErrors?.isPrivate?.[0],
+  props: {
+    checked: profileStore.createDto.isPrivate || false,
+    onCheckedChange: (value) => {
+      profileStore.setNested("createDto.isPrivate", value);
+      profileStore.setNested("createDtoErrors.isPrivate", []);
+    },
+  },
+};
+
+const regionField: Field<SelectFieldProps> = {
+  id: "region",
+  label: "Region",
+  variant: FieldVariant.SELECT,
+  required: false,
+  placeholder: "Select your region",
+  description: "Choose your region",
+  error: profileStore.createDtoErrors?.regionId?.[0],
+  props: {
+    options: regions,
+    value: profileStore.createDto.regionId?.toString() || undefined,
+    onValueChange: (value) => {
+      profileStore.setNested("createDto.regionId", value);
+      profileStore.setNested("createDtoErrors.regionId", []);
+    },
+  },
+};
+
+  const profileFormStructure: FormStructure = {
+    title: "Profile Information",
+    description: "Please fill out your profile details",
+    orientation: "horizontal",
+    fieldsets: [
+      {
+        title: "Profile Details",
+        description: "",
+        includeHeader: true,
+        rows: [
+          {
+            fields: [phoneField, cinField],
+          },
+          {
+            fields: [bioField, genderField],
+          },
+          {
+            fields: [isPrivateField, regionField],
+          },
+        ],
+      },
+    ],
+  };
+
+return {
     userFormStructure,
+    profileFormStructure,
   };
 };

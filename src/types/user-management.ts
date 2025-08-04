@@ -120,4 +120,22 @@ export interface CreateProfileDto {
   regionId?: number;
 }
 
+export const createProfileDtoFactory = (): CreateProfileDto => ({
+  phone: "",
+  cin: "",
+  bio: "",
+  gender: Gender.Male,
+  isPrivate: false,
+  regionId: undefined,
+});
+
 export interface UpdateProfileDto extends Partial<CreateProfileDto> {}
+
+export const updateProfileDtoFactory = (): UpdateProfileDto => ({
+  phone: "",
+  cin: "",
+  bio: "",
+  gender: Gender.Male,
+  isPrivate: false,
+  regionId: undefined,
+});

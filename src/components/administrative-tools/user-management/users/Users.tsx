@@ -29,6 +29,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
+import { useProfileStore } from "@/hooks/stores/useProfileStore";
 
 interface UsersProps {
   className?: string;
@@ -59,6 +60,7 @@ export default function Users({ className }: UsersProps) {
   }, [ready, t]);
 
   const userStore = useUserStore();
+  const profileStore = useProfileStore();
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -113,13 +115,14 @@ export default function Users({ className }: UsersProps) {
     return usersResponse.data;
   }, [usersResponse]);
 
-  const { mutate: createUser, isPending: isCreationPending } = useMutation({
+  const { mutate: createUser, isPending: isCreatePending } = useMutation({
     mutationFn: (user: CreateUserDto) => api.admin.user.create(user),
     onSuccess: () => {
       toast(t("userManagement.messages.userCreatedSuccess"));
-      refetchUsers();
-      userStore.reset();
       closeCreateUserSheet();
+      userStore.reset();
+      profileStore.reset();
+      refetchUsers();
     },
     onError: (error: ServerErrorResponse) => {
       toast.error(error.response?.data?.message);
@@ -191,19 +194,6 @@ export default function Users({ className }: UsersProps) {
       },
     });
 
-  const handleCreateSubmit = () => {
-    const data = userStore.createDto;
-    const result = createUserSchema.safeParse({
-      ...data,
-      confirmPassword: userStore.confirmPassword,
-      translation: t,
-    });
-    if (!result.success) {
-      userStore.set("createDtoErrors", result.error.flatten().fieldErrors);
-    } else {
-      createUser(data);
-    }
-  };
 
   const handleUpdateSubmit = () => {
     const data = userStore.updateDto;
@@ -219,18 +209,23 @@ export default function Users({ className }: UsersProps) {
     }
   };
 
+  const handleReset = () => {
+    userStore.reset();
+    profileStore.reset();
+  };
+
   const { createUserSheet, openCreateUserSheet, closeCreateUserSheet } =
     useUserCreateSheet({
-      createUser: handleCreateSubmit,
-      isCreatePending: isCreationPending,
-      resetUser: () => userStore.reset(),
+      createUser,
+      isCreatePending,
+      resetUser: handleReset,
     });
 
   const { updateUserSheet, openUpdateUserSheet, closeUpdateUserSheet } =
     useUserUpdateSheet({
       updateUser: handleUpdateSubmit,
       isUpdatePending: isUpdatePending,
-      resetUser: () => userStore.reset(),
+      resetUser: handleReset,
     });
 
   const { deleteUserDialog, openDeleteUserDialog } = useUserDeleteDialog({
@@ -243,7 +238,7 @@ export default function Users({ className }: UsersProps) {
     userFullname: `${userStore.response?.firstName} - ${userStore.response?.lastName}`,
     activateUser: () => activateUser(userStore.response?.id),
     isActivationPending,
-    resetUser: () => userStore.reset(),
+    resetUser: handleReset,
   });
 
   const { deactivateUserDialog, openDeactivateUserDialog } =

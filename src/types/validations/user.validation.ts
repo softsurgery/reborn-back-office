@@ -1,3 +1,4 @@
+import { Phone } from "lucide-react";
 import { z } from "zod";
 
 // Translation function - this should be passed as a parameter or imported from your i18n setup
@@ -120,4 +121,35 @@ function updateUserSchema(requirePasswordUpdate: boolean) {
     });
 }
 
-export { baseUserSchema, createUserSchema, updateUserSchema };
+const profileSchema = z.object({
+  phone: z
+    .string()
+    .optional()
+    .refine((value) => {
+      if (!value) return true;
+      const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+      return phoneRegex.test(value);
+    }, {
+      message: "userManagement.validation.invalidPhoneFormat",
+    }),
+  cin: z
+    .string()
+    .optional()
+    .refine((value) => {
+      if (!value) return true;
+      const cinRegex = /^[A-Z]{1,2}\d{6}$/;
+      return cinRegex.test(value);
+    }, {
+      message: "userManagement.validation.invalidCinFormat",
+    }),
+  bio: z
+    .string()
+    .max(500, {
+      message: "userManagement.validation.bioTooLong",
+    })
+    .optional(),
+  isPrivate: z.boolean().optional(),
+});
+
+
+export { baseUserSchema, createUserSchema, updateUserSchema, profileSchema };

@@ -2,9 +2,10 @@ import { User } from "lucide-react";
 import { useSheet } from "@/components/shared/Sheets";
 import { UserCreateForm } from "../forms/UserCreateForm";
 import { useTranslation } from "react-i18next";
+import { CreateUserDto } from "@/types";
 
 interface UserCreateSheet {
-  createUser?: () => void;
+  createUser?: (user: CreateUserDto) => void;
   isCreatePending?: boolean;
   resetUser?: () => void;
 }
@@ -14,7 +15,7 @@ export const useUserCreateSheet = ({
   isCreatePending,
   resetUser,
 }: UserCreateSheet) => {
-  const { t : tUser } = useTranslation("user-management");
+  const { t: tUser } = useTranslation("user-management");
   const {
     SheetFragment: createUserSheet,
     openSheet: openCreateUserSheet,
@@ -26,19 +27,18 @@ export const useUserCreateSheet = ({
         {tUser("userManagement.sheet.createUserTitle")}
       </div>
     ),
-    description:
-      tUser("userManagement.sheet.createUserDescription"),
+    description: tUser("userManagement.sheet.createUserDescription"),
     children: (
       <UserCreateForm
-        userCallback={createUser}
-        cancelCallback={() => {
-          closeCreateUserSheet?.();
-          resetUser?.();
-        }}
+      className="my-4"
+        createUser={createUser}
+        isCreatePending={isCreatePending}
       />
     ),
     className: "min-w-[50vw] flex flex-col flex-1 overflow-hidden",
-    onToggle: resetUser,
+    onToggle: () => {
+      resetUser?.();
+    },
   });
 
   return {
