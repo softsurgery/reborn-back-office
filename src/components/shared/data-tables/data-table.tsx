@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     initialState: {
       pagination: {
-        pageSize: 20,
+        pageSize: 100,
       },
     },
   });

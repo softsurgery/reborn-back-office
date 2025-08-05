@@ -30,7 +30,10 @@ export function DataTablePagination<TData>({
             return (
               <Toggle
                 key={size}
-                onClick={() => context.setSize(size)}
+                onClick={() => {
+                  context.setPage(1);
+                  context.setSize(size);
+                }}
                 pressed={size == context.size}
               >
                 {size}
@@ -41,7 +44,8 @@ export function DataTablePagination<TData>({
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center justify-center text-xs font-medium">
-          {t("common.table.page")} {context.page} {t("common.table.of")} {context.totalPageCount}
+          {t("common.table.page")} {context.page} {t("common.table.of")}{" "}
+          {context.totalPageCount}
         </div>
         <div className="flex items-center space-x-2">
           <Button
