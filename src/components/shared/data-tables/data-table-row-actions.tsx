@@ -45,8 +45,10 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="center" className="w-[160px] font-bold">
-        <DropdownMenuLabel className="text-center">{t("common.table.actions")}</DropdownMenuLabel>
+      <DropdownMenuContent align="center" className="w-[160px] font-medium ">
+        <DropdownMenuLabel className="text-center font-black text-xs">
+          {t("common.table.actions")}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {context.inspectCallback && (
@@ -57,7 +59,9 @@ export function DataTableRowActions<TData>({
               }
             >
               <Telescope />
-              <span className="mx-1">{t("common.buttons.inspect")}</span>
+              <span className="mx-1 text-xs">
+                {t("common.buttons.inspect")}
+              </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
