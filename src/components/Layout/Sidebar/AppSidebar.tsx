@@ -14,12 +14,14 @@ import {
   Paperclip,
   MapIcon,
   FileUser,
+  ShieldCheck,
+  FileText,
+  TerminalSquare,
 } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarRail,
   useSidebar,
@@ -97,6 +99,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Regions",
             url: "/content/regions",
             icon: MapIcon,
+          },
+        ],
+      },
+      {
+        id: 4,
+        title: "Audit & Monitoring",
+        url: "/audit-monitoring",
+        icon: ShieldCheck,
+        items: [
+          {
+            title: "Logger",
+            url: "/audit-monitoring/logger",
+            icon: FileText,
+          },
+          {
+            title: "Developer Logger",
+            url: "/audit-monitoring/dev-logger",
+            icon: TerminalSquare,
           },
         ],
       },

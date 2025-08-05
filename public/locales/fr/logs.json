@@ -1,0 +1,41 @@
+{
+    "titles": {
+        "SIGNIN": "Utilisateur Connecté",
+        "SIGNUP": "Utilisateur Enregistré",
+        "SIGNOUT": "Utilisateur Déconnecté",
+        
+        "USER_CREATE": "Nouvel Utilisateur Créé",
+        "USER_UPDATE": "Détails de l'Utilisateur Mis à Jour",
+        "USER_DELETE": "Compte Utilisateur Supprimé",
+        "USER_ACTIVATE": "Compte Utilisateur Activé",
+        "USER_DEACTIVATE": "Compte Utilisateur Désactivé",
+        "USER_APPROVE": "Utilisateur Approuvé",
+        "USER_DISAPPROVE": "Utilisateur Désapprouvé",
+        
+        "ROLE_CREATE": "Rôle Créé",
+        "ROLE_UPDATE": "Rôle Mis à Jour",
+        "ROLE_DELETE": "Rôle Supprimé",
+        "ROLE_DUPLICATE": "Rôle Dupliqué"
+        
+       
+    },
+    "descriptions": {
+        "SIGNIN": "L'utilisateur <strong>{{fullname}}</strong>  s'est connecté.",
+        "SIGNUP": "L'utilisateur <strong>{{fullname}}</strong> s'est inscrit.",
+        "SIGNOUT": "L'utilisateur <strong>{{fullname}}</strong> s'est déconnecté.",
+        
+        "USER_CREATE": "L'utilisateur <strong>{{firstName}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "USER_UPDATE": "L'utilisateur <strong>{{firstName}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "USER_DELETE": "L'utilisateur <strong>{{firstName}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+        "USER_ACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été activé par <strong>{{user.username}}</strong>.",
+        "USER_DEACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été désactivé par <strong>{{user.username}}</strong>.",
+        "USER_APPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été approuvé par <strong>{{user.username}}</strong>.",
+        "USER_DISAPPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été désapprouvé par <strong>{{user.username}}</strong>.",
+        
+        "ROLE_CREATE": "Le rôle <strong>{{role.name}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "ROLE_UPDATE": "Le rôle <strong>{{role.name}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "ROLE_DELETE": "Le rôle <strong>{{role.name}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+        "ROLE_DUPLICATE": "Le rôle <strong>{{role.name}}</strong> existe déjà (créé par <strong>{{user.username}}</strong>)."
+        
+    }
+}

@@ -3,6 +3,7 @@ import { role } from "./roles";
 import { user } from "./users";
 import { deviceInfo } from "./deviceInfos";
 import { upload } from "./upload";
+import { logger } from "./logger";
 
 export const admin = {
   upload,
@@ -10,4 +11,5 @@ export const admin = {
   role,
   user,
   deviceInfo,
+  logger,
 };

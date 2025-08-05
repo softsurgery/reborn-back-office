@@ -1,6 +1,7 @@
 export * from "./auth";
 
 export * from "./content";
+export * from "./logger";
 
 export * from "./user-management";
 export * from "./upload";
