@@ -3,7 +3,10 @@
         "SIGNIN": "Utilisateur Connecté",
         "SIGNUP": "Utilisateur Enregistré",
         "SIGNOUT": "Utilisateur Déconnecté",
-        
+      
+        "CLIENT_SIGNIN": "Client Connecté",
+        "CLIENT_SIGNUP": "Client Enregistré",
+      
         "USER_CREATE": "Nouvel Utilisateur Créé",
         "USER_UPDATE": "Détails de l'Utilisateur Mis à Jour",
         "USER_DELETE": "Compte Utilisateur Supprimé",
@@ -11,19 +14,30 @@
         "USER_DEACTIVATE": "Compte Utilisateur Désactivé",
         "USER_APPROVE": "Utilisateur Approuvé",
         "USER_DISAPPROVE": "Utilisateur Désapprouvé",
-        
+      
         "ROLE_CREATE": "Rôle Créé",
         "ROLE_UPDATE": "Rôle Mis à Jour",
         "ROLE_DELETE": "Rôle Supprimé",
-        "ROLE_DUPLICATE": "Rôle Dupliqué"
-        
-       
+        "ROLE_DUPLICATE": "Rôle Dupliqué",
+      
+        "BUG_CREATE": "Rapport de Bug Créé",
+        "BUG_DELETE": "Rapport de Bug Supprimé",
+      
+        "FEEDBACK_CREATE": "Retour Soumis",
+        "FEEDBACK_DELETE": "Retour Supprimé",
+      
+        "REGION_CREATE": "Région Créée",
+        "REGION_UPDATE": "Région Mise à Jour",
+        "REGION_DELETE": "Région Supprimée"
     },
     "descriptions": {
-        "SIGNIN": "L'utilisateur <strong>{{fullname}}</strong>  s'est connecté.",
-        "SIGNUP": "L'utilisateur <strong>{{fullname}}</strong> s'est inscrit.",
+        "SIGNIN": "L'utilisateur <strong>{{fullname}}</strong> s'est connecté.",
+        "SIGNUP": "L'utilisateur <strong>{{fullname}}</strong> s'est enregistré.",
         "SIGNOUT": "L'utilisateur <strong>{{fullname}}</strong> s'est déconnecté.",
-        
+      
+        "CLIENT_SIGNIN": "Le client <strong>{{clientName}}</strong> s'est connecté.",
+        "CLIENT_SIGNUP": "Le client <strong>{{clientName}}</strong> s'est enregistré.",
+      
         "USER_CREATE": "L'utilisateur <strong>{{firstName}}</strong> a été créé par <strong>{{user.username}}</strong>.",
         "USER_UPDATE": "L'utilisateur <strong>{{firstName}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
         "USER_DELETE": "L'utilisateur <strong>{{firstName}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
@@ -31,11 +45,20 @@
         "USER_DEACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été désactivé par <strong>{{user.username}}</strong>.",
         "USER_APPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été approuvé par <strong>{{user.username}}</strong>.",
         "USER_DISAPPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été désapprouvé par <strong>{{user.username}}</strong>.",
-        
-        "ROLE_CREATE": "Le rôle <strong>{{role.name}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "ROLE_UPDATE": "Le rôle <strong>{{role.name}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "ROLE_DELETE": "Le rôle <strong>{{role.name}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-        "ROLE_DUPLICATE": "Le rôle <strong>{{role.name}}</strong> existe déjà (créé par <strong>{{user.username}}</strong>)."
-        
+      
+        "ROLE_CREATE": "Le rôle <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "ROLE_UPDATE": "Le rôle <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "ROLE_DELETE": "Le rôle <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+        "ROLE_DUPLICATE": "Le rôle <strong>{{label}}</strong> existe déjà (créé par <strong>{{user.username}}</strong>).",
+      
+        "BUG_CREATE": "Le rapport de bug <strong>{{bug.title}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "BUG_DELETE": "Le rapport de bug <strong>{{bug.title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+      
+        "FEEDBACK_CREATE": "Le retour <strong>{{feedback.title}}</strong> a été soumis par <strong>{{user.username}}</strong>.",
+        "FEEDBACK_DELETE": "Le retour <strong>{{feedback.title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+      
+        "REGION_CREATE": "La région <strong>{{region.name}}</strong> a été créée par <strong>{{user.username}}</strong>.",
+        "REGION_UPDATE": "La région <strong>{{region.name}}</strong> a été mise à jour par <strong>{{user.username}}</strong>.",
+        "REGION_DELETE": "La région <strong>{{region.name}}</strong> a été supprimée par <strong>{{user.username}}</strong>."
     }
 }

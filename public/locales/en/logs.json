@@ -3,7 +3,10 @@
         "SIGNIN": "User Signed In",
         "SIGNUP": "User Registered",
         "SIGNOUT": "User Signed Out",
-        
+       
+        "CLIENT_SIGNIN": "Client Signed In",
+        "CLIENT_SIGNUP": "Client Registered",
+       
         "USER_CREATE": "New User Created",
         "USER_UPDATE": "User Details Updated",
         "USER_DELETE": "User Account Deleted",
@@ -11,16 +14,29 @@
         "USER_DEACTIVATE": "User Account Deactivated",
         "USER_APPROVE": "User Approved",
         "USER_DISAPPROVE": "User Disapproved",
-        
+       
         "ROLE_CREATE": "Role Created",
         "ROLE_UPDATE": "Role Updated",
         "ROLE_DELETE": "Role Deleted",
-        "ROLE_DUPLICATE": "Role Duplicated"
+        "ROLE_DUPLICATE": "Role Duplicated",
+       
+        "BUG_CREATE": "Bug Report Created",
+        "BUG_DELETE": "Bug Report Deleted",
+       
+        "FEEDBACK_CREATE": "Feedback Submitted",
+        "FEEDBACK_DELETE": "Feedback Deleted",
+       
+        "REGION_CREATE": "Region Created",
+        "REGION_UPDATE": "Region Updated",
+        "REGION_DELETE": "Region Deleted"
     },
     "descriptions": {
         "SIGNIN": "User <strong>{{fullname}}</strong> has signed in.",
         "SIGNUP": "User <strong>{{fullname}}</strong> has signed up.",
         "SIGNOUT": "User <strong>{{fullname}}</strong> has signed out.",
+       
+        "CLIENT_SIGNIN": "Client <strong>{{clientName}}</strong> has signed in.",
+        "CLIENT_SIGNUP": "Client <strong>{{clientName}}</strong> has registered.",
        
         "USER_CREATE": "User <strong>{{firstName}}</strong> has been created by <strong>{{user.username}}</strong>.",
         "USER_UPDATE": "User <strong>{{firstName}}</strong> has been updated by <strong>{{user.username}}</strong>.",
@@ -33,6 +49,16 @@
         "ROLE_CREATE": "Role <strong>{{label}}</strong> has been created by <strong>{{user.username}}</strong>.",
         "ROLE_UPDATE": "Role <strong>{{label}}</strong> has been updated by <strong>{{user.username}}</strong>.",
         "ROLE_DELETE": "Role <strong>{{label}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-        "ROLE_DUPLICATE": "Role <strong>{{label}}</strong> already exists by <strong>{{user.username}}</strong>."
+        "ROLE_DUPLICATE": "Role <strong>{{label}}</strong> already exists by <strong>{{user.username}}</strong>.",
+       
+        "BUG_CREATE": "Bug report <strong>{{bug.title}}</strong> has been created by <strong>{{user.username}}</strong>.",
+        "BUG_DELETE": "Bug report <strong>{{bug.title}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
+       
+        "FEEDBACK_CREATE": "Feedback <strong>{{feedback.title}}</strong> has been submitted by <strong>{{user.username}}</strong>.",
+        "FEEDBACK_DELETE": "Feedback <strong>{{feedback.title}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
+       
+        "REGION_CREATE": "Region <strong>{{region.name}}</strong> has been created by <strong>{{user.username}}</strong>.",
+        "REGION_UPDATE": "Region <strong>{{region.name}}</strong> has been updated by <strong>{{user.username}}</strong>.",
+        "REGION_DELETE": "Region <strong>{{region.name}}</strong> has been deleted by <strong>{{user.username}}</strong>."
     }
 }
