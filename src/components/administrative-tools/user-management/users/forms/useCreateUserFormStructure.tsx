@@ -12,6 +12,7 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { UserStore } from "@/hooks/stores/useUserStore";
+import { Gender } from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface useCreateUserFormStructureProps {
@@ -172,7 +173,7 @@ export const useCreateUserFormStructure = ({
     },
   };
 
-  const userFormStructure: FormStructure = {
+  const userCreateFormStructure: FormStructure = {
     title: "",
     description: "",
     orientation: "horizontal",
@@ -268,10 +269,10 @@ export const useCreateUserFormStructure = ({
     description: "Choose your gender",
     error: userStore.createDtoErrors?.gender?.[0],
     props: {
-      options: [
-        { value: "male", label: "Male" },
-        { value: "female", label: "Female" },
-      ],
+      options: Object.entries(Gender).map(([value, label]) => ({
+        value,
+        label,
+      })),
       value: userStore.createDto?.profile?.gender,
       onValueChange: (value) => {
         userStore.setNested("createDto.profile.gender", value);
@@ -315,7 +316,7 @@ export const useCreateUserFormStructure = ({
     },
   };
 
-  const profileFormStructure: FormStructure = {
+  const profileCreateFormStructure: FormStructure = {
     title: "Profile Information",
     description: "Please fill out your profile details",
     orientation: "horizontal",
@@ -343,7 +344,7 @@ export const useCreateUserFormStructure = ({
   };
 
   return {
-    userFormStructure,
-    profileFormStructure,
+    userCreateFormStructure,
+    profileCreateFormStructure,
   };
 };

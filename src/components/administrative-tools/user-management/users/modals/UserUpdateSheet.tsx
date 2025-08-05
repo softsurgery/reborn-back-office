@@ -26,20 +26,18 @@ export const useUserUpdateSheet = ({
         {t("userManagement.sheet.updateUserTitle")}
       </div>
     ),
-    description:
-      t("userManagement.sheet.updateUserDescription"),
+    description: t("userManagement.sheet.updateUserDescription"),
     children: (
       <UserUpdateForm
-        userCallback={updateUser}
-        cancelCallback={() => {
-          closeUpdateUserSheet?.();
-          resetUser?.();
-        }}
-        isPending={isUpdatePending}
+        className="my-4"
+        updateUser={updateUser}
+        isUpdatePending={isUpdatePending}
       />
     ),
     className: "min-w-[50vw] flex flex-col flex-1 overflow-hidden",
-    onToggle: resetUser,
+    onToggle: () => {
+      resetUser?.();
+    },
   });
 
   return {

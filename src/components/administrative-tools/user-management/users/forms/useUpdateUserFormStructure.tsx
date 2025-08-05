@@ -4,21 +4,27 @@ import {
   Field,
   FieldVariant,
   FormStructure,
+  NumberFieldProps,
   PasswordFieldProps,
   SelectFieldProps,
   SelectOption,
+  SwitchFieldProps,
+  TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { UserStore } from "@/hooks/stores/useUserStore";
+import { Gender } from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface useUpdateUserFormStructureProps {
   userStore: UserStore;
+  regions: SelectOption[];
   roles: SelectOption[];
 }
 
 export const useUpdateUserFormStructure = ({
   userStore,
+  regions,
   roles,
 }: useUpdateUserFormStructureProps) => {
   const { t: tUser } = useTranslation("user-management");
@@ -118,7 +124,9 @@ export const useUpdateUserFormStructure = ({
     label: `${tUser("userManagement.forms.requirePasswordCheckTitle")}`,
     variant: FieldVariant.CHECK,
     required: true,
-    description: `${tUser("userManagement.forms.requirePasswordCheckDescription")}`,
+    description: `${tUser(
+      "userManagement.forms.requirePasswordCheckDescription"
+    )}`,
     props: {
       checked: userStore.setManualPassword,
       onCheckedChange: (e) => {
@@ -184,13 +192,13 @@ export const useUpdateUserFormStructure = ({
     },
   };
 
-  const userFormStructure: FormStructure = {
+  const userUpdateFormStructure: FormStructure = {
     title: "",
     description: "",
     orientation: "horizontal",
     fieldsets: [
       {
-        title: "General Information",
+        title: `${tUser("userManagement.forms.step1FieldTitle")}`,
         description: "",
         includeHeader: true,
         rows: [
@@ -203,7 +211,7 @@ export const useUpdateUserFormStructure = ({
         ],
       },
       {
-        title: "Account Information",
+        title: `${tUser("userManagement.forms.step1Title")}`,
         description: "",
         includeHeader: true,
         rows: [
@@ -219,7 +227,145 @@ export const useUpdateUserFormStructure = ({
     ],
   };
 
+  const phoneField: Field<NumberFieldProps> = {
+    id: "phone",
+    label: `${tUser("userManagement.forms.phone")}`,
+    variant: FieldVariant.NUMBER,
+    required: false,
+    placeholder: `${tUser("userManagement.forms.phonePlaceholder")}`,
+    description: `${tUser("userManagement.forms.phoneDescription")}`,
+    error: userStore.updateDtoErrors?.phone?.[0],
+    props: {
+      value: Number(userStore.updateDto?.profile?.phone) || undefined,
+      onChange: (value: number) => {
+        userStore.setNested("updateDto.profile.phone", value.toString());
+        userStore.setNested("updateDtoErrors.phone", []);
+      },
+    },
+  };
+
+  const cinField: Field<NumberFieldProps> = {
+    id: "cin",
+    label: `${tUser("userManagement.forms.CIN")}`,
+    variant: FieldVariant.NUMBER,
+    required: true,
+    placeholder: `${tUser("userManagement.forms.CINPlaceholder")}`,
+    description: `${tUser("userManagement.forms.CINDescription")}`,
+    error: userStore.updateDtoErrors?.cin?.[0],
+    props: {
+      value: Number(userStore.updateDto?.profile?.cin) || undefined,
+      onChange: (value: number) => {
+        userStore.setNested("updateDto.profile.cin", value.toString());
+        userStore.setNested("updateDtoErrors.cin", []);
+      },
+    },
+  };
+
+  const bioField: Field<TextareaFieldProps> = {
+    id: "bio",
+    label: `${tUser("userManagement.forms.bio")}`,
+    variant: FieldVariant.TEXTAREA,
+    required: false,
+    placeholder: `${tUser("userManagement.forms.bioPlaceholder")}`,
+    description: `${tUser("userManagement.forms.bioDescription")}`,
+    error: userStore.updateDtoErrors?.bio?.[0],
+    props: {
+      value: userStore.updateDto?.profile?.bio,
+      onChange: (value) => {
+        userStore.setNested("updateDto.profile.bio", value);
+        userStore.setNested("updateDtoErrors.bio", []);
+      },
+      rows: 5,
+    },
+  };
+
+  const genderField: Field<SelectFieldProps> = {
+    id: "gender",
+    label: `${tUser("userManagement.forms.gender")}`,
+    variant: FieldVariant.SELECT,
+    required: false,
+    placeholder: `${tUser("userManagement.forms.genderPlaceholder")}`,
+    description: `${tUser("userManagement.forms.genderDescription")}`,
+    error: userStore.updateDtoErrors?.gender?.[0],
+    props: {
+      options: Object.entries(Gender).map(([value, label]) => ({
+        value,
+        label,
+      })),
+      value: userStore.updateDto?.profile?.gender?.toString(),
+      onValueChange: (value) => {
+        userStore.setNested("updateDto.profile.gender", value as Gender);
+        userStore.setNested("updateDtoErrors.gender", []);
+      },
+    },
+  };
+
+  const isPrivateField: (defaultChecked: boolean) => Field<SwitchFieldProps> = (
+    defaultChecked
+  ) => ({
+    id: "isPrivate",
+    label: `${tUser("userManagement.forms.isPrivate")}`,
+    variant: FieldVariant.SWITCH,
+    required: true,
+    placeholder: `${tUser("userManagement.forms.isPrivatePlaceholder")}`,
+    description: `${tUser("userManagement.forms.isPrivateDescription")}`,
+    props: {
+      defaultChecked,
+      checked: userStore.updateDto?.profile?.isPrivate,
+      onCheckedChange: (value) => {
+        userStore.setNested("updateDto.profile.isPrivate", value);
+        userStore.setNested("updateDtoErrors.isPrivate", []);
+      },
+    },
+  });
+
+  const regionField: Field<SelectFieldProps> = {
+    id: "region",
+    label: `${tUser("userManagement.forms.region")}`,
+    variant: FieldVariant.SELECT,
+    required: false,
+    placeholder: `${tUser("userManagement.forms.regionPlaceholder")}`,
+    description: `${tUser("userManagement.forms.regionDescription")}`,
+    error: userStore.updateDtoErrors?.regionId?.[0],
+    props: {
+      options: regions,
+      value: userStore.updateDto?.profile?.regionId?.toString(),
+      onValueChange: (value) => {
+        userStore.setNested("updateDto.profile.regionId", Number(value));
+        userStore.setNested("updateDtoErrors.regionId", []);
+      },
+    },
+  };
+
+  const profileUpdateFormStructure: FormStructure = {
+    title: `${tUser("userManagement.forms.step2Title")}`,
+    description: `${tUser("userManagement.forms.step2Description")}`,
+    orientation: "horizontal",
+    fieldsets: [
+      {
+        title: `${tUser("userManagement.forms.step2FieldTitle")}`,
+        description: "",
+        includeHeader: true,
+        rows: [
+          {
+            fields: [phoneField, cinField],
+          },
+          {
+            fields: [genderField, regionField],
+          },
+          {
+            fields: [bioField],
+          },
+          {
+            fields: [isPrivateField(!!userStore.updateDto?.profile?.isPrivate)],
+          },
+        ],
+      },
+    ],
+  };
+
   return {
-    userFormStructure,
+    userUpdateFormStructure,
+    profileUpdateFormStructure,
   };
 };

@@ -16,6 +16,7 @@ import { useUserStore } from "@/hooks/stores/useUserStore";
 import {
   CreateUserDto,
   DataTableConfig,
+  Gender,
   ResponseUserDto,
   ServerErrorResponse,
   UpdateUserDto,
@@ -219,7 +220,7 @@ export default function Users({ className }: UsersProps) {
   const { updateUserSheet, openUpdateUserSheet, closeUpdateUserSheet } =
     useUserUpdateSheet({
       updateUser: handleUpdateSubmit,
-      isUpdatePending: isUpdatePending,
+      isUpdatePending,
       resetUser: handleReset,
     });
 
@@ -317,7 +318,17 @@ export default function Users({ className }: UsersProps) {
         email: user.email,
         password: "",
         roleId: user.roleId,
-      });
+        profile: {
+          phone: user.profile?.phone,
+          cin: user.profile?.cin,
+          regionId: user.profile?.regionId,
+          bio: user.profile?.bio,
+          gender: user.profile?.gender as Gender,
+          isPrivate: user.profile?.isPrivate,
+        }
+      }
+    );
+    console.log(user.profile?.isPrivate);
     },
   };
 

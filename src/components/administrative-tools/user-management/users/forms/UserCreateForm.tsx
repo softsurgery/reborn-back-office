@@ -43,7 +43,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
   const userStore = useUserStore();
   const { regions, isFetchRegionsPending } = useRegions();
   const { roles, isFetchRolesPending } = useRoles();
-  const { userFormStructure, profileFormStructure } =
+  const { userCreateFormStructure, profileCreateFormStructure } =
     useCreateUserFormStructure({
       userStore,
       regions: mapToSelectOptions({
@@ -147,16 +147,16 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
               </Stepper.Navigation>
 
               {/* Content */}
-              {isFetchRegionsPending ? (
+              {isFetchRegionsPending && isFetchRolesPending ? (
                 <Spinner />
               ) : (
                 <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
                   <div className="flex-1 overflow-auto px-2">
                     {methods.current.id === "user-information" && (
-                      <FormBuilder structure={userFormStructure} />
+                      <FormBuilder structure={userCreateFormStructure} />
                     )}
                     {methods.current.id === "profile-information" && (
-                      <FormBuilder structure={profileFormStructure} />
+                      <FormBuilder structure={profileCreateFormStructure} />
                     )}
                   </div>
                 </div>
