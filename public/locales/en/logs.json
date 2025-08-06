@@ -51,11 +51,11 @@
         "ROLE_DELETE": "Role <strong>{{label}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
         "ROLE_DUPLICATE": "Role <strong>{{label}}</strong> already exists by <strong>{{user.username}}</strong>.",
        
-        "BUG_CREATE": "Bug report <strong>{{bug.title}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "BUG_DELETE": "Bug report <strong>{{bug.title}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
+        "BUG_CREATE": "Bug report <strong>{{variant}}</strong> has been created by <strong>{{user.username}}</strong>.",
+        "BUG_DELETE": "Bug report <strong>{{variant}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
        
-        "FEEDBACK_CREATE": "Feedback <strong>{{feedback.title}}</strong> has been submitted by <strong>{{user.username}}</strong>.",
-        "FEEDBACK_DELETE": "Feedback <strong>{{feedback.title}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
+        "FEEDBACK_CREATE": "Feedback <strong>{{category}}</strong> has been submitted by <strong>{{user.username}}</strong>.",
+        "FEEDBACK_DELETE": "Feedback <strong>{{category}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
        
         "REGION_CREATE": "Region <strong>{{region.name}}</strong> has been created by <strong>{{user.username}}</strong>.",
         "REGION_UPDATE": "Region <strong>{{region.name}}</strong> has been updated by <strong>{{user.username}}</strong>.",

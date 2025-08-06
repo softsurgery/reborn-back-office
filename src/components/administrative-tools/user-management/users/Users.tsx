@@ -198,7 +198,6 @@ export default function Users({ className }: UsersProps) {
       ...data,
       confirmPassword: userStore.confirmPassword,
     });
-    console.log(result);
     if (!result.success) {
       userStore.set("updateDtoErrors", result.error.flatten().fieldErrors);
     } else {

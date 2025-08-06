@@ -50,13 +50,13 @@
         "ROLE_UPDATE": "Le rôle <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
         "ROLE_DELETE": "Le rôle <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
         "ROLE_DUPLICATE": "Le rôle <strong>{{label}}</strong> existe déjà (créé par <strong>{{user.username}}</strong>).",
-      
-        "BUG_CREATE": "Le rapport de bug <strong>{{bug.title}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "BUG_DELETE": "Le rapport de bug <strong>{{bug.title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-      
-        "FEEDBACK_CREATE": "Le retour <strong>{{feedback.title}}</strong> a été soumis par <strong>{{user.username}}</strong>.",
-        "FEEDBACK_DELETE": "Le retour <strong>{{feedback.title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-      
+
+        "BUG_CREATE": "Le rapport de bug <strong>{{variant}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "BUG_DELETE": "Le rapport de bug <strong>{{variant}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+
+        "FEEDBACK_CREATE": "Le retour <strong>{{category}}</strong> a été soumis par <strong>{{user.username}}</strong>.",
+        "FEEDBACK_DELETE": "Le retour <strong>{{category}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+
         "REGION_CREATE": "La région <strong>{{region.name}}</strong> a été créée par <strong>{{user.username}}</strong>.",
         "REGION_UPDATE": "La région <strong>{{region.name}}</strong> a été mise à jour par <strong>{{user.username}}</strong>.",
         "REGION_DELETE": "La région <strong>{{region.name}}</strong> a été supprimée par <strong>{{user.username}}</strong>."
