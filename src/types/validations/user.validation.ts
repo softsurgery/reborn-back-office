@@ -138,6 +138,11 @@ const profileSchema = z.object({
       message: "userManagement.validation.bioTooLong",
     })
     .optional(),
+  regionId: z
+    .number({
+      message: "Region is required.",
+    })
+    .optional(),
   isPrivate: z.boolean().optional(),
 });
 
