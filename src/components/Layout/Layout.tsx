@@ -69,7 +69,7 @@ export const Layout = ({ children, className }: LayoutProps) => {
                   {/* Sidebar */}
                   <AppSidebar />
                   {/* Header , Main & Footer */}
-                  <div className="flex flex-col flex-1 overflow-hidden">
+                  <div className="flex flex-col flex-1 overflow-hidden bg-background">
                     <Header />
                     {(title || description) && (
                       <PageHeader
