@@ -20,13 +20,14 @@ import { Field, SelectOption } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
 import { PasswordField } from "../PasswordField";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface FieldBuilderProps {
   field?: Field<any>;
 }
 
 export const FieldBuilder = ({ field }: FieldBuilderProps) => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { t } = useTranslation("common");
 
   switch (field?.variant) {
@@ -225,6 +226,39 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
               </span>
             </div>
           )}
+        </div>
+      );
+    case "image":
+      return (
+        <div
+          className={cn("flex flex-col gap-2 items-center", field?.className)}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                field?.props?.onFileChange?.(file);
+                if (field.props?.onUpload) {
+                  field.props.onUpload(file, (percent: number) => {
+                    field.props.progress = percent;
+                  });
+                }
+              }
+            }}
+          />
+          <Avatar
+            className="w-24 h-24 cursor-pointer hover:opacity-80 transition"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <AvatarImage
+              src={field.props?.value || "https://github.com/shadcn.png"}
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
         </div>
       );
     case "custom":

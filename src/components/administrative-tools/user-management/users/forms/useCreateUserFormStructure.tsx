@@ -3,6 +3,7 @@ import {
   Field,
   FieldVariant,
   FormStructure,
+  ImageFieldProps,
   NumberFieldProps,
   PasswordFieldProps,
   SelectFieldProps,
@@ -27,6 +28,18 @@ export const useCreateUserFormStructure = ({
   roles,
 }: useCreateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
+
+  //photo
+  const photoField: Field<ImageFieldProps> = {
+    id: "photo",
+    label: t("userManagement.forms.photo"),
+    variant: FieldVariant.IMAGE,
+    required: true,
+    description: t("userManagement.forms.photoDescription"),
+    error: t(userStore.createDtoErrors?.photo?.[0]),
+    props: {},
+  };
+
   //first name
   const firstNameField: Field<TextFieldProps> = {
     id: "firstname",
@@ -183,6 +196,7 @@ export const useCreateUserFormStructure = ({
         description: "",
         includeHeader: true,
         rows: [
+          { fields: [photoField] },
           {
             fields: [firstNameField, lastNameField],
           },

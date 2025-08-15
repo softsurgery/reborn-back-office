@@ -15,6 +15,20 @@ export const useUserColumns = (
   const { t: tCommon } = useTranslation("common");
   return [
     {
+      accessorKey: "Photo",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Photo"
+          attribute="Photo"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => (
+        <DataTableCell variant={DataTableCellVariant.AVATAR} />
+      ),
+    },
+    {
       accessorKey: `${t("userManagement.table.username")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
