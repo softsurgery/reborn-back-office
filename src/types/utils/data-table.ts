@@ -33,6 +33,7 @@ export interface DataTableConfig<T> {
 }
 
 export enum DataTableCellVariant {
+  AVATAR = "avatar",
   TEXT = "text",
   NUMBER = "number",
   DATE = "date",

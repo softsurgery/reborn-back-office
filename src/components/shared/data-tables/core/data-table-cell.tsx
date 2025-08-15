@@ -1,4 +1,6 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DataTableCellVariant } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface DataTableCellProps {
   className?: string;
@@ -25,6 +27,15 @@ export default function DataTableCell({
         <div className="text-muted-foreground">
           {value?.toLocaleTimeString()}
         </div>
+      </div>
+    );
+  } else if (variant === DataTableCellVariant.AVATAR) {
+    return (
+      <div className={cn("p-2", className)}>
+        <Avatar>
+          <AvatarImage src={value || "https://github.com/shadcn.png"} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
       </div>
     );
   }
