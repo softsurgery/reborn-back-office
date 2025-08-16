@@ -32,12 +32,10 @@ export default function DataTableCell({
     );
   } else if (variant === DataTableCellVariant.AVATAR) {
     return (
-      <div className={cn(className)}>
-        <Avatar>
-          <AvatarImage src={value?.url} />
-          <AvatarFallback>{value?.fallback}</AvatarFallback>
-        </Avatar>
-      </div>
+      <Avatar className={cn("w-24 h-24", className)}>
+        <AvatarImage src={value?.url} />
+        <AvatarFallback>{value?.fallback}</AvatarFallback>
+      </Avatar>
     );
   }
 }

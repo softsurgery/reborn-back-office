@@ -40,6 +40,7 @@ export const useCreateUserFormStructure = ({
     id: "photo",
     label: t("userManagement.forms.photo"),
     variant: FieldVariant.IMAGE,
+    className: "bg-muted border-2 w-40 h-40",
     required: true,
     description: t("userManagement.forms.photoDescription"),
     error: t(userStore.createDtoErrors?.photo?.[0]),
@@ -47,7 +48,7 @@ export const useCreateUserFormStructure = ({
       image: userStore.picture,
       progress: userStore.progress,
       placeholder: "/unknown-user.jpg",
-      disabled: !!isUploadPending,
+      disabled: isUploadPending,
       fallback: identifyUserAvatar(userStore.response),
       onFileChange: (value) => {
         userStore.set("picture", value);

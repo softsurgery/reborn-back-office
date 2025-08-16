@@ -40,6 +40,7 @@ export const useUpdateUserFormStructure = ({
     id: "photo",
     label: t("userManagement.forms.photo"),
     variant: FieldVariant.IMAGE,
+    className: "bg-muted border-2 w-40 h-40",
     required: true,
     description: t("userManagement.forms.photoDescription"),
     error: t(userStore.updateDtoErrors?.photo?.[0]),

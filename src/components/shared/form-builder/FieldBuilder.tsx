@@ -228,9 +228,7 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
       );
     case "image":
       return (
-        <div
-          className={cn("flex flex-col gap-2 items-center", field?.className)}
-        >
+        <div className={cn("flex flex-col gap-2 items-center")}>
           <input
             {...field.props}
             id={field.id}
