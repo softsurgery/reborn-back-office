@@ -1,5 +1,4 @@
-import React, { use } from "react";
-import { Button } from "@/components/ui/button";
+import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
@@ -15,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { Eye, EyeOff } from "lucide-react";
 import { Field, SelectOption } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
@@ -234,6 +232,7 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
           className={cn("flex flex-col gap-2 items-center", field?.className)}
         >
           <input
+            {...field.props}
             id={field.id}
             type="file"
             accept={field.props?.accept || "image/*"}
@@ -252,7 +251,10 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
             }}
           />
           <Avatar
-            className="w-24 h-24 cursor-pointer hover:opacity-80 transition"
+            className={cn(
+              "w-24 h-24 cursor-pointer hover:opacity-80 transition",
+              field?.className
+            )}
             onClick={() => fileInputRef.current?.click()}
           >
             <AvatarImage
