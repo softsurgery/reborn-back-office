@@ -1,3 +1,4 @@
+import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,33 @@ import { DataTableCellVariant, ResponseUserDto } from "@/types";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { useTranslation } from "react-i18next";
 import { api } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import { identifyUserAvatar } from "@/lib/user.utils";
+
+const UserAvatarCell: React.FC<{
+  pictureId?: number;
+  fallback?: string;
+  type?: string;
+}> = ({ pictureId, fallback, type = "image/*" }) => {
+  const { data: blob } = useQuery({
+    queryKey: ["upload", pictureId],
+    queryFn: () => api.upload.getUploadById(pictureId!),
+    enabled: !!pictureId,
+  });
+
+  const url = React.useMemo(() => {
+    if (!blob) return undefined;
+    return window.URL.createObjectURL(new Blob([blob], { type }));
+  }, [blob, type]);
+
+  return (
+    <DataTableCell
+      variant={DataTableCellVariant.AVATAR}
+      value={{ url: url || "", fallback }}
+      className="p-2"
+    />
+  );
+};
 
 export const useUserColumns = (
   context: any,
@@ -26,13 +54,10 @@ export const useUserColumns = (
         />
       ),
       cell: ({ row }) => (
-        <DataTableCell
-          variant={DataTableCellVariant.AVATAR}
-          value={
-            row.original.profile.pictureId
-              ? api.upload.getUploadById(row.original.profile.pictureId)
-              : "/unknown-user.jpg"
-          }
+        <UserAvatarCell
+          pictureId={row.original?.profile?.pictureId}
+          fallback={identifyUserAvatar(row.original)}
+          type={row.original?.profile?.picture?.mimetype}
         />
       ),
     },

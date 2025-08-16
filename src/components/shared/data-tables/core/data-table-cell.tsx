@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DataTableCellVariant } from "@/types";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 interface DataTableCellProps {
   className?: string;
@@ -31,10 +32,12 @@ export default function DataTableCell({
     );
   } else if (variant === DataTableCellVariant.AVATAR) {
     return (
-      <div className={cn("p-2", className)}>
+      <div className={cn(className)}>
         <Avatar>
-          <AvatarImage src={value} />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage
+            src={value?.url}
+          />
+          <AvatarFallback>{value?.fallback}</AvatarFallback>
         </Avatar>
       </div>
     );
