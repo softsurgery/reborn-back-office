@@ -14,7 +14,8 @@ import {
   profileSchema,
 } from "@/types/validations/user.validation";
 import { Spinner } from "@/components/shared/Spinner";
-import { CreateUserDto } from "@/types";
+import { CreateUserDto, Upload } from "@/types";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
 
 const steps = [
   {
@@ -43,6 +44,16 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
   const userStore = useUserStore();
   const { regions, isFetchRegionsPending } = useRegions();
   const { roles, isFetchRolesPending } = useRoles();
+
+  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      userStore.setNested("createDto.profile.pictureId", response?.[0]?.id);
+    },
+    onError: (error: any) => {
+      userStore.setNested("createDtoErrors.pictureId", [error.message]);
+    },
+  });
+
   const { userCreateFormStructure, profileCreateFormStructure } =
     useCreateUserFormStructure({
       userStore,
@@ -56,6 +67,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
         labelKey: "label",
         valueKey: "id",
       }),
+      uploadPicture,
     });
 
   const validateStep = React.useCallback(

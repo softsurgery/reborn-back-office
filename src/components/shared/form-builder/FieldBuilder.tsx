@@ -234,16 +234,17 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
           className={cn("flex flex-col gap-2 items-center", field?.className)}
         >
           <input
+            id={field.id}
             type="file"
-            accept="image/*"
-            ref={fileInputRef}
+            accept={field.props?.accept || "image/*"}
             className="hidden"
+            ref={fileInputRef}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const file = e.target.files?.[0];
               if (file) {
                 field?.props?.onFileChange?.(file);
-                if (field.props?.onUpload) {
-                  field.props.onUpload(file, (percent: number) => {
+                if (field?.props?.onUpload) {
+                  field?.props?.onUpload(file, (percent: number) => {
                     field.props.progress = percent;
                   });
                 }
@@ -255,7 +256,13 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
             onClick={() => fileInputRef.current?.click()}
           >
             <AvatarImage
-              src={field.props?.value || "https://github.com/shadcn.png"}
+              src={
+                field.props?.image
+                  ? typeof field.props.image === "string"
+                    ? field.props.image
+                    : URL.createObjectURL(field.props.image)
+                  : field.props?.placeholder
+              }
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>

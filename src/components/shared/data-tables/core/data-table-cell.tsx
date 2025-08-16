@@ -33,7 +33,7 @@ export default function DataTableCell({
     return (
       <div className={cn("p-2", className)}>
         <Avatar>
-          <AvatarImage src={value || "https://github.com/shadcn.png"} />
+          <AvatarImage src={value} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>

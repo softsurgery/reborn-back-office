@@ -20,12 +20,14 @@ interface useCreateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
+  uploadPicture: any;
 }
 
 export const useCreateUserFormStructure = ({
   userStore,
   regions,
   roles,
+  uploadPicture,
 }: useCreateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
 
@@ -37,7 +39,25 @@ export const useCreateUserFormStructure = ({
     required: true,
     description: t("userManagement.forms.photoDescription"),
     error: t(userStore.createDtoErrors?.photo?.[0]),
-    props: {},
+    props: {
+      image: userStore.picture,
+      progress: userStore.progress,
+      placeholder: "/unknown-user.jpg",
+      onFileChange: (value) => {
+        userStore.set("picture", value);
+        userStore.setNested("createDtoErrors.pictureId", []);
+      },
+      onUpload: (file, onProgress) => {
+        userStore.set("progress", 0);
+        uploadPicture({
+          files: [file],
+          onProgress: (progress: number) => {
+            userStore.set("progress", progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
   };
 
   //first name

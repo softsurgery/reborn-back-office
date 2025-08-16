@@ -131,11 +131,11 @@ export interface TextareaFieldProps extends BaseFieldProps {
 }
 
 export interface ImageFieldProps extends BaseFieldProps {
-  value?: string;
-  onChange?: (e: string) => void;
+  image?: File | null;
   accept?: string;
   progress?: number;
-  onFileChange?: (e: string) => void;
+  placeholder?: string;
+  onFileChange?: (e: File) => void;
   onUpload?: (file: File, onProgress: (percent: number) => void) => void;
 }
 
@@ -143,7 +143,7 @@ export interface SingleFileFieldProps extends BaseFieldProps {
   file?: File | null;
   accept?: string;
   progress?: number;
-  onFileChange?: (e: string) => void;
+  onFileChange?: (e: File) => void;
   onUpload?: (file: File, onProgress: (percent: number) => void) => void;
 }
 

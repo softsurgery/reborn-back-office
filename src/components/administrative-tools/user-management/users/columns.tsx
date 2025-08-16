@@ -7,6 +7,7 @@ import { DataTableRowActions } from "@/components/shared/data-tables/data-table-
 import { DataTableCellVariant, ResponseUserDto } from "@/types";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { useTranslation } from "react-i18next";
+import { api } from "@/api";
 
 export const useUserColumns = (
   context: any,
@@ -25,7 +26,14 @@ export const useUserColumns = (
         />
       ),
       cell: ({ row }) => (
-        <DataTableCell variant={DataTableCellVariant.AVATAR} />
+        <DataTableCell
+          variant={DataTableCellVariant.AVATAR}
+          value={
+            row.original.profile.pictureId
+              ? api.upload.getUploadById(row.original.profile.pictureId)
+              : "/unknown-user.jpg"
+          }
+        />
       ),
     },
     {

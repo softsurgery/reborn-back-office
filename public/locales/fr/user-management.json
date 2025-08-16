@@ -36,7 +36,10 @@
             "step2Title": "Informations du Profil",
             "step2FieldTitle": "Informations du Profil",
             "step2Description": "Remplissez les détails du profil de l'utilisateur.",
-            
+
+            "photo": "Photo de Profil",
+            "photoDescription": "Photo de profil de l'utilisateur.",
+
             "username": "Nom d'utilisateur",
             "usernamePlaceholder": "ex. johndoe",
             "usernameDescription": "Utilisé pour se connecter à la plateforme.",

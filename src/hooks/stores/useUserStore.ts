@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CreateUserDto, Gender, ResponseUserDto, UpdateUserDto } from "@/types";
+import { CreateUserDto, ResponseUserDto, UpdateUserDto } from "@/types";
 import { setDeepValue } from "@/lib/object.util";
 
 interface UserStoreData {
@@ -8,6 +8,8 @@ interface UserStoreData {
   updateDto: UpdateUserDto;
   setManualPassword: boolean;
   confirmPassword?: string;
+  picture?: File;
+  progress?: number;
   createDtoErrors: Record<string, any>;
   updateDtoErrors: Record<string, any>;
 }
