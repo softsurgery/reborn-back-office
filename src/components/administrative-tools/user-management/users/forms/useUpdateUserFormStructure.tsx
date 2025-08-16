@@ -4,6 +4,7 @@ import {
   Field,
   FieldVariant,
   FormStructure,
+  ImageFieldProps,
   NumberFieldProps,
   PasswordFieldProps,
   SelectFieldProps,
@@ -13,6 +14,8 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { UserStore } from "@/hooks/stores/useUserStore";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
+import { identifyUserAvatar } from "@/lib/user.utils";
 import { Gender } from "@/types";
 import { useTranslation } from "react-i18next";
 
@@ -20,22 +23,57 @@ interface useUpdateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
+  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isUploadPending?: boolean;
 }
 
 export const useUpdateUserFormStructure = ({
   userStore,
   regions,
   roles,
+  uploadPicture,
+  isUploadPending,
 }: useUpdateUserFormStructureProps) => {
-  const { t: tUser } = useTranslation("user-management");
+  const { t } = useTranslation("user-management");
+  //photo
+  const photoField: Field<ImageFieldProps> = {
+    id: "photo",
+    label: t("userManagement.forms.photo"),
+    variant: FieldVariant.IMAGE,
+    required: true,
+    description: t("userManagement.forms.photoDescription"),
+    error: t(userStore.updateDtoErrors?.photo?.[0]),
+    props: {
+      image: userStore.picture,
+      progress: userStore.progress,
+      placeholder: "/unknown-user.jpg",
+      disabled: !!isUploadPending,
+      fallback: identifyUserAvatar(userStore.response),
+      onFileChange: (value) => {
+        userStore.set("picture", value);
+        userStore.setNested("updateDtoErrors.pictureId", []);
+      },
+      onUpload: (file, onProgress) => {
+        userStore.set("progress", 0);
+        uploadPicture({
+          files: [file],
+          onProgress: (progress: number) => {
+            userStore.set("progress", progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
   //first name
   const firstNameField: Field<TextFieldProps> = {
     id: "firstname",
-    label: tUser("userManagement.forms.firstName"),
+    label: t("userManagement.forms.firstName"),
     variant: FieldVariant.TEXT,
     required: true,
     placeholder: "John",
-    description: tUser("userManagement.forms.firstNameDescription"),
+    description: t("userManagement.forms.firstNameDescription"),
     error: userStore.updateDtoErrors?.firstName?.[0],
     props: {
       value: userStore.updateDto.firstName || undefined,
@@ -49,11 +87,11 @@ export const useUpdateUserFormStructure = ({
   //last name
   const lastNameField: Field<TextFieldProps> = {
     id: "lastname",
-    label: tUser("userManagement.forms.lastName"),
+    label: t("userManagement.forms.lastName"),
     variant: FieldVariant.TEXT,
     required: true,
     placeholder: "Doe",
-    description: tUser("userManagement.forms.lastNameDescription"),
+    description: t("userManagement.forms.lastNameDescription"),
     error: userStore.updateDtoErrors?.lastName?.[0],
     props: {
       value: userStore.updateDto.lastName || undefined,
@@ -67,11 +105,11 @@ export const useUpdateUserFormStructure = ({
   //email
   const emailField: Field<TextFieldProps> = {
     id: "email",
-    label: tUser("userManagement.forms.email"),
+    label: t("userManagement.forms.email"),
     variant: FieldVariant.EMAIL,
     required: true,
     placeholder: "john@doe.com",
-    description: tUser("userManagement.forms.emailDescription"),
+    description: t("userManagement.forms.emailDescription"),
     error: userStore.updateDtoErrors?.email?.[0],
     props: {
       value: userStore.updateDto.email || undefined,
@@ -85,11 +123,11 @@ export const useUpdateUserFormStructure = ({
   //date of birth
   const dateOfBirthField: Field<DateFieldProps> = {
     id: "dateofbirth",
-    label: tUser("userManagement.forms.dateOfBirth"),
+    label: t("userManagement.forms.dateOfBirth"),
     variant: FieldVariant.DATE,
     required: false,
     placeholder: "YYYY-MM-DD",
-    description: tUser("userManagement.forms.dateOfBirthDescription"),
+    description: t("userManagement.forms.dateOfBirthDescription"),
     error: userStore.updateDtoErrors?.dateOfBirth?.[0],
     props: {
       value: userStore.updateDto.dateOfBirth || undefined,
@@ -104,11 +142,11 @@ export const useUpdateUserFormStructure = ({
   //username
   const usernameField: Field<TextFieldProps> = {
     id: "username",
-    label: tUser("userManagement.forms.username"),
+    label: t("userManagement.forms.username"),
     variant: FieldVariant.TEXT,
     required: true,
-    placeholder: tUser("userManagement.forms.usernamePlaceholder"),
-    description: tUser("userManagement.forms.usernameDescription"),
+    placeholder: t("userManagement.forms.usernamePlaceholder"),
+    description: t("userManagement.forms.usernameDescription"),
     error: userStore.updateDtoErrors?.username?.[0],
     props: {
       value: userStore.updateDto.username || undefined,
@@ -121,12 +159,10 @@ export const useUpdateUserFormStructure = ({
 
   const checkPasswordField: Field<CheckboxFieldProps> = {
     id: "checkpassword",
-    label: `${tUser("userManagement.forms.requirePasswordCheckTitle")}`,
+    label: `${t("userManagement.forms.requirePasswordCheckTitle")}`,
     variant: FieldVariant.CHECK,
     required: true,
-    description: `${tUser(
-      "userManagement.forms.requirePasswordCheckDescription"
-    )}`,
+    description: `${t("userManagement.forms.requirePasswordCheckDescription")}`,
     props: {
       checked: userStore.setManualPassword,
       onCheckedChange: (e) => {
@@ -138,11 +174,11 @@ export const useUpdateUserFormStructure = ({
   //password
   const passwordField: Field<PasswordFieldProps> = {
     id: "password",
-    label: tUser("userManagement.forms.password"),
+    label: t("userManagement.forms.password"),
     variant: FieldVariant.PASSWORD,
     required: true,
-    placeholder: tUser("userManagement.forms.passwordPlaceholder"),
-    description: tUser("userManagement.forms.passwordDescription"),
+    placeholder: t("userManagement.forms.passwordPlaceholder"),
+    description: t("userManagement.forms.passwordDescription"),
     error: userStore.updateDtoErrors?.password?.[0],
     hidden: !userStore.setManualPassword,
     props: {
@@ -157,11 +193,11 @@ export const useUpdateUserFormStructure = ({
   //confirm password
   const confirmPasswordField: Field<PasswordFieldProps> = {
     id: "confirmpassword",
-    label: tUser("userManagement.forms.confirmPassword"),
+    label: t("userManagement.forms.confirmPassword"),
     variant: FieldVariant.PASSWORD,
     required: true,
-    placeholder: tUser("userManagement.forms.confirmPasswordPlaceholder"),
-    description: tUser("userManagement.forms.confirmPasswordDescription"),
+    placeholder: t("userManagement.forms.confirmPasswordPlaceholder"),
+    description: t("userManagement.forms.confirmPasswordDescription"),
     error: userStore.updateDtoErrors?.confirmPassword?.[0],
     hidden: !userStore.setManualPassword,
     props: {
@@ -176,11 +212,11 @@ export const useUpdateUserFormStructure = ({
   //roles
   const roleField: Field<SelectFieldProps> = {
     id: "role",
-    label: tUser("userManagement.forms.role"),
+    label: t("userManagement.forms.role"),
     variant: FieldVariant.SELECT,
     required: true,
-    description: tUser("userManagement.forms.roleDescription"),
-    placeholder: tUser("userManagement.forms.rolePlaceholder"),
+    description: t("userManagement.forms.roleDescription"),
+    placeholder: t("userManagement.forms.rolePlaceholder"),
     error: userStore.updateDtoErrors.roleId?.[0],
     props: {
       options: roles,
@@ -198,10 +234,11 @@ export const useUpdateUserFormStructure = ({
     orientation: "horizontal",
     fieldsets: [
       {
-        title: `${tUser("userManagement.forms.step1FieldTitle")}`,
+        title: `${t("userManagement.forms.step1FieldTitle")}`,
         description: "",
         includeHeader: true,
         rows: [
+          { fields: [photoField] },
           {
             fields: [firstNameField, lastNameField],
           },
@@ -211,7 +248,7 @@ export const useUpdateUserFormStructure = ({
         ],
       },
       {
-        title: `${tUser("userManagement.forms.step1Title")}`,
+        title: `${t("userManagement.forms.step1Title")}`,
         description: "",
         includeHeader: true,
         rows: [
@@ -229,11 +266,11 @@ export const useUpdateUserFormStructure = ({
 
   const phoneField: Field<NumberFieldProps> = {
     id: "phone",
-    label: `${tUser("userManagement.forms.phone")}`,
+    label: `${t("userManagement.forms.phone")}`,
     variant: FieldVariant.NUMBER,
     required: false,
-    placeholder: `${tUser("userManagement.forms.phonePlaceholder")}`,
-    description: `${tUser("userManagement.forms.phoneDescription")}`,
+    placeholder: `${t("userManagement.forms.phonePlaceholder")}`,
+    description: `${t("userManagement.forms.phoneDescription")}`,
     error: userStore.updateDtoErrors?.phone?.[0],
     props: {
       value: Number(userStore.updateDto?.profile?.phone) || undefined,
@@ -246,11 +283,11 @@ export const useUpdateUserFormStructure = ({
 
   const cinField: Field<NumberFieldProps> = {
     id: "cin",
-    label: `${tUser("userManagement.forms.CIN")}`,
+    label: `${t("userManagement.forms.CIN")}`,
     variant: FieldVariant.NUMBER,
     required: true,
-    placeholder: `${tUser("userManagement.forms.CINPlaceholder")}`,
-    description: `${tUser("userManagement.forms.CINDescription")}`,
+    placeholder: `${t("userManagement.forms.CINPlaceholder")}`,
+    description: `${t("userManagement.forms.CINDescription")}`,
     error: userStore.updateDtoErrors?.cin?.[0],
     props: {
       value: Number(userStore.updateDto?.profile?.cin) || undefined,
@@ -263,11 +300,11 @@ export const useUpdateUserFormStructure = ({
 
   const bioField: Field<TextareaFieldProps> = {
     id: "bio",
-    label: `${tUser("userManagement.forms.bio")}`,
+    label: `${t("userManagement.forms.bio")}`,
     variant: FieldVariant.TEXTAREA,
     required: false,
-    placeholder: `${tUser("userManagement.forms.bioPlaceholder")}`,
-    description: `${tUser("userManagement.forms.bioDescription")}`,
+    placeholder: `${t("userManagement.forms.bioPlaceholder")}`,
+    description: `${t("userManagement.forms.bioDescription")}`,
     error: userStore.updateDtoErrors?.bio?.[0],
     props: {
       value: userStore.updateDto?.profile?.bio,
@@ -281,11 +318,11 @@ export const useUpdateUserFormStructure = ({
 
   const genderField: Field<SelectFieldProps> = {
     id: "gender",
-    label: `${tUser("userManagement.forms.gender")}`,
+    label: `${t("userManagement.forms.gender")}`,
     variant: FieldVariant.SELECT,
     required: false,
-    placeholder: `${tUser("userManagement.forms.genderPlaceholder")}`,
-    description: `${tUser("userManagement.forms.genderDescription")}`,
+    placeholder: `${t("userManagement.forms.genderPlaceholder")}`,
+    description: `${t("userManagement.forms.genderDescription")}`,
     error: userStore.updateDtoErrors?.gender?.[0],
     props: {
       options: Object.entries(Gender).map(([value, label]) => ({
@@ -304,11 +341,11 @@ export const useUpdateUserFormStructure = ({
     defaultChecked
   ) => ({
     id: "isPrivate",
-    label: `${tUser("userManagement.forms.isPrivate")}`,
+    label: `${t("userManagement.forms.isPrivate")}`,
     variant: FieldVariant.SWITCH,
     required: true,
-    placeholder: `${tUser("userManagement.forms.isPrivatePlaceholder")}`,
-    description: `${tUser("userManagement.forms.isPrivateDescription")}`,
+    placeholder: `${t("userManagement.forms.isPrivatePlaceholder")}`,
+    description: `${t("userManagement.forms.isPrivateDescription")}`,
     props: {
       defaultChecked,
       checked: userStore.updateDto?.profile?.isPrivate,
@@ -321,11 +358,11 @@ export const useUpdateUserFormStructure = ({
 
   const regionField: Field<SelectFieldProps> = {
     id: "region",
-    label: `${tUser("userManagement.forms.region")}`,
+    label: `${t("userManagement.forms.region")}`,
     variant: FieldVariant.SELECT,
     required: false,
-    placeholder: `${tUser("userManagement.forms.regionPlaceholder")}`,
-    description: `${tUser("userManagement.forms.regionDescription")}`,
+    placeholder: `${t("userManagement.forms.regionPlaceholder")}`,
+    description: `${t("userManagement.forms.regionDescription")}`,
     error: userStore.updateDtoErrors?.regionId?.[0],
     props: {
       options: regions,
@@ -338,12 +375,12 @@ export const useUpdateUserFormStructure = ({
   };
 
   const profileUpdateFormStructure: FormStructure = {
-    title: `${tUser("userManagement.forms.step2Title")}`,
-    description: `${tUser("userManagement.forms.step2Description")}`,
+    title: `${t("userManagement.forms.step2Title")}`,
+    description: `${t("userManagement.forms.step2Description")}`,
     orientation: "horizontal",
     fieldsets: [
       {
-        title: `${tUser("userManagement.forms.step2FieldTitle")}`,
+        title: `${t("userManagement.forms.step2FieldTitle")}`,
         description: "",
         includeHeader: true,
         rows: [

@@ -13,6 +13,8 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { UserStore } from "@/hooks/stores/useUserStore";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
+import { identifyUserAvatar } from "@/lib/user.utils";
 import { Gender } from "@/types";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +22,8 @@ interface useCreateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
-  uploadPicture: any;
+  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isUploadPending?: boolean;
 }
 
 export const useCreateUserFormStructure = ({
@@ -28,6 +31,7 @@ export const useCreateUserFormStructure = ({
   regions,
   roles,
   uploadPicture,
+  isUploadPending,
 }: useCreateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
 
@@ -43,6 +47,8 @@ export const useCreateUserFormStructure = ({
       image: userStore.picture,
       progress: userStore.progress,
       placeholder: "/unknown-user.jpg",
+      disabled: !!isUploadPending,
+      fallback: identifyUserAvatar(userStore.response),
       onFileChange: (value) => {
         userStore.set("picture", value);
         userStore.setNested("createDtoErrors.pictureId", []);

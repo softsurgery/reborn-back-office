@@ -9,12 +9,14 @@ interface UserStoreData {
   setManualPassword: boolean;
   confirmPassword?: string;
   picture?: File;
+  pictureUrl?: string;
   progress?: number;
   createDtoErrors: Record<string, any>;
   updateDtoErrors: Record<string, any>;
 }
 
 const initialState: UserStoreData = {
+  response: undefined,
   createDto: {
     firstName: "",
     lastName: "",
@@ -55,6 +57,9 @@ const initialState: UserStoreData = {
   },
   setManualPassword: false,
   confirmPassword: "",
+  picture: undefined,
+  pictureUrl: undefined,
+  progress: 0,
   createDtoErrors: {},
   updateDtoErrors: {},
 };

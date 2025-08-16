@@ -68,6 +68,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
         valueKey: "id",
       }),
       uploadPicture,
+      isUploadPending,
     });
 
   const validateStep = React.useCallback(

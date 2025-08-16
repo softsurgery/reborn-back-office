@@ -7,15 +7,15 @@ import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapTo
 import { Button } from "@/components/ui/button";
 import { useUpdateUserFormStructure } from "./useUpdateUserFormStructure";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { useRegions } from "@/hooks/content/useRegions";
 import { defineStepper } from "@/components/ui/stepper";
-import { UpdateUserDto } from "@/types";
+import { UpdateUserDto, Upload } from "@/types";
 import {
   profileSchema,
   updateUserSchema,
 } from "@/types/validations/user.validation";
 import { Spinner } from "@/components/shared/Spinner";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
 
 const steps = [
   {
@@ -41,10 +41,19 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   updateUser,
   isUpdatePending,
 }) => {
-  const { t: tCommon } = useTranslation("common");
   const userStore = useUserStore();
   const { roles, isFetchRolesPending } = useRoles();
   const { regions, isFetchRegionsPending } = useRegions();
+
+  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      userStore.setNested("updateDto.profile.pictureId", response?.[0]?.id);
+    },
+    onError: (error: any) => {
+      userStore.setNested("updateDtoErrors.pictureId", [error.message]);
+    },
+  });
+
   const { userUpdateFormStructure, profileUpdateFormStructure } =
     useUpdateUserFormStructure({
       userStore,
@@ -58,6 +67,8 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
         labelKey: "label",
         valueKey: "id",
       }),
+      uploadPicture,
+      isUploadPending,
     });
 
   const validateStep = React.useCallback(

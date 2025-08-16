@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@/api";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useDebounce } from "@/hooks/useDebounce";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserColumns } from "./columns";
 import { DataTable } from "@/components/shared/data-tables/data-table";
@@ -30,12 +30,14 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
+import { identifyUser } from "@/lib/user.utils";
 
 interface UsersProps {
   className?: string;
 }
 
 export default function Users({ className }: UsersProps) {
+  const queryClient = useQueryClient();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   const { t, ready } = useTranslation("user-management");
@@ -192,6 +194,13 @@ export default function Users({ className }: UsersProps) {
       },
     });
 
+  const { data: blob } = useQuery({
+    queryKey: ["picture", userStore.response?.profile?.pictureId],
+    queryFn: () =>
+      api.upload.getUploadById(userStore.response?.profile?.pictureId!),
+    enabled: !!userStore.response?.profile?.pictureId,
+  });
+
   const handleUpdateSubmit = () => {
     const data = userStore.updateDto;
     const result = updateUserSchema(userStore.setManualPassword).safeParse({
@@ -324,10 +333,12 @@ export default function Users({ className }: UsersProps) {
           bio: user.profile?.bio,
           gender: user.profile?.gender as Gender,
           isPrivate: user.profile?.isPrivate,
-        }
-      }
-    );
-    console.log(user.profile?.isPrivate);
+        },
+      });
+      userStore.set(
+        "picture",
+        queryClient.getQueryData(["profile-picture", user.profile?.pictureId])
+      );
     },
   };
 

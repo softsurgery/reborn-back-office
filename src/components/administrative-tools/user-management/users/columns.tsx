@@ -18,7 +18,7 @@ const UserAvatarCell: React.FC<{
   type?: string;
 }> = ({ pictureId, fallback, type = "image/*" }) => {
   const { data: blob } = useQuery({
-    queryKey: ["upload", pictureId],
+    queryKey: ["profile-picture", pictureId],
     queryFn: () => api.upload.getUploadById(pictureId!),
     enabled: !!pictureId,
   });
