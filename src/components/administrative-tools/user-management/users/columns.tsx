@@ -8,40 +8,15 @@ import { DataTableRowActions } from "@/components/shared/data-tables/data-table-
 import { DataTableCellVariant, ResponseUserDto } from "@/types";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { useTranslation } from "react-i18next";
-import { api } from "@/api";
-import { useQuery } from "@tanstack/react-query";
 import { identifyUserAvatar } from "@/lib/user.utils";
-
-const UserAvatarCell: React.FC<{
-  pictureId?: number;
-  fallback?: string;
-  type?: string;
-}> = ({ pictureId, fallback, type = "image/*" }) => {
-  const { data: blob } = useQuery({
-    queryKey: ["profile-picture", pictureId],
-    queryFn: () => api.upload.getUploadById(pictureId!),
-    enabled: !!pictureId,
-  });
-
-  const url = React.useMemo(() => {
-    if (!blob) return undefined;
-    return window.URL.createObjectURL(new Blob([blob], { type }));
-  }, [blob, type]);
-
-  return (
-    <DataTableCell
-      variant={DataTableCellVariant.AVATAR}
-      value={{ url: url || "", fallback }}
-      className="p-2"
-    />
-  );
-};
+import UserAvatarCell from "./UserAvatarCell";
 
 export const useUserColumns = (
   context: any,
   t: any
 ): ColumnDef<ResponseUserDto>[] => {
   const { t: tCommon } = useTranslation("common");
+
   return [
     {
       accessorKey: "Photo",
@@ -49,15 +24,14 @@ export const useUserColumns = (
         <DataTableColumnHeader
           column={column}
           title="Photo"
-          attribute="Photo"
+          attribute="photo"
           context={context}
         />
       ),
       cell: ({ row }) => (
         <UserAvatarCell
-          pictureId={row.original?.profile?.pictureId}
-          fallback={identifyUserAvatar(row.original)}
-          type={row.original?.profile?.picture?.mimetype}
+          pictureId={row?.original?.profile?.pictureId}
+          fallback={identifyUserAvatar(row?.original)}
         />
       ),
     },

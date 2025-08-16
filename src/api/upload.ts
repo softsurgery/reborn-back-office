@@ -95,13 +95,13 @@ const openFile = async (slug: string) => {
 export const getUploadBySlug = async (slug: string) => {
   const url = `/upload/view/slug/${slug}`;
   const { data } = await axios.get(url, { responseType: "blob" });
-  return data;
+  return URL.createObjectURL(data);
 };
 
 export const getUploadById = async (id: number) => {
   const url = `/upload/view/id/${id}`;
   const { data } = await axios.get(url, { responseType: "blob" });
-  return data;
+  return URL.createObjectURL(data);
 };
 
 const deleteFile = async (slug: string): Promise<ServerResponse<Upload>> => {

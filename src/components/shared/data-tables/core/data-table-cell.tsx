@@ -34,9 +34,7 @@ export default function DataTableCell({
     return (
       <div className={cn(className)}>
         <Avatar>
-          <AvatarImage
-            src={value?.url}
-          />
+          <AvatarImage src={value?.url} />
           <AvatarFallback>{value?.fallback}</AvatarFallback>
         </Avatar>
       </div>

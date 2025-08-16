@@ -21,44 +21,38 @@ import {
   ServerErrorResponse,
   UpdateUserDto,
 } from "@/types";
-import {
-  createUserSchema,
-  updateUserSchema,
-} from "@/types/validations/user.validation";
+import { updateUserSchema } from "@/types/validations/user.validation";
 import { useIntro } from "@/contexts/IntroContext";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
-import { identifyUser } from "@/lib/user.utils";
 
 interface UsersProps {
   className?: string;
 }
 
-export default function Users({ className }: UsersProps) {
+export const Users = ({ className }: UsersProps) => {
   const queryClient = useQueryClient();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   const { t, ready } = useTranslation("user-management");
   React.useEffect(() => {
-    if (ready) {
-      setRoutes?.([
-        { title: t("userManagement.page.title") },
-        {
-          title: t("userManagement.page.users"),
-          href: "/users-management/users",
-        },
-      ]);
-      setIntro?.(
-        t("userManagement.page.users"),
-        t("userManagement.page.description")
-      );
-      return () => {
-        clearRoutes?.();
-        clearIntro?.();
-      };
-    }
+    setRoutes?.([
+      { title: t("userManagement.page.title") },
+      {
+        title: t("userManagement.page.users"),
+        href: "/users-management/users",
+      },
+    ]);
+    setIntro?.(
+      t("userManagement.page.users"),
+      t("userManagement.page.description")
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
   }, [ready, t]);
 
   const userStore = useUserStore();
@@ -194,13 +188,6 @@ export default function Users({ className }: UsersProps) {
       },
     });
 
-  const { data: blob } = useQuery({
-    queryKey: ["picture", userStore.response?.profile?.pictureId],
-    queryFn: () =>
-      api.upload.getUploadById(userStore.response?.profile?.pictureId!),
-    enabled: !!userStore.response?.profile?.pictureId,
-  });
-
   const handleUpdateSubmit = () => {
     const data = userStore.updateDto;
     const result = updateUserSchema(userStore.setManualPassword).safeParse({
@@ -328,6 +315,7 @@ export default function Users({ className }: UsersProps) {
         roleId: user.roleId,
         profile: {
           phone: user.profile?.phone,
+          pictureId: user.profile?.pictureId,
           cin: user.profile?.cin,
           regionId: user.profile?.regionId,
           bio: user.profile?.bio,
@@ -366,4 +354,4 @@ export default function Users({ className }: UsersProps) {
       {disapproveUserDialog}
     </div>
   );
-}
+};

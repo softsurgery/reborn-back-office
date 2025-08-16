@@ -58,7 +58,6 @@ const initialState: UserStoreData = {
   setManualPassword: false,
   confirmPassword: "",
   picture: undefined,
-  pictureUrl: undefined,
   progress: 0,
   createDtoErrors: {},
   updateDtoErrors: {},
