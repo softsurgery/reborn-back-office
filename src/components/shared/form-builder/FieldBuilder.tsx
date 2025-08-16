@@ -253,6 +253,7 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
           <Avatar
             className={cn(
               "w-24 h-24 cursor-pointer hover:opacity-80 transition",
+              field?.props?.disabled && "opacity-40 pointer-events-none",
               field?.className
             )}
             onClick={() => fileInputRef.current?.click()}
@@ -260,13 +261,13 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
             <AvatarImage
               src={
                 field.props?.image
-                  ? typeof field.props.image === "string"
-                    ? field.props.image
-                    : URL.createObjectURL(field.props.image)
-                  : field.props?.placeholder
+                  ? typeof field.props?.image === "string"
+                    ? field.props?.image
+                    : URL.createObjectURL(field.props?.image)
+                  : undefined
               }
             />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>{field.props?.fallback || "?"}</AvatarFallback>
           </Avatar>
         </div>
       );
