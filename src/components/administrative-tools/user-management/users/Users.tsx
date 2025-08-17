@@ -127,6 +127,9 @@ export const Users = ({ className }: UsersProps) => {
     mutationFn: (data: { id?: string; user: UpdateUserDto }) =>
       api.admin.user.update(data.id, data.user),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user", userStore.response?.email],
+      });
       toast(t("userManagement.messages.userUpdatedSuccess"));
       refetchUsers();
       userStore.reset();

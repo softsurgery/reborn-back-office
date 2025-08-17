@@ -1,6 +1,6 @@
 import { ResponseUserDto } from "@/types";
 
-export const identifyUser = (user?: ResponseUserDto) => {
+export const identifyUser = (user?: ResponseUserDto | null) => {
   if (!user) return "unknown";
   return user?.firstName && user?.lastName
     ? `${user?.firstName?.charAt(0).toUpperCase() + user?.firstName.slice(1)} ${
@@ -9,7 +9,7 @@ export const identifyUser = (user?: ResponseUserDto) => {
     : user?.username || "unknown";
 };
 
-export const identifyUserAvatar = (user?: ResponseUserDto) => {
+export const identifyUserAvatar = (user?: ResponseUserDto | null) => {
   if (!user) return "?";
   return user?.firstName && user?.lastName
     ? `${user?.firstName?.charAt(0).toUpperCase()}${user?.lastName

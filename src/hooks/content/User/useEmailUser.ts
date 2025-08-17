@@ -12,7 +12,7 @@ export const useEmailUser = (
     data: userResp,
     refetch: refetchUser,
   } = useQuery({
-    queryKey: ["user", email, join],
+    queryKey: ["user", email],
     queryFn: () => api.admin.user.findByEmail(email, join),
     enabled: enabled && !!email,
   });

@@ -11,8 +11,6 @@ const UserAvatarCell = React.memo(
       queryFn: () => api.upload.getUploadById(pictureId!),
       enabled: !!pictureId,
       staleTime: Infinity,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
     });
 
     return (
