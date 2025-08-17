@@ -21,7 +21,9 @@ export const parseBooleanField = (
   return false;
 };
 
-export const parseIntField = (field: string | string[] | number | undefined): number => {
+export const parseIntField = (
+  field: string | string[] | number | undefined
+): number => {
   if (typeof field === "string") {
     return parseInt(field, 10);
   }
@@ -43,7 +45,6 @@ export const parseStringField = (
   return "";
 };
 
-
 export const setDeepValue = <T>(obj: any, path: string, value: T): any => {
   const keys = path.split(".");
   const lastKey = keys.pop();
@@ -55,4 +56,45 @@ export const setDeepValue = <T>(obj: any, path: string, value: T): any => {
   }, obj);
   if (lastKey) nested[lastKey] = value;
   return obj;
+};
+
+export const safeStringify = (obj: any) => {
+  const seen = new WeakSet();
+  return JSON.stringify(
+    obj,
+    (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) return "[Circular]";
+        seen.add(value);
+      }
+      return value;
+    },
+    2
+  );
+};
+
+export const stableStringify = (value: any): string => {
+  const seen = new WeakSet();
+  const sortKeys = (obj: any): any => {
+    if (obj && typeof obj === "object") {
+      if (seen.has(obj)) return;
+      seen.add(obj);
+      if (Array.isArray(obj)) {
+        return obj.map(sortKeys);
+      }
+      const sorted: Record<string, any> = {};
+      Object.keys(obj)
+        .sort()
+        .forEach((k) => {
+          sorted[k] = sortKeys(obj[k]);
+        });
+      return sorted;
+    }
+    return obj;
+  };
+  return JSON.stringify(sortKeys(value));
+};
+
+export const deepEqual = (a: any, b: any) => {
+  return stableStringify(a) === stableStringify(b);
 };

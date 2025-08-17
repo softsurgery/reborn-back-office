@@ -30,7 +30,6 @@ import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  
   const data = {
     teams: [
       {
@@ -92,13 +91,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: "Resources",
-            url: "/content/resources",
+            url: "/content-management/resources",
             icon: FileUser,
           },
           {
             title: "Regions",
-            url: "/content/regions",
+            url: "/content-management/regions",
             icon: MapIcon,
+          },
+          {
+            title: "Application Properties",
+            url: "/content-management/application-properties",
+            icon: FileText,
           },
         ],
       },
@@ -143,7 +147,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const hoverToggledRef = React.useRef(false);
 
-  const handleMouseEnter = (e : React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ) => {
     e.stopPropagation();
     if (!open) {
       toggleSidebar();
@@ -151,7 +157,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }
   };
 
-  const handleMouseLeave = (e : React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+  const handleMouseLeave = (
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ) => {
     e.stopPropagation();
     if (hoverToggledRef.current) {
       toggleSidebar();

@@ -1,6 +1,4 @@
-"use client";
-
-import type React from "react";
+import React from "react";
 import { createContext, useContext, type HTMLAttributes } from "react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,9 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { GripVertical, Plus, Trash2 } from "lucide-react";
+import { ChevronsUpDown, GripVertical, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-
 import {
   DndContext,
   closestCenter,
@@ -29,6 +26,19 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+import { Textarea } from "./textarea";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./collapsible";
 
 type JSONPrimitive = string | number | boolean | null;
 export type JSONValue =
@@ -42,7 +52,7 @@ type SchemaNode =
   | { kind: "boolean" }
   | { kind: "null" }
   | { kind: "object"; properties: Record<string, SchemaNode>; order: string[] }
-  | { kind: "array"; element?: SchemaNode }; // undefined element means initial array was empty (unknown type)
+  | { kind: "array"; element?: SchemaNode };
 
 type PathSegment = string | number;
 type Path = PathSegment[];
@@ -184,23 +194,15 @@ function pathToId(path: Path) {
   ].join("__");
 }
 
-function pathToLabel(path: Path) {
-  if (path.length === 0) return "root";
-  return path
-    .map((seg) => (typeof seg === "number" ? `[${seg}]` : seg))
-    .join(".")
-    .replace(".[", "[");
-}
-
 type JSONFormProps = {
+  className?: string;
   value: JSONValue;
   onChange: (next: JSONValue) => void;
-  title?: string;
-  description?: string;
+  defaultOpen?: boolean;
 };
 
 export default function JSONForm(props: JSONFormProps) {
-  const { value, onChange, title = "JSON", description } = props;
+  const { value, onChange, defaultOpen } = props;
   // Freeze schema on initial render to lock structure and keys
   const schema = useMemo(() => deriveSchemaFromData(value), []);
   const sensors = useSensors(
@@ -209,13 +211,7 @@ export default function JSONForm(props: JSONFormProps) {
   );
 
   return (
-    <div className="space-y-3">
-      <div className="space-y-1">
-        <div className="text-lg font-medium">{title}</div>
-        {description ? (
-          <div className="text-sm text-muted-foreground">{description}</div>
-        ) : null}
-      </div>
+    <Card className={cn("space-y-3 border-none", props.className)}>
       <FormNode
         value={value}
         onChange={onChange}
@@ -223,35 +219,39 @@ export default function JSONForm(props: JSONFormProps) {
         path={[]}
         depth={0}
         sensors={sensors}
+        className="border-none"
+        defaultOpen={defaultOpen}
       />
-    </div>
+    </Card>
   );
 }
 
 function FormNode({
+  className,
   value,
   schema,
   onChange,
   path,
   depth,
   sensors,
+  defaultOpen,
 }: {
+  className?: string;
   value: JSONValue;
   schema: SchemaNode;
   onChange: (next: JSONValue) => void;
   path: Path;
   depth: number;
   sensors: ReturnType<typeof useSensors>;
+  defaultOpen?: boolean;
 }) {
+  const [textVariant, setTextVariant] = React.useState<"text" | "textarea">(
+    "text"
+  );
   switch (schema.kind) {
     case "object":
       return (
-        <div
-          className={cn(
-            "space-y-4 rounded-lg border p-4",
-            depth === 0 ? "" : "bg-muted/20"
-          )}
-        >
+        <div className={cn("space-y-4 p-4", className)}>
           {schema.order.map((key) => {
             const childSchema = schema.properties[key];
             const childPath = [...path, key];
@@ -260,23 +260,48 @@ function FormNode({
               ? (value as Record<string, JSONValue>)[key]
               : undefined;
 
+            const formNode = (
+              <FormNode
+                className="w-full"
+                value={childVal as JSONValue}
+                schema={childSchema}
+                onChange={(nextChild) => {
+                  const nextObj = updateAtPath(value, [key], () => nextChild);
+                  onChange(nextObj);
+                }}
+                path={childPath}
+                depth={depth + 1}
+                sensors={sensors}
+              />
+            );
+
             return (
-              <div key={key} className="space-y-2">
-                <Label htmlFor={id} className="text-base">
-                  {key}
-                </Label>
-                <FormNode
-                  value={childVal as JSONValue}
-                  schema={childSchema}
-                  onChange={(nextChild) => {
-                    // Update this object by replacing only the specific child
-                    const nextObj = updateAtPath(value, [key], () => nextChild);
-                    onChange(nextObj);
-                  }}
-                  path={childPath}
-                  depth={depth + 1}
-                  sensors={sensors}
-                />
+              <div
+                key={key}
+                className={cn(
+                  "flex flex-col md:flex-row gap-4  w-full bg-background p-4 rounded-lg border items-center"
+                )}
+              >
+                {childSchema.kind === "object" ||
+                childSchema.kind === "array" ? (
+                  <Collapsible className="w-full" defaultOpen={defaultOpen}>
+                    <CollapsibleTrigger className="flex justify-between items-center w-full">
+                      <span className="font-bold"> {key.toUpperCase()}</span>
+                      <ChevronsUpDown />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="my-4">
+                      {formNode}
+                    </CollapsibleContent>
+                  </Collapsible>
+                ) : (
+                  <div className="flex flex-row gap-2 justify-between w-full">
+                    <Label htmlFor={id} className="font-bold py-2 text-xs">
+                      <span className="font-bold"> {key.toUpperCase()}</span>
+                    </Label>
+
+                    {formNode}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -286,7 +311,6 @@ function FormNode({
     case "array": {
       const arr = Array.isArray(value) ? (value as JSONValue[]) : [];
       const canAdd = !!schema.element;
-      const label = pathToLabel(path);
       const baseId = pathToId(path);
       const items = arr.map((_, i) => `${baseId}__${i}`);
 
@@ -303,9 +327,8 @@ function FormNode({
       };
 
       return (
-        <div className="space-y-3">
+        <div className="space-y-3 w-full">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">{label}</div>
             <Button
               type="button"
               size="sm"
@@ -320,7 +343,7 @@ function FormNode({
               }}
               disabled={!canAdd}
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus />
               Add item
             </Button>
           </div>
@@ -389,14 +412,44 @@ function FormNode({
       const id = pathToId(path);
       const str = typeof value === "string" ? value : "";
       return (
-        <Input
-          id={id}
-          value={str}
-          onChange={(e) => {
-            onChange(e.target.value);
-          }}
-          placeholder="Text"
-        />
+        <div className="flex flex-row gap-2 w-full">
+          {textVariant === "text" && (
+            <Input
+              id={id}
+              value={str}
+              onChange={(e) => {
+                onChange(e.target.value);
+              }}
+              placeholder="Text"
+            />
+          )}
+          {textVariant === "textarea" && (
+            <Textarea
+              id={id}
+              value={str}
+              onChange={(e) => {
+                onChange(e.target.value);
+              }}
+              placeholder="Text"
+              className="resize-none"
+              rows={10}
+            />
+          )}
+          <Select
+            value={textVariant}
+            onValueChange={(value) =>
+              setTextVariant(value as "text" | "textarea")
+            }
+          >
+            <SelectTrigger className="w-[180px] text-xs">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="text">Text</SelectItem>
+              <SelectItem value="textarea">Textarea</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       );
     }
 
@@ -431,9 +484,6 @@ function FormNode({
               onChange(checked);
             }}
           />
-          <Label htmlFor={id} className="text-sm text-muted-foreground">
-            {pathToLabel(path)}
-          </Label>
         </div>
       );
     }
@@ -510,9 +560,9 @@ function ArrayItemCard({
 }) {
   const handle = useSortableHandle();
   return (
-    <Card className="overflow-hidden">
-      <div className="flex items-center justify-between border-b px-3 py-2">
-        <div className="flex items-center gap-2">
+    <Card className="overflow-hidden boreder-none">
+      <div className="flex items-center justify-between x-3 py-2 mx-2">
+        <div className="flex items-center gap-2 ">
           <Button
             type="button"
             variant="ghost"
@@ -524,7 +574,7 @@ function ArrayItemCard({
           >
             <GripVertical className="h-4 w-4" />
           </Button>
-          <div className="text-sm font-medium">Item {index + 1}</div>
+          <div className="font-medium text-xs">Item {index + 1}</div>
         </div>
         <Button
           type="button"
@@ -533,7 +583,7 @@ function ArrayItemCard({
           onClick={onRemove}
           aria-label={`Remove item ${index + 1}`}
         >
-          <Trash2 className="h-4 w-4" />
+          <X className="h-4 w-4" />
         </Button>
       </div>
       <CardContent className="p-3">{children}</CardContent>
