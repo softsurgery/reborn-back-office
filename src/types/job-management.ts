@@ -7,12 +7,19 @@ export interface ResponseJobDto extends DatabaseEntity {
   description: string;
   price: number;
   postedBy: ResponseUserDto;
+  jobTags: ResponseJobTagDto[];
 }
 
 export interface CreateJobDto {
   title: string;
   description: string;
   price: number;
+  jobTagIds: number[];
 }
 
 export interface UpdateJobDto extends Partial<CreateJobDto> {}
+
+export interface ResponseJobTagDto extends DatabaseEntity {
+  id: number;
+  label: string;
+}

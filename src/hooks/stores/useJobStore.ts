@@ -1,9 +1,5 @@
 import { create } from "zustand";
-import {
-  CreateJobDto,
-  ResponseJobDto,
-  UpdateJobDto,
-} from "@/types";
+import { CreateJobDto, ResponseJobDto, UpdateJobDto } from "@/types";
 import { setDeepValue } from "@/lib/object.util";
 
 interface JobStoreData {
@@ -15,10 +11,7 @@ interface JobStoreData {
 }
 
 export interface JobStore extends JobStoreData {
-  set: <K extends keyof JobStoreData>(
-    name: K,
-    value: JobStoreData[K]
-  ) => void;
+  set: <K extends keyof JobStoreData>(name: K, value: JobStoreData[K]) => void;
   setNested: <T>(path: string, value: T) => void;
   reset: () => void;
 }
@@ -28,11 +21,13 @@ const initialState: JobStoreData = {
     title: "",
     description: "",
     price: 0,
+    jobTagIds: [],
   },
   updateDto: {
     title: "",
     description: "",
     price: 0,
+    jobTagIds: [],
   },
   createDtoErrors: {},
   updateDtoErrors: {},

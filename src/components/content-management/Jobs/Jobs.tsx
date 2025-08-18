@@ -47,13 +47,13 @@ export default function Jobs({ className }: JobsProps) {
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
-    500,
+    500
   );
 
   const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
-    500,
+    500
   );
 
   const [sortDetails, setSortDetails] = React.useState({
