@@ -3,7 +3,7 @@ import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { Spinner } from "./shared/Spinner";
-import { Layout } from "./Layout/Layout";
+import { Layout } from "./layout/Layout";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 

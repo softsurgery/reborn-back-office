@@ -1,4 +1,4 @@
-import Feedbacks from "@/components/administrative-tools/system-reports/Feedbacks/Feedbacks";
+import Feedbacks from "@/components/administrative-tools/system-reports/feedback/Feedbacks";
 
 export default function page() {
   return <Feedbacks />;

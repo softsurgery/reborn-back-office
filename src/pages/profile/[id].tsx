@@ -1,4 +1,4 @@
-import { UserProfile } from "@/components/Profile/UserProfile";
+import { UserProfile } from "@/components/profile/UserProfile";
 import { useParams } from "next/navigation";
 
 export default function Page() {

@@ -7,7 +7,7 @@ import {
 } from "../../contexts/BreadcrumbContext";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppVersion } from "./AppVersion";
-import { AppSidebar } from "./Sidebar/AppSidebar";
+import { AppSidebar } from "./sidebar/AppSidebar";
 import { Footer } from "./Footer";
 import { FooterContext } from "@/contexts/FooterContext";
 import { IntroContext } from "@/contexts/IntroContext";
