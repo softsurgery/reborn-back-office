@@ -2,6 +2,7 @@ import { admin } from "./admin";
 import { auth } from "./auth";
 import { bug } from "./bug";
 import { feedback } from "./feedback";
+import { job } from "./job";
 import { _public } from "./public";
 import { upload } from "./upload";
 
@@ -12,4 +13,5 @@ export const api = {
   feedback,
   bug,
   upload,
+  job,
 };

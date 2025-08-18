@@ -90,6 +90,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Paperclip,
         items: [
           {
+            title: "Jobs",
+            url: "/content-management/jobs",
+            icon: BriefcaseBusiness,
+          },
+          {
             title: "Resources",
             url: "/content-management/resources",
             icon: FileUser,
