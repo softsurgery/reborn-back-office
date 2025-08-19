@@ -1,38 +1,29 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { useJobStore } from "@/hooks/stores/useJobStore";
+import { useJobTagStore } from "@/hooks/stores/useJobTagStore";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
-import { useUpdateJobFormStructure } from "./useUpdateJobFormStructure";
+import { useCreateJobTagFormStructure } from "./useCreateJobTagFormStructure";
 import { useTranslation } from "react-i18next";
-import { useCurrencies } from "@/hooks/content/useCurrencies";
 
-interface JobFormProps {
+interface JobTagFormProps {
   className?: string;
-  jobCallback?: () => void;
+  jobTagCallback?: () => void;
   cancelCallback?: () => void;
   isPending?: boolean;
 }
 
-export const JobUpdateForm: React.FC<JobFormProps> = ({
+export const JobTagCreateForm: React.FC<JobTagFormProps> = ({
   className,
-  jobCallback,
+  jobTagCallback,
   cancelCallback,
   isPending,
 }) => {
-  const jobStore = useJobStore();
+  const jobTagStore = useJobTagStore();
   const { t: tCommon } = useTranslation("common");
-
-  const { currencies, isFetchCurrenciesPending } = useCurrencies();
-  const { jobUpdateFormStructure } = useUpdateJobFormStructure({
-    jobStore,
-    currencies: isFetchCurrenciesPending
-      ? []
-      : currencies.map((currency) => ({
-          label: `${currency.label} (${currency.symbol})`,
-          value: currency.id.toString(),
-        })),
+  const { jobTagCreateFormStructure } = useCreateJobTagFormStructure({
+    jobTagStore,
   });
 
   return (
@@ -40,13 +31,13 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
       className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
     >
       <FormBuilder
-        className="flex flex-col flex-1 overflow-auto h-full px-1"
-        structure={jobUpdateFormStructure}
+        className="mx-auto mt-5 px-2 h-full flex flex-col flex-1 overflow-auto"
+        structure={jobTagCreateFormStructure}
       />
       <div className="flex gap-2 justify-end px-4 py-3 border-t">
         <Button
           onClick={() => {
-            jobCallback?.();
+            jobTagCallback?.();
           }}
           disabled={isPending}
         >

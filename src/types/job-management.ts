@@ -27,3 +27,9 @@ export interface ResponseJobTagDto extends DatabaseEntity {
   id: number;
   label: string;
 }
+
+export interface CreateJobTagDto {
+  label: string;
+}
+
+export interface UpdateJobTagDto extends Partial<CreateJobTagDto> {}

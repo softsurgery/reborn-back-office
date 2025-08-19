@@ -9,15 +9,24 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
+import { ResponseCurrencyDto } from "@/types";
+import React from "react";
 
-interface JobCreateFormStructureProps {
+interface JobUpdateFormStructureProps {
   jobStore: JobStore;
-  currencies: SelectOption[];
+  currencies: ResponseCurrencyDto[];
 }
-export const useCreateJobFormStructure = ({
+export const useUpdateJobFormStructure = ({
   jobStore,
   currencies,
-}: JobCreateFormStructureProps) => {
+}: JobUpdateFormStructureProps) => {
+  const selectedCurrency = React.useMemo(() => {
+    return currencies.find(
+      (currency) => currency.id === jobStore.updateDto.currencyId
+    );
+  }, [currencies, jobStore.updateDto.currencyId]);
+
+
   const titleField: Field<TextFieldProps> = {
     id: "title",
     label: "Job Title",
@@ -25,12 +34,12 @@ export const useCreateJobFormStructure = ({
     required: true,
     placeholder: "Enter job title",
     description: "The title for the job.",
-    error: jobStore.createDtoErrors?.title?.[0],
+    error: jobStore.updateDtoErrors?.title?.[0],
     props: {
-      value: jobStore.createDto.title || undefined,
+      value: jobStore.updateDto.title,
       onChange: (value) => {
-        jobStore.setNested("createDto.title", value);
-        jobStore.setNested("createDtoErrors.title", []);
+        jobStore.setNested("updateDto.title", value);
+        jobStore.setNested("updateDtoErrors.title", []);
       },
     },
   };
@@ -42,13 +51,13 @@ export const useCreateJobFormStructure = ({
     required: true,
     placeholder: "Enter job description",
     description: "The description for the job.",
-    error: jobStore.createDtoErrors?.description?.[0],
+    error: jobStore.updateDtoErrors?.description?.[0],
     props: {
-      value: jobStore.createDto.description || undefined,
+      value: jobStore.updateDto.description,
       rows: 8,
       onChange: (value) => {
-        jobStore.setNested("createDto.description", value);
-        jobStore.setNested("createDtoErrors.description", []);
+        jobStore.setNested("updateDto.description", value);
+        jobStore.setNested("updateDtoErrors.description", []);
       },
     },
   };
@@ -60,12 +69,16 @@ export const useCreateJobFormStructure = ({
     required: true,
     placeholder: "Enter job price",
     description: "The price for the job.",
-    error: jobStore.createDtoErrors?.price?.[0],
+    error: jobStore.updateDtoErrors?.price?.[0],
     props: {
-      value: jobStore.createDto.price || undefined,
+      value: jobStore.updateDto.price || undefined,
       onChange: (value) => {
-        jobStore.setNested("createDto.price", value);
-        jobStore.setNested("createDtoErrors.price", []);
+        if (
+          value == Number(value.toFixed(selectedCurrency?.digitsAfterComma))
+        ) {
+          jobStore.setNested("updateDto.price", Number(value));
+          jobStore.setNested("updateDtoErrors.price", []);
+        }
       },
     },
   };
@@ -78,24 +91,27 @@ export const useCreateJobFormStructure = ({
     required: true,
     description: "Choose the currency for the job.",
     placeholder: "Select currency",
-    error: jobStore.createDtoErrors?.currencyId?.[0],
+    error: jobStore.updateDtoErrors?.currencyId?.[0],
     props: {
-      options: currencies,
-      value: jobStore.createDto.currencyId?.toString(),
+      options: currencies.map((currency) => ({
+        label: `${currency.label} (${currency.symbol})`,
+        value: currency.id.toString(),
+      })),
+      value: jobStore.updateDto?.currencyId?.toString(),
       onValueChange: (value: string) => {
-        jobStore.setNested("createDto.currencyId", value);
-        jobStore.setNested("createDtoErrors.currencyId", []);
+        jobStore.setNested("updateDto.currencyId", value);
+        jobStore.setNested("updateDtoErrors.currencyId", []);
       },
     },
   };
 
-  const jobCreateFormStructure: FormStructure = {
+  const jobUpdateFormStructure: FormStructure = {
     title: "",
     description: "",
     fieldsets: [
       {
         title: "General Information",
-        description: "General information about the job.",
+        description: "Update the information about the job.",
         rows: [
           {
             fields: [titleField],
@@ -112,6 +128,6 @@ export const useCreateJobFormStructure = ({
   };
 
   return {
-    jobCreateFormStructure,
+    jobUpdateFormStructure,
   };
 };

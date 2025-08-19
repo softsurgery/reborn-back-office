@@ -29,8 +29,8 @@ export default function Jobs({ className }: JobsProps) {
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Content Management", href: "/content-management" },
-      { title: "Jobs", href: "/content-management/jobs" },
+      { title: "Services Management", href: "/services-management" },
+      { title: "Jobs", href: "/services-management/jobs" },
     ]);
     setIntro?.("Jobs", "Visualization of the jobs of the application");
     return () => {
@@ -158,6 +158,7 @@ export default function Jobs({ className }: JobsProps) {
   const { deleteJobDialog, openDeleteJobDialog } = useJobDeleteDialog({
     deleteJob: () => deleteJob(jobStore?.response?.id),
     isDeletePending: isDeletionPending,
+    representation: jobStore?.response?.title,
   });
 
   const context: DataTableConfig<ResponseJobDto> = {

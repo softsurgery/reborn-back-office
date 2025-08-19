@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   FileText,
   TerminalSquare,
+  Tag,
 } from "lucide-react";
 
 import {
@@ -28,6 +29,7 @@ import {
 } from "@/components/ui/sidebar";
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
+import { id } from "date-fns/locale";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
@@ -90,11 +92,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Paperclip,
         items: [
           {
-            title: "Jobs",
-            url: "/content-management/jobs",
-            icon: BriefcaseBusiness,
-          },
-          {
             title: "Resources",
             url: "/content-management/resources",
             icon: FileUser,
@@ -126,6 +123,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Developer Logger",
             url: "/audit-monitoring/dev-logger",
             icon: TerminalSquare,
+          },
+        ],
+      },
+      {
+        id: 5,
+        title: "Services Management",
+        url: "/services-management",
+        icon: ShieldCheck,
+        items: [
+          {
+            title: "Jobs",
+            url: "/services-management/jobs",
+            icon: BriefcaseBusiness,
+          },
+          {
+            title: "Job Tags",
+            url: "/services-management/job-tags",
+            icon: Tag,
           },
         ],
       },

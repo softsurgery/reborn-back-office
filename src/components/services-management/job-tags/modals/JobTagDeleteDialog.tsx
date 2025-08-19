@@ -2,37 +2,37 @@ import { useDialog } from "@/components/shared/Dialogs";
 import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
 
-interface JobDeleteDialogProps {
-  jobLabel?: string;
-  deleteJob?: () => void;
+interface JobTagDeleteDialogProps {
+  jobTagLabel?: string;
+  deleteJobTag?: () => void;
   isDeletePending?: boolean;
 }
 
-export const useJobDeleteDialog = ({
-  jobLabel,
-  deleteJob,
+export const useJobTagDeleteDialog = ({
+  jobTagLabel,
+  deleteJobTag,
   isDeletePending,
-}: JobDeleteDialogProps) => {
+}: JobTagDeleteDialogProps) => {
   const {
-    DialogFragment: deleteJobDialog,
-    openDialog: openDeleteJobDialog,
-    closeDialog: closeDeleteJobDialog,
+    DialogFragment: deleteJobTagDialog,
+    openDialog: openDeleteJobTagDialog,
+    closeDialog: closeDeleteJobTagDialog,
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Job <span className="font-light">{jobLabel}</span> ?
+        Delete JobTag <span className="font-light">{jobTagLabel}</span> ?
       </div>
     ),
     description:
-      "This action is irreversible and permanent. Please proceed with caution.",
+      "This action is irreversible and permanent.Please proceed with caution.",
     children: (
       <div>
         <div className="flex gap-2 justify-end">
           <Button
             variant={"destructive"}
             onClick={() => {
-              deleteJob?.();
-              closeDeleteJobDialog();
+              deleteJobTag?.();
+              closeDeleteJobTagDialog();
             }}
           >
             Delete
@@ -41,7 +41,7 @@ export const useJobDeleteDialog = ({
           <Button
             variant={"secondary"}
             onClick={() => {
-              closeDeleteJobDialog();
+              closeDeleteJobTagDialog();
             }}
           >
             Cancel
@@ -53,8 +53,8 @@ export const useJobDeleteDialog = ({
   });
 
   return {
-    deleteJobDialog,
-    openDeleteJobDialog,
-    closeDeleteJobDialog,
+    deleteJobTagDialog,
+    openDeleteJobTagDialog,
+    closeDeleteJobTagDialog,
   };
 };

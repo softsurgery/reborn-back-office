@@ -19,7 +19,7 @@ export const useJobCreateSheet = ({
     closeSheet: closeCreateJobSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <Briefcase />
         Create Job
       </div>
@@ -36,7 +36,7 @@ export const useJobCreateSheet = ({
         isPending={isCreatePending}
       />
     ),
-    className: "min-w-[33vw]",
+    className: "min-w-[33vw] flex flex-col flex-1 overflow-hidden",
     onToggle: resetJob,
   });
 

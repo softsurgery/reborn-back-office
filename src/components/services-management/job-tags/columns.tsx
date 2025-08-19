@@ -1,56 +1,41 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableConfig, ResponseJobDto } from "@/types";
+import { DataTableConfig, ResponseJobTagDto } from "@/types";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 
-export const getJobColumns = (
-  context: DataTableConfig<ResponseJobDto>
-): ColumnDef<ResponseJobDto>[] => {
+
+export const getJobTagColumns = (
+  context: DataTableConfig<ResponseJobTagDto>
+): ColumnDef<ResponseJobTagDto>[] => {
   return [
     {
-      accessorKey: "title",
+      accessorKey: "ID",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Title"}
-          attribute="title"
+          title={"ID"}
+          attribute="id"
           context={context}
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.title}</div>;
+        return <div>{row?.original?.id}</div>;
       },
       enableSorting: true,
       enableHiding: true,
     },
     {
-      accessorKey: "description",
+      accessorKey: "label",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Description"}
-          attribute="description"
+          title={"Label"}
+          attribute="label"
           context={context}
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.description}</div>;
-      },
-      enableSorting: true,
-      enableHiding: true,
-    },
-    {
-      accessorKey: "price",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={"Price"}
-          attribute="price"
-          context={context}
-        />
-      ),
-      cell: ({ row }) => {
-        return <div>{row?.original?.price} TND</div>;
+        return <div>{row?.original?.label}</div>;
       },
       enableSorting: true,
       enableHiding: true,
