@@ -1,7 +1,5 @@
-import { MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapIcon } from "lucide-react";
 import { useSheet } from "@/components/shared/Sheets";
-import { Spinner } from "@/components/shared/Spinner";
 import { RegionUpdateForm } from "../forms/RegionUpdateForm";
 
 interface RegionUpdateSheet {
@@ -21,8 +19,8 @@ export const useRegionUpdateSheet = ({
     closeSheet: closeUpdateRegionSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center gap-2">
-        <MessageCircle />
+      <div className="flex items-center">
+        <MapIcon />
         Update Region
       </div>
     ),
@@ -35,9 +33,10 @@ export const useRegionUpdateSheet = ({
           closeUpdateRegionSheet?.();
           resetRegion?.();
         }}
+        isPending={isUpdatePending}
       />
     ),
-    className: "min-w-[25vw]",
+    className: "min-w-[25vw] flex flex-col flex-1 overflow-hidden",
     onToggle: resetRegion,
   });
 

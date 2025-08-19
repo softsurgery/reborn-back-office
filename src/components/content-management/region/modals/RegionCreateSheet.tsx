@@ -1,4 +1,4 @@
-import { Globe } from "lucide-react";
+import { MapIcon } from "lucide-react";
 import { RegionCreateForm } from "../forms/RegionCreateForm";
 import { useSheet } from "@/components/shared/Sheets";
 import { useTranslation } from "react-i18next";
@@ -22,15 +22,14 @@ export const useRegionCreateSheet = ({
     closeSheet: closeCreateRegionSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center gap-2">
-        <Globe />
+      <div className="flex items-center">
+        <MapIcon />
         Create Region
       </div>
     ),
     description: "Fill out the region details below.",
     children: (
       <RegionCreateForm
-        className="my-4"
         regionCallback={createRegion}
         cancelCallback={() => {
           closeCreateRegionSheet?.();
@@ -39,7 +38,7 @@ export const useRegionCreateSheet = ({
         isPending={isCreatePending}
       />
     ),
-    className: "min-w-[25vw]",
+    className: "min-w-[25vw] flex flex-col flex-1 overflow-hidden",
     onToggle: resetRegion,
   });
 
