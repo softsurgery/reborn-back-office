@@ -27,7 +27,7 @@ export const useUpdateJobFormStructure = ({
     description: "The title for the job.",
     error: jobStore.updateDtoErrors?.title?.[0],
     props: {
-      value: jobStore.updateDto.title || undefined,
+      value: jobStore.updateDto.title,
       onChange: (value) => {
         jobStore.setNested("updateDto.title", value);
         jobStore.setNested("updateDtoErrors.title", []);
@@ -44,7 +44,7 @@ export const useUpdateJobFormStructure = ({
     description: "The description for the job.",
     error: jobStore.updateDtoErrors?.description?.[0],
     props: {
-      value: jobStore.updateDto.description || undefined,
+      value: jobStore.updateDto.description,
       rows: 8,
       onChange: (value) => {
         jobStore.setNested("updateDto.description", value);
@@ -64,7 +64,7 @@ export const useUpdateJobFormStructure = ({
     props: {
       value: jobStore.updateDto.price || undefined,
       onChange: (value) => {
-        jobStore.setNested("updateDto.price", value);
+        jobStore.setNested("updateDto.price", Number(value));
         jobStore.setNested("updateDtoErrors.price", []);
       },
     },
@@ -81,10 +81,10 @@ export const useUpdateJobFormStructure = ({
     error: jobStore.updateDtoErrors?.currencyId?.[0],
     props: {
       options: currencies,
-      value: jobStore.updateDto.currencyId?.toString(),
+      value: jobStore.updateDto?.currencyId?.toString(),
       onValueChange: (value: string) => {
         console.log(value);
-        jobStore.setNested("updateDto.currencyId", value);
+        jobStore.setNested("updateDto.currencyId", Number(value));
         jobStore.setNested("updateDtoErrors.currencyId", []);
       },
     },

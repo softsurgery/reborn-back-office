@@ -62,9 +62,9 @@ export const useCreateJobFormStructure = ({
     description: "The price for the job.",
     error: jobStore.createDtoErrors?.price?.[0],
     props: {
-      value: jobStore.createDto.price || undefined,
+      value: jobStore.createDto?.price,
       onChange: (value) => {
-        jobStore.setNested("createDto.price", value);
+        jobStore.setNested("createDto.price", Number(value));
         jobStore.setNested("createDtoErrors.price", []);
       },
     },
@@ -81,7 +81,7 @@ export const useCreateJobFormStructure = ({
     error: jobStore.createDtoErrors?.currencyId?.[0],
     props: {
       options: currencies,
-      value: jobStore.createDto.currencyId?.toString(),
+      value: jobStore.createDto?.currencyId?.toString(),
       onValueChange: (value: string) => {
         jobStore.setNested("createDto.currencyId", value);
         jobStore.setNested("createDtoErrors.currencyId", []);

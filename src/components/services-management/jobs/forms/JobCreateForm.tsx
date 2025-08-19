@@ -6,7 +6,6 @@ import { Save } from "lucide-react";
 import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useTranslation } from "react-i18next";
 import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
-import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
 import { useCurrencies } from "@/hooks/content/useCurrencies";
 
 interface JobFormProps {
