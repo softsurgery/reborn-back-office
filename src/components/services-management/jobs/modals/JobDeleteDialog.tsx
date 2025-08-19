@@ -3,13 +3,13 @@ import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
 
 interface JobDeleteDialogProps {
-  jobLabel?: string;
+  representation?: string;
   deleteJob?: () => void;
   isDeletePending?: boolean;
 }
 
 export const useJobDeleteDialog = ({
-  jobLabel,
+  representation,
   deleteJob,
   isDeletePending,
 }: JobDeleteDialogProps) => {
@@ -20,7 +20,7 @@ export const useJobDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Job <span className="font-light">{jobLabel}</span> ?
+        Delete Job <span className="font-light">{representation}</span> ?
       </div>
     ),
     description:
