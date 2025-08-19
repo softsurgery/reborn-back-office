@@ -9,15 +9,24 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
+import { ResponseCurrencyDto } from "@/types";
+import React from "react";
 
 interface JobUpdateFormStructureProps {
   jobStore: JobStore;
-  currencies: SelectOption[];
+  currencies: ResponseCurrencyDto[];
 }
 export const useUpdateJobFormStructure = ({
   jobStore,
   currencies,
 }: JobUpdateFormStructureProps) => {
+  const selectedCurrency = React.useMemo(() => {
+    return currencies.find(
+      (currency) => currency.id === jobStore.updateDto.currencyId
+    );
+  }, [currencies, jobStore.updateDto.currencyId]);
+
+
   const titleField: Field<TextFieldProps> = {
     id: "title",
     label: "Job Title",
@@ -64,8 +73,12 @@ export const useUpdateJobFormStructure = ({
     props: {
       value: jobStore.updateDto.price || undefined,
       onChange: (value) => {
-        jobStore.setNested("updateDto.price", Number(value));
-        jobStore.setNested("updateDtoErrors.price", []);
+        if (
+          value == Number(value.toFixed(selectedCurrency?.digitsAfterComma))
+        ) {
+          jobStore.setNested("updateDto.price", Number(value));
+          jobStore.setNested("updateDtoErrors.price", []);
+        }
       },
     },
   };
@@ -80,11 +93,13 @@ export const useUpdateJobFormStructure = ({
     placeholder: "Select currency",
     error: jobStore.updateDtoErrors?.currencyId?.[0],
     props: {
-      options: currencies,
+      options: currencies.map((currency) => ({
+        label: `${currency.label} (${currency.symbol})`,
+        value: currency.id.toString(),
+      })),
       value: jobStore.updateDto?.currencyId?.toString(),
       onValueChange: (value: string) => {
-        console.log(value);
-        jobStore.setNested("updateDto.currencyId", Number(value));
+        jobStore.setNested("updateDto.currencyId", value);
         jobStore.setNested("updateDtoErrors.currencyId", []);
       },
     },

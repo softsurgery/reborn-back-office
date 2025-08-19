@@ -50,7 +50,11 @@ export const getJobColumns = (
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.price} TND</div>;
+        return (
+          <div>
+            {row?.original?.price} {row?.original?.currency?.symbol}
+          </div>
+        );
       },
       enableSorting: true,
       enableHiding: true,

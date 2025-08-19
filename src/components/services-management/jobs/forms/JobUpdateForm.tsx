@@ -27,12 +27,7 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
   const { currencies, isFetchCurrenciesPending } = useCurrencies();
   const { jobUpdateFormStructure } = useUpdateJobFormStructure({
     jobStore,
-    currencies: isFetchCurrenciesPending
-      ? []
-      : currencies.map((currency) => ({
-          label: `${currency.label} (${currency.symbol})`,
-          value: currency.id.toString(),
-        })),
+    currencies
   });
 
   return (
