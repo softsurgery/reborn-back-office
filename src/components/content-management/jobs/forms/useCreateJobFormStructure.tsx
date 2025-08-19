@@ -3,6 +3,8 @@ import {
   FieldVariant,
   FormStructure,
   NumberFieldProps,
+  SelectFieldProps,
+  SelectOption,
   TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
@@ -10,9 +12,11 @@ import { JobStore } from "@/hooks/stores/useJobStore";
 
 interface JobCreateFormStructureProps {
   jobStore: JobStore;
+  currencies: SelectOption[];
 }
 export const useCreateJobFormStructure = ({
   jobStore,
+  currencies,
 }: JobCreateFormStructureProps) => {
   const titleField: Field<TextFieldProps> = {
     id: "title",
@@ -66,6 +70,25 @@ export const useCreateJobFormStructure = ({
     },
   };
 
+  //currency
+  const currencyField: Field<SelectFieldProps> = {
+    id: "currency",
+    label: "Currency",
+    variant: FieldVariant.SELECT,
+    required: true,
+    description: "Choose the currency for the job.",
+    placeholder: "Select currency",
+    error: jobStore.createDtoErrors?.currencyId?.[0],
+    props: {
+      options: currencies,
+      value: jobStore.createDto.currencyId?.toString(),
+      onValueChange: (value: string) => {
+        jobStore.setNested("createDto.currencyId", value);
+        jobStore.setNested("createDtoErrors.currencyId", []);
+      },
+    },
+  };
+
   const jobCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -81,7 +104,7 @@ export const useCreateJobFormStructure = ({
             fields: [descriptionField],
           },
           {
-            fields: [priceField],
+            fields: [priceField, currencyField],
           },
         ],
       },

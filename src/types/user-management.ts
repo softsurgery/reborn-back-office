@@ -66,6 +66,7 @@ export interface ResponsePermissionDto extends DatabaseEntity {
 export interface RequestResetTokenDto {
   usernameOrEmail: string;
 }
+
 export interface ResponseResetTokenDto {
   email: string;
   success: boolean;

@@ -25,9 +25,6 @@ interface JobsProps {
 }
 
 export default function Jobs({ className }: JobsProps) {
-  //next-router
-  const router = useRouter();
-
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
@@ -187,6 +184,8 @@ export default function Jobs({ className }: JobsProps) {
         title: job.title,
         description: job.description,
         price: job.price,
+        jobTagIds: job.jobTags.map((tag) => tag.id),
+        currencyId: job.currencyId.toString(),
       });
     },
   };
