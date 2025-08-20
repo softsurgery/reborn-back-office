@@ -148,7 +148,19 @@ export interface SingleFileFieldProps extends BaseFieldProps {
   onUpload?: (file: File, onProgress: (percent: number) => void) => void;
 }
 
-export interface ImageGalleryFieldProps extends BaseFieldProps {}
+export interface ImageGalleryFieldProps extends BaseFieldProps {
+  images: ImageFile[];
+  onFilesChange?: (e: ImageFile[]) => void;
+  onUpload?: (file: File, onProgress: (percent: number) => void) => void;
+}
+
+export interface ImageFile {
+  id: string;
+  image?: File | null;
+  url?: string;
+  name: string;
+  progress: number;
+}
 
 export interface CustomFieldProps extends BaseFieldProps {
   className?: string;

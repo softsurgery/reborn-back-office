@@ -79,7 +79,7 @@ export const FormBuilder = ({ className, structure }: FormBuilderProps) => {
                           key={field.id}
                           className={cn(
                             "flex flex-col gap-2 w-full",
-                            field.containerClassName
+                            field.wrapperClassName
                           )}
                         >
                           <div className="flex flex-row justify-between items-center">

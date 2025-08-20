@@ -42,8 +42,8 @@ export const ImageUploader = ({
           if (file) {
             onFileChange?.(file);
             if (onUpload) {
-              onUpload(file, (percent: number) => {
-                progress = percent;
+              onUpload(file, (currentProgress: number) => {
+                progress = currentProgress;
               });
             }
           }

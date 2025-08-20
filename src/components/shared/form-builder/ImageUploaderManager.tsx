@@ -1,30 +1,30 @@
-import React, { useState, useRef, type DragEvent } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { X, GripVertical, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Separator } from "../../ui/separator";
-
-interface ImageFile {
-  id: string;
-  file: File;
-  url: string;
-  name: string;
-}
+import { ImageFile } from "./types";
 
 interface ImageUploadManagerProps {
   className?: string;
+  wrapperClassName?: string;
+  images: ImageFile[];
+  onFilesChange?: (e: ImageFile[]) => void;
+  onUpload?: (file: File, onProgress: (percent: number) => void) => void;
 }
 
 export function ImageUploaderManager({
   className,
+  wrapperClassName,
+  images,
+  onFilesChange,
+  onUpload,
   ...props
 }: ImageUploadManagerProps) {
-  const [images, setImages] = useState<ImageFile[]>([]);
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (files: FileList | null) => {
     if (!files) return;
@@ -33,44 +33,50 @@ export function ImageUploaderManager({
       .filter((file) => file.type.startsWith("image/"))
       .map((file) => ({
         id: Math.random().toString(36).substr(2, 9),
-        file,
+        image: file,
         url: URL.createObjectURL(file),
         name: file.name,
+        progress: 0,
       }));
 
-    setImages((prev) => [...prev, ...newImages]);
+    const allImages = [...images, ...newImages];
+    onFilesChange?.(allImages);
+
+    if (onUpload) {
+      newImages.forEach((img) => {
+        if (!img.image) return;
+        onUpload(img.image, (currentProgress: number) => {
+          img.progress = currentProgress;
+        });
+      });
+    }
   };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     handleFileSelect(e.dataTransfer.files);
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
   const removeImage = (id: string) => {
-    setImages((prev) => {
-      const updated = prev.filter((img) => img.id !== id);
-      // Clean up object URL to prevent memory leaks
-      const imageToRemove = prev.find((img) => img.id === id);
-      if (imageToRemove) {
-        URL.revokeObjectURL(imageToRemove.url);
-      }
-      return updated;
-    });
+    onFilesChange?.(images.filter((img) => img.id !== id));
   };
 
   const handleImageDragStart = (
-    e: DragEvent<HTMLDivElement>,
+    e: React.DragEvent<HTMLDivElement>,
     index: number
   ) => {
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleImageDragOver = (e: DragEvent<HTMLDivElement>, index: number) => {
+  const handleImageDragOver = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     setDragOverIndex(index);
@@ -80,7 +86,10 @@ export function ImageUploaderManager({
     setDragOverIndex(null);
   };
 
-  const handleImageDrop = (e: DragEvent<HTMLDivElement>, dropIndex: number) => {
+  const handleImageDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    dropIndex: number
+  ) => {
     e.preventDefault();
 
     if (draggedIndex === null || draggedIndex === dropIndex) {
@@ -97,7 +106,7 @@ export function ImageUploaderManager({
     newImages[draggedIndex] = targetImage;
     newImages[dropIndex] = draggedImage;
 
-    setImages(newImages);
+    onFilesChange?.(newImages);
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
@@ -140,9 +149,9 @@ export function ImageUploaderManager({
           </div>
 
           {/* Existing Images */}
-          {images.map((image, index) => (
+          {images?.map((imageObj, index) => (
             <div
-              key={image.id}
+              key={imageObj.id}
               draggable
               onDragStart={(e) => handleImageDragStart(e, index)}
               onDragOver={(e) => handleImageDragOver(e, index)}
@@ -160,10 +169,15 @@ export function ImageUploaderManager({
                   "border-border hover:border-primary/50"
               )}
             >
-              <div className="aspect-square relative overflow-hidden">
+              <div
+                className={cn(
+                  "aspect-square relative overflow-hidden",
+                  imageObj.progress != 100 && "opacity-50"
+                )}
+              >
                 <Image
-                  src={image.url || "/placeholder.svg"}
-                  alt={image.name}
+                  src={imageObj.url as string}
+                  alt={imageObj.name}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   fill
                 />
@@ -182,7 +196,7 @@ export function ImageUploaderManager({
                   className="absolute top-3 right-3 h-8 w-8 p-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 shadow-lg"
                   onClick={(e) => {
                     e.stopPropagation();
-                    removeImage(image.id);
+                    removeImage(imageObj.id);
                   }}
                 >
                   <X className="h-4 w-4" />
@@ -190,7 +204,9 @@ export function ImageUploaderManager({
 
                 {/* Image Name */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <p className="text-sm font-medium truncate">{image.name}</p>
+                  <p className="text-sm font-medium truncate">
+                    {imageObj.name}
+                  </p>
                 </div>
 
                 <div className="absolute top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg">
@@ -201,7 +217,7 @@ export function ImageUploaderManager({
           ))}
         </div>
 
-        {images.length > 0 && (
+        {images?.length > 0 && (
           <React.Fragment>
             <Separator className="my-4" />
             <div className="flex items-center justify-between border-border">
@@ -214,7 +230,7 @@ export function ImageUploaderManager({
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  onClick={() => setImages([])}
+                  onClick={() => onFilesChange?.([])}
                   disabled={images.length === 0}
                 >
                   Clear All
