@@ -7,6 +7,9 @@ import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useUpdateJobFormStructure } from "./useUpdateJobFormStructure";
 import { useTranslation } from "react-i18next";
 import { useCurrencies } from "@/hooks/content/useCurrencies";
+import { Upload } from "@/types";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
+import { toast } from "sonner";
 
 interface JobFormProps {
   className?: string;
@@ -25,9 +28,22 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
   const { t: tCommon } = useTranslation("common");
 
   const { currencies, isFetchCurrenciesPending } = useCurrencies();
+
+  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      jobStore.appendUploadId("update", {
+        uploadId: response?.[0]?.id,
+      });
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+
   const { jobUpdateFormStructure } = useUpdateJobFormStructure({
     jobStore,
-    currencies
+    currencies,
+    uploadPicture,
   });
 
   return (
@@ -35,7 +51,7 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
       className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
     >
       <FormBuilder
-        className="flex flex-col flex-1 overflow-auto h-full px-1"
+        className="flex flex-col flex-1 overflow-auto no-scrollbar h-full px-1"
         structure={jobUpdateFormStructure}
       />
       <div className="flex gap-2 justify-end px-4 py-3 border-t">

@@ -1,4 +1,5 @@
 import { ResponseCurrencyDto } from "./content";
+import { Upload } from "./upload";
 import { ResponseUserDto } from "./user-management";
 import { DatabaseEntity } from "./utils/database-entity";
 
@@ -11,6 +12,7 @@ export interface ResponseJobDto extends DatabaseEntity {
   currency: ResponseCurrencyDto;
   currencyId: string;
   jobTags: ResponseJobTagDto[];
+  uploads: ResponseJobUploadDto[];
 }
 
 export interface CreateJobDto {
@@ -19,9 +21,12 @@ export interface CreateJobDto {
   price: number;
   jobTagIds: number[];
   currencyId?: string;
+  uploads?: { uploadId: number }[];
 }
 
-export interface UpdateJobDto extends Partial<CreateJobDto> {}
+export interface UpdateJobDto extends Partial<CreateJobDto> {
+  uploads?: { id: number; uploadId: number }[];
+}
 
 export interface ResponseJobTagDto extends DatabaseEntity {
   id: number;
@@ -33,3 +38,12 @@ export interface CreateJobTagDto {
 }
 
 export interface UpdateJobTagDto extends Partial<CreateJobTagDto> {}
+
+export interface ResponseJobUploadDto extends DatabaseEntity {
+  id: number;
+  jobId: string;
+  job: ResponseJobDto;
+  uploadId: number;
+  upload: Upload;
+  order: number;
+}

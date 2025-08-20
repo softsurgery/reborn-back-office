@@ -49,9 +49,6 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
     onSuccess: (response: Upload[]) => {
       userStore.setNested("createDto.profile.pictureId", response?.[0]?.id);
     },
-    onError: (error: any) => {
-      userStore.setNested("createDtoErrors.pictureId", [error.message]);
-    },
   });
 
   const { userCreateFormStructure, profileCreateFormStructure } =

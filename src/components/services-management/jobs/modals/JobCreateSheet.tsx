@@ -36,7 +36,7 @@ export const useJobCreateSheet = ({
         isPending={isCreatePending}
       />
     ),
-    className: "min-w-[33vw] flex flex-col flex-1 overflow-hidden",
+    className: "min-w-[50vw] flex flex-col flex-1 overflow-hidden",
     onToggle: resetJob,
   });
 

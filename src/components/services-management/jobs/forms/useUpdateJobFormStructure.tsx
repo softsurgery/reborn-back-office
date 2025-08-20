@@ -2,30 +2,33 @@ import {
   Field,
   FieldVariant,
   FormStructure,
+  ImageFile,
+  ImageGalleryFieldProps,
   NumberFieldProps,
   SelectFieldProps,
-  SelectOption,
   TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
 import { ResponseCurrencyDto } from "@/types";
 import React from "react";
 
 interface JobUpdateFormStructureProps {
   jobStore: JobStore;
   currencies: ResponseCurrencyDto[];
+  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
 }
 export const useUpdateJobFormStructure = ({
   jobStore,
   currencies,
+  uploadPicture,
 }: JobUpdateFormStructureProps) => {
   const selectedCurrency = React.useMemo(() => {
     return currencies.find(
       (currency) => currency.id === jobStore.updateDto.currencyId
     );
   }, [currencies, jobStore.updateDto.currencyId]);
-
 
   const titleField: Field<TextFieldProps> = {
     id: "title",
@@ -105,6 +108,27 @@ export const useUpdateJobFormStructure = ({
     },
   };
 
+  const uploadsField: Field<ImageGalleryFieldProps> = {
+    id: "uploads",
+    label: "Uploads",
+    variant: FieldVariant.IMAGE_GALLERY,
+    props: {
+      images: jobStore.images,
+      onFilesChange: (e: ImageFile[]) => {
+        jobStore.updateImages("update", e);
+      },
+      onUpload: (file, onProgress) => {
+        uploadPicture({
+          files: [file],
+          onProgress: (progress: number) => {
+            jobStore.setImageProgress(file, progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
   const jobUpdateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -121,6 +145,9 @@ export const useUpdateJobFormStructure = ({
           },
           {
             fields: [priceField, currencyField],
+          },
+          {
+            fields: [uploadsField],
           },
         ],
       },

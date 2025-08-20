@@ -13,7 +13,7 @@ const findPaginated = async ({
   sort,
   search = "",
   filter = "",
-  join = "",
+  join = "uploads",
 }: QueryParams): Promise<Paginated<ResponseJobDto>> => {
   const params: { [key: string]: any } = {
     page,

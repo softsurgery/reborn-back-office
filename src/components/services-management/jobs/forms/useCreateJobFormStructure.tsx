@@ -2,27 +2,32 @@ import {
   Field,
   FieldVariant,
   FormStructure,
+  ImageFile,
+  ImageGalleryFieldProps,
   NumberFieldProps,
   SelectFieldProps,
-  SelectOption,
   TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
 import { ResponseCurrencyDto } from "@/types";
 import React from "react";
 
 interface JobCreateFormStructureProps {
   jobStore: JobStore;
   currencies: ResponseCurrencyDto[];
+  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
 }
 export const useCreateJobFormStructure = ({
   jobStore,
   currencies,
+  uploadPicture,
 }: JobCreateFormStructureProps) => {
-
   const selectedCurrency = React.useMemo(() => {
-    return currencies.find((currency) => currency.id === jobStore.createDto.currencyId);
+    return currencies.find(
+      (currency) => currency.id === jobStore.createDto.currencyId
+    );
   }, [currencies, jobStore.createDto.currencyId]);
 
   const titleField: Field<TextFieldProps> = {
@@ -72,8 +77,7 @@ export const useCreateJobFormStructure = ({
       value: jobStore.createDto?.price,
       onChange: (value) => {
         if (
-          value ==
-          Number(value.toFixed(selectedCurrency?.digitsAfterComma))
+          value == Number(value.toFixed(selectedCurrency?.digitsAfterComma))
         ) {
           jobStore.setNested("createDto.price", Number(value));
           jobStore.setNested("createDtoErrors.price", []);
@@ -104,6 +108,27 @@ export const useCreateJobFormStructure = ({
     },
   };
 
+  const uploadsField: Field<ImageGalleryFieldProps> = {
+    id: "uploads",
+    label: "Uploads",
+    variant: FieldVariant.IMAGE_GALLERY,
+    props: {
+      images: jobStore.images,
+      onFilesChange: (e: ImageFile[]) => {
+        jobStore.updateImages("create", e);
+      },
+      onUpload: (file, onProgress) => {
+        uploadPicture({
+          files: [file],
+          onProgress: (progress: number) => {
+            jobStore.setImageProgress(file, progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
   const jobCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -120,6 +145,9 @@ export const useCreateJobFormStructure = ({
           },
           {
             fields: [priceField, currencyField],
+          },
+          {
+            fields: [uploadsField],
           },
         ],
       },

@@ -1,7 +1,6 @@
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
-import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
@@ -86,6 +85,7 @@ export default function Jobs({ className }: JobsProps) {
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
         search: debouncedSearchTerm,
+        join: "uploads.upload",
       }),
   });
 
@@ -145,14 +145,14 @@ export default function Jobs({ className }: JobsProps) {
     useJobCreateSheet({
       createJob: handleCreateSubmit,
       isCreatePending: isCreationPending,
-      resetJob: () => jobStore.reset(),
+      resetJob: jobStore.reset,
     });
 
   const { updateJobSheet, openUpdateJobSheet, closeUpdateJobSheet } =
     useJobUpdateSheet({
       updateJob: handleUpdateSubmit,
       isUpdatePending: isUpdatePending,
-      resetJob: () => jobStore.reset(),
+      resetJob: jobStore.reset,
     });
 
   const { deleteJobDialog, openDeleteJobDialog } = useJobDeleteDialog({
@@ -160,6 +160,48 @@ export default function Jobs({ className }: JobsProps) {
     isDeletePending: isDeletionPending,
     representation: jobStore?.response?.title,
   });
+
+  const { data: images } = useQuery({
+    queryKey: ["job-images", jobStore.response?.uploads],
+    queryFn: async () => {
+      const uploads = Array.isArray(jobStore.updateDto?.uploads)
+        ? jobStore.updateDto.uploads
+        : [];
+      const blobs = await Promise.all(
+        uploads.map(async (upload) => {
+          const name =
+            jobStore.response?.uploads.find(
+              (ru) => ru.uploadId === upload.uploadId
+            )?.upload.filename || `image-${upload.uploadId}.png`;
+
+          const url = await api.upload.getUploadById(upload.uploadId);
+          return {
+            id: upload.uploadId.toString(),
+            url,
+            name,
+            image: null,
+            progress: 100,
+          };
+        })
+      );
+      return blobs;
+    },
+    enabled:
+      Array.isArray(jobStore.updateDto?.uploads) &&
+      jobStore.updateDto.uploads.length > 0,
+    staleTime: Infinity,
+  });
+
+  React.useEffect(() => {
+    if (
+      images &&
+      !jobStore.hasInitializedImages &&
+      jobStore.images.length === 0
+    ) {
+      jobStore.set("images", images);
+      jobStore.set("hasInitializedImages", true);
+    }
+  }, [images, jobStore.hasInitializedImages, jobStore]);
 
   const context: DataTableConfig<ResponseJobDto> = {
     singularName: "Job",
@@ -180,6 +222,7 @@ export default function Jobs({ className }: JobsProps) {
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
     targetEntity: (job: ResponseJobDto) => {
+      const uploads = job.uploads.sort((a, b) => a.order - b.order);
       jobStore.set("response", job);
       jobStore.set("updateDto", {
         title: job.title,
@@ -187,6 +230,10 @@ export default function Jobs({ className }: JobsProps) {
         price: job.price,
         jobTagIds: job.jobTags.map((tag) => tag.id),
         currencyId: job.currencyId.toString(),
+        uploads: uploads.map((upload) => ({
+          id: upload.id,
+          uploadId: upload.uploadId,
+        })),
       });
     },
   };

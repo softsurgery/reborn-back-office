@@ -7,6 +7,9 @@ import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useTranslation } from "react-i18next";
 import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
 import { useCurrencies } from "@/hooks/content/useCurrencies";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
+import { Upload } from "@/types";
+import { toast } from "sonner";
 
 interface JobFormProps {
   className?: string;
@@ -25,9 +28,20 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
   const { t: tCommon } = useTranslation("common");
 
   const { currencies, isFetchCurrenciesPending } = useCurrencies();
+
+  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      jobStore.appendUploadId("create", { uploadId: response?.[0]?.id });
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+
   const { jobCreateFormStructure } = useCreateJobFormStructure({
     jobStore,
-    currencies
+    currencies,
+    uploadPicture,
   });
 
   return (
@@ -35,13 +49,16 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
       className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
     >
       <FormBuilder
-        className="flex flex-col flex-1 overflow-auto h-full px-1"
+        className="flex flex-col flex-1 overflow-auto no-scrollbar h-full px-1"
         structure={jobCreateFormStructure}
       />
       <div className="flex gap-2 justify-end px-4 py-3 border-t">
         <Button
           onClick={() => {
             jobCallback?.();
+            // console.log(jobStore.createDto);
+            // console.log(jobStore.images);
+            // console.log(jobStore.createDto.uploads);
           }}
           disabled={isPending}
         >

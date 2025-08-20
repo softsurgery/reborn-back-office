@@ -49,9 +49,6 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     onSuccess: (response: Upload[]) => {
       userStore.setNested("updateDto.profile.pictureId", response?.[0]?.id);
     },
-    onError: (error: any) => {
-      userStore.setNested("updateDtoErrors.pictureId", [error.message]);
-    },
   });
 
   const { userUpdateFormStructure, profileUpdateFormStructure } =
