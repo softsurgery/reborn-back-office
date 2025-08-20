@@ -36,6 +36,7 @@ export enum FieldVariant {
   SWITCH = "switch",
   TEXTAREA = "textarea",
   IMAGE = "image",
+  IMAGE_GALLERY = "image_gallery",
   FILE = "file",
   EMPTY = "empty",
   CUSTOM = "custom",
@@ -45,7 +46,7 @@ export interface Field<T = any> {
   id: string;
   label?: string;
   className?: string;
-  containerClassName?: string;
+  wrapperClassName?: string;
   variant: FieldVariant;
   required?: boolean;
   description?: string;
@@ -90,7 +91,6 @@ export interface DateFieldProps extends BaseFieldProps {
   value?: Date | null;
   onDateChange?: (e: Date | null) => void;
   nullable?: boolean;
-  disabled?: boolean;
 }
 
 export interface SelectOption {
@@ -135,7 +135,6 @@ export interface ImageFieldProps extends BaseFieldProps {
   accept?: string;
   progress?: number;
   placeholder?: string;
-  disabled?: boolean;
   fallback?: string;
   onFileChange?: (e: File) => void;
   onUpload?: (file: File, onProgress: (percent: number) => void) => void;
@@ -145,10 +144,11 @@ export interface SingleFileFieldProps extends BaseFieldProps {
   file?: File | null;
   accept?: string;
   progress?: number;
-  disabled?: boolean;
   onFileChange?: (e: File) => void;
   onUpload?: (file: File, onProgress: (percent: number) => void) => void;
 }
+
+export interface ImageGalleryFieldProps extends BaseFieldProps {}
 
 export interface CustomFieldProps extends BaseFieldProps {
   className?: string;

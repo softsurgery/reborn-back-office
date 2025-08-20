@@ -18,14 +18,14 @@ import { Field, SelectOption } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
 import { PasswordField } from "../PasswordField";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ImageUploaderManager } from "@/components/shared/form-builder/ImageUploaderManager";
+import { ImageUploader } from "./ImageUploader";
 
 interface FieldBuilderProps {
   field?: Field<any>;
 }
 
 export const FieldBuilder = ({ field }: FieldBuilderProps) => {
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const { t } = useTranslation("common");
 
   switch (field?.variant) {
@@ -193,7 +193,7 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
       );
     case "file":
       return (
-        <div className={cn("flex flex-col gap-2", field?.className)}>
+        <div className={cn("flex flex-col gap-2", field?.wrapperClassName)}>
           <Input
             {...field.props}
             id={field.id}
@@ -228,47 +228,25 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
       );
     case "image":
       return (
-        <div className={cn("flex flex-col gap-2 items-center")}>
-          <input
-            {...field.props}
-            id={field.id}
-            type="file"
-            accept={field.props?.accept || "image/*"}
-            className="hidden"
-            ref={fileInputRef}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                field?.props?.onFileChange?.(file);
-                if (field?.props?.onUpload) {
-                  field?.props?.onUpload(file, (percent: number) => {
-                    field.props.progress = percent;
-                  });
-                }
-              }
-            }}
-          />
-          <Avatar
-            className={cn(
-              "w-24 h-24 cursor-pointer hover:opacity-80 transition",
-              field?.props?.disabled && "opacity-40 pointer-events-none",
-              field?.className
-            )}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <AvatarImage
-              src={
-                field.props?.image
-                  ? typeof field.props?.image === "string"
-                    ? field.props?.image
-                    : URL.createObjectURL(field.props?.image)
-                  : undefined
-              }
-            />
-            <AvatarFallback>{field.props?.fallback || "?"}</AvatarFallback>
-          </Avatar>
-        </div>
+        <ImageUploader
+          {...field.props}
+          wrapperClassName={cn(field?.wrapperClassName)}
+          className={cn("flex flex-col gap-2 items-center", field?.className)}
+          id={field.id}
+          image={field?.props?.image}
+          fallback={field?.props?.fallback}
+          disabled={field?.props?.disabled}
+          accept={field?.props?.accept}
+          onFileChange={(e: File) => field?.props?.onFileChange?.(e)}
+          onUpload={(file, onProgress) =>
+            field?.props?.onUpload?.(file, onProgress)
+          }
+        />
       );
+
+    case "image_gallery":
+      return <ImageUploaderManager {...field.props} />;
+
     case "custom":
       return (
         <div className={cn("flex flex-col gap-2", field?.className)}>
