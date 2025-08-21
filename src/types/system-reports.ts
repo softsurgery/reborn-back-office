@@ -1,3 +1,4 @@
+import { ResponseUserDto } from "./user-management";
 import { DatabaseEntity } from "./utils/database-entity";
 
 export interface ResponseDeviceInfoDto extends DatabaseEntity {
@@ -23,6 +24,8 @@ export interface ResponseBugDto extends DatabaseEntity {
   variant: BugVariant;
   deviceId: number;
   device?: ResponseDeviceInfoDto;
+  user: ResponseUserDto;
+  userId: number;
 }
 
 export enum FeedbackCategory {
@@ -38,4 +41,6 @@ export interface ResponseFeedbackDto extends DatabaseEntity {
   rating?: number;
   device: ResponseDeviceInfoDto;
   deviceId: number;
+  user: ResponseUserDto;
+  userId: number;
 }

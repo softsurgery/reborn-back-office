@@ -3,6 +3,9 @@ import { ResponseBugDto } from "@/types/system-reports";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import { useTranslation } from "react-i18next";
+import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
+import { DataTableCellVariant } from "@/types";
+import { identifyUser } from "@/lib/user.utils";
 
 export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
   const { t } = useTranslation("bug");
@@ -50,6 +53,42 @@ export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
       cell: ({ row }) => (
         <div>{row.original.variant || t("bug.columns.noVariant")}</div>
       ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: `${t("bug.columns.user")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("bug.columns.user")}
+          attribute="user"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => <div>{identifyUser(row.original.user)}</div>,
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: `${t("bug.columns.createdAt")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("bug.columns.createdAt")}
+          attribute="createdAt"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        const date = new Date(row?.original?.createdAt);
+        return (
+          <DataTableCell
+            variant={DataTableCellVariant.DATE_TIME}
+            value={date}
+          />
+        );
+      },
       enableSorting: true,
       enableHiding: true,
     },

@@ -1,8 +1,4 @@
-import {
-  Paginated,
-  QueryParams,
-  ResponseBugDto,
-} from "@/types";
+import { Paginated, QueryParams, ResponseBugDto } from "@/types";
 import axios from "./axios";
 
 const findPaginated = async ({
@@ -11,7 +7,7 @@ const findPaginated = async ({
   sort,
   search = "",
   filter = "",
-  join = "",
+  join = "user",
 }: QueryParams): Promise<Paginated<ResponseBugDto>> => {
   const params: { [key: string]: any } = {
     page,
@@ -23,12 +19,9 @@ const findPaginated = async ({
   if (filter) params.filter = filter;
   if (join) params.join = join;
 
-  const response = await axios.get<Paginated<ResponseBugDto>>(
-    `/bug/list`,
-    {
-      params,
-    }
-  );
+  const response = await axios.get<Paginated<ResponseBugDto>>(`/bug/list`, {
+    params,
+  });
 
   return response.data;
 };
@@ -42,7 +35,6 @@ const findById = async (bugId: number): Promise<ResponseBugDto> => {
   const response = await axios.get<ResponseBugDto>(`/bug/${bugId}`);
   return response.data;
 };
-
 
 const remove = async (bugId?: number): Promise<ResponseBugDto> => {
   const response = await axios.delete(`/bug/${bugId}`);
