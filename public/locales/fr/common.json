@@ -4,32 +4,31 @@
     "fr": "🇫🇷 Français"
   },
   "common": {
-   "buttons": {
-    "cancel": "Annuler",
-    "confirm": "Confirmer",
-    "delete": "Supprimer",
-    "yes": "Oui",
-    "no": "Non",
-    "activate": "Activer",
-    "deactivate": "Désactiver",
-    "approve": "Approuver",
-    "save": "Enregistrer",
-    "edit": "Modifier",
-    "update": "Mettre à jour",
-    "new": "Nouveau",
-    "inspect": "Inspecter",
-    "filter": "Filtrer",
-    "back": "Retour",
-    "next": "Suivant",
-    "previous": "Précédent",
-    "display": "Afficher",
-    "hide": "Masquer",
-    "reset": "Réinitialiser",
-    "download": "Télécharger",
-    "upload": "Importer",
-    "duplicate": "Dupliquer",
-    "disapprove": "Désapprouver"
-  },
+    "buttons": {
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "delete": "Supprimer",
+      "yes": "Oui",
+      "no": "Non",
+      "activate": "Activer",
+      "deactivate": "Désactiver",
+      "approve": "Approuver",
+      "save": "Enregistrer",
+      "edit": "Modifier",
+      "update": "Mettre à jour",
+      "new": "Nouveau",
+      "inspect": "Inspecter",
+      "back": "Retour",
+      "next": "Suivant",
+      "previous": "Précédent",
+      "display": "Afficher",
+      "hide": "Masquer",
+      "reset": "Réinitialiser",
+      "download": "Télécharger",
+      "upload": "Importer",
+      "duplicate": "Dupliquer",
+      "disapprove": "Désapprouver"
+    },
     "table": {
       "Asc": "Croissant",
       "Desc": "Décroissant",
@@ -46,7 +45,8 @@
       "more": "Plus"
     },
     "placeholders": {
-      "selectDate": "Sélectionner une date..."
+      "selectDate": "Sélectionner une date...",
+      "filter": "Filtrer"
     },
     "sidebar": {
       "userManagement": "Gestion des utilisateurs",

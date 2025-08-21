@@ -21,7 +21,9 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder={`Filter ${context.pluralName}...`}
+          placeholder={`${t("common.placeholders.filter")} ${
+            context.pluralName
+          }...`}
           value={context?.searchTerm?.toString()}
           onChange={(event) => {
             context.setPage(1);
@@ -40,7 +42,7 @@ export function DataTableToolbar<TData>({
       {context.createCallback && (
         <Button onClick={() => context.createCallback?.()}>
           <Plus className="h-4 w-4" />
-          {t("common.buttons.new")}{" "}{context.singularName}
+          {t("common.buttons.new")} {context.singularName}
         </Button>
       )}
     </div>

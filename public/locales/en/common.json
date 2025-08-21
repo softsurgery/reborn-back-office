@@ -18,7 +18,6 @@
       "update": "Update",
       "new": "New",
       "inspect": "Inspect",
-      "filter": "Filter",
       "back": "Back",
       "next": "Next",
       "previous": "Previous",
@@ -46,7 +45,8 @@
       "more": "More"
     },
     "placeholders": {
-      "selectDate": "Select date..."
+      "selectDate": "Select date...",
+      "filter": "Filter"
     },
     "sidebar": {
       "userManagement": "User Management",
