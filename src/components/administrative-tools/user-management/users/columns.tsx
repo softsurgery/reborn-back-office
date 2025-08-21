@@ -223,6 +223,28 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
+      accessorKey: `${t("userManagement.table.updatedAt")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("userManagement.table.updatedAt")}
+          attribute="updatedAt"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        const date = new Date(row?.original?.updatedAt);
+        return (
+          <DataTableCell
+            variant={DataTableCellVariant.DATE_TIME}
+            value={date}
+          />
+        );
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">
