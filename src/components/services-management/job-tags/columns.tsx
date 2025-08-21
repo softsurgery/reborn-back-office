@@ -1,8 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableConfig, ResponseJobTagDto } from "@/types";
+import { ResponseJobTagDto } from "@/types";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
-
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 export const getJobTagColumns = (
   context: DataTableConfig<ResponseJobTagDto>

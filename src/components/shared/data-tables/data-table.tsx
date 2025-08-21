@@ -26,7 +26,7 @@ import { PackageOpen } from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 import { Spinner } from "@/components/shared/Spinner";
 import { cn } from "@/lib/utils";
-import { DataTableConfig } from "@/types";
+import { DataTableConfig } from "./types";
 import { useFooter } from "@/contexts/FooterContext";
 import { useTranslation } from "react-i18next";
 

@@ -10,9 +10,10 @@ import { toast } from "sonner";
 import { useIntro } from "@/contexts/IntroContext";
 import { cn } from "@/lib/utils";
 
-import { ResponseBugDto, DataTableConfig } from "@/types";
+import { ResponseBugDto } from "@/types";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 import { useTranslation } from "react-i18next";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface BugReportPortalProps {
   className?: string;

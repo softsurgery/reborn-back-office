@@ -8,7 +8,8 @@ import { DataTable } from "@/components/shared/data-tables/data-table";
 import { getPermissionColumns } from "./columns";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
-import { DataTableConfig, ResponsePermissionDto } from "@/types";
+import { ResponsePermissionDto } from "@/types";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface PermissionsProps {
   className?: string;

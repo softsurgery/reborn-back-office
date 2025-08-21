@@ -1,7 +1,8 @@
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
+import { DataTableCellVariant, DataTableConfig } from "@/components/shared/data-tables/types";
 import { Trans } from "@/components/shared/Trans";
-import { DataTableCellVariant, DataTableConfig, ResponseLogDto } from "@/types";
+import { ResponseLogDto } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const getLoggerColumns = (

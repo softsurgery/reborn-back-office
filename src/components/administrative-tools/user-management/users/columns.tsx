@@ -5,11 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
-import { DataTableCellVariant, ResponseUserDto } from "@/types";
+import { ResponseUserDto } from "@/types";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { useTranslation } from "react-i18next";
 import { identifyUserAvatar } from "@/lib/user.utils";
 import UserAvatarCell from "./UserAvatarCell";
+import { DataTableCellVariant } from "@/components/shared/data-tables/types";
 
 export const useUserColumns = (
   context: any,

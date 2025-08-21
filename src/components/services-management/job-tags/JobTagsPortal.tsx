@@ -7,18 +7,14 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useJobTagCreateSheet } from "./modals/JobTagCreateSheet";
-import {
-  CreateJobTagDto,
-  DataTableConfig,
-  ResponseJobTagDto,
-  UpdateJobTagDto,
-} from "@/types";
+import { CreateJobTagDto, ResponseJobTagDto, UpdateJobTagDto } from "@/types";
 import { useJobTagStore } from "@/hooks/stores/useJobTagStore";
 import { getJobTagColumns } from "./columns";
 import { toast } from "sonner";
 import { useJobTagUpdateSheet } from "./modals/JobTagUpdateSheet";
 import { useJobTagDeleteDialog } from "./modals/JobTagDeleteDialog";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface JobTagsProps {
   className?: string;

@@ -9,7 +9,6 @@ import { useIntro } from "@/contexts/IntroContext";
 import { useRegionCreateSheet } from "./modals/RegionCreateSheet";
 import {
   CreateRegionDto,
-  DataTableConfig,
   ResponseRegionDto,
   UpdateRegionDto,
 } from "@/types";
@@ -19,6 +18,7 @@ import { toast } from "sonner";
 import { useRegionUpdateSheet } from "./modals/RegionUpdateSheet";
 import { useRegionDeleteDialog } from "./modals/RegionDeleteDialog";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface RegionsProps {
   className?: string;

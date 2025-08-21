@@ -10,8 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
 import { CaretSortIcon, EyeNoneIcon } from "@radix-ui/react-icons";
-import { DataTableConfig } from "@/types";
 import { useTranslation } from "react-i18next";
+import { DataTableConfig } from "./types";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,8 +27,7 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
   context,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-
-    const { t } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;

@@ -5,10 +5,10 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { DataTableConfig } from "@/types";
 import { cn } from "@/lib/utils";
 import { Toggle } from "@/components/ui/toggle";
 import { useTranslation } from "react-i18next";
+import { DataTableConfig } from "./types";
 
 interface DataTablePaginationProps<TData> {
   className?: string;

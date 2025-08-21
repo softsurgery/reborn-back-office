@@ -6,8 +6,9 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { getDevLoggerColumns } from "./dev-columns";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
-import { DataTableConfig, ResponseLogDto } from "@/types";
+import { ResponseLogDto } from "@/types";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface DevLoggerProps {
   className?: string;

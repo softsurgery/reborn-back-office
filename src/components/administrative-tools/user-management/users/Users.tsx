@@ -15,7 +15,6 @@ import { useDeactivateUserDialog } from "./modals/UserDeactivateDialog";
 import { useUserStore } from "@/hooks/stores/useUserStore";
 import {
   CreateUserDto,
-  DataTableConfig,
   Gender,
   ResponseUserDto,
   ServerErrorResponse,
@@ -27,12 +26,15 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface UsersProps {
   className?: string;
 }
 
 export const Users = ({ className }: UsersProps) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
@@ -261,6 +263,8 @@ export const Users = ({ className }: UsersProps) => {
   const context: DataTableConfig<ResponseUserDto> = {
     singularName: `${t("userManagement.page.user")}`,
     pluralName: `${t("userManagement.page.users")}`,
+    inspectCallback: (entity: ResponseUserDto) =>
+      router.push(`/user-management/users/${entity.id}`),
     createCallback: openCreateUserSheet,
     updateCallback: openUpdateUserSheet,
     deleteCallback: openDeleteUserDialog,

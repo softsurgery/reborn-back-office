@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DataTableCellVariant } from "@/types";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { DataTableCellVariant } from "../types";
 
 interface DataTableCellProps {
   className?: string;

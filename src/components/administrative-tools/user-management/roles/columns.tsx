@@ -1,8 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
-import { DataTableConfig, ResponseRoleDto } from "@/types";
+import { ResponseRoleDto } from "@/types";
 import { useTranslation } from "react-i18next";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 export const useRoleColumns = (
   context: DataTableConfig<ResponseRoleDto>
@@ -65,12 +66,15 @@ export const useRoleColumns = (
             <div className="line-clamp-1">
               {visiblePermissions.map((entry, index) => (
                 <span key={index} className="mr-1">
-                  {entry?.label?.toUpperCase() || tCommon("common.general.unknown")}
+                  {entry?.label?.toUpperCase() ||
+                    tCommon("common.general.unknown")}
                   {index < visiblePermissions.length - 1 && ", "}
                 </span>
               ))}
               {hiddenPermissions > 0 && (
-                <span className="opacity-50 mx-2">{`+${hiddenPermissions}${" "}${tCommon("common.general.more")}`}</span>
+                <span className="opacity-50 mx-2">{`+${hiddenPermissions}${" "}${tCommon(
+                  "common.general.more"
+                )}`}</span>
               )}
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
-import { DataTableConfig, ResponsePermissionDto } from "@/types";
+import { ResponsePermissionDto } from "@/types";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 export const getPermissionColumns = (
   context: DataTableConfig<ResponsePermissionDto>

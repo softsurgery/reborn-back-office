@@ -17,11 +17,11 @@ import { Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   CreateRoleDto,
-  DataTableConfig,
   ResponseRoleDto,
   ServerErrorResponse,
   UpdateRoleDto,
 } from "@/types";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface RolesProps {
   className?: string;

@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
-import { DataTableCellVariant } from "@/types";
+import { DataTableCellVariant } from "@/components/shared/data-tables/types";
 
 const UserAvatarCell = React.memo(
   ({ pictureId, fallback }: { pictureId?: number; fallback?: string }) => {

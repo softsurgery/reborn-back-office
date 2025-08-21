@@ -6,12 +6,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useJobCreateSheet } from "./modals/JobCreateSheet";
-import {
-  CreateJobDto,
-  DataTableConfig,
-  ResponseJobDto,
-  UpdateJobDto,
-} from "@/types";
+import { CreateJobDto, ResponseJobDto, UpdateJobDto } from "@/types";
 import { useJobStore } from "@/hooks/stores/useJobStore";
 import { toast } from "sonner";
 import { useJobUpdateSheet } from "./modals/JobUpdateSheet";
@@ -23,6 +18,7 @@ import {
   updateJobSchema,
 } from "@/types/validations/job.validation";
 import { useTranslation } from "react-i18next";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface JobsProps {
   className?: string;

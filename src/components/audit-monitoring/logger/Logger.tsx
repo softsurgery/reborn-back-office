@@ -5,9 +5,10 @@ import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
-import { DataTableConfig, ResponseLogDto } from "@/types";
+import { ResponseLogDto } from "@/types";
 import { getLoggerColumns } from "./columns";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface LoggerProps {
   className?: string;

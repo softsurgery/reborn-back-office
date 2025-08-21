@@ -2,7 +2,7 @@ import { api } from "@/api";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useDebounce } from "@/hooks/useDebounce";
-import { DataTableConfig, ServerErrorResponse, Upload } from "@/types";
+import { ServerErrorResponse, Upload } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getUploadColumns } from "./columns";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useUploadDialog } from "./modals/UploadDialog";
 import { toast } from "sonner";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface UploadsProps {
   className?: string;

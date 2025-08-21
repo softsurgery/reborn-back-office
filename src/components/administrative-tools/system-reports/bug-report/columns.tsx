@@ -4,8 +4,8 @@ import { DataTableColumnHeader } from "@/components/shared/data-tables/data-tabl
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import { useTranslation } from "react-i18next";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
-import { DataTableCellVariant } from "@/types";
 import { identifyUser } from "@/lib/user.utils";
+import { DataTableCellVariant } from "@/components/shared/data-tables/types";
 
 export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
   const { t } = useTranslation("bug");

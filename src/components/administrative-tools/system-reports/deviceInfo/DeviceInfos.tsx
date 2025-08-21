@@ -7,8 +7,9 @@ import { DataTable } from "@/components/shared/data-tables/data-table";
 import { useDeviceInfoColumns } from "./columns";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
-import { DataTableConfig, ResponseDeviceInfoDto } from "@/types";
+import { ResponseDeviceInfoDto } from "@/types";
 import { useTranslation } from "react-i18next";
+import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface DeviceInfosProps {
   className?: string;

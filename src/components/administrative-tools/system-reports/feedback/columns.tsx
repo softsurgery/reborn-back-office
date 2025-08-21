@@ -1,7 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  DataTableCellVariant,
-  DataTableConfig,
   ResponseFeedbackDto,
 } from "@/types";
 import { splitCamelOrPascal } from "@/lib/string.lib";
@@ -10,6 +8,7 @@ import { DataTableRowActions } from "@/components/shared/data-tables/data-table-
 import { useTranslation } from "react-i18next";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { identifyUser } from "@/lib/user.utils";
+import { DataTableCellVariant, DataTableConfig } from "@/components/shared/data-tables/types";
 
 export const useFeedbackColumns = (
   context: DataTableConfig<ResponseFeedbackDto>

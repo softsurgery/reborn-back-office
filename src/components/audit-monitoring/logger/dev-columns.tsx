@@ -1,10 +1,11 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableCellVariant, DataTableConfig, ResponseLogDto } from "@/types";
+import { ResponseLogDto } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { identifyUser } from "@/lib/user.utils";
 import { JsonToggler } from "@/components/shared/JsonToggler";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
+import { DataTableCellVariant, DataTableConfig } from "@/components/shared/data-tables/types";
 
 const getMethodColor = (method: string) => {
   switch (method) {
