@@ -7,32 +7,37 @@ import { useFeedbackDeleteDialog } from "./modals/FeedbackDeleteDialog";
 import { toast } from "sonner";
 import { useIntro } from "@/contexts/IntroContext";
 import { cn } from "@/lib/utils";
-import { getFeedbackColumns } from "./columns";
+import { useFeedbackColumns } from "./columns";
 import { DataTableConfig, ResponseFeedbackDto } from "@/types";
 import { useFeedbackStore } from "@/hooks/stores/useFeedbackStore";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { useTranslation } from "react-i18next";
 
 interface BugsProps {
   className?: string;
 }
 
 export default function Feedbacks({ className }: BugsProps) {
+  const { t, ready } = useTranslation("feedback");
   const { setIntro, clearIntro } = useIntro();
   const { setRoutes, clearRoutes } = useBreadcrumb();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Feedbacks Management" },
-      { title: "Feedbacks", href: "/feedbacks-management/Feedbacks" },
+      { title: `${t("feedback.intro")}` },
+      {
+        title: `${t("feedback.introTitle")}`,
+        href: "/system-reports/Feedbacks",
+      },
     ]);
     setIntro?.(
-      "Feedbacks",
-      "Manage user feedback to improve the platform and overall experience."
+      `${t("feedback.introTitle")}`,
+      `${t("feedback.introDescription")}`
     );
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [t, ready]);
 
   const feedbackStore = useFeedbackStore();
   const [page, setPage] = React.useState(1);
@@ -132,7 +137,7 @@ export default function Feedbacks({ className }: BugsProps) {
       feedbackStore.set("response", feedback),
   };
 
-  const columns = getFeedbackColumns(context);
+  const columns = useFeedbackColumns(context);
 
   const isPending =
     isFeedbacksPending || paging || resizing || searching || sorting;

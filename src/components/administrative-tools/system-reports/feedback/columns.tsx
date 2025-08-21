@@ -3,17 +3,19 @@ import { DataTableConfig, ResponseFeedbackDto } from "@/types";
 import { splitCamelOrPascal } from "@/lib/string.lib";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
+import { useTranslation } from "react-i18next";
 
-export const getFeedbackColumns = (
+export const useFeedbackColumns = (
   context: DataTableConfig<ResponseFeedbackDto>
 ): ColumnDef<ResponseFeedbackDto>[] => {
+  const {t} = useTranslation("feedback");
   return [
     {
       accessorKey: "message",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Message"}
+          title={t("feedback.columns.message")}
           attribute="message"
           context={context}
         />
@@ -27,12 +29,12 @@ export const getFeedbackColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Rating"}
+          title={t("feedback.columns.rating")}
           attribute="rating"
           context={context}
         />
       ),
-      cell: ({ row }) => <div>{row.original.rating || "No Rating"}</div>,
+      cell: ({ row }) => <div>{row.original.rating || t("feedback.columns.noRating")}</div>,
       enableSorting: true,
       enableHiding: true,
     },
@@ -41,13 +43,13 @@ export const getFeedbackColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Category"}
+          title={t("feedback.columns.category")}
           attribute="category"
           context={context}
         />
       ),
       cell: ({ row }) => (
-        <div>{splitCamelOrPascal(row.original.category) || "No Category"}</div>
+        <div>{splitCamelOrPascal(row.original.category) || t("feedback.columns.noCategory")}</div>
       ),
       enableSorting: true,
       enableHiding: true,

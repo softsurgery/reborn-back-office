@@ -1,0 +1,19 @@
+{
+    "feedback": {
+        "intro": "Rapports Système",
+        "introTitle": "Retour d'Expérience",
+        "introDescription": "Gérez les retours des utilisateurs pour améliorer la plateforme et l'expérience globale.",
+        "columns": {
+            "message": "Message",
+            "rating": "Note",
+            "category": "Catégorie",
+            "noRating": "Pas de note",
+            "noCategory": "Pas de catégorie",
+            "actions": "Actions"
+        },
+        "dialog": {
+            "title": "Supprimer le feedback",
+            "description": "Cette action est permanente et ne peut pas être annulée."
+        }
+    }
+}

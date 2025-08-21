@@ -1,0 +1,19 @@
+{
+    "feedback": {
+        "intro": "System Reports",
+        "introTitle": "Feedback",
+        "introDescription": "Manage user feedback to improve the platform and overall experience.",
+        "columns": {
+            "message": "Message",
+            "rating": "Rating",
+            "category": "Category",
+            "noRating": "No Rating",
+            "noCategory": "No Category",
+            "actions": "Actions"
+        },
+        "dialog": {
+            "title": "Delete Feedback",
+            "description": "This action is permanent and cannot be undone."
+        }
+    }
+}

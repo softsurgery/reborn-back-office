@@ -1,6 +1,7 @@
 import { useDialog } from "@/components/shared/Dialogs";
 import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface FeedbackDeleteDialogProps {
   feedbackMessage?: string;
@@ -13,8 +14,10 @@ export const useFeedbackDeleteDialog = ({
   feedbackMessage,
   deleteFeedback,
   isDeletionPending,
-  resetFeedback
+  resetFeedback,
 }: FeedbackDeleteDialogProps) => {
+  const { t } = useTranslation("feedback");
+  const { t: tCommon } = useTranslation("common");
   const {
     DialogFragment: deleteFeedbackDialog,
     openDialog: openDeleteFeedbackDialog,
@@ -22,11 +25,11 @@ export const useFeedbackDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Feedback <span className="font-light">{feedbackMessage}</span> ?
+        {t("feedback.dialog.title")}{" "}
+        <span className="font-light">{feedbackMessage}</span> ?
       </div>
     ),
-    description:
-      "This action is permanent and cannot be undone.",
+    description: t("feedback.dialog.description"),
     children: (
       <div>
         <div className="flex gap-2 justify-end">
@@ -36,7 +39,7 @@ export const useFeedbackDeleteDialog = ({
               closeDeleteFeedbackDialog();
             }}
           >
-            Confirm
+            {tCommon("common.buttons.delete")}
             <Spinner show={isDeletionPending} />
           </Button>
           <Button
@@ -46,7 +49,7 @@ export const useFeedbackDeleteDialog = ({
               closeDeleteFeedbackDialog();
             }}
           >
-            Cancel
+            {tCommon("common.buttons.cancel")}
           </Button>
         </div>
       </div>
