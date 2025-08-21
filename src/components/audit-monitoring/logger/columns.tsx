@@ -27,11 +27,11 @@ export const getLoggerColumns = (
     },
 
     {
-      accessorKey: "event",
+      accessorKey: "description",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Event"}
+          title={"Description"}
           attribute="event"
           context={context}
         />

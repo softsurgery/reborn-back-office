@@ -32,13 +32,13 @@
         "DEVICE_INFO_CREATE": "Info appareil ajoutée",
         "DEVICE_INFO_DELETE": "Info appareil supprimée",
 
-        "JOB_CREATE": "Emploi créé",
-        "JOB_UPDATE": "Emploi mis à jour",
-        "JOB_DELETE": "Emploi supprimé",
+        "JOB_CREATE": "Post créé",
+        "JOB_UPDATE": "Post mis à jour",
+        "JOB_DELETE": "Post supprimé",
 
-        "JOB_TAG_CREATE": "Tag d'emploi créé",
-        "JOB_TAG_UPDATE": "Tag d'emploi mis à jour",
-        "JOB_TAG_DELETE": "Tag d'emploi supprimé"
+        "JOB_TAG_CREATE": "Tag de poste créé",
+        "JOB_TAG_UPDATE": "Tag de poste mis à jour",
+        "JOB_TAG_DELETE": "Tag de poste supprimé"
     },
     "descriptions": {
         "SIGNIN": "L'utilisateur <strong>{{fullname}}</strong> s'est connecté.",
@@ -73,12 +73,12 @@
         "DEVICE_INFO_CREATE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été ajoutée par <strong>{{user.username}}</strong>.",
         "DEVICE_INFO_DELETE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été supprimée par <strong>{{user.username}}</strong>.",
 
-        "JOB_CREATE": "L'emploi <strong>{{title}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "JOB_UPDATE": "L'emploi <strong>{{title}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "JOB_DELETE": "L'emploi <strong>{{title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+        "JOB_CREATE": "Le poste <strong>{{title}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "JOB_UPDATE": "Le poste <strong>{{title}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "JOB_DELETE": "Le poste <strong>{{title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
 
-        "JOB_TAG_CREATE": "Le tag d'emploi <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "JOB_TAG_UPDATE": "Le tag d'emploi <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "JOB_TAG_DELETE": "Le tag d'emploi <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>."
+        "JOB_TAG_CREATE": "Le tag de poste <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "JOB_TAG_UPDATE": "Le tag de poste <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "JOB_TAG_DELETE": "Le tag de poste <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>."
     }
 }
