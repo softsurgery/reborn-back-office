@@ -12,25 +12,28 @@ import { DataTableConfig } from "@/components/shared/data-tables/types";
 
 interface LoggerProps {
   className?: string;
+  userId?: string;
 }
 
-export const Logger = ({ className }: LoggerProps) => {
+export const Logger = ({ className, userId }: LoggerProps) => {
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
 
   React.useEffect(() => {
-    setRoutes?.([
-      { title: "Audit & Monitoring", href: "/audit-monitoring" },
-      { title: "Logger", href: "/audit-monitoring/logger" },
-    ]);
-    setIntro?.(
-      "Logs",
-      "Monitor and analyze system activities, API calls, and user actions"
-    );
-    return () => {
-      clearRoutes?.();
-      clearIntro?.();
-    };
+    if (!userId) {
+      setRoutes?.([
+        { title: "Audit & Monitoring", href: "/audit-monitoring" },
+        { title: "Logger", href: "/audit-monitoring/logger" },
+      ]);
+      setIntro?.(
+        "Logs",
+        "Monitor and analyze system activities, API calls, and user actions"
+      );
+      return () => {
+        clearRoutes?.();
+        clearIntro?.();
+      };
+    }
   }, []);
 
   const [page, setPage] = React.useState(1);
@@ -78,6 +81,7 @@ export const Logger = ({ className }: LoggerProps) => {
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
         search: debouncedSearchTerm,
+        filter: userId ? `userId||$eq||${userId}` : "",
       }),
   });
 

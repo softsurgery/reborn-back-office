@@ -189,7 +189,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
                 <Button onClick={handleNext} disabled={isCreatePending}>
                   {methods.isLast ? (
                     <>
-                      <Save /> {tCommon("common.buttons.create")}
+                      <Save /> {tCommon("common.buttons.save")}
                     </>
                   ) : (
                     <>
