@@ -5,21 +5,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUserStore } from "@/hooks/stores/useUserStore";
+import { cn } from "@/lib/utils";
 
-export const About = () => {
+interface AboutProps {
+  className?: string;
+}
+
+export const About = ({ className }: AboutProps) => {
+  const userStore = useUserStore();
   return (
-    <Card>
+    <Card className={cn(className)}>
       <CardHeader>
         <CardTitle>About</CardTitle>
         <CardDescription>Personal information and bio</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium mb-2">Bio</h3>
+          <h3 className="text-lg font-bold mb-2">Bio</h3>
           <p className="text-muted-foreground">
-            Product designer with over 5 years of experience in creating
-            user-centered digital experiences. Passionate about solving complex
-            problems through design thinking and collaborative approaches.
+            {userStore.response?.profile?.bio || "No bio available"}
           </p>
         </div>
 

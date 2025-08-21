@@ -12,7 +12,7 @@ export const useIdentifiedUser = (
     data: userResp,
     refetch: refetchUser,
   } = useQuery({
-    queryKey: ["user", id, join],
+    queryKey: ["user", id],
     queryFn: () => api.admin.user.findById(id, join),
     enabled: enabled && !!id,
   });

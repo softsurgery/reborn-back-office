@@ -9,23 +9,23 @@ import { Spinner } from "../shared/Spinner";
 import { About } from "./cards/About";
 import { Activity } from "./cards/Activity";
 import { Settings } from "./cards/Settings";
-import { ResponseUserDto } from "@/types";
 import { cn } from "@/lib/utils";
+import { useUserStore } from "@/hooks/stores/useUserStore";
 
 interface BaseProfileProps {
   className?: string;
-  user?: ResponseUserDto | null;
   isFetchUserPending?: boolean;
 }
 
 export const BaseProfile = ({
   className,
-  user,
   isFetchUserPending,
 }: BaseProfileProps) => {
+  const userStore = useUserStore();
+  const user = React.useMemo(() => userStore.response, [userStore]);
   const [activeTab, setActiveTab] = useState("about");
 
-  if (!user || isFetchUserPending) {
+  if (isFetchUserPending) {
     return <Spinner className="h-screen" />;
   }
 
@@ -40,7 +40,7 @@ export const BaseProfile = ({
       value: "activity",
       label: "Activity",
       icon: BarChart2,
-      content: <Activity userId={user.id} />,
+      content: <Activity />,
     },
     {
       value: "settings",
