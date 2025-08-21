@@ -19,7 +19,6 @@ import {
   TerminalSquare,
   Tag,
 } from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
@@ -29,9 +28,10 @@ import {
 } from "@/components/ui/sidebar";
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
-import { id } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {t} = useTranslation("common");
   const data = {
     teams: [
       {
@@ -42,21 +42,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: [
       {
         id: 1,
-        title: "User Management",
+        title: `${t("common.sidebar.userManagement")}`,
         icon: Users,
         items: [
           {
-            title: "Users",
+            title: `${t("common.sidebar.users")}`,
             url: "/user-management/users",
             icon: Users,
           },
           {
-            title: "Roles",
+            title: `${t("common.sidebar.roles")}`,
             url: "/user-management/roles",
             icon: Package,
           },
           {
-            title: "Permissions",
+            title: `${t("common.sidebar.permissions")}`,
             url: "/user-management/permissions",
             icon: WandSparkles,
           },
@@ -64,22 +64,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         id: 2,
-        title: "System Reports",
+        title: `${t("common.sidebar.systemReports")}`,
         url: "/system-reports",
         icon: TabletSmartphone,
         items: [
           {
-            title: "Feedbacks",
+            title: `${t("common.sidebar.feedbacks")}`,
             url: "/system-reports/feedbacks",
             icon: MessageCircle,
           },
           {
-            title: "Bugs",
+            title: `${t("common.sidebar.bugs")}`,
             url: "/system-reports/bugs",
             icon: Bug,
           },
           {
-            title: "Devices",
+            title: `${t("common.sidebar.devices")}`,
             url: "/system-reports/deviceInfos",
             icon: Tablet,
           },
@@ -87,22 +87,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         id: 3,
-        title: "Content Management",
+        title: `${t("common.sidebar.contentManagement")}`,
         url: "/content-management",
         icon: Paperclip,
         items: [
           {
-            title: "Resources",
+            title: `${t("common.sidebar.resources")}`,
             url: "/content-management/resources",
             icon: FileUser,
           },
           {
-            title: "Regions",
+            title: `${t("common.sidebar.regions")}`,
             url: "/content-management/regions",
             icon: MapIcon,
           },
           {
-            title: "Application Properties",
+            title: `${t("common.sidebar.applicationProperties")}`,
             url: "/content-management/application-properties",
             icon: FileText,
           },
@@ -110,17 +110,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         id: 4,
-        title: "Audit & Monitoring",
+        title: `${t("common.sidebar.auditMonitoring")}`,
         url: "/audit-monitoring",
         icon: ShieldCheck,
         items: [
           {
-            title: "Logger",
+            title: `${t("common.sidebar.logger")}`,
             url: "/audit-monitoring/logger",
             icon: FileText,
           },
           {
-            title: "Developer Logger",
+            title: `${t("common.sidebar.developerLogger")}`,
             url: "/audit-monitoring/dev-logger",
             icon: TerminalSquare,
           },
@@ -128,17 +128,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         id: 5,
-        title: "Services Management",
+        title: `${t("common.sidebar.servicesManagement")}`,
         url: "/services-management",
         icon: ShieldCheck,
         items: [
           {
-            title: "Jobs",
+            title: `${t("common.sidebar.jobs")}`,
             url: "/services-management/jobs",
             icon: BriefcaseBusiness,
           },
           {
-            title: "Job Tags",
+            title: `${t("common.sidebar.jobTags")}`,
             url: "/services-management/job-tags",
             icon: Tag,
           },
