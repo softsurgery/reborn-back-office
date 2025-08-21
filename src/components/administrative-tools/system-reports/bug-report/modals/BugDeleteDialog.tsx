@@ -1,6 +1,7 @@
 import { useDialog } from "@/components/shared/Dialogs";
 import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface BugDeleteDialogProps {
   bugMessage?: string;
@@ -15,6 +16,8 @@ export const useBugDeleteDialog = ({
   isDeletionPending,
   resetBug,
 }: BugDeleteDialogProps) => {
+  const { t } = useTranslation("bug");
+  const { t: tCommon } = useTranslation("common");
   const {
     DialogFragment: deleteBugDialog,
     openDialog: openDeleteBugDialog,
@@ -22,10 +25,10 @@ export const useBugDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Bug <span className="font-light">{bugMessage}</span> ?
+        {t("bug.dialog.title")} <span className="font-light">{bugMessage}</span> ?
       </div>
     ),
-    description: "This action is permanent and cannot be undone.",
+    description: t("bug.dialog.description"),
     children: (
       <div>
         <div className="flex gap-2 justify-end">
@@ -35,7 +38,7 @@ export const useBugDeleteDialog = ({
               closeDeleteBugDialog();
             }}
           >
-            Confirm
+            {tCommon("common.buttons.confirm")}
             <Spinner show={isDeletionPending} />
           </Button>
           <Button
@@ -45,7 +48,7 @@ export const useBugDeleteDialog = ({
               closeDeleteBugDialog();
             }}
           >
-            Cancel
+            {tCommon("common.buttons.cancel")}
           </Button>
         </div>
       </div>

@@ -12,28 +12,27 @@ import { cn } from "@/lib/utils";
 
 import { ResponseBugDto, DataTableConfig } from "@/types";
 import { DataTable } from "@/components/shared/data-tables/data-table";
+import { useTranslation } from "react-i18next";
 
 interface BugReportPortalProps {
   className?: string;
 }
 
 export default function BugReportPortal({ className }: BugReportPortalProps) {
+  const { t, ready } = useTranslation("bug");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "System Reports", href: "/system-reports" },
-      { title: "Bug", href: "/system-reports/bugs" },
+      { title: t("bug.intro"), href: "/system-reports" },
+      { title: t("bug.introTitle"), href: "/system-reports/bugs" },
     ]);
-    setIntro?.(
-      "Bugs",
-      "Manage device information related to user-reported bugs to streamline issue diagnosis and resolution."
-    );
+    setIntro?.(t("bug.introTitle"), t("bug.introDescription"));
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [t, ready]);
 
   const bugStore = useBugStore();
   const [page, setPage] = React.useState(1);
