@@ -1,6 +1,7 @@
 import { Briefcase } from "lucide-react";
 import { JobCreateForm } from "../forms/JobCreateForm";
 import { useSheet } from "@/components/shared/Sheets";
+import { useTranslation } from "react-i18next";
 
 interface JobCreateSheetProps {
   createJob?: () => void;
@@ -13,18 +14,19 @@ export const useJobCreateSheet = ({
   isCreatePending,
   resetJob,
 }: JobCreateSheetProps) => {
+  const { t } = useTranslation("job");
   const {
     SheetFragment: createJobSheet,
     openSheet: openCreateJobSheet,
     closeSheet: closeCreateJobSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Briefcase />
-        Create Job
+        {t("job.sheet.createTitle")}
       </div>
     ),
-    description: "Fill out the job details below.",
+    description: t("job.sheet.createDescription"),
     children: (
       <JobCreateForm
         className="my-4"

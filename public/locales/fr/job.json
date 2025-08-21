@@ -1,0 +1,59 @@
+{
+    "job": {
+        "intro": "Gestion des services",
+        "introTitle": "Postes",
+        "introDescription": "Visualisation des postes de l'application",
+        "validation": {
+            "titleRequired": "Le titre du poste est requis.",
+            "titleTooShort": "Le titre du poste doit contenir au moins 3 caractères.",
+            "titleTooLong": "Le titre du poste ne doit pas dépasser 100 caractères.",
+            "invalidTitleFormat": "Le titre du poste contient des caractères non valides.",
+            "descriptionRequired": "La description du poste est requise.",
+            "descriptionTooShort": "La description du poste doit contenir au moins 10 caractères.",
+            "descriptionTooLong": "La description du poste ne doit pas dépasser 1000 caractères.",
+            "priceRequired": "Le prix du poste est requis.",
+            "invalidPrice": "Le prix du poste doit être un nombre positif.",
+            "atLeastOneTag": "Au moins une étiquette de poste doit être sélectionnée."
+        },
+        "forms": {
+            "generalInformationTitle": "Informations générales",
+            "generalInformationDescription": "Informations générales sur le poste.",
+            "titleLabel": "Titre du poste",
+            "titlePlaceholder": "Saisissez le titre du poste",
+            "titleDescription": "Le titre du poste.",
+            "descriptionLabel": "Description du poste",
+            "descriptionPlaceholder": "Saisissez la description du poste",
+            "descriptionDescription": "La description du poste.",
+            "priceLabel": "Prix du poste",
+            "pricePlaceholder": "Saisissez le prix du poste",
+            "priceDescription": "Le prix du poste.",
+            "currencyLabel": "Devise",
+            "currencyPlaceholder": "Sélectionnez une devise",
+            "currencyDescription": "Choisissez la devise pour le poste.",
+            "uploadsLabel": "Téléversements"
+        },
+        "columns": {
+            "title": "Titre",
+            "description": "Description",
+            "price": "Prix",
+            "createdAt": "Créé le",
+            "updatedAt": "Mis à jour le",
+            "actions": "Actions"
+        },
+        "sheet": {
+            "createTitle": "Créer un poste",
+            "createDescription": "Remplissez les détails du poste ci-dessous.",
+            "updateTitle": "Mettre à jour le poste",
+            "updateDescription": "Modifiez les détails du poste ci-dessous."
+        },
+        "dialog": {
+            "deleteTitle": "Supprimer le poste",
+            "deleteDescription": "Cette action est irréversible et permanente. Veuillez procéder avec prudence."
+        },
+        "toast": {
+            "created": "Poste créé avec succès",
+            "updated": "Poste mis à jour avec succès",
+            "deleted": "Poste supprimé avec succès"
+        }
+    }
+}

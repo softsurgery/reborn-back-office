@@ -20,7 +20,7 @@ module.exports = {
     defaultLocale: "en",
     locales: ["en", "fr"],
     defaultNS: "common",
-    ns: ["common", "countries", "logs"],
+    ns: ["common", "countries", "logs", "job", "user-management", "role", "permissions"],
   },
   reloadOnPrerender: isDev,
   serializeConfig: false,

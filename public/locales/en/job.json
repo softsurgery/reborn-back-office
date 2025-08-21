@@ -1,0 +1,59 @@
+{
+    "job": {
+        "intro": "Services Management",
+        "introTitle": "Jobs",
+        "introDescription": "Visualization of the jobs of the application",
+        "validation": {
+            "titleRequired": "The job title is required.",
+            "titleTooShort": "The job title must be at least 3 characters long.",
+            "titleTooLong": "The job title must not exceed 100 characters.",
+            "invalidTitleFormat": "The job title contains invalid characters.",
+            "descriptionRequired": "The job description is required.",
+            "descriptionTooShort": "The job description must be at least 10 characters long.",
+            "descriptionTooLong": "The job description must not exceed 1000 characters.",
+            "priceRequired": "The job price is required.",
+            "invalidPrice": "The job price must be a positive number.",
+            "atLeastOneTag": "At least one job tag must be selected."
+        },
+        "forms": {
+            "generalInformationTitle": "General Information",
+            "generalInformationDescription": "General information about the job.",
+            "titleLabel": "Job Title",
+            "titlePlaceholder": "Enter job title",
+            "titleDescription": "The title for the job.",
+            "descriptionLabel": "Job Description",
+            "descriptionPlaceholder": "Enter job description",
+            "descriptionDescription": "The description for the job.",
+            "priceLabel": "Job Price",
+            "pricePlaceholder": "Enter job price",
+            "priceDescription": "The price for the job.",
+            "currencyLabel": "Currency",
+            "currencyPlaceholder": "Select currency",
+            "currencyDescription": "Choose the currency for the job.",
+            "uploadsLabel": "Uploads"
+        },
+        "columns": {
+            "title": "Title",
+            "description": "Description",
+            "price": "Price",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "actions": "Actions"
+        },
+        "sheet": {
+            "createTitle": "Create Job",
+            "createDescription": "Fill out the job details below.",
+            "updateTitle": "Update Job",
+            "updateDescription": "Modify the job details below."
+        },
+        "dialog": {
+            "deleteTitle": "Delete Job",
+            "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
+        },
+        "toast": {
+            "created": "Job Created Successfully",
+            "updated": "Job Updated Successfully",
+            "deleted": "Job Deleted Successfully"
+        }
+    }
+}

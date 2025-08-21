@@ -13,6 +13,7 @@ import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
 import { ResponseCurrencyDto } from "@/types";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface JobUpdateFormStructureProps {
   jobStore: JobStore;
@@ -24,6 +25,7 @@ export const useUpdateJobFormStructure = ({
   currencies,
   uploadPicture,
 }: JobUpdateFormStructureProps) => {
+  const { t } = useTranslation("job");
   const selectedCurrency = React.useMemo(() => {
     return currencies.find(
       (currency) => currency.id === jobStore.updateDto.currencyId
@@ -32,12 +34,12 @@ export const useUpdateJobFormStructure = ({
 
   const titleField: Field<TextFieldProps> = {
     id: "title",
-    label: "Job Title",
+    label: `${t("job.forms.titleLabel")}`,
     variant: FieldVariant.TEXT,
     required: true,
-    placeholder: "Enter job title",
-    description: "The title for the job.",
-    error: jobStore.updateDtoErrors?.title?.[0],
+    placeholder: `${t("job.forms.titlePlaceholder")}`,
+    description: `${t("job.forms.titleDescription")}`,
+    error: t(jobStore.updateDtoErrors?.title?.[0]),
     props: {
       value: jobStore.updateDto.title,
       onChange: (value) => {
@@ -49,12 +51,12 @@ export const useUpdateJobFormStructure = ({
 
   const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
-    label: "Job Description",
+    label: `${t("job.forms.descriptionLabel")}`,
     variant: FieldVariant.TEXTAREA,
     required: true,
-    placeholder: "Enter job description",
-    description: "The description for the job.",
-    error: jobStore.updateDtoErrors?.description?.[0],
+    placeholder: `${t("job.forms.descriptionPlaceholder")}`,
+    description: `${t("job.forms.descriptionDescription")}`,
+    error: t(jobStore.updateDtoErrors?.description?.[0]),
     props: {
       value: jobStore.updateDto.description,
       rows: 8,
@@ -67,12 +69,12 @@ export const useUpdateJobFormStructure = ({
 
   const priceField: Field<NumberFieldProps> = {
     id: "price",
-    label: "Job Price",
+    label: `${t("job.forms.priceLabel")}`,
     variant: FieldVariant.NUMBER,
     required: true,
-    placeholder: "Enter job price",
-    description: "The price for the job.",
-    error: jobStore.updateDtoErrors?.price?.[0],
+    placeholder: `${t("job.forms.pricePlaceholder")}`,
+    description: `${t("job.forms.priceDescription")}`,
+    error: t(jobStore.updateDtoErrors?.price?.[0]),
     props: {
       value: jobStore.updateDto.price || undefined,
       onChange: (value) => {
@@ -89,11 +91,11 @@ export const useUpdateJobFormStructure = ({
   //currency
   const currencyField: Field<SelectFieldProps> = {
     id: "currency",
-    label: "Currency",
+    label: `${t("job.forms.currencyLabel")}`,
     variant: FieldVariant.SELECT,
     required: true,
-    description: "Choose the currency for the job.",
-    placeholder: "Select currency",
+    description: `${t("job.forms.currencyDescription")}`,
+    placeholder: `${t("job.forms.currencyPlaceholder")}`,
     error: jobStore.updateDtoErrors?.currencyId?.[0],
     props: {
       options: currencies.map((currency) => ({
@@ -110,7 +112,7 @@ export const useUpdateJobFormStructure = ({
 
   const uploadsField: Field<ImageGalleryFieldProps> = {
     id: "uploads",
-    label: "Uploads",
+    label: `${t("job.forms.uploadsLabel")}`,
     variant: FieldVariant.IMAGE_GALLERY,
     props: {
       images: jobStore.images,

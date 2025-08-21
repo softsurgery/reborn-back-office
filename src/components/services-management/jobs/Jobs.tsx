@@ -17,26 +17,32 @@ import { toast } from "sonner";
 import { useJobUpdateSheet } from "./modals/JobUpdateSheet";
 import { useJobDeleteDialog } from "./modals/JobDeleteDialog";
 import { DataTable } from "@/components/shared/data-tables/data-table";
-import { getJobColumns } from "./columns";
+import { useJobColumns } from "./columns";
+import {
+  createJobSchema,
+  updateJobSchema,
+} from "@/types/validations/job.validation";
+import { useTranslation } from "react-i18next";
 
 interface JobsProps {
   className?: string;
 }
 
 export default function Jobs({ className }: JobsProps) {
+  const { t, ready } = useTranslation("job");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Services Management", href: "/services-management" },
-      { title: "Jobs", href: "/services-management/jobs" },
+      { title: t("job.intro"), href: "/services-management" },
+      { title: t("job.introTitle"), href: "/services-management/jobs" },
     ]);
-    setIntro?.("Jobs", "Visualization of the jobs of the application");
+    setIntro?.(t("job.introTitle"), t("job.introDescription"));
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [t, ready]);
 
   const jobStore = useJobStore();
 
@@ -97,7 +103,7 @@ export default function Jobs({ className }: JobsProps) {
   const { mutate: createJob, isPending: isCreationPending } = useMutation({
     mutationFn: (job: CreateJobDto) => api.job.create(job),
     onSuccess: () => {
-      toast.success("Job Created Successfully");
+      toast.success(t("job.toast.created"));
       refetchJobs();
       jobStore.reset();
       closeCreateJobSheet();
@@ -111,7 +117,7 @@ export default function Jobs({ className }: JobsProps) {
     mutationFn: (data: { id?: string; job: UpdateJobDto }) =>
       api.job.update(data.id, data.job),
     onSuccess: () => {
-      toast.success("Job Updated Successfully");
+      toast.success(t("job.toast.updated"));
       refetchJobs();
       jobStore.reset();
       closeUpdateJobSheet();
@@ -124,7 +130,7 @@ export default function Jobs({ className }: JobsProps) {
   const { mutate: deleteJob, isPending: isDeletionPending } = useMutation({
     mutationFn: (id?: string) => api.job.remove(id),
     onSuccess: () => {
-      toast.success("Job Deleted Successfully");
+      toast.success(t("job.toast.deleted"));
       jobStore.reset();
       refetchJobs();
     },
@@ -133,11 +139,22 @@ export default function Jobs({ className }: JobsProps) {
 
   const handleCreateSubmit = () => {
     const data = jobStore.createDto;
+    const result = createJobSchema.safeParse({ ...data });
+    if (!result.success) {
+      jobStore.set("createDtoErrors", result.error.flatten().fieldErrors);
+      return;
+    }
     createJob(data);
   };
 
   const handleUpdateSubmit = () => {
     const data = jobStore.updateDto;
+    const result = updateJobSchema.safeParse({ ...data });
+
+    if (!result.success) {
+      jobStore.set("updateDtoErrors", result.error.flatten().fieldErrors);
+      return;
+    }
     updateJob({ id: jobStore.response?.id, job: data });
   };
 
@@ -238,7 +255,7 @@ export default function Jobs({ className }: JobsProps) {
     },
   };
 
-  const columns = getJobColumns(context);
+  const columns = useJobColumns(context);
 
   const isPending = isJobsPending || paging || resizing || searching || sorting;
   return (

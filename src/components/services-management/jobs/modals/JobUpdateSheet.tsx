@@ -15,19 +15,18 @@ export const useJobUpdateSheet = ({
   resetJob,
 }: JobUpdateSheetProps) => {
   const { t } = useTranslation("job");
-
   const {
     SheetFragment: updateJobSheet,
     openSheet: openUpdateJobSheet,
     closeSheet: closeUpdateJobSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <Briefcase />
-        Update Job
+        {t("job.sheet.updateTitle")}
       </div>
     ),
-    description: "Modify the job details below.",
+    description: `${t("job.sheet.updateDescription")}`,
     children: (
       <JobUpdateForm
         className="my-4"

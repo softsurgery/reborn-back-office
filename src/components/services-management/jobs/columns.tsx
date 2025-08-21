@@ -3,17 +3,19 @@ import { DataTableCellVariant, DataTableConfig, ResponseJobDto } from "@/types";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
+import { useTranslation } from "react-i18next";
 
-export const getJobColumns = (
+export const useJobColumns = (
   context: DataTableConfig<ResponseJobDto>
 ): ColumnDef<ResponseJobDto>[] => {
+  const { t } = useTranslation("job");
   return [
     {
       accessorKey: "title",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Title"}
+          title={t("job.columns.title")}
           attribute="title"
           context={context}
         />
@@ -29,7 +31,7 @@ export const getJobColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Description"}
+          title={t("job.columns.description")}
           attribute="description"
           context={context}
         />
@@ -45,7 +47,7 @@ export const getJobColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Price"}
+          title={t("job.columns.price")}
           attribute="price"
           context={context}
         />
@@ -65,7 +67,7 @@ export const getJobColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Created At"}
+          title={t("job.columns.createdAt")}
           attribute="createdAt"
           context={context}
         />
@@ -87,7 +89,7 @@ export const getJobColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Updated At"}
+          title={t("job.columns.updatedAt")}
           attribute="updatedAt"
           context={context}
         />

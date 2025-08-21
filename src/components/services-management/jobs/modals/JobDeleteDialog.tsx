@@ -1,6 +1,7 @@
 import { useDialog } from "@/components/shared/Dialogs";
 import { Spinner } from "@/components/shared/Spinner";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface JobDeleteDialogProps {
   representation?: string;
@@ -13,6 +14,8 @@ export const useJobDeleteDialog = ({
   deleteJob,
   isDeletePending,
 }: JobDeleteDialogProps) => {
+  const { t: tJob } = useTranslation("job");
+  const { t: tCommon } = useTranslation("common");
   const {
     DialogFragment: deleteJobDialog,
     openDialog: openDeleteJobDialog,
@@ -20,11 +23,10 @@ export const useJobDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete Job <span className="font-light">{representation}</span> ?
+        {tJob("job.dialog.deleteTitle")} <span className="font-light">{representation}</span> ?
       </div>
     ),
-    description:
-      "This action is irreversible and permanent. Please proceed with caution.",
+    description: tJob("job.dialog.deleteDescription"),
     children: (
       <div>
         <div className="flex gap-2 justify-end">
@@ -35,7 +37,7 @@ export const useJobDeleteDialog = ({
               closeDeleteJobDialog();
             }}
           >
-            Delete
+            {tCommon("common.buttons.delete")}
             <Spinner show={isDeletePending} />
           </Button>
           <Button
@@ -44,7 +46,7 @@ export const useJobDeleteDialog = ({
               closeDeleteJobDialog();
             }}
           >
-            Cancel
+            {tCommon("common.buttons.cancel")}
           </Button>
         </div>
       </div>
