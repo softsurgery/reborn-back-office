@@ -1,19 +1,19 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableConfig, ResponseDeviceInfoDto } from "@/types";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
-import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
+import { useTranslation } from "react-i18next";
 
-
-export const getDeviceInfoColumns = (
+export const useDeviceInfoColumns = (
   context: DataTableConfig<ResponseDeviceInfoDto>
 ): ColumnDef<ResponseDeviceInfoDto>[] => {
+  const { t } = useTranslation("deviceInfo");
   return [
     {
-      accessorKey: "platform",
+      accessorKey: `${t("deviceInfo.columns.platform")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Platform"}
+          title={t("deviceInfo.columns.platform")}
           attribute="platform"
           context={context}
         />
@@ -25,11 +25,11 @@ export const getDeviceInfoColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "model",
+      accessorKey: `${t("deviceInfo.columns.model")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Model"}
+          title={t("deviceInfo.columns.model")}
           attribute="model"
           context={context}
         />
@@ -39,11 +39,11 @@ export const getDeviceInfoColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "version",
+      accessorKey: `${t("deviceInfo.columns.version")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Version"}
+          title={t("deviceInfo.columns.version")}
           attribute="version"
           context={context}
         />
@@ -53,11 +53,11 @@ export const getDeviceInfoColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "manufacturer",
+      accessorKey: `${t("deviceInfo.columns.manufacture")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Manufacturer"}
+          title={t("deviceInfo.columns.manufacturer")}
           attribute="manufacturer"
           context={context}
         />

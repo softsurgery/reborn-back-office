@@ -1,0 +1,16 @@
+{
+    "deviceInfo": {
+        "intro": "System Reports",
+        "introTitle": "Devices",
+        "introDescription": "Visualization of the device infos of the application.",
+        "pluralName": "Device Informations",
+        "singularName": "Device Information",
+        "columns": {
+            "platform": "Platform",
+            "model": "Model",
+            "version": "Version",
+            "manufacturer": "Manufacturer",
+            "actions": "Actions"
+        }
+    }
+}

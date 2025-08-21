@@ -1,0 +1,16 @@
+{
+    "deviceInfo": {
+        "intro": "Rapports Système",
+        "introTitle": "Appareils",
+        "introDescription": "Visualisation des informations des appareils de l'application.",
+        "pluralName": "Informations sur les appareils",
+        "singularName": "Information sur l'appareil",
+        "columns": {
+            "platform": "Plateforme",
+            "model": "Modèle",
+            "version": "Version",
+            "manufacturer": "Fabricant",
+            "actions": "Actions"
+        }
+    }
+}

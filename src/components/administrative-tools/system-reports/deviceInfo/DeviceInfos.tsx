@@ -1,45 +1,43 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
-import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { DataTable } from "@/components/shared/data-tables/data-table";
-import { getDeviceInfoColumns } from "./columns";
+import { useDeviceInfoColumns } from "./columns";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { DataTableConfig, ResponseDeviceInfoDto } from "@/types";
+import { useTranslation } from "react-i18next";
 
 interface DeviceInfosProps {
   className?: string;
 }
 
 export default function DeviceInfos({ className }: DeviceInfosProps) {
-  //next-router
-  const router = useRouter();
-
+  const { t, ready } = useTranslation("deviceInfo");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
       {
-        title: "User Management",
-        href: "/administrative-tools/user-management",
+        title: `${t("deviceInfo.intro")}`,
+        href: "/system-reports",
       },
       {
-        title: "Device Info",
-        href: "/administrative-tools/user-management/deviceInfo",
+        title: `${t("deviceInfo.introTitle")}`,
+        href: "/system-reports/deviceInfo",
       },
     ]);
     setIntro?.(
-      "Device Info",
-      "Visualization of the device infos of the application"
+      `${t("deviceInfo.introTitle")}`,
+      `${t("deviceInfo.introDescription")}`
     );
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [t, ready]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -95,8 +93,8 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
   }, [deviceInfosResponse]);
 
   const context: DataTableConfig<ResponseDeviceInfoDto> = {
-    singularName: "Device Info",
-    pluralName: "Device Infos",
+    singularName: t("deviceInfo.singularName"),
+    pluralName: t("deviceInfo.pluralName"),
     page,
     size,
     totalPageCount: deviceInfosResponse?.meta.pageCount || 0,
@@ -110,7 +108,7 @@ export default function DeviceInfos({ className }: DeviceInfosProps) {
     setSearchTerm,
   };
 
-  const columns = getDeviceInfoColumns(context);
+  const columns = useDeviceInfoColumns(context);
 
   const isPending =
     isDeviceInfosPending || paging || resizing || searching || sorting;
