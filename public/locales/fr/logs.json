@@ -1,43 +1,52 @@
 {
     "titles": {
-        "SIGNIN": "Utilisateur Connecté",
-        "SIGNUP": "Utilisateur Enregistré",
-        "SIGNOUT": "Utilisateur Déconnecté",
-      
-        "CLIENT_SIGNIN": "Client Connecté",
-        "CLIENT_SIGNUP": "Client Enregistré",
-      
-        "USER_CREATE": "Nouvel Utilisateur Créé",
-        "USER_UPDATE": "Détails de l'Utilisateur Mis à Jour",
-        "USER_DELETE": "Compte Utilisateur Supprimé",
-        "USER_ACTIVATE": "Compte Utilisateur Activé",
-        "USER_DEACTIVATE": "Compte Utilisateur Désactivé",
-        "USER_APPROVE": "Utilisateur Approuvé",
-        "USER_DISAPPROVE": "Utilisateur Désapprouvé",
-      
-        "ROLE_CREATE": "Rôle Créé",
-        "ROLE_UPDATE": "Rôle Mis à Jour",
-        "ROLE_DELETE": "Rôle Supprimé",
-        "ROLE_DUPLICATE": "Rôle Dupliqué",
-      
-        "BUG_CREATE": "Rapport de Bug Créé",
-        "BUG_DELETE": "Rapport de Bug Supprimé",
-      
-        "FEEDBACK_CREATE": "Retour Soumis",
-        "FEEDBACK_DELETE": "Retour Supprimé",
-      
-        "REGION_CREATE": "Région Créée",
-        "REGION_UPDATE": "Région Mise à Jour",
-        "REGION_DELETE": "Région Supprimée"
+        "SIGNIN": "Utilisateur connecté",
+        "SIGNUP": "Utilisateur enregistré",
+        "SIGNOUT": "Utilisateur déconnecté",
+        "CLIENT_SIGNIN": "Client connecté",
+        "CLIENT_SIGNUP": "Client enregistré",
+
+        "USER_CREATE": "Nouvel utilisateur créé",
+        "USER_UPDATE": "Détails de l'utilisateur mis à jour",
+        "USER_DELETE": "Compte utilisateur supprimé",
+        "USER_ACTIVATE": "Compte utilisateur activé",
+        "USER_DEACTIVATE": "Compte utilisateur désactivé",
+        "USER_APPROVE": "Utilisateur approuvé",
+        "USER_DISAPPROVE": "Utilisateur désapprouvé",
+
+        "ROLE_CREATE": "Rôle créé",
+        "ROLE_UPDATE": "Rôle mis à jour",
+        "ROLE_DELETE": "Rôle supprimé",
+        "ROLE_DUPLICATE": "Rôle dupliqué",
+
+        "BUG_CREATE": "Rapport de bug créé",
+        "BUG_DELETE": "Rapport de bug supprimé",
+
+        "FEEDBACK_CREATE": "Feedback soumis",
+        "FEEDBACK_DELETE": "Feedback supprimé",
+
+        "REGION_CREATE": "Région créée",
+        "REGION_UPDATE": "Région mise à jour",
+        "REGION_DELETE": "Région supprimée",
+
+        "DEVICE_INFO_CREATE": "Info appareil ajoutée",
+        "DEVICE_INFO_DELETE": "Info appareil supprimée",
+
+        "JOB_CREATE": "Emploi créé",
+        "JOB_UPDATE": "Emploi mis à jour",
+        "JOB_DELETE": "Emploi supprimé",
+
+        "JOB_TAG_CREATE": "Tag d'emploi créé",
+        "JOB_TAG_UPDATE": "Tag d'emploi mis à jour",
+        "JOB_TAG_DELETE": "Tag d'emploi supprimé"
     },
     "descriptions": {
         "SIGNIN": "L'utilisateur <strong>{{fullname}}</strong> s'est connecté.",
         "SIGNUP": "L'utilisateur <strong>{{fullname}}</strong> s'est enregistré.",
         "SIGNOUT": "L'utilisateur <strong>{{fullname}}</strong> s'est déconnecté.",
-      
         "CLIENT_SIGNIN": "Le client <strong>{{clientName}}</strong> s'est connecté.",
         "CLIENT_SIGNUP": "Le client <strong>{{clientName}}</strong> s'est enregistré.",
-      
+
         "USER_CREATE": "L'utilisateur <strong>{{firstName}}</strong> a été créé par <strong>{{user.username}}</strong>.",
         "USER_UPDATE": "L'utilisateur <strong>{{firstName}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
         "USER_DELETE": "L'utilisateur <strong>{{firstName}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
@@ -45,20 +54,31 @@
         "USER_DEACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été désactivé par <strong>{{user.username}}</strong>.",
         "USER_APPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été approuvé par <strong>{{user.username}}</strong>.",
         "USER_DISAPPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été désapprouvé par <strong>{{user.username}}</strong>.",
-      
+
         "ROLE_CREATE": "Le rôle <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
         "ROLE_UPDATE": "Le rôle <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
         "ROLE_DELETE": "Le rôle <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-        "ROLE_DUPLICATE": "Le rôle <strong>{{label}}</strong> existe déjà (créé par <strong>{{user.username}}</strong>).",
+        "ROLE_DUPLICATE": "Le rôle <strong>{{label}}</strong> existe déjà (par <strong>{{user.username}}</strong>).",
 
         "BUG_CREATE": "Le rapport de bug <strong>{{variant}}</strong> a été créé par <strong>{{user.username}}</strong>.",
         "BUG_DELETE": "Le rapport de bug <strong>{{variant}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
 
-        "FEEDBACK_CREATE": "Le retour <strong>{{category}}</strong> a été soumis par <strong>{{user.username}}</strong>.",
-        "FEEDBACK_DELETE": "Le retour <strong>{{category}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+        "FEEDBACK_CREATE": "Le feedback <strong>{{category}}</strong> a été soumis par <strong>{{user.username}}</strong>.",
+        "FEEDBACK_DELETE": "Le feedback <strong>{{category}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
 
         "REGION_CREATE": "La région <strong>{{region.name}}</strong> a été créée par <strong>{{user.username}}</strong>.",
         "REGION_UPDATE": "La région <strong>{{region.name}}</strong> a été mise à jour par <strong>{{user.username}}</strong>.",
-        "REGION_DELETE": "La région <strong>{{region.name}}</strong> a été supprimée par <strong>{{user.username}}</strong>."
+        "REGION_DELETE": "La région <strong>{{region.name}}</strong> a été supprimée par <strong>{{user.username}}</strong>.",
+
+        "DEVICE_INFO_CREATE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été ajoutée par <strong>{{user.username}}</strong>.",
+        "DEVICE_INFO_DELETE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été supprimée par <strong>{{user.username}}</strong>.",
+
+        "JOB_CREATE": "L'emploi <strong>{{title}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "JOB_UPDATE": "L'emploi <strong>{{title}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "JOB_DELETE": "L'emploi <strong>{{title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
+
+        "JOB_TAG_CREATE": "Le tag d'emploi <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
+        "JOB_TAG_UPDATE": "Le tag d'emploi <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
+        "JOB_TAG_DELETE": "Le tag d'emploi <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>."
     }
 }
