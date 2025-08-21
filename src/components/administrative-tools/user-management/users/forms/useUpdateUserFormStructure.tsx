@@ -76,7 +76,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: "John",
     description: t("userManagement.forms.firstNameDescription"),
-    error: userStore.updateDtoErrors?.firstName?.[0],
+    error: t(userStore.updateDtoErrors?.firstName?.[0]),
     props: {
       value: userStore.updateDto.firstName || undefined,
       onChange: (value) => {
@@ -94,7 +94,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: "Doe",
     description: t("userManagement.forms.lastNameDescription"),
-    error: userStore.updateDtoErrors?.lastName?.[0],
+    error: t(userStore.updateDtoErrors?.lastName?.[0]),
     props: {
       value: userStore.updateDto.lastName || undefined,
       onChange: (value) => {
@@ -112,7 +112,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: "john@doe.com",
     description: t("userManagement.forms.emailDescription"),
-    error: userStore.updateDtoErrors?.email?.[0],
+    error: t(userStore.updateDtoErrors?.email?.[0]),
     props: {
       value: userStore.updateDto.email || undefined,
       onChange: (value) => {
@@ -130,7 +130,7 @@ export const useUpdateUserFormStructure = ({
     required: false,
     placeholder: "YYYY-MM-DD",
     description: t("userManagement.forms.dateOfBirthDescription"),
-    error: userStore.updateDtoErrors?.dateOfBirth?.[0],
+    error: t(userStore.updateDtoErrors?.dateOfBirth?.[0]),
     props: {
       value: userStore.updateDto.dateOfBirth || undefined,
       onDateChange: (value) => {
@@ -149,7 +149,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: t("userManagement.forms.usernamePlaceholder"),
     description: t("userManagement.forms.usernameDescription"),
-    error: userStore.updateDtoErrors?.username?.[0],
+    error: t(userStore.updateDtoErrors?.username?.[0]),
     props: {
       value: userStore.updateDto.username || undefined,
       onChange: (value) => {
@@ -181,7 +181,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: t("userManagement.forms.passwordPlaceholder"),
     description: t("userManagement.forms.passwordDescription"),
-    error: userStore.updateDtoErrors?.password?.[0],
+    error: t(userStore.updateDtoErrors?.password?.[0]),
     hidden: !userStore.setManualPassword,
     props: {
       value: userStore.updateDto.password || undefined,
@@ -200,7 +200,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: t("userManagement.forms.confirmPasswordPlaceholder"),
     description: t("userManagement.forms.confirmPasswordDescription"),
-    error: userStore.updateDtoErrors?.confirmPassword?.[0],
+    error: t(userStore.updateDtoErrors?.confirmPassword?.[0]),
     hidden: !userStore.setManualPassword,
     props: {
       value: userStore.confirmPassword || undefined,
@@ -219,7 +219,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     description: t("userManagement.forms.roleDescription"),
     placeholder: t("userManagement.forms.rolePlaceholder"),
-    error: userStore.updateDtoErrors.roleId?.[0],
+    error: t(userStore.updateDtoErrors.roleId?.[0]),
     props: {
       options: roles,
       value: userStore.updateDto.roleId,
@@ -273,7 +273,7 @@ export const useUpdateUserFormStructure = ({
     required: false,
     placeholder: `${t("userManagement.forms.phonePlaceholder")}`,
     description: `${t("userManagement.forms.phoneDescription")}`,
-    error: userStore.updateDtoErrors?.phone?.[0],
+    error: t(userStore.updateDtoErrors?.phone?.[0]),
     props: {
       value: Number(userStore.updateDto?.profile?.phone) || undefined,
       onChange: (value: number) => {
@@ -290,7 +290,7 @@ export const useUpdateUserFormStructure = ({
     required: true,
     placeholder: `${t("userManagement.forms.CINPlaceholder")}`,
     description: `${t("userManagement.forms.CINDescription")}`,
-    error: userStore.updateDtoErrors?.cin?.[0],
+    error: t(userStore.updateDtoErrors?.cin?.[0]),
     props: {
       value: Number(userStore.updateDto?.profile?.cin) || undefined,
       onChange: (value: number) => {
@@ -307,7 +307,7 @@ export const useUpdateUserFormStructure = ({
     required: false,
     placeholder: `${t("userManagement.forms.bioPlaceholder")}`,
     description: `${t("userManagement.forms.bioDescription")}`,
-    error: userStore.updateDtoErrors?.bio?.[0],
+    error: t(userStore.updateDtoErrors?.bio?.[0]),
     props: {
       value: userStore.updateDto?.profile?.bio,
       onChange: (value) => {
@@ -325,7 +325,7 @@ export const useUpdateUserFormStructure = ({
     required: false,
     placeholder: `${t("userManagement.forms.genderPlaceholder")}`,
     description: `${t("userManagement.forms.genderDescription")}`,
-    error: userStore.updateDtoErrors?.gender?.[0],
+    error: t(userStore.updateDtoErrors?.gender?.[0]),
     props: {
       options: Object.entries(Gender).map(([value, label]) => ({
         value,
@@ -365,7 +365,7 @@ export const useUpdateUserFormStructure = ({
     required: false,
     placeholder: `${t("userManagement.forms.regionPlaceholder")}`,
     description: `${t("userManagement.forms.regionDescription")}`,
-    error: userStore.updateDtoErrors?.regionId?.[0],
+    error: t(userStore.updateDtoErrors?.regionId?.[0]),
     props: {
       options: regions,
       value: userStore.updateDto?.profile?.regionId?.toString(),

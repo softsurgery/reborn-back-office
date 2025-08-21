@@ -31,106 +31,79 @@
         },
         "forms": {
             "step1Title": "Informations Générales",
-            "step1Description": "Remplissez les informations de base de l'utilisateur.",
             "step1FieldTitle": "Informations de l'Utilisateur",
             "step2Title": "Informations du Profil",
             "step2FieldTitle": "Informations du Profil",
-            "step2Description": "Remplissez les détails du profil de l'utilisateur.",
-
             "photo": "Photo de Profil",
             "photoDescription": "Photo de profil de l'utilisateur.",
-
             "username": "Nom d'utilisateur",
             "usernamePlaceholder": "ex. johndoe",
             "usernameDescription": "Utilisé pour se connecter à la plateforme.",
-            
             "password": "Mot de passe",
             "passwordPlaceholder": "Entrez le mot de passe",
             "passwordDescription": "Mot de passe pour se connecter au compte.",
             "confirmPassword": "Confirmer le mot de passe",
             "confirmPasswordPlaceholder": "Répétez le mot de passe",
             "confirmPasswordDescription": "Doit correspondre au mot de passe ci-dessus.",
-            
             "role": "Rôle",
             "rolePlaceholder": "Sélectionnez le rôle de l'utilisateur",
             "roleDescription": "Sélectionnez le rôle de l'utilisateur.",
-            
             "firstName": "Prénom",
             "firstNamePlaceholder": "ex. John",
             "firstNameDescription": "Prénom de l'utilisateur.",
-            
             "lastName": "Nom",
             "lastNamePlaceholder": "ex. Doe",
             "lastNameDescription": "Nom de famille de l'utilisateur.",
-            
             "dateOfBirth": "Date de naissance",
             "dateOfBirthPlaceholder": "AAAA-MM-JJ",
             "dateOfBirthDescription": "Date de naissance de l'utilisateur.",
-            
             "email": "Email",
             "emailPlaceholder": "ex. johndoe@example.com",
             "emailDescription": "Adresse email associée au compte.",
-           
             "phone": "Téléphone",
             "phonePlaceholder": "ex. +1234567890",
             "phoneDescription": "Numéro de téléphone de l'utilisateur.",
-            
             "CIN": "CIN",
             "CINPlaceholder": "ex. 123456",
             "CINDescription": "Numéro CIN de l'utilisateur.",
-            
             "bio": "Biographie",
             "bioPlaceholder": "Parlez-nous de vous...",
             "bioDescription": "Biographie ou informations personnelles de l'utilisateur.",
-            
             "gender": "Genre",
             "genderPlaceholder": "ex. Homme, Femme",
             "genderDescription": "Genre de l'utilisateur.",
-            
             "isPrivate": "Confidentialité du Profil",
             "isPrivateDescription": "Si activé, le profil de l'utilisateur sera privé et non visible par les autres.",
             "isPrivatePlaceholder": "Sélectionnez si le profil doit être privé",
-            
             "region": "Région",
             "regionPlaceholder": "ex. Amérique du Nord",
             "regionDescription": "Région ou emplacement de l'utilisateur.",
-            
             "createUser": "Créer un utilisateur",
             "createUserSuccess": "Utilisateur créé avec succès.",
             "createUserError": "Erreur lors de la création de l'utilisateur.",
-           
             "editUser": "Modifier l'utilisateur",
             "updateUserSuccess": "Utilisateur mis à jour avec succès.",
             "updateUserError": "Erreur lors de la mise à jour de l'utilisateur.",
-           
             "deleteUser": "Supprimer l'utilisateur",
             "deleteUserConfirmation": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
             "deleteUserSuccess": "Utilisateur supprimé avec succès.",
             "deleteUserError": "Erreur lors de la suppression de l'utilisateur.",
-           
             "activateUserSuccess": "Utilisateur activé avec succès.",
             "activateUserError": "Erreur lors de l'activation de l'utilisateur.",
-           
             "deactivateUserSuccess": "Utilisateur désactivé avec succès.",
             "deactivateUserError": "Erreur lors de la désactivation de l'utilisateur.",
-           
             "approveUserSuccess": "Utilisateur approuvé avec succès.",
             "approveUserError": "Erreur lors de l'approbation de l'utilisateur.",
-           
             "disapproveUserSuccess": "Utilisateur désapprouvé avec succès.",
             "disapproveUserError": "Erreur lors de la désapprobation de l'utilisateur.",
-           
             "requirePasswordCheckTitle": "Exiger une mise à jour du mot de passe",
             "requirePasswordCheckDescription": "Les utilisateurs seront invités à mettre à jour leur mot de passe lors de leur prochaine connexion."
-            
         },
         "sheet": {
-            "createUserTitle": "Créer un Nouvel Utilisateur",
-            "editUserTitle": "Modifier un Utilisateur",
-            "deleteUserTitle": "Supprimer un Utilisateur",
-            "createUserDescription": "Utilisez ce formulaire pour définir un nouvel utilisateur dans le système. Un utilisateur est identifié par son adresse email unique. Remplissez tous les champs requis pour garantir que l'utilisateur est ajouté avec succès.",
-            "editUserDescription": "Utilisez ce formulaire pour modifier les détails d'un utilisateur existant.",
-            "deleteUserDescription": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
+            "createUserTitle": "Créer un utilisateur",
+            "updateUserTitle": "Mettre à jour un utilisateur",
+            "createUserDescription": "Utilisez ce formulaire pour définir un nouvel utilisateur dans le système. Un utilisateur est identifié par son adresse e-mail unique. Remplissez tous les champs obligatoires pour que l'utilisateur soit ajouté avec succès.",
+            "updateUserDescription": "Utilisez ce formulaire pour mettre à jour un utilisateur existant dans le système. Un utilisateur est identifié par son adresse e-mail unique. Remplissez tous les champs obligatoires pour que l'utilisateur soit mis à jour avec succès."
         },
         "dialogs": {
             "deleteUserTitle": "Supprimer l'Utilisateur",

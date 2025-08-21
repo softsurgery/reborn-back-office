@@ -16,15 +16,16 @@ import {
 } from "@/types/validations/user.validation";
 import { Spinner } from "@/components/shared/Spinner";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
+import { useTranslation } from "react-i18next";
 
 const steps = [
   {
     id: "user-information",
-    title: "User Information",
+    title: "userManagement.forms.step1Title",
   },
   {
     id: "profile-information",
-    title: "Profile Information",
+    title: "userManagement.forms.step2Title",
   },
 ];
 
@@ -41,6 +42,8 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   updateUser,
   isUpdatePending,
 }) => {
+  const { t: tCommon } = useTranslation("common");
+  const { t: tUser } = useTranslation("user-management");
   const userStore = useUserStore();
   const { roles, isFetchRolesPending } = useRoles();
   const { regions, isFetchRegionsPending } = useRegions();
@@ -155,7 +158,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                     }}
                     disabled={isUpdatePending}
                   >
-                    <Stepper.Title>{step.title}</Stepper.Title>
+                    <Stepper.Title>{tUser(step.title)}</Stepper.Title>
                   </Stepper.Step>
                 ))}
               </Stepper.Navigation>
@@ -184,17 +187,17 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                     onClick={methods.prev}
                     disabled={isUpdatePending}
                   >
-                    <ArrowLeft /> Previous
+                    <ArrowLeft /> {tCommon("common.buttons.previous")}
                   </Button>
                 )}
                 <Button onClick={handleNext} disabled={isUpdatePending}>
                   {methods.isLast ? (
                     <>
-                      <Save /> Update
+                      <Save /> {tCommon("common.buttons.update")}
                     </>
                   ) : (
                     <>
-                      Next <ArrowRight />
+                      {tCommon("common.buttons.next")} <ArrowRight />
                     </>
                   )}
                 </Button>
