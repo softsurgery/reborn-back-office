@@ -14,8 +14,9 @@
             "deleteUser": "Delete User",
             "userDetails": "User Details"
         },
-        "table": {
+        "columns": {
             "id": "ID",
+            "photo": "Photo",
             "username": "Username",
             "firstName": "First Name",
             "lastName": "Last Name",
@@ -33,94 +34,71 @@
             "step1Title": "General Information",
             "step1Description": "Fill in the user's basic information.",
             "step1FieldTitle": "User Information",
-            
             "step2Title": "Profile Information",
             "step2FieldTitle": "Profile Information",
             "step2Description": "Fill in the user's profile details.",
-
             "photo": "Profile Photo",
             "photoDescription": "User's profile photo.",
-
             "username": "Username",
             "usernamePlaceholder": "e.g. johndoe",
             "usernameDescription": "Used to log into the platform.",
-           
             "password": "Password",
             "passwordPlaceholder": "Enter the password",
             "passwordDescription": "Password used to log into the account.",
             "confirmPassword": "Confirm Password",
             "confirmPasswordPlaceholder": "Repeat the password",
             "confirmPasswordDescription": "Must match the above password.",
-           
             "role": "Role",
             "rolePlaceholder": "Select the user's role",
             "roleDescription": "Select the user's role.",
-           
             "firstName": "First Name",
             "firstNamePlaceholder": "e.g. John",
             "firstNameDescription": "User's first name.",
-           
             "lastName": "Last Name",
             "lastNamePlaceholder": "e.g. Doe",
             "lastNameDescription": "User's last name.",
-           
             "dateOfBirth": "Date of Birth",
             "dateOfBirthPlaceholder": "YYYY-MM-DD",
             "dateOfBirthDescription": "User's date of birth.",
-           
             "email": "Email",
             "emailPlaceholder": "e.g. johndoe@example.com",
             "emailDescription": "Email address associated with the account.",
-           
             "phone": "Phone",
             "phonePlaceholder": "e.g. +1234567890",
             "phoneDescription": "User's phone number.",
-           
             "CIN": "CIN",
             "CINPlaceholder": "e.g. 123456",
             "CINDescription": "User's CIN number.",
-           
             "bio": "Bio",
             "bioPlaceholder": "Tell us about yourself...",
             "bioDescription": "User's biography or personal details.",
-           
             "gender": "Gender",
             "genderPlaceholder": "e.g. Male, Female",
             "genderDescription": "User's gender.",
-           
             "isPrivate": "Profile Privacy",
             "isPrivateDescription": "If enabled, the user's profile will be private and not visible to others.",
             "isPrivatePlaceholder": "Select if the profile should be private",
-           
             "region": "Region",
             "regionPlaceholder": "e.g. North America",
             "regionDescription": "User's region or location.",
-           
             "createUser": "Create User",
             "createUserSuccess": "User created successfully.",
             "createUserError": "Error creating user.",
-           
             "editUser": "Edit User",
             "updateUserSuccess": "User updated successfully.",
             "updateUserError": "Error updating user.",
-           
             "deleteUser": "Delete User",
             "deleteUserConfirmation": "Are you sure you want to delete this user?",
             "deleteUserSuccess": "User deleted successfully.",
             "deleteUserError": "Error deleting user.",
-           
             "activateUserSuccess": "User activated successfully.",
             "activateUserError": "Error activating user.",
-           
             "deactivateUserSuccess": "User deactivated successfully.",
             "deactivateUserError": "Error deactivating user.",
-           
             "approveUserSuccess": "User approved successfully.",
             "approveUserError": "Error approving user.",
-           
             "disapproveUserSuccess": "User disapproved successfully.",
             "disapproveUserError": "Error disapproving user.",
-           
             "requirePasswordCheckTitle": "Require Password Update",
             "requirePasswordCheckDescription": "Users will be prompted to update their password on their next login."
         },

@@ -7,6 +7,8 @@
             "title": "Titre",
             "description": "Description",
             "variant": "Variante",
+            "createdAt": "Créé le",
+            "user": "Utilisateur",
             "noDescription": "Pas de description",
             "noVariant": "Pas de variante",
             "actions": "Actions"

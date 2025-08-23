@@ -7,6 +7,8 @@
             "message": "Message",
             "rating": "Rating",
             "category": "Category",
+            "createdAt": "Created At",
+            "user": "User",
             "noRating": "No Rating",
             "noCategory": "No Category",
             "actions": "Actions"

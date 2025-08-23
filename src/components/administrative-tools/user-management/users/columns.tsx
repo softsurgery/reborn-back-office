@@ -20,11 +20,11 @@ export const useUserColumns = (
 
   return [
     {
-      accessorKey: "Photo",
+      accessorKey: `${t("userManagement.columns.photo")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Photo"
+          title={t("userManagement.columns.photo")}
           attribute="photo"
           context={context}
         />
@@ -37,11 +37,11 @@ export const useUserColumns = (
       ),
     },
     {
-      accessorKey: `${t("userManagement.table.username")}`,
+      accessorKey: `${t("userManagement.columns.username")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.username")}
+          title={t("userManagement.columns.username")}
           attribute="username"
           context={context}
         />
@@ -53,11 +53,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.email")}`,
+      accessorKey: `${t("userManagement.columns.email")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.email")}
+          title={t("userManagement.columns.email")}
           attribute="email"
           context={context}
         />
@@ -67,11 +67,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.firstName")}`,
+      accessorKey: `${t("userManagement.columns.firstName")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.firstName")}
+          title={t("userManagement.columns.firstName")}
           attribute="firstName"
           context={context}
         />
@@ -89,11 +89,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.lastName")}`,
+      accessorKey: `${t("userManagement.columns.lastName")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.lastName")}
+          title={t("userManagement.columns.lastName")}
           attribute="lastName"
           context={context}
         />
@@ -111,11 +111,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.dateOfBirth")}`,
+      accessorKey: `${t("userManagement.columns.dateOfBirth")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.dateOfBirth")}
+          title={t("userManagement.columns.dateOfBirth")}
           attribute="dateOfBirth"
           context={context}
         />
@@ -134,11 +134,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.role")}`,
+      accessorKey: `${t("userManagement.columns.role")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.role")}
+          title={t("userManagement.columns.role")}
           attribute="role.label"
           context={context}
         />
@@ -156,11 +156,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.isActive")}`,
+      accessorKey: `${t("userManagement.columns.isActive")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.isActive")}
+          title={t("userManagement.columns.isActive")}
           attribute="isActive"
           context={context}
         />
@@ -179,11 +179,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.isApproved")}`,
+      accessorKey: `${t("userManagement.columns.isApproved")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.isApproved")}
+          title={t("userManagement.columns.isApproved")}
           attribute="isApproved"
           context={context}
         />
@@ -202,11 +202,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.createdAt")}`,
+      accessorKey: `${t("userManagement.columns.createdAt")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.createdAt")}
+          title={t("userManagement.columns.createdAt")}
           attribute="createdAt"
           context={context}
         />
@@ -224,11 +224,11 @@ export const useUserColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: `${t("userManagement.table.updatedAt")}`,
+      accessorKey: `${t("userManagement.columns.updatedAt")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("userManagement.table.updatedAt")}
+          title={t("userManagement.columns.updatedAt")}
           attribute="updatedAt"
           context={context}
         />

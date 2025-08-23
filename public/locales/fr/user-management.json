@@ -14,8 +14,9 @@
             "deleteUser": "Supprimer l'Utilisateur",
             "userDetails": "Détails de l'Utilisateur"
         },
-        "table": {
+        "columns": {
             "id": "ID",
+            "photo": "Photo",
             "firstName": "Prénom",
             "lastName": "Nom",
             "dateOfBirth": "Date de naissance",
