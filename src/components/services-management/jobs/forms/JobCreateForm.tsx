@@ -2,14 +2,24 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { useJobStore } from "@/hooks/stores/useJobStore";
 import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
+import { Save, ArrowLeft, ArrowRight } from "lucide-react";
 import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useTranslation } from "react-i18next";
-import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
 import { useCurrencies } from "@/hooks/content/useCurrencies";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
 import { Upload } from "@/types";
 import { toast } from "sonner";
+import { defineStepper } from "@/components/ui/stepper";
+import { Spinner } from "@/components/shared/Spinner";
+import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
+import { createJobSchema } from "@/types/validations/job.validation";
+
+const steps = [
+  { id: "general", title: "job.forms.generalInformationTitle" },
+  { id: "detailed", title: "job.forms.detailedInformationTitle" },
+];
+
+const { Stepper } = defineStepper(...steps);
 
 interface JobFormProps {
   className?: string;
@@ -26,6 +36,7 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
 }) => {
   const jobStore = useJobStore();
   const { t: tCommon } = useTranslation("common");
+  const { t: tJob } = useTranslation("job");
 
   const { currencies, isFetchCurrenciesPending } = useCurrencies();
 
@@ -38,43 +49,145 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
     },
   });
 
-  const { jobCreateFormStructure } = useCreateJobFormStructure({
+  const {
+    detailedInformationCreateFormStructure,
+    generalInformationCreateFormStructure,
+  } = useCreateJobFormStructure({
     jobStore,
     currencies,
     uploadPicture,
   });
 
+  const validateStep = React.useCallback(
+    (stepId: string) => {
+      if (stepId === "general") {
+        const jobResult = createJobSchema.safeParse(jobStore.createDto);
+        if (!jobResult.success) {
+          jobResult.error.errors.forEach((error) => {
+            jobStore.setNested(`createDtoErrors.${error.path[0]}`, [
+              error.message,
+            ]);
+          });
+          return false;
+        }
+      }
+      if (stepId === "detailed") {
+        return true;
+      }
+      return true;
+    },
+    [jobStore]
+  );
+
+  const handleSubmit = () => {
+    jobCallback?.();
+  };
+
   return (
-    <div
-      className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
-    >
-      <FormBuilder
-        className="flex flex-col flex-1 overflow-auto no-scrollbar h-full px-1"
-        structure={jobCreateFormStructure}
-      />
-      <div className="flex gap-2 justify-end px-4 py-3 border-t">
-        <Button
-          onClick={() => {
-            jobCallback?.();
-            // console.log(jobStore.createDto);
-            // console.log(jobStore.images);
-            // console.log(jobStore.createDto.uploads);
-          }}
-          disabled={isPending}
-        >
-          <Save className="mr-2" />
-          {tCommon("common.buttons.save")}
-        </Button>
-        <Button
-          variant={"secondary"}
-          onClick={() => {
-            cancelCallback?.();
-          }}
-          disabled={isPending}
-        >
-          {tCommon("common.buttons.cancel")}
-        </Button>
-      </div>
+    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
+      <Stepper.Provider
+        className="flex flex-col flex-1 overflow-hidden"
+        variant="horizontal"
+      >
+        {({ methods }) => {
+          const activeIndex = steps.findIndex(
+            (step) => step.id === methods.current.id
+          );
+
+          const handleNext = () => {
+            const valid = validateStep(methods.current.id);
+            if (!valid) return;
+
+            if (methods.isLast) {
+              handleSubmit();
+            } else {
+              methods.next();
+            }
+          };
+
+          return (
+            <>
+              {/* Navigation */}
+              <Stepper.Navigation className="flex-shrink-0">
+                {methods.all.map((step, index) => (
+                  <Stepper.Step
+                    key={step.id}
+                    of={step.id}
+                    onClick={() => {
+                      if (index > activeIndex) {
+                        let valid = true;
+                        for (let i = 0; i <= activeIndex; i++) {
+                          valid = valid && validateStep(steps[i].id);
+                        }
+                        if (!valid) return;
+                      }
+                      methods.goTo(step.id);
+                    }}
+                    disabled={isPending}
+                  >
+                    <Stepper.Title>{tJob(step.title)}</Stepper.Title>
+                  </Stepper.Step>
+                ))}
+              </Stepper.Navigation>
+
+              {/* Content */}
+              {isFetchCurrenciesPending ? (
+                <Spinner />
+              ) : (
+                <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
+                  <div className="flex-1 overflow-auto px-2">
+                    {methods.current.id === "general" && (
+                      <FormBuilder
+                        structure={generalInformationCreateFormStructure}
+                      />
+                    )}
+                    {methods.current.id === "detailed" && (
+                      <FormBuilder
+                        structure={detailedInformationCreateFormStructure}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Controls */}
+              <Stepper.Controls className="shrink-0 flex items-center justify-between gap-2 px-4 py-3 border-t">
+                <Button
+                  variant="secondary"
+                  onClick={() => cancelCallback?.()}
+                  disabled={isPending}
+                >
+                  {tCommon("common.buttons.cancel")}
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  {!methods.isFirst && (
+                    <Button
+                      variant="outline"
+                      onClick={methods.prev}
+                      disabled={isPending}
+                    >
+                      <ArrowLeft /> {tCommon("common.buttons.previous")}
+                    </Button>
+                  )}
+
+                  <Button onClick={handleNext} disabled={isPending}>
+                    {methods.isLast ? (
+                      <>
+                        <Save /> {tCommon("common.buttons.save")}
+                      </>
+                    ) : (
+                      <>
+                        {tCommon("common.buttons.next")} <ArrowRight />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </Stepper.Controls>
+            </>
+          );
+        }}
+      </Stepper.Provider>
     </div>
   );
 };

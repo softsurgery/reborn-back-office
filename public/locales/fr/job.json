@@ -18,6 +18,8 @@
         "forms": {
             "generalInformationTitle": "Informations générales",
             "generalInformationDescription": "Informations générales sur le poste.",
+            "detailedInformationTitle": "Informations détaillées",
+            "detailedInformationDescription": "Informations supplémentaires sur le poste.",
             "titleLabel": "Titre du poste",
             "titlePlaceholder": "Saisissez le titre du poste",
             "titleDescription": "Le titre du poste.",

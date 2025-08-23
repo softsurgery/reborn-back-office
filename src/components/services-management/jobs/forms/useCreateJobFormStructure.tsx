@@ -131,7 +131,7 @@ export const useCreateJobFormStructure = ({
     },
   };
 
-  const jobCreateFormStructure: FormStructure = {
+  const generalInformationCreateFormStructure: FormStructure = {
     title: "",
     description: "",
     fieldsets: [
@@ -148,6 +148,19 @@ export const useCreateJobFormStructure = ({
           {
             fields: [priceField, currencyField],
           },
+        ],
+      },
+    ],
+  };
+
+  const detailedInformationCreateFormStructure: FormStructure = {
+    title: "",
+    description: "",
+    fieldsets: [
+      {
+        title: `${t("job.forms.detailInformationTitle")}`,
+        description: `${t("job.forms.detailInformationDescription")}`,
+        rows: [
           {
             fields: [uploadsField],
           },
@@ -157,6 +170,7 @@ export const useCreateJobFormStructure = ({
   };
 
   return {
-    jobCreateFormStructure,
+    generalInformationCreateFormStructure,
+    detailedInformationCreateFormStructure,
   };
 };

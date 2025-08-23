@@ -18,6 +18,8 @@
         "forms": {
             "generalInformationTitle": "General Information",
             "generalInformationDescription": "General information about the job.",
+            "detailedInformationTitle": "Detailed Information",
+            "detailedInformationDescription": "Additional information about the job.",
             "titleLabel": "Job Title",
             "titlePlaceholder": "Enter job title",
             "titleDescription": "The title for the job.",

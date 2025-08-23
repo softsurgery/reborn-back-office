@@ -131,7 +131,7 @@ export const useUpdateJobFormStructure = ({
     },
   };
 
-  const jobUpdateFormStructure: FormStructure = {
+  const generalInformationUpdateFormStructure: FormStructure = {
     title: "",
     description: "",
     fieldsets: [
@@ -148,6 +148,20 @@ export const useUpdateJobFormStructure = ({
           {
             fields: [priceField, currencyField],
           },
+       
+        ],
+      },
+    ],
+  };
+
+  const detailedInformationUpdateFormStructure: FormStructure = {
+    title: "",
+    description: "",
+    fieldsets: [
+      {
+        title: "Detailed Information",
+        description: "Update the detailed information about the job.",
+        rows: [
           {
             fields: [uploadsField],
           },
@@ -157,6 +171,7 @@ export const useUpdateJobFormStructure = ({
   };
 
   return {
-    jobUpdateFormStructure,
+    generalInformationUpdateFormStructure,
+    detailedInformationUpdateFormStructure,
   };
 };
