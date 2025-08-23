@@ -1,3 +1,4 @@
+import { currency } from "@/api/public/currency";
 import { z } from "zod";
 
 const createJobSchema = z.object({
@@ -28,6 +29,13 @@ const createJobSchema = z.object({
     })
     .positive({
       message: "job.validation.invalidPrice",
+    }),
+  currencyId: z
+    .number({
+      message: "job.validation.currencyRequired",
+    })
+    .min(1, {
+      message: "job.validation.invalidCurrency",
     }),
 
   // jobTagIds: z.array(z.number().positive()).min(1, {
@@ -68,6 +76,14 @@ const updateJobSchema = z.object({
     })
     .optional(),
 
+  currencyId: z
+    .number({
+      message: "job.validation.currencyRequired",
+    })
+    .min(1, {
+      message: "job.validation.invalidCurrency",
+    })
+    .optional(),
   // jobTagIds: z
   //   .array(z.number().positive())
   //   .min(1, {

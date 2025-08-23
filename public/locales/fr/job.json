@@ -13,6 +13,8 @@
             "descriptionTooLong": "La description du poste ne doit pas dépasser 1000 caractères.",
             "priceRequired": "Le prix du poste est requis.",
             "invalidPrice": "Le prix du poste doit être un nombre positif.",
+            "currencyRequired": "La devise du poste est requise.",
+            "invalidCurrency": "La devise du poste doit être une devise valide.",
             "atLeastOneTag": "Au moins une étiquette de poste doit être sélectionnée."
         },
         "forms": {

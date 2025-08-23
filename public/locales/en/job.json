@@ -13,6 +13,8 @@
             "descriptionTooLong": "The job description must not exceed 1000 characters.",
             "priceRequired": "The job price is required.",
             "invalidPrice": "The job price must be a positive number.",
+            "currencyRequired": "The job currency is required.",
+            "invalidCurrency": "The job currency must be a valid currency.",
             "atLeastOneTag": "At least one job tag must be selected."
         },
         "forms": {

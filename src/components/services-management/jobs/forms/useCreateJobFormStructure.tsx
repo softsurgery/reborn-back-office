@@ -96,7 +96,7 @@ export const useCreateJobFormStructure = ({
     required: true,
     description: `${t("job.forms.currencyDescription")}`,
     placeholder: `${t("job.forms.currencyPlaceholder")}`,
-    error: jobStore.createDtoErrors?.currencyId?.[0],
+    error: t(jobStore.createDtoErrors?.currencyId?.[0]),
     props: {
       options: currencies.map((currency) => ({
         label: `${currency.label} (${currency.symbol})`,
