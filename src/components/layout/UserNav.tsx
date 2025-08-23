@@ -17,15 +17,17 @@ import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
+import { useTranslation } from "react-i18next";
 
 interface UserNavProps {
   className?: string;
 }
 
 export function UserNav({ className }: UserNavProps) {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { user } = useCurrentUser();
-  
+
   const identity = React.useMemo(() => identifyUser(user), [user]);
   const avatarIdentity = React.useMemo(() => identifyUserAvatar(user), [user]);
 
@@ -72,28 +74,28 @@ export function UserNav({ className }: UserNavProps) {
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => router.push("/profile")}>
             <User />
-            Profile
+            {t("common.buttons.profile")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <BadgeCheck />
-            Account
+            {t("common.buttons.account")}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCard />
-            Billing
+            {t("common.buttons.billing")}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Bell />
-            Notifications
+            {t("common.buttons.notifications")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut />
-          Logout
+          {t("common.buttons.logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

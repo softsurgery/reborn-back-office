@@ -27,7 +27,12 @@
       "download": "Download",
       "upload": "Upload",
       "duplicate": "Duplicate",
-      "disapprove": "Disapprove"
+      "disapprove": "Disapprove",
+      "logout": "Logout",
+      "notifications": "Notifications",
+      "billing": "Billing",
+      "account": "Account",
+      "profile": "Profile"
     },
     "table": {
       "Asc": "Ascending",

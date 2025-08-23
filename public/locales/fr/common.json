@@ -27,7 +27,12 @@
       "download": "Télécharger",
       "upload": "Importer",
       "duplicate": "Dupliquer",
-      "disapprove": "Désapprouver"
+      "disapprove": "Désapprouver",
+      "logout": "Déconnexion",
+      "notifications": "Notifications",
+      "billing": "Facturation",
+      "account": "Compte",
+      "profile": "Profil"
     },
     "table": {
       "Asc": "Croissant",
