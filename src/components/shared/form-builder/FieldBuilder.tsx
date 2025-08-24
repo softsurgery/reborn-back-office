@@ -17,7 +17,7 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { Field, SelectOption } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
-import { PasswordField } from "../PasswordField";
+import { PasswordField } from "./PasswordField";
 import { ImageUploaderManager } from "@/components/shared/form-builder/ImageUploaderManager";
 import { ImageUploader } from "./ImageUploader";
 

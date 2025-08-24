@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
 import { ServerErrorResponse, ServerResponse } from "@/types";
-import { PasswordField } from "../shared/PasswordField";
+import { PasswordField } from "../shared/form-builder/PasswordField";
 
 interface ResetPasswordFormProps {
   className?: string;
