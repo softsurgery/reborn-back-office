@@ -148,7 +148,6 @@ export const useUpdateJobFormStructure = ({
           {
             fields: [priceField, currencyField],
           },
-       
         ],
       },
     ],

@@ -30,13 +30,9 @@ const createJobSchema = z.object({
     .positive({
       message: "job.validation.invalidPrice",
     }),
-  currencyId: z
-    .number({
-      message: "job.validation.currencyRequired",
-    })
-    .min(1, {
-      message: "job.validation.invalidCurrency",
-    }),
+  currencyId: z.string({
+    message: "job.validation.currencyRequired",
+  }),
 
   // jobTagIds: z.array(z.number().positive()).min(1, {
   //   message: "job.validation.atLeastOneTag",
@@ -76,14 +72,9 @@ const updateJobSchema = z.object({
     })
     .optional(),
 
-  currencyId: z
-    .number({
-      message: "job.validation.currencyRequired",
-    })
-    .min(1, {
-      message: "job.validation.invalidCurrency",
-    })
-    .optional(),
+  currencyId: z.string({
+    message: "job.validation.currencyRequired",
+  }),
   // jobTagIds: z
   //   .array(z.number().positive())
   //   .min(1, {
