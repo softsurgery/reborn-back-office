@@ -3,35 +3,40 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
-import { getDevLoggerColumns } from "./dev-columns";
+import { useDevLoggerColumns } from "./dev-columns";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { ResponseLogDto } from "@/types";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { useTranslation } from "react-i18next";
 
 interface DevLoggerProps {
   className?: string;
 }
 
 export const DevLogger = ({ className }: DevLoggerProps) => {
+  const { t, ready } = useTranslation("logs");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
 
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Audit & Monitoring", href: "/audit-monitoring" },
-      { title: "Developer Logger", href: "/audit-monitoring/developer-logger" },
+      { title: `${t("devLogger.intro")}`, href: "/audit-monitoring" },
+      {
+        title: `${t("devLogger.introTitle")}`,
+        href: "/audit-monitoring/logger",
+      },
     ]);
     setIntro?.(
-      "Developer Logs",
-      "Monitor and analyze system activities, API calls, and user actions"
+      `${t("devLogger.introTitle")}`,
+      `${t("devLogger.introDescription")}`
     );
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [t, ready]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -87,8 +92,8 @@ export const DevLogger = ({ className }: DevLoggerProps) => {
   }, [logsResponse]);
 
   const context: DataTableConfig<ResponseLogDto> = {
-    singularName: "Log Entry",
-    pluralName: "Log Entries",
+    singularName: t("logger.singularName"),
+    pluralName: t("logger.pluralName"),
     page,
     size,
     totalPageCount: logsResponse?.meta.pageCount || 0,
@@ -102,7 +107,7 @@ export const DevLogger = ({ className }: DevLoggerProps) => {
     setSearchTerm,
   };
 
-  const columns = getDevLoggerColumns(context);
+  const columns = useDevLoggerColumns(context);
 
   const isPending = isLogsPending || paging || resizing || searching || sorting;
 

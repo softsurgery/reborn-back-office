@@ -1,20 +1,25 @@
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
-import { DataTableCellVariant, DataTableConfig } from "@/components/shared/data-tables/types";
+import {
+  DataTableCellVariant,
+  DataTableConfig,
+} from "@/components/shared/data-tables/types";
 import { Trans } from "@/components/shared/Trans";
 import { ResponseLogDto } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 
-export const getLoggerColumns = (
+export const useLoggerColumns = (
   context: DataTableConfig<ResponseLogDto>
 ): ColumnDef<ResponseLogDto>[] => {
+  const { t } = useTranslation("logs");
   return [
     {
-      accessorKey: "event",
+      accessorKey: `${t("logger.columns.event")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Event"}
+          title={t("logger.columns.event")}
           attribute="event"
           context={context}
         />
@@ -28,11 +33,11 @@ export const getLoggerColumns = (
     },
 
     {
-      accessorKey: "description",
+      accessorKey: `${t("logger.columns.description")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Description"}
+          title={t("logger.columns.description")}
           attribute="event"
           context={context}
         />
@@ -54,11 +59,11 @@ export const getLoggerColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Logged At",
+      accessorKey: `${t("logger.columns.loggedAt")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Logged At"}
+          title={t("logger.columns.loggedAt")}
           attribute="createdAt"
           context={context}
         />

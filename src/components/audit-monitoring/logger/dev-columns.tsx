@@ -5,7 +5,11 @@ import { identifyUser } from "@/lib/user.utils";
 import { JsonToggler } from "@/components/shared/JsonToggler";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
-import { DataTableCellVariant, DataTableConfig } from "@/components/shared/data-tables/types";
+import {
+  DataTableCellVariant,
+  DataTableConfig,
+} from "@/components/shared/data-tables/types";
+import { useTranslation } from "react-i18next";
 
 const getMethodColor = (method: string) => {
   switch (method) {
@@ -24,16 +28,18 @@ const getMethodColor = (method: string) => {
   }
 };
 
-export const getDevLoggerColumns = (
+export const useDevLoggerColumns = (
   context: DataTableConfig<ResponseLogDto>
 ): ColumnDef<ResponseLogDto>[] => {
+  const { t } = useTranslation("logs");
+  const { t: tCommon } = useTranslation("common");
   return [
     {
-      accessorKey: "event",
+      accessorKey: `${t("devLogger.columns.event")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Event"}
+          title={t("devLogger.columns.event")}
           attribute="event"
           context={context}
         />
@@ -46,11 +52,11 @@ export const getDevLoggerColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "method",
+      accessorKey: `${t("devLogger.columns.method")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Method"}
+          title={t("devLogger.columns.method")}
           attribute="method"
           context={context}
         />
@@ -67,11 +73,11 @@ export const getDevLoggerColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "API Endpoint",
+      accessorKey: `${t("devLogger.columns.apiEndpoint")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"API Endpoint"}
+          title={t("devLogger.columns.apiEndpoint")}
           attribute="api"
           context={context}
         />
@@ -87,11 +93,11 @@ export const getDevLoggerColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "User",
+      accessorKey: `${t("devLogger.columns.user")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="User"
+          title={t("devLogger.columns.user")}
           attribute="userId"
           context={context}
         />
@@ -107,11 +113,11 @@ export const getDevLoggerColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Logged At",
+      accessorKey: `${t("devLogger.columns.loggedAt")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Logged At"}
+          title={t("devLogger.columns.loggedAt")}
           attribute="createdAt"
           context={context}
         />
@@ -129,11 +135,11 @@ export const getDevLoggerColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "logInfo",
+      accessorKey: `${t("devLogger.columns.logInfo")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Log Info"}
+          title={t("devLogger.columns.logInfo")}
           attribute="logInfo"
           context={context}
         />
@@ -144,7 +150,7 @@ export const getDevLoggerColumns = (
           <JsonToggler data={logInfo} className="w-full" />
         ) : (
           <Badge variant="outline" className="text-xs">
-            No data
+            {tCommon("common.table.noData")}
           </Badge>
         );
       },

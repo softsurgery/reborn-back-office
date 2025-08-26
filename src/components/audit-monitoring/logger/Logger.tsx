@@ -6,9 +6,10 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { ResponseLogDto } from "@/types";
-import { getLoggerColumns } from "./columns";
+import { useLoggerColumns } from "./columns";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { useTranslation } from "react-i18next";
 
 interface LoggerProps {
   className?: string;
@@ -16,25 +17,29 @@ interface LoggerProps {
 }
 
 export const Logger = ({ className, userId }: LoggerProps) => {
+  const { t, ready } = useTranslation("logs");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
 
   React.useEffect(() => {
     if (!userId) {
       setRoutes?.([
-        { title: "Audit & Monitoring", href: "/audit-monitoring" },
-        { title: "Logger", href: "/audit-monitoring/logger" },
+        { title: `${t("logger.intro")}`, href: "/audit-monitoring" },
+        {
+          title: `${t("logger.introTitle")}`,
+          href: "/audit-monitoring/logger",
+        },
       ]);
       setIntro?.(
-        "Logs",
-        "Monitor and analyze system activities, API calls, and user actions"
+        `${t("logger.introTitle")}`,
+        `${t("logger.introDescription")}`
       );
       return () => {
         clearRoutes?.();
         clearIntro?.();
       };
     }
-  }, []);
+  }, [t, ready]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -91,8 +96,8 @@ export const Logger = ({ className, userId }: LoggerProps) => {
   }, [logsResponse]);
 
   const context: DataTableConfig<ResponseLogDto> = {
-    singularName: "Log Entry",
-    pluralName: "Log Entries",
+    singularName: t("logger.singularName"),
+    pluralName: t("logger.pluralName"),
     page,
     size,
     totalPageCount: logsResponse?.meta.pageCount || 0,
@@ -106,7 +111,7 @@ export const Logger = ({ className, userId }: LoggerProps) => {
     setSearchTerm,
   };
 
-  const columns = getLoggerColumns(context);
+  const columns = useLoggerColumns(context);
 
   const isPending = isLogsPending || paging || resizing || searching || sorting;
 
