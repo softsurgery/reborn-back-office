@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@radix-ui/react-separator";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface JsonTogglerProps {
   className?: string;
@@ -10,6 +11,7 @@ interface JsonTogglerProps {
 }
 
 export const JsonToggler = ({ className, data }: JsonTogglerProps) => {
+  const { t } = useTranslation("common");
   const [open, setOpen] = React.useState(false);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const [height, setHeight] = React.useState<number | null>(0);
@@ -46,7 +48,7 @@ export const JsonToggler = ({ className, data }: JsonTogglerProps) => {
             open && "rotate-180"
           )}
         />
-        View Details
+        {t("common.buttons.viewDetails")}
       </button>
 
       <div

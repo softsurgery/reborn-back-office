@@ -32,6 +32,8 @@
       "notifications": "Notifications",
       "billing": "Billing",
       "account": "Account",
+      "viewDetails": "View Details",
+      "clearAll": "Clear All",
       "profile": "Profile"
     },
     "table": {
@@ -43,6 +45,7 @@
       "actions": "Actions",
       "visibleColumns": "Visible Columns",
       "noResults": "No results found",
+      "noData": "No data",
       "loading": "Loading..."
     },
     "general": {
@@ -52,6 +55,11 @@
     "placeholders": {
       "selectDate": "Select date...",
       "filter": "Filter"
+    },
+    "imageUpload": {
+      "dragToReorder": "Drag to reorder",
+      "addPhoto": "Add Photo",
+      "tapToSelect": "Tap to select"
     },
     "sidebar": {
       "userManagement": "User Management",

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Separator } from "../../ui/separator";
 import { ImageFile } from "./types";
+import { useTranslation } from "react-i18next";
 
 interface ImageUploadManagerProps {
   className?: string;
@@ -22,6 +23,7 @@ export function ImageUploaderManager({
   onUpload,
   ...props
 }: ImageUploadManagerProps) {
+  const { t } = useTranslation("common");
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -132,10 +134,10 @@ export function ImageUploaderManager({
                 <Plus className="h-6 w-6" />
               </div>
               <p className="text-sm font-medium text-foreground text-center">
-                Add Photo
+                {t("common.imageUpload.addPhoto")}
               </p>
               <p className="text-xs text-muted-foreground text-center mt-1">
-                Tap to select
+                {t("common.imageUpload.tapToSelect")}
               </p>
             </div>
             <input
@@ -223,8 +225,8 @@ export function ImageUploaderManager({
             <div className="flex items-center justify-between border-border">
               <div>
                 <p className="text-muted-foreground text-xs">
-                  {images.length} photo{images.length !== 1 ? "s" : ""} • Drag
-                  to reorder
+                  {images.length} photo{images.length !== 1 ? "s" : ""} •{" "}
+                  {t("common.imageUpload.dragToReorder")}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -233,7 +235,7 @@ export function ImageUploaderManager({
                   onClick={() => onFilesChange?.([])}
                   disabled={images.length === 0}
                 >
-                  Clear All
+                  {t("common.buttons.clearAll")}
                 </Button>
               </div>
             </div>
