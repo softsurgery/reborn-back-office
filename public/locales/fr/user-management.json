@@ -27,8 +27,8 @@
             "emailVerified": "Email vérifié",
             "role": "Rôle",
             "roleId": "ID du rôle",
-            "createdAt": "Date de création",
-            "updatedAt": "Date de mise à jour"
+            "createdAt": "Créé le",
+            "updatedAt": "Mise à jour le"
         },
         "forms": {
             "step1Title": "Informations Générales",
