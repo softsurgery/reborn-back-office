@@ -3,6 +3,8 @@
         "intro": "Gestion des services",
         "introTitle": "Postes",
         "introDescription": "Visualisation des postes de l'application",
+        "singularName": "Poste",
+        "pluralName": "Postes",
         "validation": {
             "titleRequired": "Le titre du poste est requis.",
             "titleTooShort": "Le titre du poste doit contenir au moins 3 caractères.",
@@ -58,6 +60,38 @@
             "created": "Poste créé avec succès",
             "updated": "Poste mis à jour avec succès",
             "deleted": "Poste supprimé avec succès"
+        }
+    },
+    "jobTags": {
+        "intro": "Gestion des services",
+        "introTitle": "Étiquettes de poste",
+        "singularName": "Étiquette de poste",
+        "pluralName": "Étiquettes de poste",
+        "introDescription": "Gérez les étiquettes associées aux postes pour une meilleure organisation et un meilleur filtrage.",
+        "columns": {
+            "label": "Libellé",
+            "createdAt": "Créé le",
+            "updatedAt": "Mis à jour le"
+        },
+        "forms": {
+            "label": "Libellé",
+            "labelPlaceholder": "Saisissez le libellé de l'étiquette",
+            "labelDescription": "Le libellé de l'étiquette de poste."
+        },
+        "sheet": {
+            "createTitle": "Créer une étiquette de poste",
+            "createDescription": "Remplissez les détails de l'étiquette de poste ci-dessous.",
+            "updateTitle": "Mettre à jour l'étiquette de poste",
+            "updateDescription": "Modifiez les détails de l'étiquette de poste ci-dessous."
+        },
+        "dialog": {
+            "deleteTitle": "Supprimer l’étiquette de poste",
+            "deleteDescription": "Cette action est irréversible et permanente. Veuillez procéder avec prudence."
+        },
+        "toast": {
+            "created": "Étiquette de poste créée avec succès",
+            "updated": "Étiquette de poste mise à jour avec succès",
+            "deleted": "Étiquette de poste supprimée avec succès"
         }
     }
 }

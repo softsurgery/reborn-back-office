@@ -5,6 +5,7 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { JobTagStore } from "@/hooks/stores/useJobTagStore";
+import { useTranslation } from "react-i18next";
 
 interface JobTagUpdateFormStructureProps {
   jobTagStore: JobTagStore;
@@ -12,13 +13,14 @@ interface JobTagUpdateFormStructureProps {
 export const useUpdateJobTagFormStructure = ({
   jobTagStore,
 }: JobTagUpdateFormStructureProps) => {
+  const { t } = useTranslation("job");
   const labelField: Field<TextFieldProps> = {
     id: "label",
-    label: "Job Tag Label",
+    label: `${t("jobTags.forms.label")}`,
     variant: FieldVariant.TEXT,
     required: true,
-    placeholder: "Enter job tag label",
-    description: "The label for the job tag.",
+    placeholder: `${t("jobTags.forms.labelPlaceholder")}`,
+    description: `${t("jobTags.forms.labelDescription")}`,
     error: jobTagStore.updateDtoErrors?.label?.[0],
     props: {
       value: jobTagStore.updateDto.label || undefined,

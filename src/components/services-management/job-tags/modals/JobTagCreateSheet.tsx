@@ -14,7 +14,7 @@ export const useJobTagCreateSheet = ({
   isCreatePending,
   resetJobTag,
 }: JobTagCreateSheetProps) => {
-  const { t } = useTranslation("jobTag");
+  const { t } = useTranslation("job");
 
   const {
     SheetFragment: createJobTagSheet,
@@ -24,11 +24,10 @@ export const useJobTagCreateSheet = ({
     title: (
       <div className="flex items-center">
         <MapIcon />
-        Create Tag
+        {t("jobTags.sheet.createTitle")}
       </div>
     ),
-    description:
-      "Add a new job tag to help categorize and organize job postings.",
+    description: t("jobTags.sheet.createDescription"),
     children: (
       <JobTagCreateForm
         jobTagCallback={createJobTag}

@@ -217,8 +217,8 @@ export default function Jobs({ className }: JobsProps) {
   }, [images, jobStore.hasInitializedImages, jobStore]);
 
   const context: DataTableConfig<ResponseJobDto> = {
-    singularName: "Job",
-    pluralName: "Jobs",
+    singularName: `${t("job.singularName")}`,
+    pluralName: `${t("job.pluralName")}`,
     createCallback: openCreateJobSheet,
     updateCallback: openUpdateJobSheet,
     deleteCallback: openDeleteJobDialog,

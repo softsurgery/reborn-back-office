@@ -1,6 +1,7 @@
 import { MapIcon } from "lucide-react";
 import { useSheet } from "@/components/shared/Sheets";
 import { JobTagUpdateForm } from "../forms/JobTagUpdateForm";
+import { useTranslation } from "next-i18next";
 
 interface JobTagUpdateSheet {
   updateJobTag?: () => void;
@@ -13,19 +14,19 @@ export const useJobTagUpdateSheet = ({
   isUpdatePending,
   resetJobTag,
 }: JobTagUpdateSheet) => {
+  const { t } = useTranslation("job");
   const {
-    SheetFragment: updateJobTagSheet,
     openSheet: openUpdateJobTagSheet,
+    SheetFragment: updateJobTagSheet,
     closeSheet: closeUpdateJobTagSheet,
   } = useSheet({
     title: (
       <div className="flex items-center">
         <MapIcon />
-        Update JobTag
+        {t("jobTags.sheet.updateTitle")}
       </div>
     ),
-    description:
-      "Use this form to update an existing job tag within the system. A job tag is identified by their unique id, Fill in all required fields to ensure the job tag is successfully updated.",
+    description: t("jobTags.sheet.updateDescription"),
     children: (
       <JobTagUpdateForm
         jobTagCallback={updateJobTag}

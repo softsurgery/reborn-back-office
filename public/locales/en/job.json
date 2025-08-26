@@ -3,6 +3,8 @@
         "intro": "Services Management",
         "introTitle": "Jobs",
         "introDescription": "Visualization of the jobs of the application",
+        "singularName": "Job",
+        "pluralName": "Jobs",
         "validation": {
             "titleRequired": "The job title is required.",
             "titleTooShort": "The job title must be at least 3 characters long.",
@@ -58,6 +60,32 @@
             "created": "Job Created Successfully",
             "updated": "Job Updated Successfully",
             "deleted": "Job Deleted Successfully"
+        }
+    },
+    "jobTags": {
+        "intro": "Services Management",
+        "introTitle": "Job Tags",
+        "singularName": "Job Tag",
+        "pluralName": "Job Tags",
+        "introDescription": "Manage tags associated with jobs for better organization and filtering.",
+        "columns": {
+            "label": "Label",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At"
+        },
+        "forms": {
+            "label": "Label",
+            "labelPlaceholder": "Enter job tag label",
+            "labelDescription": "The label for the job tag."
+        },
+        "dialog": {
+            "deleteTitle": "Delete Job Tag",
+            "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
+        },
+        "toast": {
+            "created": "Job Tag Created Successfully",
+            "updated": "Job Tag Updated Successfully",
+            "deleted": "Job Tag Deleted Successfully"
         }
     }
 }

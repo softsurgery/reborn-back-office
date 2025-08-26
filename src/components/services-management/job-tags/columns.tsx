@@ -3,10 +3,12 @@ import { ResponseJobTagDto } from "@/types";
 import { DataTableColumnHeader } from "@/components/shared/data-tables/data-table-column-header";
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { useTranslation } from "react-i18next";
 
-export const getJobTagColumns = (
+export const useJobTagColumns = (
   context: DataTableConfig<ResponseJobTagDto>
 ): ColumnDef<ResponseJobTagDto>[] => {
+  const { t } = useTranslation("job");
   return [
     {
       accessorKey: "ID",
@@ -25,11 +27,11 @@ export const getJobTagColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "label",
+      accessorKey: `${t("jobTags.columns.label")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={"Label"}
+          title={t("jobTags.columns.label")}
           attribute="label"
           context={context}
         />

@@ -9,18 +9,20 @@ import { useIntro } from "@/contexts/IntroContext";
 import { useJobTagCreateSheet } from "./modals/JobTagCreateSheet";
 import { CreateJobTagDto, ResponseJobTagDto, UpdateJobTagDto } from "@/types";
 import { useJobTagStore } from "@/hooks/stores/useJobTagStore";
-import { getJobTagColumns } from "./columns";
+import { useJobTagColumns } from "./columns";
 import { toast } from "sonner";
 import { useJobTagUpdateSheet } from "./modals/JobTagUpdateSheet";
 import { useJobTagDeleteDialog } from "./modals/JobTagDeleteDialog";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { useTranslation } from "react-i18next";
 
 interface JobTagsProps {
   className?: string;
 }
 
 export default function JobTagsPortal({ className }: JobTagsProps) {
+  const { t, ready } = useTranslation("job");
   //next-router
   const router = useRouter();
 
@@ -28,15 +30,15 @@ export default function JobTagsPortal({ className }: JobTagsProps) {
   const { setIntro, clearIntro } = useIntro();
   React.useEffect(() => {
     setRoutes?.([
-      { title: "Services Management", href: "/services" },
-      { title: "Job Tags", href: "/services-management/job-tags" },
+      { title: t("jobTags.intro"), href: "/services-management" },
+      { title: t("jobTags.introTitle"), href: "/services-management/jobs" },
     ]);
-    setIntro?.("Job Tags", "Visualization of the job tags of the application");
+    setIntro?.(t("jobTags.introTitle"), t("jobTags.introDescription"));
     return () => {
       clearRoutes?.();
       clearIntro?.();
     };
-  }, []);
+  }, [t, ready]);
 
   const jobTagStore = useJobTagStore();
 
@@ -96,7 +98,7 @@ export default function JobTagsPortal({ className }: JobTagsProps) {
   const { mutate: createJobTag, isPending: isCreationPending } = useMutation({
     mutationFn: (jobTag: CreateJobTagDto) => api.jobTag.create(jobTag),
     onSuccess: () => {
-      toast.success("JobTag Created Successfully");
+      toast.success(t("jobTags.toast.created"));
       refetchJobTags();
       jobTagStore.reset();
       closeCreateJobTagSheet();
@@ -110,7 +112,7 @@ export default function JobTagsPortal({ className }: JobTagsProps) {
     mutationFn: (data: { id?: number; jobTag: UpdateJobTagDto }) =>
       api.jobTag.update(data.id, data.jobTag),
     onSuccess: () => {
-      toast.success("JobTag Updated Successfully");
+      toast.success(t("jobTags.toast.updated"));
       refetchJobTags();
       jobTagStore.reset();
       closeUpdateJobTagSheet();
@@ -123,7 +125,7 @@ export default function JobTagsPortal({ className }: JobTagsProps) {
   const { mutate: deleteJobTag, isPending: isDeletionPending } = useMutation({
     mutationFn: (id?: number) => api.jobTag.remove(id),
     onSuccess: () => {
-      toast.success("JobTag Deleted Successfully");
+      toast.success(t("jobTags.toast.deleted"));
       jobTagStore.reset();
       refetchJobTags();
     },
@@ -160,8 +162,8 @@ export default function JobTagsPortal({ className }: JobTagsProps) {
   });
 
   const context: DataTableConfig<ResponseJobTagDto> = {
-    singularName: "JobTag",
-    pluralName: "JobTags",
+    singularName: `${t("jobTags.singularName")}`,
+    pluralName: `${t("jobTags.pluralName")}`,
     createCallback: openCreateJobTagSheet,
     updateCallback: openUpdateJobTagSheet,
     deleteCallback: openDeleteJobTagDialog,
@@ -183,7 +185,7 @@ export default function JobTagsPortal({ className }: JobTagsProps) {
     },
   };
 
-  const columns = getJobTagColumns(context);
+  const columns = useJobTagColumns(context);
 
   const isPending =
     isJobTagsPending || paging || resizing || searching || sorting;
