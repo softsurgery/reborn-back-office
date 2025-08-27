@@ -251,7 +251,7 @@ function FormNode({
   switch (schema.kind) {
     case "object":
       return (
-        <div className={cn("space-y-4 p-4", className)}>
+        <div className={cn("space-y-1", className)}>
           {schema.order.map((key) => {
             const childSchema = schema.properties[key];
             const childPath = [...path, key];
@@ -279,26 +279,23 @@ function FormNode({
               <div
                 key={key}
                 className={cn(
-                  "flex flex-col md:flex-row gap-4  w-full bg-background p-4 rounded-lg border items-center"
+                  "flex flex-col md:flex-row gap-2 w-full bg-background p-2 rounded-lg border items-center"
                 )}
               >
                 {childSchema.kind === "object" ||
                 childSchema.kind === "array" ? (
                   <Collapsible className="w-full" defaultOpen={defaultOpen}>
                     <CollapsibleTrigger className="flex justify-between items-center w-full">
-                      <span className="font-bold"> {key.toUpperCase()}</span>
+                      <span> {key.toUpperCase()}</span>
                       <ChevronsUpDown />
                     </CollapsibleTrigger>
-                    <CollapsibleContent className="my-4">
-                      {formNode}
-                    </CollapsibleContent>
+                    <CollapsibleContent>{formNode}</CollapsibleContent>
                   </Collapsible>
                 ) : (
-                  <div className="flex flex-row gap-2 justify-between w-full">
-                    <Label htmlFor={id} className="font-bold py-2 text-xs">
-                      <span className="font-bold"> {key.toUpperCase()}</span>
+                  <div className="flex flex-col gap-2 w-full">
+                    <Label htmlFor={id} className="text-xs font-bold mx-1">
+                      {key.toUpperCase()} :
                     </Label>
-
                     {formNode}
                   </div>
                 )}
@@ -327,26 +324,7 @@ function FormNode({
       };
 
       return (
-        <div className="space-y-3 w-full">
-          <div className="flex items-center justify-between">
-            <Button
-              type="button"
-              size="sm"
-              variant="secondary"
-              onClick={() => {
-                if (!canAdd) return;
-                const item =
-                  arr.length > 0
-                    ? cloneWithDefaultsFromExample(arr[arr.length - 1])
-                    : defaultItemForSchema(schema.element);
-                onChange([...arr, item]);
-              }}
-              disabled={!canAdd}
-            >
-              <Plus />
-              Add item
-            </Button>
-          </div>
+        <div className="flex flex-col gap-2 w-full">
           {!canAdd ? (
             <p className="text-xs text-muted-foreground">
               Element type is unknown (initial array was empty). Seed the
@@ -363,7 +341,7 @@ function FormNode({
               items={items}
               strategy={verticalListSortingStrategy}
             >
-              <div className="space-y-3">
+              <div className="space-y-2 mt-2">
                 {arr.map((item, index) => {
                   const id = `${baseId}__${index}`;
                   return (
@@ -404,6 +382,24 @@ function FormNode({
               </div>
             </SortableContext>
           </DndContext>
+          <div className="flex items-center justify-end mt-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                if (!canAdd) return;
+                const item =
+                  arr.length > 0
+                    ? cloneWithDefaultsFromExample(arr[arr.length - 1])
+                    : defaultItemForSchema(schema.element);
+                onChange([...arr, item]);
+              }}
+              disabled={!canAdd}
+            >
+              <Plus />
+              New Item
+            </Button>
+          </div>
         </div>
       );
     }
@@ -560,7 +556,7 @@ function ArrayItemCard({
 }) {
   const handle = useSortableHandle();
   return (
-    <Card className="overflow-hidden boreder-none">
+    <div className="overflow-hidden border rounded-lg">
       <div className="flex items-center justify-between x-3 py-2 mx-2">
         <div className="flex items-center gap-2 ">
           <Button
@@ -586,7 +582,7 @@ function ArrayItemCard({
           <X className="h-4 w-4" />
         </Button>
       </div>
-      <CardContent className="p-3">{children}</CardContent>
-    </Card>
+      <div className="p-4">{children}</div>
+    </div>
   );
 }
