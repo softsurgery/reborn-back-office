@@ -5,8 +5,10 @@ import {
   FormStructure,
   ImageFile,
   ImageGalleryFieldProps,
+  MultiSelectFieldProps,
   NumberFieldProps,
   SelectFieldProps,
+  SelectOption,
   TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
@@ -18,11 +20,13 @@ import { useTranslation } from "react-i18next";
 interface JobCreateFormStructureProps {
   jobStore: JobStore;
   currencies: ResponseCurrencyDto[];
+  jobTags: SelectOption[];
   uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
 }
 export const useCreateJobFormStructure = ({
   jobStore,
   currencies,
+  jobTags,
   uploadPicture,
 }: JobCreateFormStructureProps) => {
   const { t } = useTranslation("job");
@@ -131,6 +135,24 @@ export const useCreateJobFormStructure = ({
     },
   };
 
+  const jobTagsField: Field<MultiSelectFieldProps> = {
+    id: "tags",
+    label: `${t("job.forms.tagsLabel")}`,
+    variant: FieldVariant.MULTI_SELECT,
+    required: true,
+    description: `${t("job.forms.tagsDescription")}`,
+    placeholder: `${t("job.forms.tagsPlaceholder")}`,
+    error: t(jobStore.createDtoErrors?.tags?.[0]),
+    props: {
+      options: jobTags,
+      value: jobStore.createDto?.jobTagIds,
+      onChange: (value) => {
+        jobStore.setNested("createDto.jobTagIds", value);
+        jobStore.setNested("createDtoErrors.jobTagIds", []);
+      },
+    },
+  };
+
   const generalInformationCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -147,6 +169,9 @@ export const useCreateJobFormStructure = ({
           },
           {
             fields: [priceField, currencyField],
+          },
+          {
+            fields: [jobTagsField],
           },
         ],
       },

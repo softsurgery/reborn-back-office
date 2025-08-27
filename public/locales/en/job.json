@@ -36,6 +36,9 @@
             "currencyLabel": "Currency",
             "currencyPlaceholder": "Select currency",
             "currencyDescription": "Choose the currency for the job.",
+            "tagsLabel": "Tags",
+            "tagsPlaceholder": "Select tags",
+            "tagsDescription": "Choose tags for the job.",
             "uploadsLabel": "Uploads"
         },
         "columns": {

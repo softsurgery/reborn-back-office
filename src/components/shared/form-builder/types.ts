@@ -105,8 +105,8 @@ export interface SelectFieldProps extends BaseFieldProps {
 }
 
 export interface MultiSelectFieldProps extends BaseFieldProps {
-  value?: string[];
-  onValueChange?: (value: string[]) => void;
+  value?: number[];
+  onChange?: (value: string[]) => void;
   options?: SelectOption[];
 }
 

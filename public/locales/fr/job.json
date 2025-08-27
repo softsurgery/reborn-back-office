@@ -36,6 +36,9 @@
             "currencyLabel": "Devise",
             "currencyPlaceholder": "Sélectionnez une devise",
             "currencyDescription": "Choisissez la devise pour le poste.",
+            "tagsLabel": "Étiquettes",
+            "tagsPlaceholder": "Sélectionnez des étiquettes",
+            "tagsDescription": "Choisissez des étiquettes pour le poste.",
             "uploadsLabel": "Téléversements"
         },
         "columns": {

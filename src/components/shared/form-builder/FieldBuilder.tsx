@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { PasswordField } from "./PasswordField";
 import { ImageUploaderManager } from "@/components/shared/form-builder/ImageUploaderManager";
 import { ImageUploader } from "./ImageUploader";
+import MultipleSelector from "@/components/ui/multi-select";
 
 interface FieldBuilderProps {
   field?: Field<any>;
@@ -246,6 +247,22 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
 
     case "image_gallery":
       return <ImageUploaderManager {...field.props} />;
+
+    case "multi_select":
+      return (
+        <MultipleSelector
+          {...field.props}
+          id={field.id}
+          className={cn("w-full", field?.className)}
+          options={field.props?.options}
+          value={field.props?.values}
+          onChange={(value) => field?.props?.onChange?.(value)}
+          placeholder={field?.placeholder}
+          emptyIndicator={
+            <p className="text-center text-sm">{t("common.table.noResults")}</p>
+          }
+        />
+      );
 
     case "custom":
       return (
