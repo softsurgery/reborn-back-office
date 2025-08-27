@@ -40,12 +40,12 @@ export const AppProperties = () => {
 
   const { data: storesResponse, isPending: isStoresPending } = useQuery({
     queryKey: ["stores"],
-    queryFn: () => api.admin.store.findAll(),
+    queryFn: () => api.store.findAll(),
   });
 
   const { mutate: saveChanges } = useMutation({
     mutationFn: async (updatedStores: UpdateStoreDto[]) =>
-      api.admin.store.updateMany(updatedStores),
+      api.store.updateMany(updatedStores),
     onSuccess: () => {
       toast.success("Changes saved successfully");
     },

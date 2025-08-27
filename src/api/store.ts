@@ -1,5 +1,5 @@
 import { Store, Paginated, QueryParams, UpdateStoreDto } from "@/types";
-import axios from "../axios";
+import axios from "./axios";
 
 const findPaginated = async ({
   page = "1",
@@ -19,7 +19,7 @@ const findPaginated = async ({
   if (filter) params.filter = filter;
   if (join) params.join = join;
 
-  const response = await axios.get<Paginated<Store>>(`/admin/store/list`, {
+  const response = await axios.get<Paginated<Store>>(`/store/list`, {
     params,
   });
 
@@ -27,22 +27,22 @@ const findPaginated = async ({
 };
 
 const findAll = async (): Promise<Store[]> => {
-  const response = await axios.get<Store[]>(`/admin/store/all`);
+  const response = await axios.get<Store[]>(`/store/all`);
   return response.data;
 };
 
 const findById = async (id: string): Promise<Store> => {
-  const response = await axios.get<Store>(`/admin/store/${id}`);
+  const response = await axios.get<Store>(`/store/${id}`);
   return response.data;
 };
 
 const update = async (updateStoreDto: UpdateStoreDto): Promise<Store> => {
-  const response = await axios.put<Store>(`/admin/store`, updateStoreDto);
+  const response = await axios.put<Store>(`/store`, updateStoreDto);
   return response.data;
 };
 
 const updateMany = async (stores: UpdateStoreDto[]): Promise<Store[]> => {
-  const response = await axios.put<Store[]>(`/admin/store/bulk`, stores);
+  const response = await axios.put<Store[]>(`/store/bulk`, stores);
   return response.data;
 };
 

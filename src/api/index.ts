@@ -6,6 +6,7 @@ import { job } from "./job";
 import { jobTag } from "./job-tag";
 import { _public } from "./public";
 import { upload } from "./upload";
+import { store } from "./store";
 
 export const api = {
   admin,
@@ -15,5 +16,6 @@ export const api = {
   bug,
   upload,
   job,
-  jobTag
+  jobTag,
+  store,
 };

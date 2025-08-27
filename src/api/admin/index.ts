@@ -4,7 +4,6 @@ import { user } from "./users";
 import { deviceInfo } from "./deviceInfos";
 import { upload } from "./upload";
 import { logger } from "./logger";
-import { store } from "./store";
 
 export const admin = {
   upload,
@@ -13,5 +12,4 @@ export const admin = {
   user,
   deviceInfo,
   logger,
-  store,
 };
