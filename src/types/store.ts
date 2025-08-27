@@ -3,3 +3,5 @@ export interface Store {
   description: string;
   value: any;
 }
+
+export interface UpdateStoreDto extends Store {}

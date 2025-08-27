@@ -4,7 +4,10 @@ import { DataTableColumnHeader } from "@/components/shared/data-tables/data-tabl
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { useTranslation } from "react-i18next";
-import { DataTableCellVariant, DataTableConfig } from "@/components/shared/data-tables/types";
+import {
+  DataTableCellVariant,
+  DataTableConfig,
+} from "@/components/shared/data-tables/types";
 
 export const useJobColumns = (
   context: DataTableConfig<ResponseJobDto>
@@ -61,6 +64,22 @@ export const useJobColumns = (
         );
       },
       enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "Pictures",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Pictures"
+          attribute=""
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return <div>{row?.original?.uploads?.length || 0}</div>;
+      },
+      enableSorting: false,
       enableHiding: true,
     },
     {

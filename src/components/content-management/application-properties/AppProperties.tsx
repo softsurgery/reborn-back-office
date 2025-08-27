@@ -22,53 +22,36 @@ import { cn } from "@/lib/utils";
 import JSONForm from "@/components/ui/json-editor";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
-import { useFooter } from "@/contexts/FooterContext";
-import { Store } from "@/types";
+import { Store, UpdateStoreDto } from "@/types";
 import { deepEqual, safeStringify, stableStringify } from "@/lib/object.util";
 import { Textarea } from "@/components/ui/textarea";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
+import { toast } from "sonner";
+import { Update } from "next/dist/build/swc";
 
 export const AppProperties = () => {
   const [textBuffers, setTextBuffers] = React.useState<Record<string, string>>(
     {}
   );
 
+  const { setIntro, clearIntro, setFloating, clearFloating } = useIntro();
   const { setRoutes, clearRoutes } = useBreadcrumb();
-  const { setIntro, clearIntro } = useIntro();
-  const { setContent, clearContent } = useFooter();
-  const queryClient = useQueryClient();
 
-  React.useEffect(() => {
-    setRoutes?.([
-      {
-        title: "Content Management",
-        href: "/content-management",
-      },
-      {
-        title: "Application Properties",
-        href: "/content-management/application-properties",
-      },
-    ]);
-    setIntro?.(
-      "Application Properties",
-      "Manage and configure application properties in a structured format"
-    );
-
-    return () => {
-      clearRoutes?.();
-      clearIntro?.();
-      clearContent?.();
-    };
-  }, []);
-
-  const {
-    data: storesResponse,
-    isPending: isStoresPending,
-    refetch: refetchStores,
-  } = useQuery({
+  const { data: storesResponse, isPending: isStoresPending } = useQuery({
     queryKey: ["stores"],
     queryFn: () => api.admin.store.findAll(),
+  });
+
+  const { mutate: saveChanges } = useMutation({
+    mutationFn: async (updatedStores: UpdateStoreDto[]) =>
+      api.admin.store.updateMany(updatedStores),
+    onSuccess: () => {
+      toast.success("Changes saved successfully");
+    },
+    onError: () => {
+      toast.error("Failed to save changes. Please try again.");
+    },
   });
 
   const [data, setData] = React.useState<Store[] | null>(
@@ -84,12 +67,17 @@ export const AppProperties = () => {
   React.useEffect(() => {
     if (storesResponse && !original) {
       setData(storesResponse);
-      setOriginal(storesResponse);
+      setOriginal(
+        storesResponse.map((s) => ({
+          ...s,
+          value: JSON.parse(JSON.stringify(s.value)),
+        }))
+      );
       setExpanded(storesResponse.map((s) => s.id));
     }
   }, [storesResponse, original]);
 
-  const changedIds = React.useMemo(() => {
+  const changedIds = (() => {
     if (!data || !original) return [];
     const mapOrig = new Map(original.map((s) => [s.id, s.value]));
     return data
@@ -98,7 +86,7 @@ export const AppProperties = () => {
         return !deepEqual(s.value, o);
       })
       .map((s) => s.id);
-  }, [data, original]);
+  })();
 
   const filtered = React.useMemo(() => {
     if (!data) return [];
@@ -115,10 +103,9 @@ export const AppProperties = () => {
   }, [data, query, showChangedOnly, changedIds]);
 
   const handleValueChange = (storeId: string, newValue: any) => {
+    const cloned = JSON.parse(JSON.stringify(newValue));
     setData?.((prev) =>
-      (prev ?? []).map((s) =>
-        s.id === storeId ? { ...s, value: newValue } : s
-      )
+      (prev ?? []).map((s) => (s.id === storeId ? { ...s, value: cloned } : s))
     );
   };
 
@@ -138,20 +125,24 @@ export const AppProperties = () => {
     setData?.(original.map((s) => ({ ...s, value: s.value })));
   }, [original, setData]);
 
-  React.useEffect(() => {
-    setContent?.(
-      <div className="flex items-end justify-end gap-2">
-        <Button>Save Changes</Button>
-        <Button variant={"secondary"} onClick={handleResetAll}>
-          Reset
-        </Button>
-      </div>
-    );
-  }, []);
-
   const handleSaveAll = () => {
-    if (!data) return;
-    setOriginal(data.map((s) => ({ ...s })));
+    if (!data || !original) return;
+
+    const updatedStores = data.filter((s) => changedIds.includes(s.id));
+
+    if (updatedStores.length === 0) {
+      console.log("No changes to save.");
+      return;
+    }
+
+    saveChanges(updatedStores);
+
+    setOriginal(
+      data.map((s) => ({
+        ...s,
+        value: JSON.parse(JSON.stringify(s.value)),
+      }))
+    );
   };
 
   const allExpanded = React.useMemo(() => {
@@ -165,6 +156,36 @@ export const AppProperties = () => {
       prev.length === data.length ? [] : data.map((s) => s.id)
     );
   };
+
+  React.useEffect(() => {
+    setRoutes?.([
+      {
+        title: "Content Management",
+        href: "/content-management",
+      },
+      {
+        title: "Application Properties",
+        href: "/content-management/application-properties",
+      },
+    ]);
+    setIntro?.(
+      "Application Properties",
+      "Manage and configure application properties in a structured format"
+    );
+    setFloating?.(
+      <div className="flex gap-2 justify-center">
+        <Button onClick={handleSaveAll}>Save Changes</Button>
+        <Button variant={"secondary"} onClick={handleResetAll}>
+          Reset All
+        </Button>
+      </div>
+    );
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+      clearFloating?.();
+    };
+  }, [handleSaveAll]);
 
   return (
     <main className={cn("flex flex-col flex-1 container overflow-hidden p-1")}>
@@ -262,13 +283,13 @@ export const AppProperties = () => {
           >
             {filtered.map((store) => {
               const isChanged = changedIds.includes(store.id);
-              const subtitle = "Global application configuration";
+              const subtitle = store.description;
 
               return (
                 <AccordionItem
                   value={store.id}
                   key={store.id}
-                  className="bg-card border rounded-lg px-2"
+                  className="border rounded-lg px-2"
                 >
                   <AccordionTrigger className="px-2">
                     <div className="flex w-full items-center justify-between pr-2">
@@ -302,7 +323,7 @@ export const AppProperties = () => {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="p-2 md:p-4">
+                    <div className="p-2">
                       <div className="flex flex-col md:flex-row gap-4">
                         <JSONForm
                           value={store.value}
@@ -310,7 +331,7 @@ export const AppProperties = () => {
                           className="w-full md:w-2/3"
                         />
                         <Textarea
-                          className="w-full md:w-1/3 resize-none font-bold"
+                          className="w-full md:w-1/3 resize-none"
                           value={
                             textBuffers[store.id] ?? safeStringify(store.value)
                           }
