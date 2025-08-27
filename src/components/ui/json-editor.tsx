@@ -250,7 +250,7 @@ function FormNode({
   switch (schema.kind) {
     case "object":
       return (
-        <div className={cn("space-y-1", className)}>
+        <div className={cn("space-y-4", className)}>
           {schema.order.map((key) => {
             const childSchema = schema.properties[key];
             const childPath = [...path, key];
