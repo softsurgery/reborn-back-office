@@ -40,16 +40,22 @@ export const Layout = ({ children, className }: LayoutProps) => {
 
   const [title, setTitle] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
+  const [floating, setFloating] = React.useState<React.ReactNode>(null);
   const introContext = {
     title,
     description,
+    floating,
     setIntro: (title: string, description?: string) => {
       setTitle(title);
       setDescription(description || "");
     },
+    setFloating,
     clearIntro: () => {
       setTitle("");
       setDescription("");
+    },
+    clearFloating: () => {
+      setFloating(null);
     },
   };
 
