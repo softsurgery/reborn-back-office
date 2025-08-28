@@ -258,6 +258,7 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
           value={field.props?.values}
           onChange={(value) => field?.props?.onChange?.(value)}
           placeholder={field?.placeholder}
+          creatable={field.props?.creatable}
           emptyIndicator={
             <p className="text-center text-sm">{t("common.table.noResults")}</p>
           }

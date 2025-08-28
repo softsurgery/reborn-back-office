@@ -108,6 +108,7 @@ export interface MultiSelectFieldProps extends BaseFieldProps {
   value?: number[];
   onChange?: (value: string[]) => void;
   options?: SelectOption[];
+  creatable?: boolean;
 }
 
 export interface CheckboxFieldProps extends BaseFieldProps {
