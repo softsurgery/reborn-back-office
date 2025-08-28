@@ -8,7 +8,7 @@ export const useJobTags = (enabled?: boolean) => {
     data: jobTagsResp,
     refetch: refetchJobTags,
   } = useQuery({
-    queryKey: ["jobTags"],
+    queryKey: ["job-tags"],
     queryFn: () => api.jobTag.findAll(),
     enabled,
   });

@@ -33,7 +33,7 @@ const initialState: JobStoreData = {
     description: "",
     price: 0.0,
     currencyId: undefined,
-    jobTagIds: [],
+    tagIds: [],
     uploads: [],
   },
   updateDto: {
@@ -41,7 +41,7 @@ const initialState: JobStoreData = {
     description: "",
     price: 0.0,
     currencyId: undefined,
-    jobTagIds: [],
+    tagIds: [],
     uploads: [],
   },
   images: [],

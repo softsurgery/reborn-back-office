@@ -1,4 +1,3 @@
-import { currency } from "@/api/public/currency";
 import { z } from "zod";
 
 const createJobSchema = z.object({
@@ -33,10 +32,6 @@ const createJobSchema = z.object({
   currencyId: z.string({
     message: "job.validation.currencyRequired",
   }),
-
-  // jobTagIds: z.array(z.number().positive()).min(1, {
-  //   message: "job.validation.atLeastOneTag",
-  // }),
 });
 
 const updateJobSchema = z.object({
@@ -75,12 +70,6 @@ const updateJobSchema = z.object({
   currencyId: z.string({
     message: "job.validation.currencyRequired",
   }),
-  // jobTagIds: z
-  //   .array(z.number().positive())
-  //   .min(1, {
-  //     message: "job.validation.atLeastOneTag",
-  //   })
-  //   .optional(),
 });
 
 export { createJobSchema, updateJobSchema };
