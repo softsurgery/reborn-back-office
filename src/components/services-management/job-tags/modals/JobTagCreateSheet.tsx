@@ -22,7 +22,7 @@ export const useJobTagCreateSheet = ({
     closeSheet: closeCreateJobTagSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <MapIcon />
         {t("jobTags.sheet.createTitle")}
       </div>

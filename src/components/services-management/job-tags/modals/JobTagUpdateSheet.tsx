@@ -21,7 +21,7 @@ export const useJobTagUpdateSheet = ({
     closeSheet: closeUpdateJobTagSheet,
   } = useSheet({
     title: (
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <MapIcon />
         {t("jobTags.sheet.updateTitle")}
       </div>
