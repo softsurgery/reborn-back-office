@@ -83,6 +83,38 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
+      accessorKey: "Tags",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.tags")}
+          attribute="tags"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return <div>{row?.original?.tags?.map(tag => tag.label).join(", ")}</div>;
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "Category",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.category")}
+          attribute="category"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return <div>{row?.original?.category?.label}</div>;
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       accessorKey: "Created At",
       header: ({ column }) => (
         <DataTableColumnHeader

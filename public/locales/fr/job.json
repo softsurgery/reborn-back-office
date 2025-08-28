@@ -49,6 +49,9 @@
             "title": "Titre",
             "description": "Description",
             "price": "Prix",
+            "currency": "Devise",
+            "category": "Catégorie",
+            "tags": "Étiquettes",
             "createdAt": "Créé le",
             "updatedAt": "Mis à jour le",
             "actions": "Actions"

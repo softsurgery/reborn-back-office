@@ -49,6 +49,9 @@
             "title": "Title",
             "description": "Description",
             "price": "Price",
+            "currency": "Currency",
+            "category": "Category",
+            "tags": "Tags",
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "actions": "Actions"
