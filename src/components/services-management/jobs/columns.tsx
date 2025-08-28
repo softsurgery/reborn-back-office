@@ -8,6 +8,8 @@ import {
   DataTableCellVariant,
   DataTableConfig,
 } from "@/components/shared/data-tables/types";
+import { identifyUser } from "@/lib/user.utils";
+import Link from "next/link";
 
 export const useJobColumns = (
   context: DataTableConfig<ResponseJobDto>
@@ -114,6 +116,30 @@ export const useJobColumns = (
       ),
       cell: ({ row }) => {
         return <div>{row?.original?.category?.label}</div>;
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: "Posted By",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.postedBy")}
+          attribute="postedBy"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        if (!row?.original?.postedBy) return <div>-</div>;
+        return (
+          <Link
+            href={`/user-management/users/${row?.original?.postedBy?.id}`}
+            className="text-primary hover:underline"
+          >
+            {identifyUser(row?.original?.postedBy)}
+          </Link>
+        );
       },
       enableSorting: true,
       enableHiding: true,

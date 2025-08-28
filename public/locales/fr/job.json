@@ -53,6 +53,7 @@
             "category": "Catégorie",
             "tags": "Étiquettes",
             "noTags": "Aucune étiquette",
+            "postedBy": "Publié par",
             "createdAt": "Créé le",
             "updatedAt": "Mis à jour le",
             "actions": "Actions"

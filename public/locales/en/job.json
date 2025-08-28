@@ -53,6 +53,7 @@
             "category": "Category",
             "tags": "Tags",
             "noTags": "No Tags",
+            "postedBy": "Posted By",
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "actions": "Actions"
