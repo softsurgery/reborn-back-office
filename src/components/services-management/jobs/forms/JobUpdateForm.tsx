@@ -13,6 +13,9 @@ import { defineStepper } from "@/components/ui/stepper";
 import { Spinner } from "@/components/shared/Spinner";
 import { updateJobSchema } from "@/types/validations/job.validation";
 import { useUpdateJobFormStructure } from "./useUpdateJobFormStructure";
+import { useJobTags } from "@/hooks/content/useJobTags";
+import { useJobCategories } from "@/hooks/content/useJobCategories";
+import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
 
 const steps = [
   { id: "general", title: "job.forms.generalInformationTitle" },
@@ -49,12 +52,25 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
     },
   });
 
+    const { jobTags, isFetchJobTagsPending } = useJobTags();
+    const { jobCategories, isFetchJobCategoriesPending } = useJobCategories();
+
   const {
     detailedInformationUpdateFormStructure,
     generalInformationUpdateFormStructure,
   } = useUpdateJobFormStructure({
     jobStore,
     currencies,
+    jobTags: mapToSelectOptions({
+      data: isFetchJobTagsPending ? [] : jobTags,
+      labelKey: "label",
+      valueKey: "id",
+    }),
+    jobCategories: mapToSelectOptions({
+      data: isFetchJobCategoriesPending ? [] : jobCategories,
+      labelKey: "label",
+      valueKey: "id",
+    }),
     uploadPicture,
   });
 

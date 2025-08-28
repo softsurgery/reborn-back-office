@@ -12,6 +12,8 @@ export interface ResponseJobDto extends DatabaseEntity {
   currency: ResponseCurrencyDto;
   currencyId: string;
   tags: ResponseJobTagDto[];
+  categoryId: number;
+  category: ResponseJobCategoryDto;
   uploads: ResponseJobUploadDto[];
 }
 
@@ -21,6 +23,7 @@ export interface CreateJobDto {
   price: number;
   tagIds: number[];
   currencyId?: string;
+  categoryId?: number;
   uploads?: { uploadId: number }[];
 }
 

@@ -15,6 +15,7 @@ import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
 import { createJobSchema } from "@/types/validations/job.validation";
 import { useJobTags } from "@/hooks/content/useJobTags";
 import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
+import { useJobCategories } from "@/hooks/content/useJobCategories";
 
 const steps = [
   { id: "general", title: "job.forms.generalInformationTitle" },
@@ -52,6 +53,7 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
   });
 
   const { jobTags, isFetchJobTagsPending } = useJobTags();
+  const { jobCategories, isFetchJobCategoriesPending } = useJobCategories();
 
   const {
     detailedInformationCreateFormStructure,
@@ -61,6 +63,11 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
     currencies,
     jobTags: mapToSelectOptions({
       data: isFetchJobTagsPending ? [] : jobTags,
+      labelKey: "label",
+      valueKey: "id",
+    }),
+    jobCategories: mapToSelectOptions({
+      data: isFetchJobCategoriesPending ? [] : jobCategories,
       labelKey: "label",
       valueKey: "id",
     }),

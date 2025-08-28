@@ -17,6 +17,7 @@
             "invalidPrice": "The job price must be a positive number.",
             "currencyRequired": "The job currency is required.",
             "invalidCurrency": "The job currency must be a valid currency.",
+            "categoryRequired": "The job category is required.",
             "atLeastOneTag": "At least one job tag must be selected."
         },
         "forms": {
@@ -39,6 +40,9 @@
             "tagsLabel": "Tags",
             "tagsPlaceholder": "Select tags",
             "tagsDescription": "Choose tags for the job.",
+            "categoriesLabel": "Category",
+            "categoriesPlaceholder": "Select category",
+            "categoriesDescription": "Choose a category for the job.",
             "uploadsLabel": "Uploads"
         },
         "columns": {
@@ -89,6 +93,33 @@
             "created": "Job Tag Created Successfully",
             "updated": "Job Tag Updated Successfully",
             "deleted": "Job Tag Deleted Successfully"
+        }
+    },
+    "jobCategory":
+    {
+        "intro":"Services Management",
+        "introTitle": "Job Categories",
+        "introDescription": "Manage job categories for better organization and filtering.",
+        "singularName": "Job Category",
+        "pluralName": "Job Categories",
+        "columns": {
+            "label": "Label",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At"
+        },
+        "forms": {
+            "label": "Label",
+            "labelPlaceholder": "Enter job category label",
+            "labelDescription": "The label for the job category."
+        },
+        "dialog": {
+            "deleteTitle": "Delete Job Category",
+            "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
+        },
+        "toast": {
+            "created": "Job Category Created Successfully",
+            "updated": "Job Category Updated Successfully",
+            "deleted": "Job Category Deleted Successfully"
         }
     }
 }

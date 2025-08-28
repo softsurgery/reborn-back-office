@@ -21,12 +21,14 @@ interface JobCreateFormStructureProps {
   jobStore: JobStore;
   currencies: ResponseCurrencyDto[];
   jobTags: SelectOption[];
+  jobCategories: SelectOption[];
   uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
 }
 export const useCreateJobFormStructure = ({
   jobStore,
   currencies,
   jobTags,
+  jobCategories,
   uploadPicture,
 }: JobCreateFormStructureProps) => {
   const { t } = useTranslation("job");
@@ -147,8 +149,26 @@ export const useCreateJobFormStructure = ({
       options: jobTags,
       value: jobStore.createDto?.tagIds,
       onChange: (value) => {
-        jobStore.setNested("createDto.tagIds", value);
+        jobStore.setNested("createDto.tagIds", Number(value));
         jobStore.setNested("createDtoErrors.tagIds", []);
+      },
+    },
+  };
+
+  const jobCategoriesField: Field<SelectFieldProps> = {
+    id: "categories",
+    label: `${t("job.forms.categoriesLabel")}`,
+    variant: FieldVariant.SELECT,
+    required: true,
+    description: `${t("job.forms.categoriesDescription")}`,
+    placeholder: `${t("job.forms.categoriesPlaceholder")}`,
+    error: t(jobStore.createDtoErrors?.categoryId?.[0]),
+    props: {
+      options: jobCategories,
+      value: jobStore.createDto?.categoryId?.toString(),
+      onValueChange: (value) => {
+        jobStore.setNested("createDto.categoryId", Number(value));
+        jobStore.setNested("createDtoErrors.categoryId", []);
       },
     },
   };
@@ -171,7 +191,7 @@ export const useCreateJobFormStructure = ({
             fields: [priceField, currencyField],
           },
           {
-            fields: [jobTagsField],
+            fields: [jobTagsField, jobCategoriesField],
           },
         ],
       },

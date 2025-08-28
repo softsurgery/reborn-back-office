@@ -39,6 +39,10 @@
             "tagsLabel": "Étiquettes",
             "tagsPlaceholder": "Sélectionnez des étiquettes",
             "tagsDescription": "Choisissez des étiquettes pour le poste.",
+            "categoriesRequired": "La catégorie du poste est requise.",
+            "categoriesLabel": "Catégorie",
+            "categoriesPlaceholder": "Sélectionnez une catégorie",
+            "categoriesDescription": "Choisissez une catégorie pour le poste.",
             "uploadsLabel": "Téléversements"
         },
         "columns": {
@@ -95,6 +99,38 @@
             "created": "Étiquette de poste créée avec succès",
             "updated": "Étiquette de poste mise à jour avec succès",
             "deleted": "Étiquette de poste supprimée avec succès"
+        }
+    },
+    "jobCategory": {
+        "intro": "Gestion des services",
+        "introTitle": "Catégories de postes",
+        "introDescription": "Gérez les catégories de postes pour une meilleure organisation et un filtrage efficace.",
+        "singularName": "Catégorie de poste",
+        "pluralName": "Catégories de poste",
+        "columns": {
+            "label": "Libellé",
+            "createdAt": "Créé le",
+            "updatedAt": "Mis à jour le"
+        },
+        "forms": {
+            "label": "Libellé",
+            "labelPlaceholder": "Entrez le libellé de la catégorie de poste",
+            "labelDescription": "Le libellé de la catégorie de poste."
+        },
+        "sheet": {
+            "createTitle": "Créer une catégorie de poste",
+            "createDescription": "Remplissez les détails de la catégorie de poste ci-dessous.",
+            "updateTitle": "Mettre à jour la catégorie de poste",
+            "updateDescription": "Modifiez les détails de la catégorie de poste ci-dessous."
+        },
+        "dialog": {
+            "deleteTitle": "Supprimer la catégorie de poste",
+            "deleteDescription": "Cette action est irréversible et permanente. Veuillez procéder avec prudence."
+        },
+        "toast": {
+            "created": "Catégorie de poste créée avec succès",
+            "updated": "Catégorie de poste mise à jour avec succès",
+            "deleted": "Catégorie de poste supprimée avec succès"
         }
     }
 }

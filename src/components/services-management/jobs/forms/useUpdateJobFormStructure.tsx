@@ -4,8 +4,10 @@ import {
   FormStructure,
   ImageFile,
   ImageGalleryFieldProps,
+  MultiSelectFieldProps,
   NumberFieldProps,
   SelectFieldProps,
+  SelectOption,
   TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
@@ -18,11 +20,15 @@ import { useTranslation } from "react-i18next";
 interface JobUpdateFormStructureProps {
   jobStore: JobStore;
   currencies: ResponseCurrencyDto[];
+  jobTags: SelectOption[];
+  jobCategories: SelectOption[];
   uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
 }
 export const useUpdateJobFormStructure = ({
   jobStore,
   currencies,
+  jobTags,
+  jobCategories,
   uploadPicture,
 }: JobUpdateFormStructureProps) => {
   const { t } = useTranslation("job");
@@ -110,6 +116,42 @@ export const useUpdateJobFormStructure = ({
     },
   };
 
+  const jobTagsField: Field<MultiSelectFieldProps> = {
+    id: "tags",
+    label: `${t("job.forms.tagsLabel")}`,
+    variant: FieldVariant.MULTI_SELECT,
+    required: true,
+    description: `${t("job.forms.tagsDescription")}`,
+    placeholder: `${t("job.forms.tagsPlaceholder")}`,
+    error: t(jobStore.createDtoErrors?.tags?.[0]),
+    props: {
+      options: jobTags,
+      value: jobStore.createDto?.tagIds,
+      onChange: (value) => {
+        jobStore.setNested("createDto.tagIds", Number(value));
+        jobStore.setNested("createDtoErrors.tagIds", []);
+      },
+    },
+  };
+
+  const jobCategoriesField: Field<SelectFieldProps> = {
+    id: "categories",
+    label: `${t("job.forms.categoriesLabel")}`,
+    variant: FieldVariant.SELECT,
+    required: true,
+    description: `${t("job.forms.categoriesDescription")}`,
+    placeholder: `${t("job.forms.categoriesPlaceholder")}`,
+    error: t(jobStore.updateDtoErrors?.categoryId?.[0]),
+    props: {
+      options: jobCategories,
+      value: jobStore.updateDto?.categoryId?.toString(),
+      onValueChange: (value) => {
+        jobStore.setNested("updateDto.categoryId", Number(value));
+        jobStore.setNested("updateDtoErrors.categoryId", []);
+      },
+    },
+  };
+
   const uploadsField: Field<ImageGalleryFieldProps> = {
     id: "uploads",
     label: `${t("job.forms.uploadsLabel")}`,
@@ -147,6 +189,9 @@ export const useUpdateJobFormStructure = ({
           },
           {
             fields: [priceField, currencyField],
+          },
+          {
+            fields: [jobTagsField, jobCategoriesField],
           },
         ],
       },

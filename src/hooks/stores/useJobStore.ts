@@ -34,6 +34,7 @@ const initialState: JobStoreData = {
     price: 0.0,
     currencyId: undefined,
     tagIds: [],
+    categoryId: undefined,
     uploads: [],
   },
   updateDto: {
@@ -42,6 +43,7 @@ const initialState: JobStoreData = {
     price: 0.0,
     currencyId: undefined,
     tagIds: [],
+    categoryId: undefined,
     uploads: [],
   },
   images: [],

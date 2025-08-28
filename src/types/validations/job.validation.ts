@@ -32,6 +32,9 @@ const createJobSchema = z.object({
   currencyId: z.string({
     message: "job.validation.currencyRequired",
   }),
+  categoryId: z.number({
+    message: "job.validation.categoryRequired",
+  }),
 });
 
 const updateJobSchema = z.object({
