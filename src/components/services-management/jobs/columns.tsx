@@ -93,7 +93,11 @@ export const useJobColumns = (
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.tags?.map(tag => tag.label).join(", ") || t("job.columns.noTags")}</div>;
+        return row?.original?.tags.length > 0 ? (
+          <div>{row?.original?.tags?.map((tag) => tag.label).join(", ")}</div>
+        ) : (
+          <div className="opacity-60">{t("job.columns.noTags")}</div>
+        );
       },
       enableSorting: false,
       enableHiding: true,
