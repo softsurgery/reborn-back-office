@@ -93,9 +93,9 @@ export const useJobColumns = (
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.tags?.map(tag => tag.label).join(", ")}</div>;
+        return <div>{row?.original?.tags?.map(tag => tag.label).join(", ") || t("job.columns.noTags")}</div>;
       },
-      enableSorting: true,
+      enableSorting: false,
       enableHiding: true,
     },
     {

@@ -52,6 +52,7 @@
             "currency": "Currency",
             "category": "Category",
             "tags": "Tags",
+            "noTags": "No Tags",
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "actions": "Actions"

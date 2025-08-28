@@ -52,6 +52,7 @@
             "currency": "Devise",
             "category": "Catégorie",
             "tags": "Étiquettes",
+            "noTags": "Aucune étiquette",
             "createdAt": "Créé le",
             "updatedAt": "Mis à jour le",
             "actions": "Actions"
