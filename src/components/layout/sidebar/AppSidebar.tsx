@@ -142,6 +142,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/services-management/job-tags",
             icon: Tag,
           },
+          {
+            title: `${t("common.sidebar.jobCategories")}`,
+            url: "/services-management/job-categories",
+            icon: Map,
+          },
         ],
       },
     ],

@@ -79,7 +79,8 @@
       "developerLogger": "Journal Développeur",
       "servicesManagement": "Gestion des services",
       "jobs": "Postes",
-      "jobTags": "Étiquettes de poste"
+      "jobTags": "Étiquettes de poste",
+      "jobCategories": "Catégories de poste"
     }
   }
 }
