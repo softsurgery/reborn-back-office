@@ -92,11 +92,11 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Tags",
+      accessorKey: `${t("job.columns.tags")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Tags"
+          title={t("job.columns.tags")}
           attribute="tags"
           context={context}
         />
@@ -106,7 +106,7 @@ export const useJobColumns = (
         const entries = row.original.tags.map((p) => p.label) ?? [];
 
         if (entries.length === 0) {
-          return <div className="opacity-70">{t("columns.noTags")}</div>;
+          return <div className="opacity-70">{t("job.columns.noTags")}</div>;
         }
 
         const visibleTags = entries.slice(0, 2);
