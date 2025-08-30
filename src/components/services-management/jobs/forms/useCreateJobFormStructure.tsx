@@ -14,7 +14,7 @@ import {
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { ResponseCurrencyDto } from "@/types";
+import { JobStyle, ResponseCurrencyDto } from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface JobCreateFormStructureProps {
@@ -178,6 +178,27 @@ export const useCreateJobFormStructure = ({
     },
   };
 
+  const jobStylesField: Field<SelectFieldProps> = {
+    id: "styles",
+    label: `${t("job.forms.stylesLabel")}`,
+    variant: FieldVariant.SELECT,
+    required: true,
+    description: `${t("job.forms.stylesDescription")}`,
+    placeholder: `${t("job.forms.stylesPlaceholder")}`,
+    error: t(jobStore.createDtoErrors?.style?.[0]),
+    props: {
+      value: jobStore.createDto?.style,
+      options: Object.values(JobStyle).map((style) => ({
+        label: style,
+        value: style,
+      })),
+      onValueChange: (value: string) => {
+        jobStore.setNested("createDto.style", value as JobStyle);
+        jobStore.setNested("createDtoErrors.style", []);
+      },
+    },
+  };
+
   const generalInformationCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -196,7 +217,10 @@ export const useCreateJobFormStructure = ({
             fields: [priceField, currencyField],
           },
           {
-            fields: [jobTagsField, jobCategoriesField],
+            fields: [ jobCategoriesField, jobStylesField],
+          },
+          {
+            fields: [jobTagsField],
           },
         ],
       },

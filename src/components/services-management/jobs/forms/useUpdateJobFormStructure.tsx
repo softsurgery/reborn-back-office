@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { ResponseCurrencyDto } from "@/types";
+import { JobStyle, ResponseCurrencyDto } from "@/types";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -123,7 +123,7 @@ export const useUpdateJobFormStructure = ({
     required: true,
     description: `${t("job.forms.tagsDescription")}`,
     placeholder: `${t("job.forms.tagsPlaceholder")}`,
-    error: t(jobStore.createDtoErrors?.tags?.[0]),
+    error: t(jobStore.updateDtoErrors?.tags?.[0]),
     props: {
       options: jobTags,
       value: jobTags.filter((option: SelectOption) =>
@@ -177,6 +177,26 @@ export const useUpdateJobFormStructure = ({
       },
     },
   };
+  const jobStylesField: Field<SelectFieldProps> = {
+    id: "styles",
+    label: `${t("job.forms.stylesLabel")}`,
+    variant: FieldVariant.SELECT,
+    required: true,
+    description: `${t("job.forms.stylesDescription")}`,
+    placeholder: `${t("job.forms.stylesPlaceholder")}`,
+    error: t(jobStore.updateDtoErrors?.style?.[0]),
+    props: {
+      value: jobStore.updateDto?.style,
+      options: Object.values(JobStyle).map((style) => ({
+        label: style,
+        value: style,
+      })),
+      onValueChange: (value: string) => {
+        jobStore.setNested("updateDto.style", value as JobStyle);
+        jobStore.setNested("updateDtoErrors.style", []);
+      },
+    },
+  };
 
   const generalInformationUpdateFormStructure: FormStructure = {
     title: "",
@@ -196,7 +216,10 @@ export const useUpdateJobFormStructure = ({
             fields: [priceField, currencyField],
           },
           {
-            fields: [jobTagsField, jobCategoriesField],
+            fields: [jobCategoriesField, jobStylesField],
+          },
+          {
+            fields: [jobTagsField],
           },
         ],
       },

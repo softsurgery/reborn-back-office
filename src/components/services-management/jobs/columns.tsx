@@ -18,7 +18,7 @@ export const useJobColumns = (
   const { t: tCommon } = useTranslation("common");
   return [
     {
-      accessorKey: "title",
+      accessorKey: `${t("job.columns.title")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -36,7 +36,7 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "description",
+      accessorKey: `${t("job.columns.description")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -56,7 +56,7 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "price",
+      accessorKey: `${t("job.columns.price")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -76,12 +76,12 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Pictures",
+      accessorKey: `${t("job.columns.pictures")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Pictures"
-          attribute=""
+          title={t("job.columns.pictures")}
+          attribute="pictures"
           context={context}
         />
       ),
@@ -133,7 +133,29 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Category",
+      accessorKey: `${t("job.columns.style")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.style")}
+          attribute="style"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="truncate">
+            {row?.original?.style || (
+              <span className="opacity-70">{t("job.columns.noStyle")}</span>
+            )}
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableHiding: true,
+    },
+    {
+      accessorKey: `${t("job.columns.category")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -149,7 +171,7 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Posted By",
+      accessorKey: `${t("job.columns.postedBy")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -173,7 +195,7 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Created At",
+      accessorKey: `${t("job.columns.createdAt")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -195,7 +217,7 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
-      accessorKey: "Updated At",
+      accessorKey: `${t("job.columns.updatedAt")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}

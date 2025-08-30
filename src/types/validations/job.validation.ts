@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { JobStyle } from "../job-management";
 
 const createJobSchema = z.object({
   title: z
@@ -34,6 +35,9 @@ const createJobSchema = z.object({
   }),
   categoryId: z.number({
     message: "job.validation.categoryRequired",
+  }),
+  style: z.enum(Object.values(JobStyle) as [string, ...string[]], {
+    message: "job.validation.stylesRequired",
   }),
 });
 
@@ -72,6 +76,9 @@ const updateJobSchema = z.object({
 
   currencyId: z.string({
     message: "job.validation.currencyRequired",
+  }),
+  style: z.enum(Object.values(JobStyle) as [string, ...string[]], {
+    message: "job.validation.stylesRequired",
   }),
 });
 

@@ -14,6 +14,7 @@ export interface ResponseJobDto extends DatabaseEntity {
   tags: ResponseJobTagDto[];
   categoryId: number;
   category: ResponseJobCategoryDto;
+  style: JobStyle;
   uploads: ResponseJobUploadDto[];
 }
 
@@ -24,6 +25,7 @@ export interface CreateJobDto {
   tagIds: number[];
   currencyId?: string;
   categoryId?: number;
+  style?: JobStyle;
   uploads?: { uploadId: number }[];
 }
 
@@ -61,3 +63,16 @@ export interface ResponseJobUploadDto extends DatabaseEntity {
   upload: Upload;
   order: number;
 }
+
+export enum JobStyle {
+  REMOTE = "Remote",
+  ONSITE = "On-site",
+  FLEXIBLE = "Flexible Hours",
+  FULL_TIME = "Full-time",
+  PART_TIME = "Part-time",
+  FREELANCE = "Freelance",
+  WEEKEND = "Weekend Job",
+  NIGHT = "Night Shift",
+  DAY = "Day Shift",
+}
+

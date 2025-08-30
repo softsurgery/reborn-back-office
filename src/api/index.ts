@@ -8,6 +8,7 @@ import { jobCategory } from "./job-category";
 import { _public } from "./public";
 import { upload } from "./upload";
 import { store } from "./store";
+import { follow } from "./follow";
 
 export const api = {
   admin,
@@ -19,5 +20,6 @@ export const api = {
   job,
   jobTag,
   jobCategory,
+  follow,
   store,
 };

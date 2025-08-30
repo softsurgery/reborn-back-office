@@ -43,16 +43,23 @@
             "categoriesLabel": "Category",
             "categoriesPlaceholder": "Select category",
             "categoriesDescription": "Choose a category for the job.",
+            "stylesRequired": "The job style is required.",
+            "stylesLabel": "Style",
+            "stylesPlaceholder": "Select style",
+            "stylesDescription": "Choose a style for the job.",
             "uploadsLabel": "Uploads"
         },
         "columns": {
             "title": "Title",
             "description": "Description",
+            "pictures": "Photos",
             "price": "Price",
             "currency": "Currency",
             "category": "Category",
             "tags": "Tags",
             "noTags": "No Tags",
+            "style": "Style",
+            "noStyle": "No Style",
             "postedBy": "Posted By",
             "createdAt": "Created At",
             "updatedAt": "Updated At",
@@ -100,9 +107,8 @@
             "deleted": "Job Tag Deleted Successfully"
         }
     },
-    "jobCategory":
-    {
-        "intro":"Services Management",
+    "jobCategory": {
+        "intro": "Services Management",
         "introTitle": "Job Categories",
         "introDescription": "Manage job categories for better organization and filtering.",
         "singularName": "Job Category",
