@@ -102,3 +102,24 @@ export interface CreateProfileDto {
 }
 
 export interface UpdateProfileDto extends Partial<CreateProfileDto> {}
+
+
+export interface ResponseFollowDto extends DatabaseEntity {
+  id: string;
+  follower: ResponseUserDto;
+  followerId: string;
+  following: ResponseUserDto;
+  followingId: string;
+  isFollowing: boolean;
+}
+
+export interface ResponseFollowCountsDto {
+  followers: number;
+  following: number;
+}
+
+export interface ResponseIsFollowingDto {
+  userId?: string;
+  targetId?: string;
+  isFollowing?: boolean;
+}

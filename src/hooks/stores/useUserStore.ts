@@ -1,9 +1,16 @@
 import { create } from "zustand";
-import { CreateUserDto, ResponseUserDto, UpdateUserDto } from "@/types";
+import {
+  CreateUserDto,
+  ResponseFollowCountsDto,
+  ResponseFollowDto,
+  ResponseUserDto,
+  UpdateUserDto,
+} from "@/types";
 import { setDeepValue } from "@/lib/object.util";
 
 interface UserStoreData {
   response?: ResponseUserDto;
+  responseFollowCountsDto: ResponseFollowCountsDto;
   createDto: CreateUserDto;
   updateDto: UpdateUserDto;
   setManualPassword: boolean;
@@ -11,12 +18,18 @@ interface UserStoreData {
   picture?: File;
   pictureUrl?: string;
   progress?: number;
+  followers: ResponseFollowDto[];
+  following: ResponseFollowDto[];
   createDtoErrors: Record<string, any>;
   updateDtoErrors: Record<string, any>;
 }
 
 const initialState: UserStoreData = {
   response: undefined,
+  responseFollowCountsDto: {
+    followers: 0,
+    following: 0,
+  },
   createDto: {
     firstName: "",
     lastName: "",
@@ -59,6 +72,8 @@ const initialState: UserStoreData = {
   confirmPassword: "",
   picture: undefined,
   progress: 0,
+  followers: [],
+  following: [],
   createDtoErrors: {},
   updateDtoErrors: {},
 };
