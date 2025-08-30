@@ -90,7 +90,7 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
           <SelectContent className="overflow-y-auto max-h-[15rem]">
             {field?.props?.options?.map((option: SelectOption) => {
               return (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem key={option.value} value={option.value as string}>
                   {option.label}
                 </SelectItem>
               );
@@ -255,7 +255,8 @@ export const FieldBuilder = ({ field }: FieldBuilderProps) => {
           id={field.id}
           className={cn("w-full", field?.className)}
           options={field.props?.options}
-          value={field.props?.values}
+          value={field.props?.value}
+          isDisabled={field.props?.disabled}
           onChange={(value) => field?.props?.onChange?.(value)}
           placeholder={field?.placeholder}
           creatable={field.props?.creatable}

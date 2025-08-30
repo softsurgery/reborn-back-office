@@ -147,9 +147,14 @@ export const useCreateJobFormStructure = ({
     error: t(jobStore.createDtoErrors?.tags?.[0]),
     props: {
       options: jobTags,
-      value: jobStore.createDto?.tagIds,
+      value: jobTags.filter((option: SelectOption) =>
+        jobStore.createDto?.tagIds?.includes(Number(option.value))
+      ),
       onChange: (value) => {
-        jobStore.setNested("createDto.tagIds", Number(value));
+        jobStore.setNested(
+          "createDto.tagIds",
+          value.map((v) => Number(v.value))
+        );
         jobStore.setNested("createDtoErrors.tagIds", []);
       },
     },

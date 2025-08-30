@@ -95,7 +95,7 @@ export interface DateFieldProps extends BaseFieldProps {
 
 export interface SelectOption {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 export interface SelectFieldProps extends BaseFieldProps {
@@ -105,8 +105,8 @@ export interface SelectFieldProps extends BaseFieldProps {
 }
 
 export interface MultiSelectFieldProps extends BaseFieldProps {
-  value?: number[];
-  onChange?: (value: string[]) => void;
+  value?: SelectOption[];
+  onChange?: (value: SelectOption[]) => void;
   options?: SelectOption[];
   creatable?: boolean;
 }

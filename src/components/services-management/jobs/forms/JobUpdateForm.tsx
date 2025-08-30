@@ -52,8 +52,8 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
     },
   });
 
-    const { jobTags, isFetchJobTagsPending } = useJobTags();
-    const { jobCategories, isFetchJobCategoriesPending } = useJobCategories();
+  const { jobTags, isFetchJobTagsPending } = useJobTags();
+  const { jobCategories, isFetchJobCategoriesPending } = useJobCategories();
 
   const {
     detailedInformationUpdateFormStructure,

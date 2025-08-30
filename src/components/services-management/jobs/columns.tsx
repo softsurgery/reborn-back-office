@@ -15,6 +15,7 @@ export const useJobColumns = (
   context: DataTableConfig<ResponseJobDto>
 ): ColumnDef<ResponseJobDto>[] => {
   const { t } = useTranslation("job");
+  const { t: tCommon } = useTranslation("common");
   return [
     {
       accessorKey: "title",
@@ -27,7 +28,9 @@ export const useJobColumns = (
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.title}</div>;
+        return (
+          <div className="line-clamp-3 max-w-48">{row?.original?.title}</div>
+        );
       },
       enableSorting: true,
       enableHiding: true,
@@ -43,7 +46,11 @@ export const useJobColumns = (
         />
       ),
       cell: ({ row }) => {
-        return <div>{row?.original?.description}</div>;
+        return (
+          <div className="line-clamp-3 max-w-72">
+            {row?.original?.description}
+          </div>
+        );
       },
       enableSorting: true,
       enableHiding: true,
@@ -89,16 +96,37 @@ export const useJobColumns = (
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("job.columns.tags")}
+          title="Tags"
           attribute="tags"
           context={context}
         />
       ),
       cell: ({ row }) => {
-        return row?.original?.tags.length > 0 ? (
-          <div>{row?.original?.tags?.map((tag) => tag.label).join(", ")}</div>
-        ) : (
-          <div className="opacity-60">{t("job.columns.noTags")}</div>
+        // Ensure `entries` is always an array to prevent undefined errors
+        const entries = row.original.tags.map((p) => p.label) ?? [];
+
+        if (entries.length === 0) {
+          return <div className="opacity-70">{t("columns.noTags")}</div>;
+        }
+
+        const visibleTags = entries.slice(0, 2);
+        const hiddenTags = entries.length - visibleTags.length;
+        return (
+          <div>
+            <div className="line-clamp-1">
+              {visibleTags.map((entry, index) => (
+                <span key={index} className="mr-1">
+                  {entry?.toUpperCase() || tCommon("common.general.unknown")}
+                  {index < visibleTags.length - 1 && ", "}
+                </span>
+              ))}
+              {hiddenTags > 0 && (
+                <span className="opacity-50 mx-2">{`+${hiddenTags}${" "}${tCommon(
+                  "common.general.more"
+                )}`}</span>
+              )}
+            </div>
+          </div>
         );
       },
       enableSorting: false,
