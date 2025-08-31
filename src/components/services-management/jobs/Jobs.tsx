@@ -19,12 +19,14 @@ import {
 } from "@/types/validations/job.validation";
 import { useTranslation } from "react-i18next";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { useRouter } from "next/router";
 
 interface JobsProps {
   className?: string;
 }
 
 export default function Jobs({ className }: JobsProps) {
+  const router = useRouter();
   const { t, ready } = useTranslation("job");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro } = useIntro();
@@ -219,6 +221,9 @@ export default function Jobs({ className }: JobsProps) {
   const context: DataTableConfig<ResponseJobDto> = {
     singularName: `${t("job.singularName")}`,
     pluralName: `${t("job.pluralName")}`,
+    inspectCallback: (entity: ResponseJobDto) => {
+      router.push(`/services-management/jobs/${entity.id}`);
+    },
     createCallback: openCreateJobSheet,
     updateCallback: openUpdateJobSheet,
     deleteCallback: openDeleteJobDialog,
