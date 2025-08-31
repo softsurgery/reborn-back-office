@@ -5,7 +5,6 @@
         "SIGNOUT": "Utilisateur déconnecté",
         "CLIENT_SIGNIN": "Client connecté",
         "CLIENT_SIGNUP": "Client enregistré",
-      
         "USER_CREATE": "Nouvel utilisateur créé",
         "USER_UPDATE": "Détails de l'utilisateur mis à jour",
         "USER_DELETE": "Compte utilisateur supprimé",
@@ -13,29 +12,29 @@
         "USER_DEACTIVATE": "Compte utilisateur désactivé",
         "USER_APPROVE": "Utilisateur approuvé",
         "USER_DISAPPROVE": "Utilisateur désapprouvé",
-      
+
         "ROLE_CREATE": "Rôle créé",
         "ROLE_UPDATE": "Rôle mis à jour",
         "ROLE_DELETE": "Rôle supprimé",
         "ROLE_DUPLICATE": "Rôle dupliqué",
-      
+
         "BUG_CREATE": "Rapport de bug créé",
         "BUG_DELETE": "Rapport de bug supprimé",
-      
+
         "FEEDBACK_CREATE": "Feedback soumis",
         "FEEDBACK_DELETE": "Feedback supprimé",
-      
+
         "REGION_CREATE": "Région créée",
         "REGION_UPDATE": "Région mise à jour",
         "REGION_DELETE": "Région supprimée",
-      
+
         "DEVICE_INFO_CREATE": "Info appareil ajoutée",
         "DEVICE_INFO_DELETE": "Info appareil supprimée",
-      
-        "JOB_CREATE": "Post créé",
-        "JOB_UPDATE": "Post mis à jour",
-        "JOB_DELETE": "Post supprimé",
-      
+
+        "JOB_CREATE": "Poste créé",
+        "JOB_UPDATE": "Poste mis à jour",
+        "JOB_DELETE": "Poste supprimé",
+
         "JOB_TAG_CREATE": "Tag de poste créé",
         "JOB_TAG_UPDATE": "Tag de poste mis à jour",
         "JOB_TAG_DELETE": "Tag de poste supprimé"
@@ -46,40 +45,40 @@
         "SIGNOUT": "L'utilisateur <strong>{{fullname}}</strong> s'est déconnecté.",
         "CLIENT_SIGNIN": "Le client <strong>{{clientName}}</strong> s'est connecté.",
         "CLIENT_SIGNUP": "Le client <strong>{{clientName}}</strong> s'est enregistré.",
-      
-        "USER_CREATE": "L'utilisateur <strong>{{firstName}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "USER_UPDATE": "L'utilisateur <strong>{{firstName}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "USER_DELETE": "L'utilisateur <strong>{{firstName}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-        "USER_ACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été activé par <strong>{{user.username}}</strong>.",
-        "USER_DEACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été désactivé par <strong>{{user.username}}</strong>.",
-        "USER_APPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été approuvé par <strong>{{user.username}}</strong>.",
-        "USER_DISAPPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été désapprouvé par <strong>{{user.username}}</strong>.",
-      
-        "ROLE_CREATE": "Le rôle <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "ROLE_UPDATE": "Le rôle <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "ROLE_DELETE": "Le rôle <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-        "ROLE_DUPLICATE": "Le rôle <strong>{{label}}</strong> existe déjà (par <strong>{{user.username}}</strong>).",
-      
-        "BUG_CREATE": "Le rapport de bug <strong>{{variant}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "BUG_DELETE": "Le rapport de bug <strong>{{variant}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-      
-        "FEEDBACK_CREATE": "Le feedback <strong>{{category}}</strong> a été soumis par <strong>{{user.username}}</strong>.",
-        "FEEDBACK_DELETE": "Le feedback <strong>{{category}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-      
-        "REGION_CREATE": "La région <strong>{{region.name}}</strong> a été créée par <strong>{{user.username}}</strong>.",
-        "REGION_UPDATE": "La région <strong>{{region.name}}</strong> a été mise à jour par <strong>{{user.username}}</strong>.",
-        "REGION_DELETE": "La région <strong>{{region.name}}</strong> a été supprimée par <strong>{{user.username}}</strong>.",
-      
-        "DEVICE_INFO_CREATE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été ajoutée par <strong>{{user.username}}</strong>.",
-        "DEVICE_INFO_DELETE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été supprimée par <strong>{{user.username}}</strong>.",
-      
-        "JOB_CREATE": "Le poste <strong>{{title}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "JOB_UPDATE": "Le poste <strong>{{title}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "JOB_DELETE": "Le poste <strong>{{title}}</strong> a été supprimé par <strong>{{user.username}}</strong>.",
-      
-        "JOB_TAG_CREATE": "Le tag de poste <strong>{{label}}</strong> a été créé par <strong>{{user.username}}</strong>.",
-        "JOB_TAG_UPDATE": "Le tag de poste <strong>{{label}}</strong> a été mis à jour par <strong>{{user.username}}</strong>.",
-        "JOB_TAG_DELETE": "Le tag de poste <strong>{{label}}</strong> a été supprimé par <strong>{{user.username}}</strong>."
+
+        "USER_CREATE": "L'utilisateur <strong>{{firstName}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_UPDATE": "L'utilisateur <strong>{{firstName}}</strong> a été mis à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_DELETE": "L'utilisateur <strong>{{firstName}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_ACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été activé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_DEACTIVATE": "L'utilisateur <strong>{{firstName}}</strong> a été désactivé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_APPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été approuvé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_DISAPPROVE": "L'utilisateur <strong>{{firstName}}</strong> a été désapprouvé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "ROLE_CREATE": "Le rôle <strong>{{label}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "ROLE_UPDATE": "Le rôle <strong>{{label}}</strong> a été mis à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "ROLE_DELETE": "Le rôle <strong>{{label}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "ROLE_DUPLICATE": "Le rôle <strong>{{label}}</strong> existe déjà (par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>).",
+
+        "BUG_CREATE": "Le rapport de bug <strong>{{variant}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "BUG_DELETE": "Le rapport de bug <strong>{{variant}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "FEEDBACK_CREATE": "Le feedback <strong>{{category}}</strong> a été soumis par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "FEEDBACK_DELETE": "Le feedback <strong>{{category}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "REGION_CREATE": "La région <strong>{{region.name}}</strong> a été créée par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "REGION_UPDATE": "La région <strong>{{region.name}}</strong> a été mise à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "REGION_DELETE": "La région <strong>{{region.name}}</strong> a été supprimée par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "DEVICE_INFO_CREATE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été ajoutée par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "DEVICE_INFO_DELETE": "L'info appareil <strong>{{platform}} {{model}}</strong> a été supprimée par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "JOB_CREATE": "Le poste <strong>{{title}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_UPDATE": "Le poste <strong>{{title}}</strong> a été mis à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_DELETE": "Le poste <strong>{{title}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        
+        "JOB_TAG_CREATE": "Le tag de poste <strong>{{label}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_TAG_UPDATE": "Le tag de poste <strong>{{label}}</strong> a été mis à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_TAG_DELETE": "Le tag de poste <strong>{{label}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>."
     },
     "logger": {
         "intro": "Audit & Surveillance",

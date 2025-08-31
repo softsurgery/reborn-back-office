@@ -5,7 +5,7 @@
         "SIGNOUT": "User Signed Out",
         "CLIENT_SIGNIN": "Client Signed In",
         "CLIENT_SIGNUP": "Client Registered",
-       
+
         "USER_CREATE": "New User Created",
         "USER_UPDATE": "User Details Updated",
         "USER_DELETE": "User Account Deleted",
@@ -13,29 +13,29 @@
         "USER_DEACTIVATE": "User Account Deactivated",
         "USER_APPROVE": "User Approved",
         "USER_DISAPPROVE": "User Disapproved",
-       
+
         "ROLE_CREATE": "Role Created",
         "ROLE_UPDATE": "Role Updated",
         "ROLE_DELETE": "Role Deleted",
         "ROLE_DUPLICATE": "Role Duplicated",
-       
+        
         "BUG_CREATE": "Bug Report Created",
         "BUG_DELETE": "Bug Report Deleted",
-       
+        
         "FEEDBACK_CREATE": "Feedback Submitted",
         "FEEDBACK_DELETE": "Feedback Deleted",
-       
+
         "REGION_CREATE": "Region Created",
         "REGION_UPDATE": "Region Updated",
         "REGION_DELETE": "Region Deleted",
-       
+
         "DEVICE_INFO_CREATE": "Device Info Added",
         "DEVICE_INFO_DELETE": "Device Info Deleted",
-       
+
         "JOB_CREATE": "Job Created",
         "JOB_UPDATE": "Job Updated",
         "JOB_DELETE": "Job Deleted",
-       
+
         "JOB_TAG_CREATE": "Job Tag Created",
         "JOB_TAG_UPDATE": "Job Tag Updated",
         "JOB_TAG_DELETE": "Job Tag Deleted"
@@ -46,40 +46,40 @@
         "SIGNOUT": "User <strong>{{fullname}}</strong> has signed out.",
         "CLIENT_SIGNIN": "Client <strong>{{clientName}}</strong> has signed in.",
         "CLIENT_SIGNUP": "Client <strong>{{clientName}}</strong> has registered.",
-       
-        "USER_CREATE": "User <strong>{{firstName}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "USER_UPDATE": "User <strong>{{firstName}}</strong> has been updated by <strong>{{user.username}}</strong>.",
-        "USER_DELETE": "User <strong>{{firstName}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-        "USER_ACTIVATE": "User <strong>{{firstName}}</strong> has been activated by <strong>{{user.username}}</strong>.",
-        "USER_DEACTIVATE": "User <strong>{{firstName}}</strong> has been deactivated by <strong>{{user.username}}</strong>.",
-        "USER_APPROVE": "User <strong>{{firstName}}</strong> has been approved by <strong>{{user.username}}</strong>.",
-        "USER_DISAPPROVE": "User <strong>{{firstName}}</strong> has been disapproved by <strong>{{user.username}}</strong>.",
-       
-        "ROLE_CREATE": "Role <strong>{{label}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "ROLE_UPDATE": "Role <strong>{{label}}</strong> has been updated by <strong>{{user.username}}</strong>.",
-        "ROLE_DELETE": "Role <strong>{{label}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-        "ROLE_DUPLICATE": "Role <strong>{{label}}</strong> already exists by <strong>{{user.username}}</strong>.",
-       
-        "BUG_CREATE": "Bug report <strong>{{variant}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "BUG_DELETE": "Bug report <strong>{{variant}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-       
-        "FEEDBACK_CREATE": "Feedback <strong>{{category}}</strong> has been submitted by <strong>{{user.username}}</strong>.",
-        "FEEDBACK_DELETE": "Feedback <strong>{{category}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-       
-        "REGION_CREATE": "Region <strong>{{region.name}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "REGION_UPDATE": "Region <strong>{{region.name}}</strong> has been updated by <strong>{{user.username}}</strong>.",
-        "REGION_DELETE": "Region <strong>{{region.name}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-       
-        "DEVICE_INFO_CREATE": "Device info <strong>{{platform}} {{model}}</strong> has been added by <strong>{{user.username}}</strong>.",
-        "DEVICE_INFO_DELETE": "Device info <strong>{{platform}} {{model}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-       
-        "JOB_CREATE": "Job <strong>{{title}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "JOB_UPDATE": "Job <strong>{{title}}</strong> has been updated by <strong>{{user.username}}</strong>.",
-        "JOB_DELETE": "Job <strong>{{title}}</strong> has been deleted by <strong>{{user.username}}</strong>.",
-       
-        "JOB_TAG_CREATE": "Job tag <strong>{{label}}</strong> has been created by <strong>{{user.username}}</strong>.",
-        "JOB_TAG_UPDATE": "Job tag <strong>{{label}}</strong> has been updated by <strong>{{user.username}}</strong>.",
-        "JOB_TAG_DELETE": "Job tag <strong>{{label}}</strong> has been deleted by <strong>{{user.username}}</strong>."
+
+        "USER_CREATE": "User <strong>{{firstName}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_UPDATE": "User <strong>{{firstName}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_DELETE": "User <strong>{{firstName}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_ACTIVATE": "User <strong>{{firstName}}</strong> has been activated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_DEACTIVATE": "User <strong>{{firstName}}</strong> has been deactivated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_APPROVE": "User <strong>{{firstName}}</strong> has been approved by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "USER_DISAPPROVE": "User <strong>{{firstName}}</strong> has been disapproved by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "ROLE_CREATE": "Role <strong>{{label}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "ROLE_UPDATE": "Role <strong>{{label}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "ROLE_DELETE": "Role <strong>{{label}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "ROLE_DUPLICATE": "Role <strong>{{label}}</strong> already exists by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "BUG_CREATE": "Bug report <strong>{{variant}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "BUG_DELETE": "Bug report <strong>{{variant}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "FEEDBACK_CREATE": "Feedback <strong>{{category}}</strong> has been submitted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "FEEDBACK_DELETE": "Feedback <strong>{{category}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "REGION_CREATE": "Region <strong>{{region.name}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "REGION_UPDATE": "Region <strong>{{region.name}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "REGION_DELETE": "Region <strong>{{region.name}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "DEVICE_INFO_CREATE": "Device info <strong>{{platform}} {{model}}</strong> has been added by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "DEVICE_INFO_DELETE": "Device info <strong>{{platform}} {{model}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "JOB_CREATE": "Job <strong>{{title}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_UPDATE": "Job <strong>{{title}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_DELETE": "Job <strong>{{title}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+
+        "JOB_TAG_CREATE": "Job tag <strong>{{label}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_TAG_UPDATE": "Job tag <strong>{{label}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+        "JOB_TAG_DELETE": "Job tag <strong>{{label}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>."
     },
     "logger": {
         "intro": "Audit & Monitoring",
@@ -91,21 +91,21 @@
             "event": "Event",
             "description": "Description",
             "loggedAt": "Logged At"
-        },
-        "devLogger": {
-            "intro": "Audit & Monitoring",
-            "introTitle": "Developer Logs",
-            "singularName": "Log Entry",
-            "pluralName": "Log Entries",
-            "introDescription": "Analyze API requests, methods used, and technical information related to system actions",
-            "columns": {
-                "event": "Event",
-                "method": "Method",
-                "apiEndpoint": "API Endpoint",
-                "user": "User",
-                "loggedAt": "Logged At",
-                "logInfo": "Log Info"
-            }
+        }
+    },
+    "devLogger": {
+        "intro": "Audit & Monitoring",
+        "introTitle": "Developer Logs",
+        "singularName": "Log Entry",
+        "pluralName": "Log Entries",
+        "introDescription": "Analyze API requests, methods used, and technical information related to system actions",
+        "columns": {
+            "event": "Event",
+            "method": "Method",
+            "apiEndpoint": "API Endpoint",
+            "user": "User",
+            "loggedAt": "Logged At",
+            "logInfo": "Log Info"
         }
     }
 }

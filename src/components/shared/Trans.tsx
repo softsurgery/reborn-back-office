@@ -8,6 +8,7 @@ interface TransProps {
   isPending?: boolean;
   className?: string;
   defaults?: string;
+  components?: Record<string, React.ReactElement>;
 }
 
 export const Trans = ({
@@ -17,6 +18,7 @@ export const Trans = ({
   isPending = false,
   className,
   defaults,
+  components,
 }: TransProps) => {
   if (isPending) return <Skeleton className="h-5 w-full" />;
   if (!i18nKey)
@@ -29,6 +31,7 @@ export const Trans = ({
       values={values}
       defaults={defaults}
       className={className}
+      components={components}
     />
   );
 };

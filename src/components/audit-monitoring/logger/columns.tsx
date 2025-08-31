@@ -7,6 +7,7 @@ import {
 import { Trans } from "@/components/shared/Trans";
 import { ResponseLogDto } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 export const useLoggerColumns = (
@@ -50,7 +51,18 @@ export const useLoggerColumns = (
             i18nKey={`descriptions.${event}`}
             values={{
               ...row.original.logInfo,
-              user: { username: row?.original?.user?.username },
+              user: {
+                id: row?.original?.user?.id,
+                username: row?.original?.user?.username,
+              },
+            }}
+            components={{
+              a: (
+                <Link
+                  href={`/user-management/users/${row?.original?.user?.id}`}
+                  className="hover:underline"
+                />
+              ),
             }}
           />
         );
