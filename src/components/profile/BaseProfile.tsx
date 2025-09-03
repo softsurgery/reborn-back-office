@@ -62,7 +62,7 @@ export const BaseProfile = ({
       value: "activity",
       label: "Activity",
       icon: BarChart2,
-      content: <Activity />,
+      content: <Activity userId={user?.id} />,
     },
     {
       value: "settings",
@@ -79,10 +79,11 @@ export const BaseProfile = ({
         className
       )}
     >
-      <div className="flex flex-col flex-1 overflow-hidden h-full">
-        <div className="flex flex-col gap-4 p-4 border-b">
+      <div className="flex flex-col flex-1 overflow-auto no-scrollbar h-full">
+        {/* Info */}
+        <div className="flex flex-col gap-4 p-4">
           {/* Profile Info Row */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-4">
             {/* Profile Picture */}
             <Avatar className={cn("w-24 h-24", className)}>
               <AvatarImage src={picture} />
@@ -92,16 +93,10 @@ export const BaseProfile = ({
             </Avatar>
 
             {/* Stats */}
-            <div className="flex flex-1 justify-around md:justify-start md:gap-4">
+            <div className="flex justify-around md:justify-start md:gap-4">
               <div className="text-center">
                 <div className="font-semibold text-lg">-</div>
                 <div className="text-sm text-muted-foreground">Services</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-lg">
-                  {followDataCount?.followers ?? 0}
-                </div>
-                <div className="text-sm text-muted-foreground">Followers</div>
               </div>
               <div className="text-center">
                 <div className="font-semibold text-lg">
@@ -109,32 +104,16 @@ export const BaseProfile = ({
                 </div>
                 <div className="text-sm text-muted-foreground">Following</div>
               </div>
+              <div className="text-center">
+                <div className="font-semibold text-lg">
+                  {followDataCount?.followers ?? 0}
+                </div>
+                <div className="text-sm text-muted-foreground">Followers</div>
+              </div>
             </div>
           </div>
-
-          {/* Profile Details */}
-          <div className="flex flex-col gap-2">
-            <h1 className="font-semibold text-lg">
-              {identifyUser(user) || "John Doe"}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {user?.profile?.bio || "No Bio Available"}
-            </p>
-            <p className="text-sm">
-              {user?.dateOfBirth
-                ? user.dateOfBirth instanceof Date
-                  ? user.dateOfBirth.toLocaleDateString()
-                  : user.dateOfBirth
-                : "No Date Provided"}
-              <br />
-              {user?.profile?.region?.label || "No Location Provided"}
-              <br />
-              {user?.profile?.phone || "No Phone Provided"}
-            </p>
-          </div>
         </div>
-      </div>
-      <div className="flex flex-col flex-1 overflow-auto no-scrollbar h-full">
+
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
