@@ -19,7 +19,7 @@ interface UserStoreData {
   pictureUrl?: string;
   progress?: number;
   followers: ResponseFollowDto[];
-  following: ResponseFollowDto[];
+  followings: ResponseFollowDto[];
   createDtoErrors: Record<string, any>;
   updateDtoErrors: Record<string, any>;
 }
@@ -73,7 +73,7 @@ const initialState: UserStoreData = {
   picture: undefined,
   progress: 0,
   followers: [],
-  following: [],
+  followings: [],
   createDtoErrors: {},
   updateDtoErrors: {},
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BarChart2,
   User as UserIcon,
@@ -12,9 +12,11 @@ import { Settings } from "./cards/Settings";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/hooks/stores/useUserStore";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { identifyUser } from "@/lib/user.utils";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
+import { useFollowerDialog } from "./modals/FollowersDialog";
+import { useFollowingDialog } from "./modals/FollowingDialog";
+import { useFollowSystem } from "@/hooks/useFollowSystem";
 
 interface BaseProfileProps {
   className?: string;
@@ -27,8 +29,19 @@ export const BaseProfile = ({
 }: BaseProfileProps) => {
   const userStore = useUserStore();
   const user = React.useMemo(() => userStore.response, [userStore]);
-  const [activeTab, setActiveTab] = useState("about");
+  const [activeTab, setActiveTab] = React.useState("about");
 
+  const { followerDialog, openFollowerDialog } = useFollowerDialog({
+    userStore,
+  });
+  const { followingDialog, openFollowingDialog } = useFollowingDialog({
+    userStore,
+  });
+
+  const { followers, followings } = useFollowSystem({
+    id: userStore?.response?.id!,
+    use: ["is-following", "followers", "followings"],
+  });
   const { data: followDataCount, isPending: isFollowDataCountPending } =
     useQuery({
       queryKey: ["follow-data-count", user?.id],
@@ -42,6 +55,11 @@ export const BaseProfile = ({
     enabled: !!user?.profile?.pictureId,
     staleTime: Infinity,
   });
+
+  React.useEffect(() => {
+    userStore.set("followers", followers);
+    userStore.set("followings", followings);
+  }, [followers, followings]);
 
   React.useEffect(() => {
     if (user) userStore.set("picture", picture);
@@ -98,13 +116,19 @@ export const BaseProfile = ({
                 <div className="font-semibold text-lg">-</div>
                 <div className="text-sm text-muted-foreground">Services</div>
               </div>
-              <div className="text-center">
+              <div
+                className="text-center cursor-pointer"
+                onClick={openFollowingDialog}
+              >
                 <div className="font-semibold text-lg">
                   {followDataCount?.following ?? 0}
                 </div>
                 <div className="text-sm text-muted-foreground">Following</div>
               </div>
-              <div className="text-center">
+              <div
+                className="text-center cursor-pointer"
+                onClick={openFollowerDialog}
+              >
                 <div className="font-semibold text-lg">
                   {followDataCount?.followers ?? 0}
                 </div>
@@ -149,6 +173,8 @@ export const BaseProfile = ({
           </div>
         </Tabs>
       </div>
+      {followingDialog}
+      {followerDialog}
     </div>
   );
 };
