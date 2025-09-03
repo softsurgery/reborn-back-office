@@ -28,7 +28,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
-import { Update } from "next/dist/build/swc";
 
 export const AppProperties = () => {
   const [textBuffers, setTextBuffers] = React.useState<Record<string, string>>(
@@ -125,7 +124,7 @@ export const AppProperties = () => {
     setData?.(original.map((s) => ({ ...s, value: s.value })));
   }, [original, setData]);
 
-  const handleSaveAll = () => {
+  const handleSaveAll = React.useCallback(() => {
     if (!data || !original) return;
 
     const updatedStores = data.filter((s) => changedIds.includes(s.id));
@@ -143,7 +142,7 @@ export const AppProperties = () => {
         value: JSON.parse(JSON.stringify(s.value)),
       }))
     );
-  };
+  }, [saveChanges, data]);
 
   const allExpanded = React.useMemo(() => {
     if (!data) return false;
@@ -306,7 +305,12 @@ export const AppProperties = () => {
                           {subtitle}
                         </p>
                       </div>
-                      <div className="hidden md:flex items-center gap-3">
+                    </div>
+                  </AccordionTrigger>
+
+                  <AccordionContent>
+                    <div className="p-2">
+                      <div className="hidden md:flex justify-end mb-4">
                         <Button
                           variant="secondary"
                           size="sm"
@@ -320,10 +324,6 @@ export const AppProperties = () => {
                           Reset store
                         </Button>
                       </div>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="p-2">
                       <div className="flex flex-col md:flex-row gap-4">
                         <JSONForm
                           value={store.value}
@@ -335,6 +335,7 @@ export const AppProperties = () => {
                           value={
                             textBuffers[store.id] ?? safeStringify(store.value)
                           }
+                          onChange={() => {}}
                         />
                       </div>
 
