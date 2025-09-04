@@ -37,6 +37,9 @@
             "step2Title": "Profile Information",
             "step2FieldTitle": "Profile Information",
             "step2Description": "Fill in the user's profile details.",
+            "step3Title": "Set Uploads",
+            "step3Description": "Upload profile uploads for the user.",
+            "step3FieldTitle": "Profile Uploads",
             "photo": "Profile Photo",
             "photoDescription": "User's profile photo.",
             "username": "Username",
@@ -100,7 +103,9 @@
             "disapproveUserSuccess": "User disapproved successfully.",
             "disapproveUserError": "Error disapproving user.",
             "requirePasswordCheckTitle": "Require Password Update",
-            "requirePasswordCheckDescription": "Users will be prompted to update their password on their next login."
+            "requirePasswordCheckDescription": "Users will be prompted to update their password on their next login.",
+            "uploadsLabel": "Upload Photos",
+            "uploadsDescription": "Drag and drop files here or click to upload. Supported formats: JPG, PNG. Max size: 5MB."
         },
         "sheet": {
             "createUserTitle": "Create User",

@@ -33,8 +33,13 @@
         "forms": {
             "step1Title": "Informations Générales",
             "step1FieldTitle": "Informations de l'Utilisateur",
+            "step1Description": "Remplissez les informations de base de l'utilisateur.",
             "step2Title": "Informations du Profil",
             "step2FieldTitle": "Informations du Profil",
+            "step2Description": "Remplissez les détails du profil de l'utilisateur.",
+            "step3Title": "Définir les Téléversements",
+            "step3Description": "Téléversez les fichiers de profil pour l'utilisateur.",
+            "step3FieldTitle": "Téléversements de Profil",
             "photo": "Photo de Profil",
             "photoDescription": "Photo de profil de l'utilisateur.",
             "username": "Nom d'utilisateur",

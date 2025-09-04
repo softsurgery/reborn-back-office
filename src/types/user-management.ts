@@ -89,6 +89,7 @@ export interface ResponseProfileDto extends DatabaseEntity {
   user: ResponseUserDto;
   pictureId?: number;
   picture?: Upload;
+  uploads?: ResponseProfileUploadDto[];
 }
 
 export interface CreateProfileDto {
@@ -98,11 +99,10 @@ export interface CreateProfileDto {
   gender?: Gender;
   isPrivate?: boolean;
   regionId?: number;
-  pictureId?: number;
+  uploads?: { uploadId: number }[];
 }
 
 export interface UpdateProfileDto extends Partial<CreateProfileDto> {}
-
 
 export interface ResponseFollowDto extends DatabaseEntity {
   id: string;
@@ -122,4 +122,13 @@ export interface ResponseIsFollowingDto {
   userId?: string;
   targetId?: string;
   isFollowing?: boolean;
+}
+
+export interface ResponseProfileUploadDto extends DatabaseEntity {
+  id: number;
+  jobId: string;
+  profile: ResponseProfileDto;
+  uploadId: number;
+  upload: Upload;
+  order: number;
 }

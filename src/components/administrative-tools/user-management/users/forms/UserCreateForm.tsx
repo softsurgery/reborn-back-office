@@ -27,6 +27,10 @@ const steps = [
     id: "profile-information",
     title: "userManagement.forms.step2Title",
   },
+  {
+    id: "uploads",
+    title: "userManagement.forms.step3Title",
+  },
 ];
 
 const { Stepper } = defineStepper(...steps);
@@ -54,22 +58,26 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
     },
   });
 
-  const { userCreateFormStructure, profileCreateFormStructure } =
-    useCreateUserFormStructure({
-      userStore,
-      regions: mapToSelectOptions({
-        data: isFetchRegionsPending ? [] : regions,
-        labelKey: "label",
-        valueKey: "id",
-      }),
-      roles: mapToSelectOptions({
-        data: isFetchRolesPending ? [] : roles,
-        labelKey: "label",
-        valueKey: "id",
-      }),
-      uploadPicture,
-      isUploadPending,
-    });
+
+  const {
+    userCreateFormStructure,
+    profileCreateFormStructure,
+    uploadsFormStructure,
+  } = useCreateUserFormStructure({
+    userStore,
+    regions: mapToSelectOptions({
+      data: isFetchRegionsPending ? [] : regions,
+      labelKey: "label",
+      valueKey: "id",
+    }),
+    roles: mapToSelectOptions({
+      data: isFetchRolesPending ? [] : roles,
+      labelKey: "label",
+      valueKey: "id",
+    }),
+    uploadPicture,
+    isUploadPending,
+  });
 
   const validateStep = React.useCallback(
     (stepId: string) => {
@@ -170,6 +178,9 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
                     )}
                     {methods.current.id === "profile-information" && (
                       <FormBuilder structure={profileCreateFormStructure} />
+                    )}
+                    {methods.current.id === "uploads" && (
+                      <FormBuilder structure={uploadsFormStructure} />
                     )}
                   </div>
                 </div>
