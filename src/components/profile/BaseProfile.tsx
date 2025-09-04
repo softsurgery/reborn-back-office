@@ -113,18 +113,22 @@ export const BaseProfile = ({
             </Avatar>
             <div className="flex flex-col items-start justify-start">
               <div className="flex flex-col items-start">
-                <h1 className="font-semibold text-lg">{identifyUser(user)}</h1>
+                <h1 className="font-semibold text-lg">
+                  {identifyUser(user) || "Unknown User"}
+                </h1>
                 <h2 className="text-sm text-muted-foreground hover:underline cursor-pointer">
-                  <a href={`mailto:${user?.email}`}>{user?.email}</a>
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.email || "No email"}
+                  </a>
                 </h2>
               </div>
               <div className="flex flex-row items-center">
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.region?.label}
+                  {user?.profile?.region?.label || "No region"}
                 </p>
                 <Separator orientation="vertical" className="mx-1 h-4" />
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.phone}
+                  {user?.profile?.phone || "No phone number"}
                 </p>
               </div>
             </div>
