@@ -309,6 +309,7 @@ export const Users = ({ className }: UsersProps) => {
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
     targetEntity: (user: ResponseUserDto) => {
+      const uploads = user.profile?.uploads?.sort((a, b) => a.order - b.order);
       userStore.set("response", user);
       userStore.set<UpdateUserDto>("updateDto", {
         firstName: user.firstName,
@@ -328,6 +329,10 @@ export const Users = ({ className }: UsersProps) => {
           bio: user.profile?.bio,
           gender: user.profile?.gender as Gender,
           isPrivate: user.profile?.isPrivate,
+          uploads: uploads.map((upload) => ({
+            id: upload.id,
+            uploadId: upload.uploadId,
+          })),
         },
       });
       userStore.set(

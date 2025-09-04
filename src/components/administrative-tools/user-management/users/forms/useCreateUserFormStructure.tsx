@@ -29,7 +29,7 @@ interface useCreateUserFormStructureProps {
   isProfilePictureUploadPending?: boolean;
 
   uploadPhotos: ReturnType<typeof useUploadMutation>["uploadFiles"];
-  isPhotosUplaodPending?: boolean;
+  isPhotosUploadPending?: boolean;
 }
 
 export const useCreateUserFormStructure = ({
@@ -40,7 +40,7 @@ export const useCreateUserFormStructure = ({
   isProfilePictureUploadPending,
 
   uploadPhotos,
-  isPhotosUplaodPending,
+  isPhotosUploadPending,
 }: useCreateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
 
@@ -401,7 +401,7 @@ export const useCreateUserFormStructure = ({
     variant: FieldVariant.IMAGE_GALLERY,
     props: {
       images: userStore.images,
-      disabled: isPhotosUplaodPending,
+      disabled: isPhotosUploadPending,
       onFilesChange: (e: ImageFile[]) => {
         console.log(e);
         userStore.updateImages("create", e);

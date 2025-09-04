@@ -25,16 +25,21 @@ interface useUpdateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
-  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
-  isUploadPending?: boolean;
+  uploadProfilePicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isProfilePictureUploadPending?: boolean;
+
+  uploadPhotos: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isPhotosUploadPending?: boolean;
 }
 
 export const useUpdateUserFormStructure = ({
   userStore,
   regions,
   roles,
-  uploadPicture,
-  isUploadPending,
+  uploadProfilePicture,
+  isProfilePictureUploadPending,
+  uploadPhotos,
+  isPhotosUploadPending,
 }: useUpdateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
   //photo
@@ -51,7 +56,7 @@ export const useUpdateUserFormStructure = ({
       image: userStore.picture,
       progress: userStore.progress,
       placeholder: "/unknown-user.jpg",
-      disabled: !!isUploadPending,
+      disabled: !!isProfilePictureUploadPending,
       fallback: identifyUserAvatar(userStore.response),
       onFileChange: (value) => {
         userStore.set("picture", value);
@@ -59,7 +64,7 @@ export const useUpdateUserFormStructure = ({
       },
       onUpload: (file, onProgress) => {
         userStore.set("progress", 0);
-        uploadPicture({
+        uploadProfilePicture({
           files: [file],
           onProgress: (progress: number) => {
             userStore.set("progress", progress);
@@ -416,7 +421,7 @@ export const useUpdateUserFormStructure = ({
         userStore.updateImages("update", e);
       },
       onUpload: (file, onProgress) => {
-        uploadPicture({
+        uploadPhotos({
           files: [file],
           onProgress: (progress: number) => {
             userStore.setImageProgress(file, progress);

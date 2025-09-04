@@ -9,7 +9,7 @@ import { useUpdateUserFormStructure } from "./useUpdateUserFormStructure";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { useRegions } from "@/hooks/content/useRegions";
 import { defineStepper } from "@/components/ui/stepper";
-import { UpdateUserDto, Upload } from "@/types";
+import { ServerErrorResponse, UpdateUserDto, Upload } from "@/types";
 import {
   profileSchema,
   updateUserSchema,
@@ -17,6 +17,7 @@ import {
 import { Spinner } from "@/components/shared/Spinner";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 const steps = [
   {
@@ -26,6 +27,10 @@ const steps = [
   {
     id: "profile-information",
     title: "userManagement.forms.step2Title",
+  },
+  {
+    id: "uploads",
+    title: "userManagement.forms.step3Title",
   },
 ];
 
@@ -48,13 +53,29 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   const { roles, isFetchRolesPending } = useRoles();
   const { regions, isFetchRegionsPending } = useRegions();
 
-  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+  const {
+    uploadFiles: uploadProfilePicture,
+    isUploadPending: isProfilePictureUploadPending,
+  } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
       userStore.setNested("updateDto.profile.pictureId", response?.[0]?.id);
     },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
   });
 
-  const { userUpdateFormStructure, profileUpdateFormStructure } =
+  const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUploadPending } =
+    useUploadMutation({
+      onSuccess: (response: Upload[]) => {
+        userStore.appendUploadId("update", { uploadId: response?.[0]?.id });
+      },
+      onError: (error: ServerErrorResponse) => {
+        toast.error(error.response?.data?.message);
+      },
+    });
+
+  const { userUpdateFormStructure, profileUpdateFormStructure, uploadsFormStructure } =
     useUpdateUserFormStructure({
       userStore,
       regions: mapToSelectOptions({
@@ -67,8 +88,10 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
         labelKey: "label",
         valueKey: "id",
       }),
-      uploadPicture,
-      isUploadPending,
+      uploadProfilePicture,
+      isProfilePictureUploadPending,
+      uploadPhotos,
+      isPhotosUploadPending,
     });
 
   const validateStep = React.useCallback(
@@ -103,7 +126,6 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
           );
           return false;
         }
-        return true;
       }
       return true;
     },
@@ -175,6 +197,9 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                     {methods.current.id === "profile-information" && (
                       <FormBuilder structure={profileUpdateFormStructure} />
                     )}
+                    {methods.current.id === "uploads" && (
+                      <FormBuilder structure={uploadsFormStructure} />
+                    )}
                   </div>
                 </div>
               )}
@@ -192,13 +217,13 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                 )}
                 <Button onClick={handleNext} disabled={isUpdatePending}>
                   {methods.isLast ? (
-                    <>
+                    <React.Fragment>
                       <Save /> {tCommon("common.buttons.update")}
-                    </>
+                    </React.Fragment>
                   ) : (
-                    <>
+                    <React.Fragment>
                       {tCommon("common.buttons.next")} <ArrowRight />
-                    </>
+                    </React.Fragment>
                   )}
                 </Button>
               </Stepper.Controls>

@@ -65,7 +65,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
     },
   });
 
-  const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUplaodPending } =
+  const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUploadPending } =
     useUploadMutation({
       onSuccess: (response: Upload[]) => {
         userStore.appendUploadId("create", { uploadId: response?.[0]?.id });
@@ -94,7 +94,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
     uploadProfilePicture,
     isProfilePictureUploadPending,
     uploadPhotos,
-    isPhotosUplaodPending,
+    isPhotosUploadPending,
   });
 
   const validateStep = React.useCallback(
