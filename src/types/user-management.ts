@@ -99,6 +99,7 @@ export interface CreateProfileDto {
   gender?: Gender;
   isPrivate?: boolean;
   regionId?: number;
+  pictureId?: number;
   uploads?: { uploadId: number }[];
 }
 

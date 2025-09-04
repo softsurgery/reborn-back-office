@@ -24,17 +24,23 @@ interface useCreateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
-  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
-  isUploadPending?: boolean;
+
+  uploadProfilePicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isProfilePictureUploadPending?: boolean;
+
+  uploadPhotos: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isPhotosUplaodPending?: boolean;
 }
 
 export const useCreateUserFormStructure = ({
   userStore,
   regions,
   roles,
-  uploadPicture,
+  uploadProfilePicture,
+  isProfilePictureUploadPending,
 
-  isUploadPending,
+  uploadPhotos,
+  isPhotosUplaodPending,
 }: useCreateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
 
@@ -52,7 +58,7 @@ export const useCreateUserFormStructure = ({
       image: userStore.picture,
       progress: userStore.progress,
       placeholder: "/unknown-user.jpg",
-      disabled: isUploadPending,
+      disabled: isProfilePictureUploadPending,
       fallback: identifyUserAvatar(userStore.response),
       onFileChange: (value) => {
         userStore.set("picture", value);
@@ -60,7 +66,7 @@ export const useCreateUserFormStructure = ({
       },
       onUpload: (file, onProgress) => {
         userStore.set("progress", 0);
-        uploadPicture({
+        uploadProfilePicture({
           files: [file],
           onProgress: (progress: number) => {
             userStore.set("progress", progress);
@@ -395,11 +401,15 @@ export const useCreateUserFormStructure = ({
     variant: FieldVariant.IMAGE_GALLERY,
     props: {
       images: userStore.images,
+      disabled: isPhotosUplaodPending,
       onFilesChange: (e: ImageFile[]) => {
+        console.log(e);
         userStore.updateImages("create", e);
+        console.log(userStore.images);
+        console.log(userStore.createDto?.profile?.uploads);
       },
       onUpload: (file, onProgress) => {
-        uploadPicture({
+        uploadPhotos({
           files: [file],
           onProgress: (progress: number) => {
             userStore.setImageProgress(file, progress);

@@ -14,9 +14,10 @@ import {
   profileSchema,
 } from "@/types/validations/user.validation";
 import { Spinner } from "@/components/shared/Spinner";
-import { CreateUserDto, Upload } from "@/types";
+import { CreateUserDto, ServerErrorResponse, Upload } from "@/types";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 const steps = [
   {
@@ -52,12 +53,27 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
   const { regions, isFetchRegionsPending } = useRegions();
   const { roles, isFetchRolesPending } = useRoles();
 
-  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+  const {
+    uploadFiles: uploadProfilePicture,
+    isUploadPending: isProfilePictureUploadPending,
+  } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
       userStore.setNested("createDto.profile.pictureId", response?.[0]?.id);
     },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
   });
 
+  const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUplaodPending } =
+    useUploadMutation({
+      onSuccess: (response: Upload[]) => {
+        userStore.appendUploadId("create", { uploadId: response?.[0]?.id });
+      },
+      onError: (error: ServerErrorResponse) => {
+        toast.error(error.response?.data?.message);
+      },
+    });
 
   const {
     userCreateFormStructure,
@@ -75,8 +91,10 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
       labelKey: "label",
       valueKey: "id",
     }),
-    uploadPicture,
-    isUploadPending,
+    uploadProfilePicture,
+    isProfilePictureUploadPending,
+    uploadPhotos,
+    isPhotosUplaodPending,
   });
 
   const validateStep = React.useCallback(
@@ -93,7 +111,6 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
           );
           return false;
         }
-        return true;
       }
 
       if (stepId === "profile-information") {
@@ -107,7 +124,6 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
           );
           return false;
         }
-        return true;
       }
       return true;
     },
@@ -199,13 +215,13 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
                 )}
                 <Button onClick={handleNext} disabled={isCreatePending}>
                   {methods.isLast ? (
-                    <>
+                    <React.Fragment>
                       <Save /> {tCommon("common.buttons.save")}
-                    </>
+                    </React.Fragment>
                   ) : (
-                    <>
+                    <React.Fragment>
                       {tCommon("common.buttons.next")} <ArrowRight />
-                    </>
+                    </React.Fragment>
                   )}
                 </Button>
               </Stepper.Controls>

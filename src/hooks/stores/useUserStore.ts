@@ -50,6 +50,7 @@ const initialState: UserStoreData = {
       gender: undefined,
       isPrivate: false,
       regionId: undefined,
+      uploads: [],
     },
   },
   updateDto: {
@@ -69,6 +70,7 @@ const initialState: UserStoreData = {
       gender: undefined,
       isPrivate: false,
       regionId: undefined,
+      uploads: [],
     },
   },
   setManualPassword: false,
@@ -134,7 +136,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
       ...state,
       [`${dto}Dto`]: {
         ...state[`${dto}Dto`],
-        uploads: [...(state[`${dto}Dto`].profile?.uploads ?? []), upload],
+        profile: {
+          ...state[`${dto}Dto`].profile,
+          uploads: [...(state[`${dto}Dto`].profile?.uploads ?? []), upload],
+        },
       },
     }));
   },
@@ -165,7 +170,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
         images: newImages,
         [`${dto}Dto`]: {
           ...state[`${dto}Dto`],
-          uploads: newUploads,
+          profile: {
+            ...state[`${dto}Dto`].profile,
+            uploads: newUploads,
+          },
         },
       };
     });
