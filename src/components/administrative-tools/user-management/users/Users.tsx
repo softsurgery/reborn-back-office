@@ -260,6 +260,48 @@ export const Users = ({ className }: UsersProps) => {
       resetUser: () => userStore.reset(),
     });
 
+  const { data: images } = useQuery({
+    queryKey: ["user-photos", userStore.response?.profile?.uploads],
+    queryFn: async () => {
+      const uploads = Array.isArray(userStore.updateDto?.profile?.uploads)
+        ? userStore.updateDto.profile.uploads
+        : [];
+      const blobs = await Promise.all(
+        uploads.map(async (upload) => {
+          const name =
+            userStore.response?.profile?.uploads.find(
+              (ru) => ru.uploadId === upload.uploadId
+            )?.upload.filename || `image-${upload.uploadId}.png`;
+
+          const url = await api.upload.getUploadById(upload.uploadId);
+          return {
+            id: upload.uploadId.toString(),
+            url,
+            name,
+            image: null,
+            progress: 100,
+          };
+        })
+      );
+      return blobs;
+    },
+    enabled:
+      Array.isArray(userStore.updateDto?.profile?.uploads) &&
+      userStore.updateDto.profile.uploads.length > 0,
+    staleTime: Infinity,
+  });
+
+  React.useEffect(() => {
+    if (
+      images &&
+      !userStore.hasInitializedImages &&
+      userStore.images.length === 0
+    ) {
+      userStore.set("images", images);
+      userStore.set("hasInitializedImages", true);
+    }
+  }, [images, userStore.hasInitializedImages, userStore]);
+
   const context: DataTableConfig<ResponseUserDto> = {
     singularName: `${t("userManagement.page.user")}`,
     pluralName: `${t("userManagement.page.users")}`,
