@@ -5,6 +5,8 @@ import {
   FieldVariant,
   FormStructure,
   ImageFieldProps,
+  ImageFile,
+  ImageGalleryFieldProps,
   NumberFieldProps,
   PasswordFieldProps,
   SelectFieldProps,
@@ -23,16 +25,21 @@ interface useUpdateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
-  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
-  isUploadPending?: boolean;
+  uploadProfilePicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isProfilePictureUploadPending?: boolean;
+
+  uploadPhotos: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isPhotosUploadPending?: boolean;
 }
 
 export const useUpdateUserFormStructure = ({
   userStore,
   regions,
   roles,
-  uploadPicture,
-  isUploadPending,
+  uploadProfilePicture,
+  isProfilePictureUploadPending,
+  uploadPhotos,
+  isPhotosUploadPending,
 }: useUpdateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
   //photo
@@ -49,7 +56,7 @@ export const useUpdateUserFormStructure = ({
       image: userStore.picture,
       progress: userStore.progress,
       placeholder: "/unknown-user.jpg",
-      disabled: !!isUploadPending,
+      disabled: !!isProfilePictureUploadPending,
       fallback: identifyUserAvatar(userStore.response),
       onFileChange: (value) => {
         userStore.set("picture", value);
@@ -57,7 +64,7 @@ export const useUpdateUserFormStructure = ({
       },
       onUpload: (file, onProgress) => {
         userStore.set("progress", 0);
-        uploadPicture({
+        uploadProfilePicture({
           files: [file],
           onProgress: (progress: number) => {
             userStore.set("progress", progress);
@@ -403,8 +410,43 @@ export const useUpdateUserFormStructure = ({
     ],
   };
 
+  const uploadsField: Field<ImageGalleryFieldProps> = {
+    id: "uploads",
+    label: `${t("userManagement.forms.uploadsLabel")}`,
+    description: `${t("userManagement.forms.uploadsDescription")}`,
+    variant: FieldVariant.IMAGE_GALLERY,
+    props: {
+      images: userStore.images,
+      onFilesChange: (e: ImageFile[]) => {
+        userStore.updateImages("update", e);
+      },
+      onUpload: (file, onProgress) => {
+        uploadPhotos({
+          files: [file],
+          onProgress: (progress: number) => {
+            userStore.setImageProgress(file, progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
+  const uploadsFormStructure: FormStructure = {
+    title: "",
+    description: "",
+    orientation: "horizontal",
+    fieldsets: [
+      {
+        title: `${t("userManagement.forms.step3Title")}`,
+        rows: [{ fields: [uploadsField] }],
+      },
+    ],
+  };
+
   return {
     userUpdateFormStructure,
     profileUpdateFormStructure,
+    uploadsFormStructure,
   };
 };

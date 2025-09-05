@@ -7,7 +7,7 @@ import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useTranslation } from "react-i18next";
 import { useCurrencies } from "@/hooks/content/useCurrencies";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { Upload } from "@/types";
+import { ServerErrorResponse, Upload } from "@/types";
 import { toast } from "sonner";
 import { defineStepper } from "@/components/ui/stepper";
 import { Spinner } from "@/components/shared/Spinner";
@@ -47,8 +47,8 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
     onSuccess: (response: Upload[]) => {
       jobStore.appendUploadId("update", { uploadId: response?.[0]?.id });
     },
-    onError: (error: any) => {
-      toast.error(error.message);
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
     },
   });
 

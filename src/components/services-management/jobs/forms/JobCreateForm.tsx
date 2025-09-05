@@ -189,13 +189,13 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
 
                   <Button onClick={handleNext} disabled={isPending}>
                     {methods.isLast ? (
-                      <>
+                      <React.Fragment>
                         <Save /> {tCommon("common.buttons.save")}
-                      </>
+                      </React.Fragment>
                     ) : (
-                      <>
+                      <React.Fragment>
                         {tCommon("common.buttons.next")} <ArrowRight />
-                      </>
+                      </React.Fragment>
                     )}
                   </Button>
                 </div>

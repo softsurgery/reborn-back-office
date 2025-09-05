@@ -4,6 +4,8 @@ import {
   FieldVariant,
   FormStructure,
   ImageFieldProps,
+  ImageFile,
+  ImageGalleryFieldProps,
   NumberFieldProps,
   PasswordFieldProps,
   SelectFieldProps,
@@ -22,16 +24,23 @@ interface useCreateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
-  uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
-  isUploadPending?: boolean;
+
+  uploadProfilePicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isProfilePictureUploadPending?: boolean;
+
+  uploadPhotos: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isPhotosUploadPending?: boolean;
 }
 
 export const useCreateUserFormStructure = ({
   userStore,
   regions,
   roles,
-  uploadPicture,
-  isUploadPending,
+  uploadProfilePicture,
+  isProfilePictureUploadPending,
+
+  uploadPhotos,
+  isPhotosUploadPending,
 }: useCreateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
 
@@ -49,7 +58,7 @@ export const useCreateUserFormStructure = ({
       image: userStore.picture,
       progress: userStore.progress,
       placeholder: "/unknown-user.jpg",
-      disabled: isUploadPending,
+      disabled: isProfilePictureUploadPending,
       fallback: identifyUserAvatar(userStore.response),
       onFileChange: (value) => {
         userStore.set("picture", value);
@@ -57,7 +66,7 @@ export const useCreateUserFormStructure = ({
       },
       onUpload: (file, onProgress) => {
         userStore.set("progress", 0);
-        uploadPicture({
+        uploadProfilePicture({
           files: [file],
           onProgress: (progress: number) => {
             userStore.set("progress", progress);
@@ -252,12 +261,12 @@ export const useCreateUserFormStructure = ({
 
   const phoneField: Field<NumberFieldProps> = {
     id: "phone",
-    label: "Phone",
+    label: `${t("userManagement.forms.phone")}`,
     variant: FieldVariant.NUMBER,
     required: false,
     placeholder: "+216 21 21 21 21",
-    description: "Enter your phone number",
-    error: userStore.createDtoErrors?.phone?.[0],
+    description: `${t("userManagement.forms.phoneDescription")}`,
+    error: t(userStore.createDtoErrors?.phone?.[0]),
     props: {
       value: Number(userStore.createDto?.profile?.phone) || undefined,
       onChange: (value: number) => {
@@ -269,12 +278,12 @@ export const useCreateUserFormStructure = ({
 
   const cinField: Field<NumberFieldProps> = {
     id: "cin",
-    label: "CIN",
+    label: `${t("userManagement.forms.CIN")}`,
     variant: FieldVariant.NUMBER,
     required: true,
-    placeholder: "CIN Number",
-    description: "Enter your CIN number",
-    error: userStore.createDtoErrors?.cin?.[0],
+    placeholder: `${t("userManagement.forms.CINPlaceholder")}`,
+    description: `${t("userManagement.forms.CINDescription")}`,
+    error: t(userStore.createDtoErrors?.cin?.[0]),
     props: {
       value: Number(userStore.createDto?.profile?.cin) || undefined,
       onChange: (value: number) => {
@@ -286,12 +295,12 @@ export const useCreateUserFormStructure = ({
 
   const bioField: Field<TextareaFieldProps> = {
     id: "bio",
-    label: "Bio",
+    label: `${t("userManagement.forms.bio")}`,
     variant: FieldVariant.TEXTAREA,
     required: false,
-    placeholder: "Tell us about yourself",
-    description: "Enter a short bio",
-    error: userStore.createDtoErrors?.bio?.[0],
+    placeholder: `${t("userManagement.forms.bioPlaceholder")}`,
+    description: `${t("userManagement.forms.bioDescription")}`,
+    error: t(userStore.createDtoErrors?.bio?.[0]),
     props: {
       value: userStore.createDto?.profile?.bio,
       onChange: (value) => {
@@ -304,12 +313,12 @@ export const useCreateUserFormStructure = ({
 
   const genderField: Field<SelectFieldProps> = {
     id: "gender",
-    label: "Gender",
+    label: `${t("userManagement.forms.gender")}`,
     variant: FieldVariant.SELECT,
     required: false,
-    placeholder: "Select your gender",
-    description: "Choose your gender",
-    error: userStore.createDtoErrors?.gender?.[0],
+    placeholder: `${t("userManagement.forms.genderPlaceholder")}`,
+    description: `${t("userManagement.forms.genderDescription")}`,
+    error: t(userStore.createDtoErrors?.gender?.[0]),
     props: {
       options: Object.entries(Gender).map(([value, label]) => ({
         value,
@@ -325,12 +334,12 @@ export const useCreateUserFormStructure = ({
 
   const isPrivateField: Field<SwitchFieldProps> = {
     id: "isPrivate",
-    label: "Profile Privacy",
+    label: `${t("userManagement.forms.isPrivate")}`,
     variant: FieldVariant.SWITCH,
     required: true,
-    placeholder: "Select privacy setting",
-    description: "Choose whether your profile is private or public",
-    error: userStore.createDtoErrors?.isPrivate?.[0],
+    placeholder: `${t("userManagement.forms.isPrivatePlaceholder")}`,
+    description: `${t("userManagement.forms.isPrivateDescription")}`,
+    error: t(userStore.createDtoErrors?.isPrivate?.[0]),
     props: {
       checked: userStore.createDto?.profile?.isPrivate,
       onCheckedChange: (value) => {
@@ -342,12 +351,12 @@ export const useCreateUserFormStructure = ({
 
   const regionField: Field<SelectFieldProps> = {
     id: "region",
-    label: "Region",
+    label: `${t("userManagement.forms.region")}`,
     variant: FieldVariant.SELECT,
     required: false,
-    placeholder: "Select your region",
-    description: "Choose your region",
-    error: userStore.createDtoErrors?.regionId?.[0],
+    placeholder: `${t("userManagement.forms.regionPlaceholder")}`,
+    description: `${t("userManagement.forms.regionDescription")}`,
+    error: t(userStore.createDtoErrors?.regionId?.[0]),
     props: {
       options: regions,
       value: userStore.createDto?.profile?.regionId?.toString(),
@@ -385,8 +394,47 @@ export const useCreateUserFormStructure = ({
     ],
   };
 
+  const uploadsField: Field<ImageGalleryFieldProps> = {
+    id: "uploads",
+    label: `${t("userManagement.forms.uploadsLabel")}`,
+    description: `${t("userManagement.forms.uploadsDescription")}`,
+    variant: FieldVariant.IMAGE_GALLERY,
+    props: {
+      images: userStore.images,
+      disabled: isPhotosUploadPending,
+      onFilesChange: (e: ImageFile[]) => {
+        console.log(e);
+        userStore.updateImages("create", e);
+        console.log(userStore.images);
+        console.log(userStore.createDto?.profile?.uploads);
+      },
+      onUpload: (file, onProgress) => {
+        uploadPhotos({
+          files: [file],
+          onProgress: (progress: number) => {
+            userStore.setImageProgress(file, progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
+  const uploadsFormStructure: FormStructure = {
+    title: "",
+    description: "",
+    orientation: "horizontal",
+    fieldsets: [
+      {
+        title: t("userManagement.forms.step3Title"),
+        rows: [{ fields: [uploadsField] }],
+      },
+    ],
+  };
+
   return {
     userCreateFormStructure,
     profileCreateFormStructure,
+    uploadsFormStructure,
   };
 };

@@ -17,6 +17,8 @@ import { api } from "@/api";
 import { useFollowerDialog } from "./modals/FollowersDialog";
 import { useFollowingDialog } from "./modals/FollowingDialog";
 import { useFollowSystem } from "@/hooks/useFollowSystem";
+import { identifyUser } from "@/lib/user.utils";
+import { Separator } from "../ui/separator";
 
 interface BaseProfileProps {
   className?: string;
@@ -99,9 +101,9 @@ export const BaseProfile = ({
     >
       <div className="flex flex-col flex-1 overflow-auto no-scrollbar h-full">
         {/* Info */}
-        <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-row items-center justify-between gap-4 p-4">
           {/* Profile Info Row */}
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-row items-center gap-4">
             {/* Profile Picture */}
             <Avatar className={cn("w-24 h-24", className)}>
               <AvatarImage src={picture} />
@@ -109,31 +111,52 @@ export const BaseProfile = ({
                 {user?.firstName?.charAt(0) || "U"}
               </AvatarFallback>
             </Avatar>
+            <div className="flex flex-col items-start justify-start">
+              <div className="flex flex-col items-start">
+                <h1 className="font-semibold text-lg">
+                  {identifyUser(user) || "Unknown User"}
+                </h1>
+                <h2 className="text-sm text-muted-foreground hover:underline cursor-pointer">
+                  <a href={`mailto:${user?.email}`}>
+                    {user?.email || "No email"}
+                  </a>
+                </h2>
+              </div>
+              <div className="flex flex-row items-center">
+                <p className="text-sm text-muted-foreground">
+                  {user?.profile?.region?.label || "No region"}
+                </p>
+                <Separator orientation="vertical" className="mx-1 h-4" />
+                <p className="text-sm text-muted-foreground">
+                  {user?.profile?.phone || "No phone number"}
+                </p>
+              </div>
+            </div>
+          </div>
 
-            {/* Stats */}
-            <div className="flex justify-around md:justify-start md:gap-4">
-              <div className="text-center">
-                <div className="font-semibold text-lg">-</div>
-                <div className="text-sm text-muted-foreground">Services</div>
+          {/* Stats */}
+          <div className="flex justify-end md:justify-start md:gap-4">
+            <div className="text-center">
+              <div className="font-semibold text-lg">-</div>
+              <div className="text-sm text-muted-foreground">Services</div>
+            </div>
+            <div
+              className="text-center cursor-pointer"
+              onClick={openFollowingDialog}
+            >
+              <div className="font-semibold text-lg">
+                {followDataCount?.following ?? 0}
               </div>
-              <div
-                className="text-center cursor-pointer"
-                onClick={openFollowingDialog}
-              >
-                <div className="font-semibold text-lg">
-                  {followDataCount?.following ?? 0}
-                </div>
-                <div className="text-sm text-muted-foreground">Following</div>
+              <div className="text-sm text-muted-foreground">Following</div>
+            </div>
+            <div
+              className="text-center cursor-pointer"
+              onClick={openFollowerDialog}
+            >
+              <div className="font-semibold text-lg">
+                {followDataCount?.followers ?? 0}
               </div>
-              <div
-                className="text-center cursor-pointer"
-                onClick={openFollowerDialog}
-              >
-                <div className="font-semibold text-lg">
-                  {followDataCount?.followers ?? 0}
-                </div>
-                <div className="text-sm text-muted-foreground">Followers</div>
-              </div>
+              <div className="text-sm text-muted-foreground">Followers</div>
             </div>
           </div>
         </div>
