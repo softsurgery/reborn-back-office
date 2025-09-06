@@ -36,6 +36,7 @@ const initialState: JobStoreData = {
     tagIds: [],
     categoryId: undefined,
     style: undefined,
+    difficulty: undefined,
     uploads: [],
   },
   updateDto: {
@@ -46,6 +47,7 @@ const initialState: JobStoreData = {
     tagIds: [],
     categoryId: undefined,
     style: undefined,
+    difficulty: undefined,
     uploads: [],
   },
   images: [],

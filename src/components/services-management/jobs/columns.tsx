@@ -155,6 +155,30 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
+      accessorKey: `${t("job.columns.difficulty")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.difficulty")}
+          attribute="difficulty"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="truncate">
+            {row?.original?.difficulty || (
+              <span className="opacity-70">
+                {t("job.columns.noDifficulty")}
+              </span>
+            )}
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableHiding: true,
+    },
+    {
       accessorKey: `${t("job.columns.category")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
