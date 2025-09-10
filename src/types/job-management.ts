@@ -15,6 +15,7 @@ export interface ResponseJobDto extends DatabaseEntity {
   categoryId: number;
   category: ResponseJobCategoryDto;
   style: JobStyle;
+  difficulty: JobDifficulty;
   uploads: ResponseJobUploadDto[];
 }
 
@@ -26,6 +27,7 @@ export interface CreateJobDto {
   currencyId?: string;
   categoryId?: number;
   style?: JobStyle;
+  difficulty?: JobDifficulty;
   uploads?: { uploadId: number }[];
 }
 
@@ -75,4 +77,12 @@ export enum JobStyle {
   NIGHT = "Night Shift",
   DAY = "Day Shift",
 }
+
+export enum JobDifficulty {
+  ENTRY_LEVEL = "Entry Level",
+  MID_LEVEL = "Mid Level",
+  SENIOR_LEVEL = "Senior Level",
+  INTERN = "Internship",
+}
+
 

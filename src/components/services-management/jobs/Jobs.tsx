@@ -250,6 +250,7 @@ export default function Jobs({ className }: JobsProps) {
         currencyId: job.currencyId.toString(),
         categoryId: job.categoryId,
         style: job.style,
+        difficulty: job.difficulty,
         uploads: uploads.map((upload) => ({
           id: upload.id,
           uploadId: upload.uploadId,

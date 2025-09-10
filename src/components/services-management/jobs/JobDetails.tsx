@@ -1,19 +1,10 @@
 import React from "react";
-import {
-  MapPin,
-  Tag,
-  DollarSign,
-  Heart,
-  Share,
-  Bookmark,
-  Loader2,
-} from "lucide-react";
+import { MapPin, Tag, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { JobStyle, ResponseCurrencyDto, ResponseJobDto } from "@/types";
+import { JobDifficulty, JobStyle, ResponseCurrencyDto } from "@/types";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
@@ -86,6 +77,22 @@ export const JobDetails = ({
         return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
     }
   };
+
+  const getDifficultyBadgeColor = (difficulty: JobDifficulty) => {
+    switch (difficulty) {
+      case JobDifficulty.ENTRY_LEVEL:
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200";
+      case JobDifficulty.INTERN:
+        return "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200";
+      case JobDifficulty.MID_LEVEL:
+        return "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200";
+      case JobDifficulty.SENIOR_LEVEL:
+        return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+    }
+  };
+
   const handleAvatarClick = () => {
     router.push(`/user-management/users/${job?.postedBy?.id}`);
   };
@@ -97,8 +104,6 @@ export const JobDetails = ({
       <div className="flex flex-col flex-1 overflow-auto gap-4 h-full">
         {/* Job Header */}
         <div className="flex flex-col gap-4 p-4 border-b">
-          {/* Poster Info Row */}
-
           {/* Job Title and Price */}
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-bold text-balance">{job?.title}</h1>
@@ -110,6 +115,12 @@ export const JobDetails = ({
                 {job?.style.toLowerCase()}
               </Badge>
               <Badge variant="outline">{job?.category?.label}</Badge>
+              <Badge
+                variant="outline"
+                className="text-gray-600 dark:text-gray-300"
+              >
+                {job?.difficulty.toLowerCase()}
+              </Badge>
             </div>
           </div>
 
@@ -207,6 +218,7 @@ export const JobDetails = ({
           </CardContent>
         </Card>
       </div>
+      {/* Poster Info Row */}
       <div className="flex items-center gap-4 p-4 border-t">
         <Avatar
           className="h-12 w-12 cursor-pointer"
