@@ -45,7 +45,7 @@ export function UserNav({ className }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className={cn(className)}>
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-8 w-8 rounded-full">
           <AvatarImage src={profilePicture} alt={identity} />
           <AvatarFallback>{avatarIdentity}</AvatarFallback>
         </Avatar>

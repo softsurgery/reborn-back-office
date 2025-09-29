@@ -105,7 +105,7 @@ export const BaseProfile = ({
           {/* Profile Info Row */}
           <div className="flex flex-row items-center gap-4">
             {/* Profile Picture */}
-            <Avatar className={cn("w-24 h-24", className)}>
+            <Avatar className={cn("w-24 h-24 rounded-full", className)}>
               <AvatarImage src={picture} />
               <AvatarFallback>
                 {user?.firstName?.charAt(0) || "U"}
