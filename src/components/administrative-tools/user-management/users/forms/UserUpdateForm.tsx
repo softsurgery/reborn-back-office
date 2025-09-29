@@ -29,8 +29,12 @@ const steps = [
     title: "userManagement.forms.step2Title",
   },
   {
-    id: "uploads",
+    id: "official-information",
     title: "userManagement.forms.step3Title",
+  },
+  {
+    id: "uploads",
+    title: "userManagement.forms.step4Title",
   },
 ];
 
@@ -65,6 +69,36 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     },
   });
 
+  const {
+    uploadFiles: uploadOfficialDocument,
+    isUploadPending: isOfficialDocumentUploadPending,
+  } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      userStore.setNested(
+        "updateDto.profile.officialDocumentId",
+        response?.[0]?.id
+      );
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
+  });
+
+  const {
+    uploadFiles: uploadDriverLicenseDocument,
+    isUploadPending: isDriverLicenseDocumentPending,
+  } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      userStore.setNested(
+        "updateDto.profile.driverLicenseDocumentId",
+        response?.[0]?.id
+      );
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
+  });
+
   const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUploadPending } =
     useUploadMutation({
       onSuccess: (response: Upload[]) => {
@@ -75,24 +109,35 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
       },
     });
 
-  const { userUpdateFormStructure, profileUpdateFormStructure, uploadsFormStructure } =
-    useUpdateUserFormStructure({
-      userStore,
-      regions: mapToSelectOptions({
-        data: isFetchRegionsPending ? [] : regions,
-        labelKey: "label",
-        valueKey: "id",
-      }),
-      roles: mapToSelectOptions({
-        data: isFetchRolesPending ? [] : roles,
-        labelKey: "label",
-        valueKey: "id",
-      }),
-      uploadProfilePicture,
-      isProfilePictureUploadPending,
-      uploadPhotos,
-      isPhotosUploadPending,
-    });
+  const {
+    userUpdateFormStructure,
+    profileUpdateFormStructure,
+    step3FormStructure,
+    uploadsFormStructure,
+  } = useUpdateUserFormStructure({
+    userStore,
+    regions: mapToSelectOptions({
+      data: isFetchRegionsPending ? [] : regions,
+      labelKey: "label",
+      valueKey: "id",
+    }),
+    roles: mapToSelectOptions({
+      data: isFetchRolesPending ? [] : roles,
+      labelKey: "label",
+      valueKey: "id",
+    }),
+    uploadProfilePicture,
+    isProfilePictureUploadPending,
+
+    uploadOfficialDocument,
+    isOfficialDocumentUploadPending,
+
+    uploadDriverLicenseDocument,
+    isDriverLicenseDocumentPending,
+
+    uploadPhotos,
+    isPhotosUploadPending,
+  });
 
   const validateStep = React.useCallback(
     (stepId: string) => {
@@ -196,6 +241,9 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                     )}
                     {methods.current.id === "profile-information" && (
                       <FormBuilder structure={profileUpdateFormStructure} />
+                    )}
+                    {methods.current.id === "official-information" && (
+                      <FormBuilder structure={step3FormStructure} />
                     )}
                     {methods.current.id === "uploads" && (
                       <FormBuilder structure={uploadsFormStructure} />

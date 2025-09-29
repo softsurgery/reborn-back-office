@@ -89,6 +89,10 @@ export interface ResponseProfileDto extends DatabaseEntity {
   user: ResponseUserDto;
   pictureId?: number;
   picture?: Upload;
+  officialDocumentId?: number;
+  officialDocument?: Upload;
+  driverLicenseDocumentId?: number;
+  driverLicenseDocument?: Upload;
   uploads: ResponseProfileUploadDto[];
 }
 
@@ -100,6 +104,8 @@ export interface CreateProfileDto {
   isPrivate?: boolean;
   regionId?: number;
   pictureId?: number;
+  officialDocumentId?: number;
+  driverLicenseDocumentId?: number;
   uploads?: { uploadId: number }[];
 }
 

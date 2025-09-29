@@ -28,6 +28,8 @@ import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { useUploads } from "@/hooks/content/useUploads";
+import { useUpload } from "@/hooks/content/useUpload";
 
 interface UsersProps {
   className?: string;
@@ -260,47 +262,58 @@ export const Users = ({ className }: UsersProps) => {
       resetUser: () => userStore.reset(),
     });
 
-  const { data: images } = useQuery({
-    queryKey: ["user-photos", userStore.response?.profile?.uploads],
-    queryFn: async () => {
-      const uploads = Array.isArray(userStore.updateDto?.profile?.uploads)
-        ? userStore.updateDto.profile.uploads
-        : [];
-      const blobs = await Promise.all(
-        uploads.map(async (upload) => {
-          const name =
-            userStore.response?.profile?.uploads.find(
-              (ru) => ru.uploadId === upload.uploadId
-            )?.upload.filename || `image-${upload.uploadId}.png`;
+  //fetch user images
+  const uploadIds = Array.isArray(userStore.updateDto?.profile?.uploads)
+    ? userStore.updateDto.profile.uploads.map((u) => u.uploadId)
+    : [];
 
-          const url = await api.upload.getUploadById(upload.uploadId);
-          return {
-            id: upload.uploadId.toString(),
-            url,
-            name,
-            image: null,
-            progress: 100,
-          };
-        })
-      );
-      return blobs;
-    },
-    enabled:
-      Array.isArray(userStore.updateDto?.profile?.uploads) &&
-      userStore.updateDto.profile.uploads.length > 0,
-    staleTime: Infinity,
-  });
+  const { uploads: images, isPending: isImagesPending } = useUploads(uploadIds);
 
   React.useEffect(() => {
     if (
-      images &&
+      images.length > 0 &&
       !userStore.hasInitializedImages &&
       userStore.images.length === 0
     ) {
       userStore.set("images", images);
       userStore.set("hasInitializedImages", true);
     }
-  }, [images, userStore.hasInitializedImages, userStore]);
+  }, [images, userStore.hasInitializedImages]);
+
+  const { upload: profilePicture, isUploadPending: isProfilePicturePending } =
+    useUpload({
+      id: userStore.updateDto?.profile?.pictureId,
+      enabled: Boolean(userStore.updateDto?.profile?.pictureId),
+    });
+  React.useEffect(() => {
+    if (profilePicture) {
+      userStore.set("picture", profilePicture);
+    }
+  }, [profilePicture]);
+
+  const { upload: officialDocument, isUploadPending: isOfficialDocPending } =
+    useUpload({
+      id: userStore.updateDto?.profile?.officialDocumentId,
+      enabled: Boolean(userStore.updateDto?.profile?.officialDocumentId),
+    });
+
+  React.useEffect(() => {
+    if (officialDocument) {
+      userStore.set("officialDocument", officialDocument);
+    }
+  }, [officialDocument]);
+
+  const { upload: driverLicenseDocument, isUploadPending: isDriverDocPending } =
+    useUpload({
+      id: userStore.updateDto?.profile?.driverLicenseDocumentId,
+      enabled: Boolean(userStore.updateDto?.profile?.driverLicenseDocumentId),
+    });
+
+  React.useEffect(() => {
+    if (driverLicenseDocument) {
+      userStore.set("driverLicenseDocument", driverLicenseDocument);
+    }
+  }, [driverLicenseDocument]);
 
   const context: DataTableConfig<ResponseUserDto> = {
     singularName: `${t("userManagement.page.user")}`,
@@ -371,16 +384,17 @@ export const Users = ({ className }: UsersProps) => {
           bio: user.profile?.bio,
           gender: user.profile?.gender as Gender,
           isPrivate: user.profile?.isPrivate,
+          officialDocumentId: user.profile?.officialDocumentId,
+          driverLicenseDocumentId: user.profile?.driverLicenseDocumentId,
           uploads: uploads.map((upload) => ({
             id: upload.id,
             uploadId: upload.uploadId,
           })),
         },
       });
-      userStore.set(
-        "picture",
-        queryClient.getQueryData(["profile-picture", user.profile?.pictureId])
-      );
+      userStore.set("picture", profilePicture);
+      userStore.set("officialDocument", officialDocument);
+      userStore.set("driverLicenseDocument", driverLicenseDocument);
     },
   };
 

@@ -29,8 +29,12 @@ const steps = [
     title: "userManagement.forms.step2Title",
   },
   {
-    id: "uploads",
+    id: "official-information",
     title: "userManagement.forms.step3Title",
+  },
+  {
+    id: "uploads",
+    title: "userManagement.forms.step4Title",
   },
 ];
 
@@ -65,6 +69,36 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
     },
   });
 
+  const {
+    uploadFiles: uploadOfficialDocument,
+    isUploadPending: isOfficialDocumentUploadPending,
+  } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      userStore.setNested(
+        "createDto.profile.officialDocumentId",
+        response?.[0]?.id
+      );
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
+  });
+
+  const {
+    uploadFiles: uploadDriverLicenseDocument,
+    isUploadPending: isDriverLicenseDocumentPending,
+  } = useUploadMutation({
+    onSuccess: (response: Upload[]) => {
+      userStore.setNested(
+        "createDto.profile.driverLicenseDocumentId",
+        response?.[0]?.id
+      );
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
+  });
+
   const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUploadPending } =
     useUploadMutation({
       onSuccess: (response: Upload[]) => {
@@ -78,6 +112,7 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
   const {
     userCreateFormStructure,
     profileCreateFormStructure,
+    step3FormStructure,
     uploadsFormStructure,
   } = useCreateUserFormStructure({
     userStore,
@@ -93,6 +128,13 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
     }),
     uploadProfilePicture,
     isProfilePictureUploadPending,
+
+    uploadOfficialDocument,
+    isOfficialDocumentUploadPending,
+
+    uploadDriverLicenseDocument,
+    isDriverLicenseDocumentPending,
+
     uploadPhotos,
     isPhotosUploadPending,
   });
@@ -194,6 +236,9 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
                     )}
                     {methods.current.id === "profile-information" && (
                       <FormBuilder structure={profileCreateFormStructure} />
+                    )}
+                    {methods.current.id === "official-information" && (
+                      <FormBuilder structure={step3FormStructure} />
                     )}
                     {methods.current.id === "uploads" && (
                       <FormBuilder structure={uploadsFormStructure} />

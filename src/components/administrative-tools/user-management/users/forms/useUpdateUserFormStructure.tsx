@@ -25,8 +25,17 @@ interface useUpdateUserFormStructureProps {
   userStore: UserStore;
   regions: SelectOption[];
   roles: SelectOption[];
+
   uploadProfilePicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
   isProfilePictureUploadPending?: boolean;
+
+  uploadOfficialDocument: ReturnType<typeof useUploadMutation>["uploadFiles"];
+  isOfficialDocumentUploadPending?: boolean;
+
+  uploadDriverLicenseDocument: ReturnType<
+    typeof useUploadMutation
+  >["uploadFiles"];
+  isDriverLicenseDocumentPending?: boolean;
 
   uploadPhotos: ReturnType<typeof useUploadMutation>["uploadFiles"];
   isPhotosUploadPending?: boolean;
@@ -36,18 +45,29 @@ export const useUpdateUserFormStructure = ({
   userStore,
   regions,
   roles,
+
   uploadProfilePicture,
   isProfilePictureUploadPending,
+
+  uploadOfficialDocument,
+  isOfficialDocumentUploadPending,
+
+  uploadDriverLicenseDocument,
+  isDriverLicenseDocumentPending,
+
   uploadPhotos,
   isPhotosUploadPending,
 }: useUpdateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
+
+  // Step 1 *************************************************************************************
+
   //photo
   const photoField: Field<ImageFieldProps> = {
     id: "photo",
     label: t("userManagement.forms.photo"),
     variant: FieldVariant.IMAGE,
-    className: "bg-muted border-2 w-40 h-40 my-2",
+    className: "bg-muted border-2 w-40 h-40 my-2 rounded-full",
     wrapperClassName: "flex flex-col gap-2 items-center",
     required: true,
     description: t("userManagement.forms.photoDescription"),
@@ -273,6 +293,8 @@ export const useUpdateUserFormStructure = ({
     ],
   };
 
+  // Step 2 *************************************************************************************
+
   const phoneField: Field<NumberFieldProps> = {
     id: "phone",
     label: `${t("userManagement.forms.phone")}`,
@@ -409,6 +431,86 @@ export const useUpdateUserFormStructure = ({
       },
     ],
   };
+  // Step 3 *************************************************************************************
+
+  const officialDocumentField: Field<ImageFieldProps> = {
+    id: "official-document",
+    label: t("userManagement.forms.officialDocument"),
+    variant: FieldVariant.IMAGE,
+    className: "bg-muted container w-[700px] h-[400px] my-2 rounded-lg",
+    wrapperClassName: "flex flex-col gap-2",
+    required: true,
+    description: t("userManagement.forms.officialDocumentDescription"),
+    error: t(userStore.createDtoErrors?.officialDocument?.[0]),
+    props: {
+      image: userStore.officialDocument,
+      progress: userStore.progress,
+      disabled: isOfficialDocumentUploadPending,
+      fallback: identifyUserAvatar(userStore.response),
+      onFileChange: (value) => {
+        userStore.set("officialDocument", value);
+        userStore.setNested("updateDtoErrors.officialDocumentId", []);
+      },
+      onUpload: (file, onProgress) => {
+        userStore.set("progress", 0);
+        uploadOfficialDocument({
+          files: [file],
+          onProgress: (progress: number) => {
+            userStore.set("progress", progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
+  const driverLicenseDocumentField: Field<ImageFieldProps> = {
+    id: "driver-license-document",
+    label: `${t("userManagement.forms.driverLicenseDocument")}`,
+    variant: FieldVariant.IMAGE,
+    className: "bg-muted container w-[700px] h-[400px] my-2 rounded-lg",
+    wrapperClassName: "flex flex-col gap-2",
+    required: true,
+    description: t("userManagement.forms.driverLicenseDocumentDescription"),
+    error: t(userStore.createDtoErrors?.driverLicenseDocument?.[0]),
+    props: {
+      image: userStore.driverLicenseDocument,
+      progress: userStore.progress,
+      disabled: isDriverLicenseDocumentPending,
+      fallback: identifyUserAvatar(userStore.response),
+      onFileChange: (value) => {
+        userStore.set("driverLicenseDocument", value);
+        userStore.setNested("updateDtoErrors.driverLicenseDocumentId", []);
+      },
+      onUpload: (file, onProgress) => {
+        userStore.set("progress", 0);
+        uploadDriverLicenseDocument({
+          files: [file],
+          onProgress: (progress: number) => {
+            userStore.set("progress", progress);
+            onProgress(progress);
+          },
+        });
+      },
+    },
+  };
+
+  const step3FormStructure: FormStructure = {
+    title: "",
+    description: "",
+    orientation: "horizontal",
+    fieldsets: [
+      {
+        title: t("userManagement.forms.step3Title"),
+        rows: [
+          { fields: [officialDocumentField] },
+          { fields: [driverLicenseDocumentField] },
+        ],
+      },
+    ],
+  };
+
+  // Step 4 *************************************************************************************
 
   const uploadsField: Field<ImageGalleryFieldProps> = {
     id: "uploads",
@@ -417,6 +519,7 @@ export const useUpdateUserFormStructure = ({
     variant: FieldVariant.IMAGE_GALLERY,
     props: {
       images: userStore.images,
+      disabled: isPhotosUploadPending,
       onFilesChange: (e: ImageFile[]) => {
         userStore.updateImages("update", e);
       },
@@ -447,6 +550,7 @@ export const useUpdateUserFormStructure = ({
   return {
     userUpdateFormStructure,
     profileUpdateFormStructure,
+    step3FormStructure,
     uploadsFormStructure,
   };
 };

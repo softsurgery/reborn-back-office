@@ -17,6 +17,8 @@ interface UserStoreData {
   setManualPassword: boolean;
   confirmPassword?: string;
   picture?: File;
+  officialDocument?: File;
+  driverLicenseDocument?: File;
   pictureUrl?: string;
   progress?: number;
   followers: ResponseFollowDto[];
@@ -50,6 +52,9 @@ const initialState: UserStoreData = {
       gender: undefined,
       isPrivate: false,
       regionId: undefined,
+      pictureId: undefined,
+      officialDocumentId: undefined,
+      driverLicenseDocumentId: undefined,
       uploads: [],
     },
   },
@@ -70,12 +75,17 @@ const initialState: UserStoreData = {
       gender: undefined,
       isPrivate: false,
       regionId: undefined,
+      pictureId: undefined,
+      officialDocumentId: undefined,
+      driverLicenseDocumentId: undefined,
       uploads: [],
     },
   },
   setManualPassword: false,
   confirmPassword: "",
   picture: undefined,
+  officialDocument: undefined,
+  driverLicenseDocument: undefined,
   progress: 0,
   followers: [],
   followings: [],
