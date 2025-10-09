@@ -27,13 +27,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { DocumentCard } from "./DocumentCard";
 
 interface AboutProps {
   className?: string;
 }
 
 export const About = ({ className }: AboutProps) => {
-  const [showDocuments, setShowDocuments] = React.useState(true);
   const userStore = useUserStore();
   const user = userStore.response;
 
@@ -168,89 +168,27 @@ export const About = ({ className }: AboutProps) => {
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
                 Documents
               </h4>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowDocuments(!showDocuments)}
-                className="flex items-center gap-2"
-              >
-                {showDocuments ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-                {showDocuments ? "Hide" : "Show"}
-              </Button>
             </div>
+            <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
+              {(officialDocument || user?.profile?.officialDocumentId) && (
+                <DocumentCard
+                  title="Official Document"
+                  icon={FileText}
+                  src={officialDocument}
+                  isLoading={isOfficialDocPending}
+                />
+              )}
 
-            {showDocuments && (
-              <div className="space-y-4">
-                {/* Official Document */}
-                {(officialDocument || user?.profile?.officialDocumentId) && (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <FileText className="h-4 w-4 text-muted-foreground" />
-                      Official Document
-                    </div>
-                    <div className="relative w-full overflow-hidden rounded-lg border bg-muted">
-                      {isOfficialDocPending ? (
-                        <div className="flex items-center justify-center h-full">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                        </div>
-                      ) : (
-                        <Image
-                          src={
-                            officialDocument ||
-                            "/placeholder.svg?height=300&width=400&query=official document placeholder"
-                          }
-                          alt="Official Document"
-                          width={200}
-                          height={300}
-                        />
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Driver License Document */}
-                {(driverLicenseDocument ||
-                  user?.profile?.driverLicenseDocumentId) && (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <Car className="h-4 w-4 text-muted-foreground" />
-                      Driver License
-                    </div>
-                    <div className="relative w-full overflow-hidden rounded-lg border bg-muted">
-                      {isDriverDocPending ? (
-                        <div className="flex items-center justify-center h-full">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                        </div>
-                      ) : (
-                        <Image
-                          src={
-                            driverLicenseDocument ||
-                            "/placeholder.svg?height=300&width=400&query=driver license placeholder"
-                          }
-                          alt="Driver License"
-                          width={200}
-                          height={300}
-                        />
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {!officialDocument &&
-                  !driverLicenseDocument &&
-                  !user?.profile?.officialDocumentId &&
-                  !user?.profile?.driverLicenseDocumentId && (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <FileText className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">No documents uploaded</p>
-                    </div>
-                  )}
-              </div>
-            )}
+              {(driverLicenseDocument ||
+                user?.profile?.driverLicenseDocumentId) && (
+                <DocumentCard
+                  title="Driver License"
+                  icon={Car}
+                  src={driverLicenseDocument}
+                  isLoading={isDriverDocPending}
+                />
+              )}
+            </div>
           </div>
         </div>
       </CardContent>
