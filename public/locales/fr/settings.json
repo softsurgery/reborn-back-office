@@ -1,0 +1,13 @@
+{
+  "settings": "Paramètres",
+  "manageAccount": "Gérer les paramètres de votre compte",
+  "account": "Compte",
+  "updateAccount": "Mettez à jour les informations de votre compte",
+  "editAccount": "Modifier le compte",
+  "privacy": "Confidentialité",
+  "managePrivacy": "Gérer vos paramètres de confidentialité",
+  "privacySettings": "Paramètres de confidentialité",
+  "notifications": "Notifications",
+  "configureNotifications": "Configurez vos préférences de notification",
+  "notificationSettings": "Paramètres des notifications"
+}

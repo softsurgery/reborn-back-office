@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FileText, Download, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface DocumentCardProps {
   title: string;
@@ -24,6 +25,7 @@ export const DocumentCard = ({
   className,
 }: DocumentCardProps) => {
   const [hidden, setHidden] = useState(false);
+  const { t } = useTranslation("documentCard");
 
   const handleDownload = () => {
     if (!src) return;
@@ -43,7 +45,7 @@ export const DocumentCard = ({
               <div className="flex flex-col items-center gap-3">
                 <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent"></div>
                 <p className="text-sm text-muted-foreground">
-                  Loading document...
+                  {t("loadingDocument")} 
                 </p>
               </div>
             </div>
@@ -51,7 +53,7 @@ export const DocumentCard = ({
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex flex-col items-center gap-3 text-muted-foreground">
                 <EyeOff className="h-12 w-12" />
-                <p className="text-sm font-medium">Document Hidden</p>
+                <p className="text-sm font-medium">{t("documentHidden")}</p>
               </div>
             </div>
           ) : (
@@ -80,11 +82,11 @@ export const DocumentCard = ({
                 {title}
               </h3>
               <p className="text-xs text-muted-foreground mt-1">
-                {isLoading
-                  ? "Processing..."
+                 {isLoading
+                  ? t("loadingDocument")  
                   : src
-                  ? "Ready to view"
-                  : "No document"}
+                  ? t("readyToView") 
+                  : t("noDocument")}  
               </p>
             </div>
           </div>
@@ -100,12 +102,12 @@ export const DocumentCard = ({
               {hidden ? (
                 <>
                   <Eye className="h-4 w-4 mr-2" />
-                  Show
+                  {t("show")}
                 </>
               ) : (
                 <>
                   <EyeOff className="h-4 w-4 mr-2" />
-                  Hide
+                  {t("hide")}
                 </>
               )}
             </Button>
@@ -117,7 +119,7 @@ export const DocumentCard = ({
               className="flex-1"
             >
               <Download className="h-4 w-4 mr-2" />
-              Download
+              {t("download")}
             </Button>
           </div>
         </div>
