@@ -30,7 +30,9 @@ const findPaginatedUserConversationsById = async ({
   search = "",
   filter = "",
   join = "",
-}: QueryParams & { id: string }): Promise<Paginated<ResponseConversationDto>> => {
+}: QueryParams & { id?: string }): Promise<
+  Paginated<ResponseConversationDto>
+> => {
   const params: Record<string, any> = { page, limit, sort };
   if (search) params.search = search;
   if (filter) params.filter = filter;

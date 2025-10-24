@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { format } from "date-fns";
 import { ChatHeaderLeft } from "./conversation/ChatHeaderLeft";
 import { ChatHeaderRight } from "./conversation/ChatHeaderRight";
@@ -16,25 +16,26 @@ interface ConversationProps {
 
 export const Conversation = ({ id }: ConversationProps) => {
   const { user } = useCurrentUser();
-  const [messages, setMessages] = useState<ResponseMessageDto[]>([]);
-  const [input, setInput] = useState("");
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [messages, setMessages] = React.useState<ResponseMessageDto[]>([]);
+  const [input, setInput] = React.useState("");
+  const [loadingMore, setLoadingMore] = React.useState(false);
 
-  const { data: conversation, isPending: isConversationLoading } = useQuery<ResponseConversationDto>({
-  queryKey: ["conversation", id],
-  queryFn: () => api.chat.conversation.findById(id),
- });
+  const { data: conversation, isPending: isConversationLoading } =
+    useQuery<ResponseConversationDto>({
+      queryKey: ["conversation", id],
+      queryFn: () => api.chat.conversation.findById(id),
+    });
 
-
-  const otherUser = useMemo(() => {
+  const otherUser = React.useMemo(() => {
     return conversation?.participants.find((p) => p.id !== user?.id);
   }, [conversation, user]);
 
   // Group messages by day
-  const groupedMessages = useMemo(() => {
+  const groupedMessages = React.useMemo(() => {
     if (!messages) return [];
     const sorted = [...messages].sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
 
     const groups: { date: string; messages: ResponseMessageDto[] }[] = [];
@@ -63,7 +64,7 @@ export const Conversation = ({ id }: ConversationProps) => {
   const getProfilePictureUrl = (picture?: Upload) => {
     if (!picture) return undefined;
     // adapter ici selon ton backend
-    return `/uploads/${picture.filename}`; 
+    return `/uploads/${picture.filename}`;
   };
 
   // Send message
@@ -128,7 +129,11 @@ export const Conversation = ({ id }: ConversationProps) => {
 
       {/* Input */}
       <div className="p-2 border-t">
-        <ConversationInput input={input} setInput={setInput} sendMessage={sendMessage} />
+        <ConversationInput
+          input={input}
+          setInput={setInput}
+          sendMessage={sendMessage}
+        />
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ interface ChatProps {
 
 export const Chat = ({ className }: ChatProps) => {
   const userStore = useUserStore();
-  const user = userStore.response; // utilisateur sélectionné
+  const user = React.useMemo(() => userStore.response, [userStore.response]);
 
   const {
     data,
@@ -27,7 +27,10 @@ export const Chat = ({ className }: ChatProps) => {
     isFetchingNextPage,
     isLoading: isConversationsPending,
   } = useInfiniteQuery<
-    { data: ResponseConversationDto[]; meta: { page: number; hasNextPage?: boolean } },
+    {
+      data: ResponseConversationDto[];
+      meta: { page: number; hasNextPage?: boolean };
+    },
     unknown
   >({
     queryKey: ["conversations", user?.id],
@@ -42,7 +45,7 @@ export const Chat = ({ className }: ChatProps) => {
         : Promise.resolve({ data: [], meta: { page: 1, hasNextPage: false } }),
     getNextPageParam: (lastPage) =>
       lastPage.meta.hasNextPage ? lastPage.meta.page + 1 : undefined,
-    enabled: Boolean(user?.id),
+    enabled: !!user?.id,
   });
 
   const conversations = React.useMemo(
@@ -74,40 +77,40 @@ export const Chat = ({ className }: ChatProps) => {
         <Separator className="mt-2" />
 
         <div className="flex flex-col gap-2">
-          {conversations.length > 0 ? (
-            conversations.map((item: ResponseConversationDto) => {
-              const otherUser = item.participants.find(
-                (u) => u.id !== user?.id
-              );
+          {conversations.length > 0
+            ? conversations.map((item: ResponseConversationDto) => {
+                const otherUser = item.participants.find(
+                  (u) => u.id !== user?.id
+                );
 
-              const lastMessage = item.messages?.[0]?.content ?? "";
-              const sentAt = item.messages?.[0]
-                ? format(item.messages[0].createdAt, "hh:mm a")
-                : "";
+                const lastMessage = item.messages?.[0]?.content ?? "";
+                const sentAt = item.messages?.[0]
+                  ? format(item.messages[0].createdAt, "hh:mm a")
+                  : "";
 
-              return (
-                <StablePressable
-                  key={item.id}
-                  className="flex flex-col gap-2 py-2 cursor-pointer"
-                  onPress={() => handleClickConversation(item.id)}
-                >
-                  {otherUser && (
-                    <UserEntry
-                      user={otherUser}
-                      lastMessage={lastMessage}
-                      sentAt={sentAt}
-                    />
-                  )}
-                </StablePressable>
-              );
-            })
-          ) : (
-            !isPending && (
-              <div className="p-6 flex items-center justify-center">
-                <span className="text-gray-400">No conversations available</span>
-              </div>
-            )
-          )}
+                return (
+                  <StablePressable
+                    key={item.id}
+                    className="flex flex-col gap-2 py-2 cursor-pointer"
+                    onPress={() => handleClickConversation(item.id)}
+                  >
+                    {otherUser && (
+                      <UserEntry
+                        user={otherUser}
+                        lastMessage={lastMessage}
+                        sentAt={sentAt}
+                      />
+                    )}
+                  </StablePressable>
+                );
+              })
+            : !isPending && (
+                <div className="p-6 flex items-center justify-center">
+                  <span className="text-gray-400">
+                    No conversations available
+                  </span>
+                </div>
+              )}
         </div>
 
         {isPending && <Loader isPending />}

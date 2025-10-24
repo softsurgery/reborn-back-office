@@ -1,39 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ResponseConversationDto, ResponseMessageDto } from "@/types";
 import { useUserStore } from "@/hooks/stores/useUserStore";
 import { api } from "@/api";
 import { useTranslation } from "react-i18next";
-
-const StablePressable: React.FC<{
-  className?: string;
-  onPress?: () => void;
-  onPressIn?: () => void;
-  onPressOut?: () => void;
-  children?: React.ReactNode;
-}> = ({ className, onPress, onPressIn, onPressOut, children }) => {
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onPress?.();
-    }
-  };
-
-  return (
-    <div
-      className={className}
-      role="button"
-      tabIndex={0}
-      onClick={() => onPress?.()}
-      onMouseDown={() => onPressIn?.()}
-      onMouseUp={() => onPressOut?.()}
-      onMouseLeave={() => onPressOut?.()}
-      onKeyPress={handleKeyPress}
-    >
-      {children}
-    </div>
-  );
-};
+import { cn } from "@/lib/utils";
+import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
+import Image from "next/image";
 
 const formatMessageTime = (
   dateInput?: string | Date,
@@ -67,72 +40,98 @@ const formatMessageTime = (
   } else if (isThisWeek) {
     return date.toLocaleDateString(locale, { weekday: "long" });
   } else {
-    return date.toLocaleDateString(locale, { day: "2-digit", month: "2-digit", year: "numeric" });
+    return date.toLocaleDateString(locale, {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   }
 };
 
 interface ConversationItemProps {
+  className?: string;
   conversation: ResponseConversationDto;
   onClick?: (id: number) => void;
 }
 
-const ConversationItem: React.FC<ConversationItemProps> = ({ conversation, onClick }) => {
+const ConversationItem = ({
+  className,
+  conversation,
+  onClick,
+}: ConversationItemProps) => {
   const { t, i18n } = useTranslation("conversation");
-  const [isPressed, setIsPressed] = useState(false);
   const userStore = useUserStore();
-  const currentUserId = userStore.response?.id;
-  if (!currentUserId) return null;
-
   const { data: lastMessageData } = useQuery({
     queryKey: ["last-message", conversation.id],
     queryFn: () =>
       api.chat.message.findPaginatedConversationMessages(conversation.id, {
         page: "1",
         limit: "1",
-        sort: "-createdAt",
+        sort: "createdAt,DESC",
       }),
-    staleTime: 60_000,
   });
 
-  const lastMessage: ResponseMessageDto | undefined = lastMessageData?.data[0];
-  const formattedTime = formatMessageTime(lastMessage?.createdAt, i18n.language, t);
+  const otherParticipant = React.useMemo(() => {
+    return conversation.participants?.find(
+      (p) => p.id !== userStore.response?.id
+    );
+  }, [conversation, userStore.response?.id]);
 
-  const otherParticipant = conversation.participants?.find(p => p.id !== currentUserId);
-  const name =
-    (otherParticipant as any)?.displayName ||
-    (otherParticipant as any)?.fullName ||
-    otherParticipant?.email?.split("@")[0] ||
-    t("unknown");
-  const avatarUrl = (otherParticipant as any)?.profilePicture || "/default-avatar.png";
+  const { data: otherParticipantPicture } = useQuery({
+    queryKey: ["picture", otherParticipant?.profile?.pictureId],
+    queryFn: () =>
+      api.upload.getUploadById(otherParticipant?.profile?.pictureId!),
+    enabled: !!otherParticipant?.profile?.pictureId,
+    staleTime: Infinity,
+  });
 
+  const identifier = React.useMemo(() => {
+    return identifyUser(otherParticipant);
+  }, [otherParticipant]);
+
+  const fallback = React.useMemo(() => {
+    return identifyUserAvatar(otherParticipant);
+  }, [otherParticipant]);
+
+  const lastMessage: ResponseMessageDto | undefined = React.useMemo(() => {
+    return lastMessageData?.data[0];
+  }, [lastMessageData]);
+
+  const formattedTime = React.useMemo(() => {
+    return formatMessageTime(lastMessage?.createdAt, i18n.language, t);
+  }, [lastMessage]);
+
+  if (!userStore.response?.id) return null;
   return (
-    <StablePressable
-      className={`p-3 cursor-pointer flex items-center transition-colors ${
-        isPressed ? "bg-[hsl(var(--muted)/1)]" : "hover:bg-[hsl(var(--muted)/0.8)]"
-      }`}
-      onPress={() => onClick?.(conversation.id)}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
+    <div
+      className={cn(
+        "p-3 cursor-pointer flex items-center transition-colors",
+        className
+      )}
+      onClick={() => onClick?.(conversation.id)}
     >
       <div className="flex items-center gap-3 w-full">
-        <img
-          src={avatarUrl}
-          alt={name}
-          className="w-10 h-10 rounded-full object-cover border border-[hsl(var(--border)/1)]"
+        <Image
+          src={otherParticipantPicture as string}
+          alt={fallback}
+          className="rounded-full object-cover border"
+          width={50}
+          height={50}
         />
+
         <div className="flex flex-col flex-1 min-w-0">
-          <span className="font-semibold truncate text-[hsl(var(--foreground)/1)]">{name}</span>
+          <span className="font-semibold truncate">{identifier}</span>
           <div className="flex justify-between items-center mt-1">
-            <span className="text-sm text-[hsl(var(--muted-foreground)/1)] truncate max-w-[220px]">
+            <span className="text-sm truncate max-w-[220px]">
               {lastMessage?.content || t("noMessagesYet")}
             </span>
-            <span className="text-xs text-[hsl(var(--muted-foreground)/0.8)] whitespace-nowrap ml-2">
+            <span className="text-xs opacity-70 whitespace-nowrap ml-2">
               {formattedTime}
             </span>
           </div>
         </div>
       </div>
-    </StablePressable>
+    </div>
   );
 };
 
