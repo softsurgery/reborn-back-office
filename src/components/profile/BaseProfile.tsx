@@ -20,6 +20,8 @@ import { useFollowSystem } from "@/hooks/useFollowSystem";
 import { identifyUser } from "@/lib/user.utils";
 import { Separator } from "../ui/separator";
 import { useTranslation } from 'react-i18next';
+import { ChatBubbleIcon } from "@radix-ui/react-icons";
+import { Conversations } from "./cards/Conversations";
 
 interface BaseProfileProps {
   className?: string;
@@ -86,12 +88,19 @@ export const BaseProfile = ({
       icon: BarChart2,
       content: <Activity userId={user?.id} />,
     },
+     { 
+      value: "conversations",
+      label: t("conversations"),
+      icon: ChatBubbleIcon,
+      content: <Conversations/>,
+    },
     {
       value: "settings",
       label: t("settings"),
       icon: SettingsIcon,
       content: <Settings />,
-    },
+    }
+   
   ];
 
   return (
@@ -169,7 +178,7 @@ export const BaseProfile = ({
           className="flex flex-col flex-1 overflow-hidden"
         >
           {/* Tab Headers */}
-          <TabsList className="grid grid-cols-3 mb-4">
+          <TabsList className="grid grid-cols-4 mb-4">
             {tabs.map(({ value, label, icon: Icon }) => (
               <TabsTrigger
                 key={value}
