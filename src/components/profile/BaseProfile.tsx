@@ -19,6 +19,9 @@ import { useFollowingDialog } from "./modals/FollowingDialog";
 import { useFollowSystem } from "@/hooks/useFollowSystem";
 import { identifyUser } from "@/lib/user.utils";
 import { Separator } from "../ui/separator";
+import { useTranslation } from 'react-i18next';
+import { ChatBubbleIcon } from "@radix-ui/react-icons";
+import { Conversations } from "./cards/Conversations";
 
 interface BaseProfileProps {
   className?: string;
@@ -29,6 +32,7 @@ export const BaseProfile = ({
   className,
   isFetchUserPending,
 }: BaseProfileProps) => {
+  const { t } = useTranslation('baseProfile');
   const userStore = useUserStore();
   const user = React.useMemo(() => userStore.response, [userStore]);
   const [activeTab, setActiveTab] = React.useState("about");
@@ -74,22 +78,29 @@ export const BaseProfile = ({
   const tabs = [
     {
       value: "about",
-      label: "About",
+      label: t("about"),
       icon: UserIcon,
       content: <About />,
     },
     {
       value: "activity",
-      label: "Activity",
+      label: t("activity"),
       icon: BarChart2,
       content: <Activity userId={user?.id} />,
     },
+     { 
+      value: "conversations",
+      label: t("conversations"),
+      icon: ChatBubbleIcon,
+      content: <Conversations/>,
+    },
     {
       value: "settings",
-      label: "Settings",
+      label: t("settings"),
       icon: SettingsIcon,
       content: <Settings />,
-    },
+    }
+   
   ];
 
   return (
@@ -124,11 +135,11 @@ export const BaseProfile = ({
               </div>
               <div className="flex flex-row items-center">
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.region?.label || "No region"}
+                  {user?.profile?.region?.label || t("noRegion")}
                 </p>
                 <Separator orientation="vertical" className="mx-1 h-4" />
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.phone || "No phone number"}
+                  {user?.profile?.phone || t("noPhoneNumber")}
                 </p>
               </div>
             </div>
@@ -138,7 +149,7 @@ export const BaseProfile = ({
           <div className="flex justify-end md:justify-start md:gap-4">
             <div className="text-center">
               <div className="font-semibold text-lg">-</div>
-              <div className="text-sm text-muted-foreground">Services</div>
+              <div className="text-sm text-muted-foreground">{t("services")}</div>
             </div>
             <div
               className="text-center cursor-pointer"
@@ -147,7 +158,7 @@ export const BaseProfile = ({
               <div className="font-semibold text-lg">
                 {followDataCount?.following ?? 0}
               </div>
-              <div className="text-sm text-muted-foreground">Following</div>
+              <div className="text-sm text-muted-foreground">{t("following")}</div>
             </div>
             <div
               className="text-center cursor-pointer"
@@ -156,7 +167,7 @@ export const BaseProfile = ({
               <div className="font-semibold text-lg">
                 {followDataCount?.followers ?? 0}
               </div>
-              <div className="text-sm text-muted-foreground">Followers</div>
+              <div className="text-sm text-muted-foreground">{t("followers")}</div>
             </div>
           </div>
         </div>
@@ -167,7 +178,7 @@ export const BaseProfile = ({
           className="flex flex-col flex-1 overflow-hidden"
         >
           {/* Tab Headers */}
-          <TabsList className="grid grid-cols-3 mb-4">
+          <TabsList className="grid grid-cols-4 mb-4">
             {tabs.map(({ value, label, icon: Icon }) => (
               <TabsTrigger
                 key={value}

@@ -1,19 +1,21 @@
 import { useDialog } from "@/components/shared/Dialogs";
 import { UserStore } from "@/hooks/stores/useUserStore";
 import { UserEntry } from "../UserEntry";
+import { useTranslation } from "react-i18next";  
 
 interface FollowingDialogProps {
   userStore: UserStore;
 }
 
 export const useFollowingDialog = ({ userStore }: FollowingDialogProps) => {
+  const { t } = useTranslation('followingDialog');
   const {
     DialogFragment: followingDialog,
     openDialog: openFollowingDialog,
     closeDialog: closeFollowingDialog,
   } = useDialog({
-    title: <div className="leading-normal">Following</div>,
-    description: "You are following these users:",
+    title: <div className="leading-normal">{t("title")}</div>,
+    description: t("description"),
     children: (
       <div className="flex flex-1 flex-col">
         {userStore.followings.length > 0 ? (
@@ -26,7 +28,7 @@ export const useFollowingDialog = ({ userStore }: FollowingDialogProps) => {
           ))
         ) : (
           <div className="flex text-sm items-center justify-center py-6 text-muted-foreground">
-            No followings yet.
+            {t("noFollowings")} 
           </div>
         )}
       </div>

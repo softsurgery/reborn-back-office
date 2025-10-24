@@ -1,0 +1,13 @@
+{
+  "settings": "Settings",
+  "manageAccount": "Manage your account settings",
+  "account": "Account",
+  "updateAccount": "Update your account information",
+  "editAccount": "Edit Account",
+  "privacy": "Privacy",
+  "managePrivacy": "Manage your privacy settings",
+  "privacySettings": "Privacy Settings",
+  "notifications": "Notifications",
+  "configureNotifications": "Configure your notification preferences",
+  "notificationSettings": "Notification Settings"
+}
