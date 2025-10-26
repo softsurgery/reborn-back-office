@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { ResponseConversationDto, ResponseMessageDto } from "@/types";
@@ -38,11 +38,12 @@ const formatMessengerTime = (
   });
 
   if (isToday) return timeStr;
-  if (isYesterday) return `${t?.("userManagement.inspect.conversations.conversationList.yesterday") || "userManagement.inspect.conversations.conversationList.Yesterday"} at ${timeStr}`;
+  if (isYesterday)
+    return `${t?.(
+      "userManagement.inspect.conversations.conversationList.yesterday"
+    ) || "Yesterday"} at ${timeStr}`;
   if (isThisWeek)
-    return `${date.toLocaleDateString(locale, {
-      weekday: "long",
-    })} at ${timeStr}`;
+    return `${date.toLocaleDateString(locale, { weekday: "long" })} at ${timeStr}`;
   return `${date.toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
@@ -61,6 +62,8 @@ export const ConversationList = ({ className }: ConversationListProps) => {
 
   const [selectedConversation, setSelectedConversation] =
     React.useState<ResponseConversationDto | null>(null);
+
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user-conversations", user?.id],
@@ -91,19 +94,13 @@ export const ConversationList = ({ className }: ConversationListProps) => {
     enabled: Boolean(selectedConversation?.id),
   });
 
-  React.useEffect(() => {
+  // Refetch messages when selecting a conversation
+  useEffect(() => {
     if (selectedConversation) refetchMessages();
   }, [selectedConversation, refetchMessages]);
 
-  if (isLoading || !user) return <Spinner />;
-  if (isError)
-    return (
-      <div className="text-center py-4 text-red-400">
-        {t("userManagement.inspect.conversations.conversationList.errorLoading") || "Error loading conversations."}
-      </div>
-    );
-
   const conversations: ResponseConversationDto[] = data?.data || [];
+  const messages: ResponseMessageDto[] = messagesData?.data || [];
 
   const handleSelectConversation = (conversationId: number) => {
     const conversation =
@@ -116,10 +113,33 @@ export const ConversationList = ({ className }: ConversationListProps) => {
     const participant = selectedConversation?.participants?.find(
       (p) => p.id === msg.userId
     );
-    return participant ? identifyUser(participant) : t("userManagement.inspect.conversations.conversationList.unknown");
+    return participant
+      ? identifyUser(participant)
+      : t("userManagement.inspect.conversations.conversationList.unknown");
   };
 
-  const messages: ResponseMessageDto[] = messagesData?.data || [];
+  // Auto-scroll only if user is near bottom
+  useLayoutEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const isAtBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+
+    if (isAtBottom) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
+
+  if (isLoading || !user) return <Spinner />;
+  if (isError)
+    return (
+      <div className="text-center py-4 text-red-400">
+        {t(
+          "userManagement.inspect.conversations.conversationList.errorLoading"
+        ) || "Error loading conversations."}
+      </div>
+    );
 
   return (
     <div className={cn("flex h-full rounded-lg overflow-hidden", className)}>
@@ -143,11 +163,17 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                 {selectedConversation.participants
                   ?.filter((p) => p.id !== user.id)
                   ?.map(identifyUser)
-                  ?.join(", ") || t("userManagement.inspect.conversations.conversationList.unknown")}
+                  ?.join(", ") ||
+                  t(
+                    "userManagement.inspect.conversations.conversationList.unknown"
+                  )}
               </h2>
             </div>
 
-            <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 p-4 overflow-y-auto flex flex-col-reverse space-y-3 space-y-reverse"
+            >
               {messages.length > 0 ? (
                 messages.map((msg) => {
                   const isMine = msg.userId === user.id;
@@ -182,13 +208,19 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                   );
                 })
               ) : (
-                <div className="text-center mt-10">{t("userManagement.inspect.conversations.conversationList.noMessagesYet")}</div>
+                <div className="text-center mt-10">
+                  {t(
+                    "userManagement.inspect.conversations.conversationList.noMessagesYet"
+                  )}
+                </div>
               )}
             </div>
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center">
-            {t("userManagement.inspect.conversations.conversationList.selectConversation")}
+            {t(
+              "userManagement.inspect.conversations.conversationList.selectConversation"
+            )}
           </div>
         )}
       </div>
