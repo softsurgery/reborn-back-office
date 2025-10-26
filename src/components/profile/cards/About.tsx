@@ -35,7 +35,7 @@ interface AboutProps {
 }
 
 export const About = ({ className }: AboutProps) => {
-  const { t } = useTranslation("about");
+  const { t } = useTranslation("user-management:about");
   const userStore = useUserStore();
   const user = userStore.response;
 
@@ -54,10 +54,10 @@ export const About = ({ className }: AboutProps) => {
   return (
     <Card className={cn(className, "flex flex-col overflow-auto mb-5")}>
       <CardHeader>
-        <CardTitle>{t("title")}</CardTitle>
+        <CardTitle>{t("about:title")}</CardTitle>
         <CardDescription>
              {userStore.response?.profile?.bio 
-        ? userStore.response.profile.bio : t("bio") 
+        ? userStore.response.profile.bio : t("about:bio") 
       }
           
         </CardDescription>
@@ -68,7 +68,7 @@ export const About = ({ className }: AboutProps) => {
             {/* Contact Information */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                 {t("contact")}
+                 {t("about:contact")}
               </h4>
               <div className="grid gap-3">
                 <div className="flex items-center gap-3 text-sm">
@@ -76,7 +76,7 @@ export const About = ({ className }: AboutProps) => {
                   <span>{user?.email}</span>
                   {user?.emailVerified && (
                     <Badge variant="outline" className="text-xs">
-                      {t("emailVerified")}
+                      {t("about:emailVerified")}
                     </Badge>
                   )}
                 </div>
@@ -98,15 +98,15 @@ export const About = ({ className }: AboutProps) => {
             {/* Personal Details */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("personal")}
+                {t("about:personal")}
               </h4>
               <div className="grid gap-3">
                 {user?.profile?.gender && (
                   <div className="flex items-center gap-3 text-sm">
                     <User className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      <span className="font-bold">{t('gender')}: </span>
-                      {user.profile.gender === 'Female' ? t('female') : user.profile.gender === 'Male' ? t('male') : user.profile.gender}
+                      <span className="font-bold">{t('about:gender')}: </span>
+                      {user.profile.gender === 'Female' ? t('about:female') : user.profile.gender === 'Male' ? t('about:male') : user.profile.gender}
                     </span>
                   </div>
                 )}
@@ -126,8 +126,8 @@ export const About = ({ className }: AboutProps) => {
                     <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                   <span>
-                    <span className="font-bold">{t("profile")}: </span>
-                    {user?.profile?.isPrivate ?  t("private") : t("public")}
+                    <span className="font-bold">{t("about:profile")}: </span>
+                    {user?.profile?.isPrivate ?  t("about:private") : t("about:public")}
                   </span>
                 </div>
               </div>
@@ -136,13 +136,13 @@ export const About = ({ className }: AboutProps) => {
             {/* Account Information */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("account")}
+                {t("about:account")}
               </h4>
               <div className="grid gap-3">
                 <div className="flex items-center gap-3 text-sm">
                   <Shield className="h-4 w-4 text-muted-foreground" />
                   <span>
-                    <span className="font-bold">{t("role")}: </span>
+                    <span className="font-bold">{t("about:role")}: </span>
                     {user?.role.label}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ export const About = ({ className }: AboutProps) => {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   {user?.createdAt && (
                     <span>
-                      <span className="font-bold">{t("memberSince")}: </span>
+                      <span className="font-bold">{t("about:memberSince")}: </span>
                       {format(new Date(user?.createdAt), "yyyy-MM-dd")}
                     </span>
                   )}
@@ -171,13 +171,13 @@ export const About = ({ className }: AboutProps) => {
           <div className="lg:w-1/2 space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("documents")}
+                {t("about:documents")}
               </h4>
             </div>
             <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
               {(officialDocument || user?.profile?.officialDocumentId) && (
                 <DocumentCard
-                  title={t("officialDocument")} 
+                  title={t("about:officialDocument")} 
                   icon={FileText}
                   src={officialDocument}
                   isLoading={isOfficialDocPending}
@@ -187,7 +187,7 @@ export const About = ({ className }: AboutProps) => {
               {(driverLicenseDocument ||
                 user?.profile?.driverLicenseDocumentId) && (
                 <DocumentCard
-                  title={t("driverLicense")} 
+                  title={t("about:driverLicense")} 
                   icon={Car}
                   src={driverLicenseDocument}
                   isLoading={isDriverDocPending}

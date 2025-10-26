@@ -12,11 +12,16 @@
   "tabs": {
     "about": "About",
     "activity": "Activity",
-    "settings": "Settings"
+    "settings": "Settings",
+    "conversations":"Conversations"
   },
   "stats": {
     "services": "Services",
     "followers": "Followers",
     "following": "Following"
-  }
+  },
+   "myProfile":{
+     "profile": "My Profile",
+     "loadingProfile": "Loading profile..."
+    }
 }

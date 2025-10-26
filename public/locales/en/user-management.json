@@ -160,6 +160,41 @@
       "userDeactivatedSuccess": "User Deactivated Successfully",
       "userApprovedSuccess": "User Approved Successfully",
       "userDisapprovedSuccess": "User Disapproved Successfully"
+    },
+   "about": {
+  "title":"About",
+  "bio": "No bio available",
+  "contact": "Contact Information",
+  "personal": "Personal Details",
+  "account": "Account Information",
+  "documents": "Documents",
+  "emailVerified": "Verified",
+  "gender": "Gender",
+  "female": "Female",
+  "male": "Male",
+  "cin": "CIN",
+  "profile": "Profile",
+  "private": "Private",
+  "public": "Public",
+  "role": "Role",
+  "memberSince": "Member since",
+  "lastUpdated": "Last updated",
+  "officialDocument": "Official Document",
+  "driverLicense": "Driver License"
+
+    },
+    "followersDialog":{
+      "title": "Followers",
+    "description": "These users are following you:",
+    "noFollowers": "No followers yet."
+    },
+    "followingDialog":{
+      "title": "Following",
+    "description": "You are following these users:",
+    "noFollowings": "No followings yet."
+
     }
   }
-}
+    
+  }
+
