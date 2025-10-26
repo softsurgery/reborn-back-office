@@ -1,140 +1,140 @@
 {
-    "job": {
-        "intro": "Services Management",
-        "introTitle": "Jobs",
-        "introDescription": "Visualization of the jobs of the application",
-        "singularName": "Job",
-        "pluralName": "Jobs",
-        "validation": {
-            "titleRequired": "The job title is required.",
-            "titleTooShort": "The job title must be at least 3 characters long.",
-            "titleTooLong": "The job title must not exceed 100 characters.",
-            "invalidTitleFormat": "The job title contains invalid characters.",
-            "descriptionRequired": "The job description is required.",
-            "descriptionTooShort": "The job description must be at least 10 characters long.",
-            "descriptionTooLong": "The job description must not exceed 1000 characters.",
-            "priceRequired": "The job price is required.",
-            "invalidPrice": "The job price must be a positive number.",
-            "currencyRequired": "The job currency is required.",
-            "categoryRequired": "The job category is required.",
-            "stylesRequired": "The job style is required.",
-            "difficultyRequired": "The job difficulty is required."
-        },
-        "forms": {
-            "generalInformationTitle": "General Information",
-            "generalInformationDescription": "General information about the job.",
-            "detailedInformationTitle": "Detailed Information",
-            "detailedInformationDescription": "Additional details about the job.",
-            "titleLabel": "Job Title",
-            "titlePlaceholder": "Enter the job title",
-            "titleDescription": "The title of the job.",
-            "descriptionLabel": "Job Description",
-            "descriptionPlaceholder": "Enter the job description",
-            "descriptionDescription": "The description of the job.",
-            "priceLabel": "Job Price",
-            "pricePlaceholder": "Enter the job price",
-            "priceDescription": "The price of the job.",
-            "currencyLabel": "Currency",
-            "currencyPlaceholder": "Select a currency",
-            "currencyDescription": "Choose the currency for the job.",
-            "tagsLabel": "Tags",
-            "tagsPlaceholder": "Select tags",
-            "tagsDescription": "Choose tags for the job.",
-            "categoriesLabel": "Category",
-            "categoriesPlaceholder": "Select a category",
-            "categoriesDescription": "Choose a category for the job.",
-            "stylesLabel": "Style",
-            "stylesPlaceholder": "Select a style",
-            "stylesDescription": "Choose a style for the job.",
-            "difficultyLabel": "Difficulty",
-            "difficultyPlaceholder": "Select a difficulty",
-            "difficultyDescription": "Choose a difficulty level for the job.",
-            "uploadsLabel": "Uploads"
-        },
-        "columns": {
-            "title": "Title",
-            "description": "Description",
-            "pictures": "Photos",
-            "price": "Price",
-            "currency": "Currency",
-            "category": "Category",
-            "tags": "Tags",
-            "noTags": "No Tags",
-            "style": "Style",
-            "noStyle": "No Style",
-            "difficulty": "Difficulty",
-            "noDifficulty": "No Difficulty",
-            "postedBy": "Posted By",
-            "createdAt": "Created At",
-            "updatedAt": "Updated At",
-            "actions": "Actions"
-        },
-        "sheet": {
-            "createTitle": "Create Job",
-            "createDescription": "Fill out the job details below.",
-            "updateTitle": "Update Job",
-            "updateDescription": "Modify the job details below."
-        },
-        "dialog": {
-            "deleteTitle": "Delete Job",
-            "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
-        },
-        "toast": {
-            "created": "Job Created Successfully",
-            "updated": "Job Updated Successfully",
-            "deleted": "Job Deleted Successfully"
-        }
+  "job": {
+    "intro": "Services Management",
+    "introTitle": "Jobs",
+    "introDescription": "Visualization of the jobs of the application",
+    "singularName": "Job",
+    "pluralName": "Jobs",
+    "validation": {
+      "titleRequired": "The job title is required.",
+      "titleTooShort": "The job title must be at least 3 characters long.",
+      "titleTooLong": "The job title must not exceed 100 characters.",
+      "invalidTitleFormat": "The job title contains invalid characters.",
+      "descriptionRequired": "The job description is required.",
+      "descriptionTooShort": "The job description must be at least 10 characters long.",
+      "descriptionTooLong": "The job description must not exceed 1000 characters.",
+      "priceRequired": "The job price is required.",
+      "invalidPrice": "The job price must be a positive number.",
+      "currencyRequired": "The job currency is required.",
+      "categoryRequired": "The job category is required.",
+      "stylesRequired": "The job style is required.",
+      "difficultyRequired": "The job difficulty is required."
     },
-    "jobTags": {
-        "intro": "Services Management",
-        "introTitle": "Job Tags",
-        "singularName": "Job Tag",
-        "pluralName": "Job Tags",
-        "introDescription": "Manage tags associated with jobs for better organization and filtering.",
-        "columns": {
-            "label": "Label",
-            "createdAt": "Created At",
-            "updatedAt": "Updated At"
-        },
-        "forms": {
-            "label": "Label",
-            "labelPlaceholder": "Enter job tag label",
-            "labelDescription": "The label for the job tag."
-        },
-        "dialog": {
-            "deleteTitle": "Delete Job Tag",
-            "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
-        },
-        "toast": {
-            "created": "Job Tag Created Successfully",
-            "updated": "Job Tag Updated Successfully",
-            "deleted": "Job Tag Deleted Successfully"
-        }
+    "forms": {
+      "generalInformationTitle": "General Information",
+      "generalInformationDescription": "General information about the job.",
+      "detailedInformationTitle": "Detailed Information",
+      "detailedInformationDescription": "Additional details about the job.",
+      "titleLabel": "Job Title",
+      "titlePlaceholder": "Enter the job title",
+      "titleDescription": "The title of the job.",
+      "descriptionLabel": "Job Description",
+      "descriptionPlaceholder": "Enter the job description",
+      "descriptionDescription": "The description of the job.",
+      "priceLabel": "Job Price",
+      "pricePlaceholder": "Enter the job price",
+      "priceDescription": "The price of the job.",
+      "currencyLabel": "Currency",
+      "currencyPlaceholder": "Select a currency",
+      "currencyDescription": "Choose the currency for the job.",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "Select tags",
+      "tagsDescription": "Choose tags for the job.",
+      "categoriesLabel": "Category",
+      "categoriesPlaceholder": "Select a category",
+      "categoriesDescription": "Choose a category for the job.",
+      "stylesLabel": "Style",
+      "stylesPlaceholder": "Select a style",
+      "stylesDescription": "Choose a style for the job.",
+      "difficultyLabel": "Difficulty",
+      "difficultyPlaceholder": "Select a difficulty",
+      "difficultyDescription": "Choose a difficulty level for the job.",
+      "uploadsLabel": "Uploads"
     },
-    "jobCategory": {
-        "intro": "Services Management",
-        "introTitle": "Job Categories",
-        "introDescription": "Manage job categories for better organization and filtering.",
-        "singularName": "Job Category",
-        "pluralName": "Job Categories",
-        "columns": {
-            "label": "Label",
-            "createdAt": "Created At",
-            "updatedAt": "Updated At"
-        },
-        "forms": {
-            "label": "Label",
-            "labelPlaceholder": "Enter job category label",
-            "labelDescription": "The label for the job category."
-        },
-        "dialog": {
-            "deleteTitle": "Delete Job Category",
-            "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
-        },
-        "toast": {
-            "created": "Job Category Created Successfully",
-            "updated": "Job Category Updated Successfully",
-            "deleted": "Job Category Deleted Successfully"
-        }
+    "columns": {
+      "title": "Title",
+      "description": "Description",
+      "pictures": "Photos",
+      "price": "Price",
+      "currency": "Currency",
+      "category": "Category",
+      "tags": "Tags",
+      "noTags": "No Tags",
+      "style": "Style",
+      "noStyle": "No Style",
+      "difficulty": "Difficulty",
+      "noDifficulty": "No Difficulty",
+      "postedBy": "Posted By",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "actions": "Actions"
+    },
+    "sheet": {
+      "createTitle": "Create Job",
+      "createDescription": "Fill out the job details below.",
+      "updateTitle": "Update Job",
+      "updateDescription": "Modify the job details below."
+    },
+    "dialog": {
+      "deleteTitle": "Delete Job",
+      "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
+    },
+    "toast": {
+      "created": "Job Created Successfully",
+      "updated": "Job Updated Successfully",
+      "deleted": "Job Deleted Successfully"
     }
+  },
+  "jobTags": {
+    "intro": "Services Management",
+    "introTitle": "Job Tags",
+    "singularName": "Job Tag",
+    "pluralName": "Job Tags",
+    "introDescription": "Manage tags associated with jobs for better organization and filtering.",
+    "columns": {
+      "label": "Label",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "forms": {
+      "label": "Label",
+      "labelPlaceholder": "Enter job tag label",
+      "labelDescription": "The label for the job tag."
+    },
+    "dialog": {
+      "deleteTitle": "Delete Job Tag",
+      "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
+    },
+    "toast": {
+      "created": "Job Tag Created Successfully",
+      "updated": "Job Tag Updated Successfully",
+      "deleted": "Job Tag Deleted Successfully"
+    }
+  },
+  "jobCategory": {
+    "intro": "Services Management",
+    "introTitle": "Job Categories",
+    "introDescription": "Manage job categories for better organization and filtering.",
+    "singularName": "Job Category",
+    "pluralName": "Job Categories",
+    "columns": {
+      "label": "Label",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "forms": {
+      "label": "Label",
+      "labelPlaceholder": "Enter job category label",
+      "labelDescription": "The label for the job category."
+    },
+    "dialog": {
+      "deleteTitle": "Delete Job Category",
+      "deleteDescription": "This action is irreversible and permanent. Please proceed with caution."
+    },
+    "toast": {
+      "created": "Job Category Created Successfully",
+      "updated": "Job Category Updated Successfully",
+      "deleted": "Job Category Deleted Successfully"
+    }
+  }
 }

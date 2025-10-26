@@ -159,36 +159,82 @@
       "userApprovedSuccess": "Utilisateur approuvé avec succès",
       "userDisapprovedSuccess": "Utilisateur désapprouvé avec succès"
     },
-   "about": {
-  "title": "À propos",
-  "bio": "Aucune biographie disponible",
-  "contact": "Informations de contact",
-  "personal": "Informations personnelles",
-  "account": "Informations du compte",
-  "documents": "Documents",
-  "emailVerified": "Vérifié",
-  "gender": "Genre",
-  "female": "Femme",
-  "male": "Homme",
-  "cin": "CIN",
-  "profile": "Profil",
-  "private": "Privé",
-  "public": "Public",
-  "role": "Rôle",
-  "memberSince": "Membre depuis",
-  "lastUpdated": "Dernière mise à jour",
-  "officialDocument": "Document officiel",
-  "driverLicense": "Permis de conduire"
-    },
-    "followersDialog":{
-      "title": "Abonnés",
-    "description": "Ces utilisateurs vous suivent :",
-    "noFollowers": "Pas encore d'abonnés."
-    },
-    "followingDialog":{
-      "title": "Abonnements",
-      "description": "Vous suivez ces utilisateurs :",
-      "noFollowings": "Pas encore d'abonnements."
+    "inspect": {
+      "unknownUser": "Utilisateur inconnu",
+      "noEmail": "Pas d'email",
+      "noRegion": "Pas de région",
+      "noPhone": "Pas de numéro de téléphone",
+      "services": "Services",
+      "followers": "Abonnés",
+      "following": "Abonnements",
+      "activity": "Activité",
+      "settings": "Paramètres",
+      "tabs": {
+        "about": "À propos",
+        "activity": "Activité",
+        "conversations": "Conversations",
+        "settings": "Paramètres"
+      },
+      "stats": {
+        "services": "Services",
+        "followers": "Abonnés",
+        "following": "Abonnements"
+      },
+      "myProfile": {
+        "profile": "Mon Profil",
+        "loadingProfile": "Chargement du profil..."
+      },
+      "followersDialog": {
+        "title": "Abonnés",
+        "description": "Ces utilisateurs vous suivent :",
+        "noFollowers": "Pas encore d'abonnés."
+      },
+      "followingDialog": {
+        "title": "Abonnements",
+        "description": "Vous suivez ces utilisateurs :",
+        "noFollowings": "Pas encore d'abonnements."
+      },
+      "about": {
+        "title": "À propos",
+        "bio": "Aucune biographie disponible",
+        "contact": "Informations de contact",
+        "personal": "Informations personnelles",
+        "account": "Informations du compte",
+        "documents": "Documents",
+        "emailVerified": "Vérifié",
+        "gender": "Genre",
+        "female": "Femme",
+        "male": "Homme",
+        "cin": "CIN",
+        "profile": "Profil",
+        "private": "Privé",
+        "public": "Public",
+        "role": "Rôle",
+        "memberSince": "Membre depuis",
+        "lastUpdated": "Dernière mise à jour",
+        "officialDocument": "Document officiel",
+        "driverLicense": "Permis de conduire",
+        "documentView": {
+          "loadingDocument": "Chargement du document...",
+          "documentHidden": "Document masqué",
+          "readyToView": "Prêt à afficher",
+          "noDocument": "Aucun document"
+        }
+      },
+      "conversations": {
+        "conversationListe": {
+          "noMessagesYet": "Aucun message pour le moment.",
+          "unknown": "Inconnu",
+          "yesterday": "Hier",
+          "selectConversation": "Sélectionnez une conversation pour l'ouvrir",
+          "errorLoading": "Erreur lors du chargement des conversations."
+        },
+        "conversationItem": {
+          "noMessagesYet": "Aucun message pour le moment.",
+          "yesterday": "Hier",
+          "unknown": "Inconnu"
+        }
+      }
+    }
   }
-}
 }

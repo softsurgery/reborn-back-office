@@ -19,7 +19,7 @@ import { useFollowingDialog } from "./modals/FollowingDialog";
 import { useFollowSystem } from "@/hooks/useFollowSystem";
 import { identifyUser } from "@/lib/user.utils";
 import { Separator } from "../ui/separator";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { Conversations } from "./cards/Conversations";
 
@@ -32,7 +32,7 @@ export const BaseProfile = ({
   className,
   isFetchUserPending,
 }: BaseProfileProps) => {
-  const { t } = useTranslation('baseProfile');
+  const { t } = useTranslation("user-management");
   const userStore = useUserStore();
   const user = React.useMemo(() => userStore.response, [userStore]);
   const [activeTab, setActiveTab] = React.useState("about");
@@ -78,29 +78,28 @@ export const BaseProfile = ({
   const tabs = [
     {
       value: "about",
-      label: t("about"),
+      label: t("userManagement.inspect.tabs.about"),
       icon: UserIcon,
       content: <About />,
     },
     {
       value: "activity",
-      label: t("activity"),
+      label: t("userManagement.inspect.tabs.activity"),
       icon: BarChart2,
       content: <Activity userId={user?.id} />,
     },
-     { 
+    {
       value: "conversations",
-      label: t("conversations"),
+      label: t("userManagement.inspect.tabs.conversations"),
       icon: ChatBubbleIcon,
-      content: <Conversations/>,
+      content: <Conversations />,
     },
     {
       value: "settings",
-      label: t("settings"),
+      label: t("userManagement.inspect.tabs.settings"),
       icon: SettingsIcon,
       content: <Settings />,
-    }
-   
+    },
   ];
 
   return (
@@ -135,11 +134,13 @@ export const BaseProfile = ({
               </div>
               <div className="flex flex-row items-center">
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.region?.label || t("noRegion")}
+                  {user?.profile?.region?.label ||
+                    t("userManagement.inspect.noRegion")}
                 </p>
                 <Separator orientation="vertical" className="mx-1 h-4" />
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.phone || t("noPhoneNumber")}
+                  {user?.profile?.phone ||
+                    t("userManagement.inspect.noPhoneNumber")}
                 </p>
               </div>
             </div>
@@ -149,7 +150,9 @@ export const BaseProfile = ({
           <div className="flex justify-end md:justify-start md:gap-4">
             <div className="text-center">
               <div className="font-semibold text-lg">-</div>
-              <div className="text-sm text-muted-foreground">{t("services")}</div>
+              <div className="text-sm text-muted-foreground">
+                {t("userManagement.inspect.stats.services")}
+              </div>
             </div>
             <div
               className="text-center cursor-pointer"
@@ -158,7 +161,9 @@ export const BaseProfile = ({
               <div className="font-semibold text-lg">
                 {followDataCount?.following ?? 0}
               </div>
-              <div className="text-sm text-muted-foreground">{t("following")}</div>
+              <div className="text-sm text-muted-foreground">
+                {t("userManagement.inspect.stats.following")}
+              </div>
             </div>
             <div
               className="text-center cursor-pointer"
@@ -167,7 +172,9 @@ export const BaseProfile = ({
               <div className="font-semibold text-lg">
                 {followDataCount?.followers ?? 0}
               </div>
-              <div className="text-sm text-muted-foreground">{t("followers")}</div>
+              <div className="text-sm text-muted-foreground">
+                {t("userManagement.inspect.stats.followers")}
+              </div>
             </div>
           </div>
         </div>

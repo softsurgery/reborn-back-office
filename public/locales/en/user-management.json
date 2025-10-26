@@ -161,40 +161,82 @@
       "userApprovedSuccess": "User Approved Successfully",
       "userDisapprovedSuccess": "User Disapproved Successfully"
     },
-   "about": {
-  "title":"About",
-  "bio": "No bio available",
-  "contact": "Contact Information",
-  "personal": "Personal Details",
-  "account": "Account Information",
-  "documents": "Documents",
-  "emailVerified": "Verified",
-  "gender": "Gender",
-  "female": "Female",
-  "male": "Male",
-  "cin": "CIN",
-  "profile": "Profile",
-  "private": "Private",
-  "public": "Public",
-  "role": "Role",
-  "memberSince": "Member since",
-  "lastUpdated": "Last updated",
-  "officialDocument": "Official Document",
-  "driverLicense": "Driver License"
-
-    },
-    "followersDialog":{
-      "title": "Followers",
-    "description": "These users are following you:",
-    "noFollowers": "No followers yet."
-    },
-    "followingDialog":{
-      "title": "Following",
-    "description": "You are following these users:",
-    "noFollowings": "No followings yet."
-
+    "inspect": {
+      "unknownUser": "Unknown User",
+      "noEmail": "No email",
+      "noRegion": "No region",
+      "noPhone": "No phone number",
+      "services": "Services",
+      "followers": "Followers",
+      "following": "Following",
+      "activity": "Activity",
+      "settings": "Settings",
+      "tabs": {
+        "about": "About",
+        "activity": "Activity",
+        "conversations": "Conversations",
+        "settings": "Settings"
+      },
+      "stats": {
+        "services": "Services",
+        "followers": "Followers",
+        "following": "Following"
+      },
+      "myProfile": {
+        "profile": "My Profile",
+        "loadingProfile": "Loading profile..."
+      },
+      "followersDialog": {
+        "title": "Followers",
+        "description": "These users are following you:",
+        "noFollowers": "No followers yet."
+      },
+      "followingDialog": {
+        "title": "Following",
+        "description": "You are following these users:",
+        "noFollowings": "No followings yet."
+      },
+      "about": {
+        "title": "About",
+        "bio": "No bio available",
+        "contact": "Contact Information",
+        "personal": "Personal Details",
+        "account": "Account Information",
+        "documents": "Documents",
+        "emailVerified": "Verified",
+        "gender": "Gender",
+        "female": "Female",
+        "male": "Male",
+        "cin": "CIN",
+        "profile": "Profile",
+        "private": "Private",
+        "public": "Public",
+        "role": "Role",
+        "memberSince": "Member since",
+        "lastUpdated": "Last updated",
+        "officialDocument": "Official Document",
+        "driverLicense": "Driver License",
+        "documentView": {
+          "loadingDocument": "Loading document...",
+          "documentHidden": "Document hidden",
+          "readyToView": "Ready to view",
+          "noDocument": "No document"
+        }
+      },
+      "conversations": {
+        "conversationList": {
+          "noMessagesYet": "No messages yet.",
+          "unknown": "Unknown",
+          "yesterday": "Yesterday",
+          "selectConversation": "Select a conversation to open it",
+          "errorLoading": "Error loading conversations."
+        },
+        "conversationItem": {
+          "noMessagesYet": "No messages yet.",
+          "yesterday": "Yesterday",
+          "unknown": "Unknown"
+        }
+      }
     }
   }
-    
-  }
-
+}
