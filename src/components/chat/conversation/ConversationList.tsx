@@ -38,7 +38,7 @@ const formatMessengerTime = (
   });
 
   if (isToday) return timeStr;
-  if (isYesterday) return `${t?.("conversationList:yesterday") || "conversationList:Yesterday"} at ${timeStr}`;
+  if (isYesterday) return `${t?.("userManagement.inspect.conversations.conversationList.yesterday") || "userManagement.inspect.conversations.conversationList.Yesterday"} at ${timeStr}`;
   if (isThisWeek)
     return `${date.toLocaleDateString(locale, {
       weekday: "long",
@@ -55,7 +55,7 @@ interface ConversationListProps {
 }
 
 export const ConversationList = ({ className }: ConversationListProps) => {
-  const { t, i18n } = useTranslation("conversation:conversationList");
+  const { t, i18n } = useTranslation("user-management");
   const userStore = useUserStore();
   const user = React.useMemo(() => userStore.response, [userStore.response]);
 
@@ -99,7 +99,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   if (isError)
     return (
       <div className="text-center py-4 text-red-400">
-        {t("conversationList:errorLoading") || "Error loading conversations."}
+        {t("userManagement.inspect.conversations.conversationList.errorLoading") || "Error loading conversations."}
       </div>
     );
 
@@ -116,7 +116,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
     const participant = selectedConversation?.participants?.find(
       (p) => p.id === msg.userId
     );
-    return participant ? identifyUser(participant) : t("conversationList:unknown");
+    return participant ? identifyUser(participant) : t("userManagement.inspect.conversations.conversationList.unknown");
   };
 
   const messages: ResponseMessageDto[] = messagesData?.data || [];
@@ -143,7 +143,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                 {selectedConversation.participants
                   ?.filter((p) => p.id !== user.id)
                   ?.map(identifyUser)
-                  ?.join(", ") || t("conversationList:unknown")}
+                  ?.join(", ") || t("userManagement.inspect.conversations.conversationList.unknown")}
               </h2>
             </div>
 
@@ -182,13 +182,13 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                   );
                 })
               ) : (
-                <div className="text-center mt-10">{t("ConversationList:noMessagesYet")}</div>
+                <div className="text-center mt-10">{t("userManagement.inspect.conversations.conversationList.noMessagesYet")}</div>
               )}
             </div>
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center">
-            {t("conversationList:selectConversation")}
+            {t("userManagement.inspect.conversations.conversationList.selectConversation")}
           </div>
         )}
       </div>

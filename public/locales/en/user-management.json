@@ -220,7 +220,10 @@
           "loadingDocument": "Loading document...",
           "documentHidden": "Document hidden",
           "readyToView": "Ready to view",
-          "noDocument": "No document"
+          "noDocument": "No document",
+          "show":"Show",
+          "hide":"Hide",
+          "download":"Download"
         }
       },
       "conversations": {
@@ -229,7 +232,8 @@
           "unknown": "Unknown",
           "yesterday": "Yesterday",
           "selectConversation": "Select a conversation to open it",
-          "errorLoading": "Error loading conversations."
+          "errorLoading": "Error loading conversations.",
+          "at": "at"
         },
         "conversationItem": {
           "noMessagesYet": "No messages yet.",

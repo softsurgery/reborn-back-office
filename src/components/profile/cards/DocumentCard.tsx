@@ -25,7 +25,7 @@ export const DocumentCard = ({
   className,
 }: DocumentCardProps) => {
   const [hidden, setHidden] = useState(false);
-  const { t } = useTranslation("documentCard");
+  const { t} = useTranslation("user-management");
 
   const handleDownload = () => {
     if (!src) return;
@@ -45,7 +45,7 @@ export const DocumentCard = ({
               <div className="flex flex-col items-center gap-3">
                 <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent"></div>
                 <p className="text-sm text-muted-foreground">
-                  {t("loadingDocument")} 
+                  {t("userManagement.inspect.about.documentView.loadingDocument")} 
                 </p>
               </div>
             </div>
@@ -53,7 +53,7 @@ export const DocumentCard = ({
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex flex-col items-center gap-3 text-muted-foreground">
                 <EyeOff className="h-12 w-12" />
-                <p className="text-sm font-medium">{t("documentHidden")}</p>
+                <p className="text-sm font-medium">{t("userManagement.inspect.about.documentView.documentHidden")}</p>
               </div>
             </div>
           ) : (
@@ -83,10 +83,10 @@ export const DocumentCard = ({
               </h3>
               <p className="text-xs text-muted-foreground mt-1">
                  {isLoading
-                  ? t("loadingDocument")  
+                  ? t("userManagement.inspect.about.documentView.loadingDocument")  
                   : src
-                  ? t("readyToView") 
-                  : t("noDocument")}  
+                  ? t("userManagement.inspect.about.documentView.readyToView") 
+                  : t("userManagement.inspect.about.documentView.noDocument")}  
               </p>
             </div>
           </div>

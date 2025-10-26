@@ -218,7 +218,10 @@
           "loadingDocument": "Chargement du document...",
           "documentHidden": "Document masqué",
           "readyToView": "Prêt à afficher",
-          "noDocument": "Aucun document"
+          "noDocument": "Aucun document",
+          "show":"Afficher",
+          "hide":"Masquer",
+          "download":"Télécharger"
         }
       },
       "conversations": {
@@ -227,7 +230,8 @@
           "unknown": "Inconnu",
           "yesterday": "Hier",
           "selectConversation": "Sélectionnez une conversation pour l'ouvrir",
-          "errorLoading": "Erreur lors du chargement des conversations."
+          "errorLoading": "Erreur lors du chargement des conversations.",
+          "at": "à"
         },
         "conversationItem": {
           "noMessagesYet": "Aucun message pour le moment.",
