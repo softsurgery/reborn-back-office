@@ -12,7 +12,8 @@
       "editUser": "Modifier l'Utilisateur",
       "createUser": "Créer un Utilisateur",
       "deleteUser": "Supprimer l'Utilisateur",
-      "userDetails": "Détails de l'Utilisateur"
+      "userDetails": "Détails de l'Utilisateur",
+      "notify": "Notifier"
     },
     "columns": {
       "id": "ID",

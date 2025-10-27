@@ -22,7 +22,7 @@ import {
 } from "@/types";
 import { updateUserSchema } from "@/types/validations/user.validation";
 import { useIntro } from "@/contexts/IntroContext";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, BellPlus } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";
 import { useDisapproveUserDialog } from "./modals/UserDisapproveDialog";
 import { useTranslation } from "react-i18next";
@@ -262,6 +262,16 @@ export const Users = ({ className }: UsersProps) => {
       resetUser: () => userStore.reset(),
     });
 
+  const { mutate: testNotification } = useMutation({
+    mutationFn: (id: string) => api.notification.test(id),
+    onSuccess: () => {
+      toast(t("notifications.messages.testNotificationSuccess"));
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message);
+    },
+  });
+
   //fetch user images
   const uploadIds = Array.isArray(userStore.updateDto?.profile?.uploads)
     ? userStore.updateDto.profile.uploads.map((u) => u.uploadId)
@@ -348,6 +358,16 @@ export const Users = ({ className }: UsersProps) => {
           actionLabel: t("userManagement.page.disapprove"),
           actionIcon: <ArrowDown />,
           isActionVisible: (user: ResponseUserDto) => !!user.isApproved,
+        },
+      ],
+      2: [
+        {
+          actionCallback: (targetEntity: ResponseUserDto) => {
+            testNotification(targetEntity.id);
+          },
+          actionLabel: t("userManagement.page.notify"),
+          actionIcon: <BellPlus />,
+          isActionVisible: () => true,
         },
       ],
     },

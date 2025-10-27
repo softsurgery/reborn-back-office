@@ -1,5 +1,5 @@
+import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import {
   Card,
@@ -26,8 +26,6 @@ import {
   Shield,
   User,
 } from "lucide-react";
-import Image from "next/image";
-import React from "react";
 import { DocumentCard } from "./DocumentCard";
 
 interface AboutProps {
@@ -56,10 +54,9 @@ export const About = ({ className }: AboutProps) => {
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-             {userStore.response?.profile?.bio 
-        ? userStore.response.profile.bio : t("bio") 
-      }
-          
+          {userStore.response?.profile?.bio
+            ? userStore.response.profile.bio
+            : t("bio")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -68,7 +65,7 @@ export const About = ({ className }: AboutProps) => {
             {/* Contact Information */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                 {t("contact")}
+                {t("contact")}
               </h4>
               <div className="grid gap-3">
                 <div className="flex items-center gap-3 text-sm">
@@ -105,8 +102,12 @@ export const About = ({ className }: AboutProps) => {
                   <div className="flex items-center gap-3 text-sm">
                     <User className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      <span className="font-bold">{t('gender')}: </span>
-                      {user.profile.gender === 'Female' ? t('female') : user.profile.gender === 'Male' ? t('male') : user.profile.gender}
+                      <span className="font-bold">{t("gender")}: </span>
+                      {user.profile.gender === "Female"
+                        ? t("female")
+                        : user.profile.gender === "Male"
+                        ? t("male")
+                        : user.profile.gender}
                     </span>
                   </div>
                 )}
@@ -127,7 +128,7 @@ export const About = ({ className }: AboutProps) => {
                   )}
                   <span>
                     <span className="font-bold">{t("profile")}: </span>
-                    {user?.profile?.isPrivate ?  t("private") : t("public")}
+                    {user?.profile?.isPrivate ? t("private") : t("public")}
                   </span>
                 </div>
               </div>
@@ -174,26 +175,39 @@ export const About = ({ className }: AboutProps) => {
                 {t("documents")}
               </h4>
             </div>
-            <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
-              {(officialDocument || user?.profile?.officialDocumentId) && (
-                <DocumentCard
-                  title={t("officialDocument")} 
-                  icon={FileText}
-                  src={officialDocument}
-                  isLoading={isOfficialDocPending}
-                />
-              )}
 
-              {(driverLicenseDocument ||
-                user?.profile?.driverLicenseDocumentId) && (
-                <DocumentCard
-                  title={t("driverLicense")} 
-                  icon={Car}
-                  src={driverLicenseDocument}
-                  isLoading={isDriverDocPending}
-                />
-              )}
-            </div>
+            {!(
+              officialDocument ||
+              user?.profile?.officialDocumentId ||
+              driverLicenseDocument ||
+              user?.profile?.driverLicenseDocumentId
+            ) ? (
+              <div className="flex flex-col items-center justify-center h-40 rounded-lg border border-dashed border-muted text-muted-foreground">
+                <FileText className="h-6 w-6 mb-2" />
+                <p className="text-sm font-medium">No documents available</p>
+              </div>
+            ) : (
+              <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
+                {(officialDocument || user?.profile?.officialDocumentId) && (
+                  <DocumentCard
+                    title="Official Document"
+                    icon={FileText}
+                    src={officialDocument}
+                    isLoading={isOfficialDocPending}
+                  />
+                )}
+
+                {(driverLicenseDocument ||
+                  user?.profile?.driverLicenseDocumentId) && (
+                  <DocumentCard
+                    title="Driver License"
+                    icon={Car}
+                    src={driverLicenseDocument}
+                    isLoading={isDriverDocPending}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

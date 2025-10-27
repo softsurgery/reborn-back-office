@@ -12,7 +12,8 @@
       "editUser": "Edit User",
       "createUser": "Create User",
       "deleteUser": "Delete User",
-      "userDetails": "User Details"
+      "userDetails": "User Details",
+      "notify": "Notify"
     },
     "columns": {
       "id": "ID",
