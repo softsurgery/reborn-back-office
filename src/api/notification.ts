@@ -71,9 +71,18 @@ const findById = async (
   return response.data;
 };
 
+const testNotify = async (id: string) => {
+  const response = await axios.post<ResponseNotificationDto>(
+    `/notification/test/${id}`,
+    {}
+  );
+  return response.data;
+};
+
 export const notification = {
   findPaginated,
   findPaginatedByUser,
   findAll,
   findById,
+  testNotify,
 };

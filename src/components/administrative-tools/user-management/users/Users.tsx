@@ -263,9 +263,9 @@ export const Users = ({ className }: UsersProps) => {
     });
 
   const { mutate: testNotification } = useMutation({
-    mutationFn: (id: string) => api.notification.test(id),
+    mutationFn: (id: string) => api.notification.testNotify(id),
     onSuccess: () => {
-      toast(t("notifications.messages.testNotificationSuccess"));
+      toast(t("userManagement.messages.testNotificationSuccess"));
     },
     onError: (error: ServerErrorResponse) => {
       toast.error(error.response?.data?.message);
