@@ -82,7 +82,7 @@ export function DataTableRowActions<TData>({
                   }
                 >
                   {action.actionIcon}
-                  <span className="mx-1">{action.actionLabel}</span>
+                  <span className="mx-1 text-xs">{action.actionLabel}</span>
                 </DropdownMenuItem>
               );
             })}
@@ -97,7 +97,7 @@ export function DataTableRowActions<TData>({
             }
           >
             <Edit />
-            <span className="mx-1">{t("common.buttons.edit")}</span>
+            <span className="mx-1 text-xs">{t("common.buttons.edit")}</span>
           </DropdownMenuItem>
         )}
 
@@ -108,7 +108,7 @@ export function DataTableRowActions<TData>({
             }
           >
             <Trash2 />
-            <span className="mx-1">{t("common.buttons.delete")}</span>
+            <span className="mx-1 text-xs">{t("common.buttons.delete")}</span>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

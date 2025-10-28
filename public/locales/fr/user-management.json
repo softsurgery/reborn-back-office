@@ -12,7 +12,8 @@
       "editUser": "Modifier l'Utilisateur",
       "createUser": "Créer un Utilisateur",
       "deleteUser": "Supprimer l'Utilisateur",
-      "userDetails": "Détails de l'Utilisateur"
+      "userDetails": "Détails de l'Utilisateur",
+      "notify": "Notifier"
     },
     "columns": {
       "id": "ID",
@@ -157,7 +158,8 @@
       "userActivatedSuccess": "Utilisateur activé avec succès",
       "userDeactivatedSuccess": "Utilisateur désactivé avec succès",
       "userApprovedSuccess": "Utilisateur approuvé avec succès",
-      "userDisapprovedSuccess": "Utilisateur désapprouvé avec succès"
+      "userDisapprovedSuccess": "Utilisateur désapprouvé avec succès",
+      "testNotificationSuccess": "Notification envoyée avec succès"
     }
   }
 }
