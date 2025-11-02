@@ -39,11 +39,14 @@ const formatMessengerTime = (
 
   if (isToday) return timeStr;
   if (isYesterday)
-    return `${t?.(
-      "userManagement.inspect.conversations.conversationList.yesterday"
-    ) || "Yesterday"} at ${timeStr}`;
+    return `${
+      t?.("userManagement.inspect.conversations.conversationList.yesterday") ||
+      "Yesterday"
+    } at ${timeStr}`;
   if (isThisWeek)
-    return `${date.toLocaleDateString(locale, { weekday: "long" })} at ${timeStr}`;
+    return `${date.toLocaleDateString(locale, {
+      weekday: "long",
+    })} at ${timeStr}`;
   return `${date.toLocaleDateString(locale, {
     month: "short",
     day: "numeric",
@@ -87,7 +90,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
         {
           page: "1",
           limit: "50",
-          sort: "createdAt",
+          sort: "createdAt,desc",
         }
       );
     },
@@ -124,7 +127,8 @@ export const ConversationList = ({ className }: ConversationListProps) => {
     if (!container) return;
 
     const isAtBottom =
-      container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+      container.scrollHeight - container.scrollTop - container.clientHeight <
+      50;
 
     if (isAtBottom) {
       container.scrollTop = container.scrollHeight;
