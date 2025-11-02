@@ -1,5 +1,5 @@
+import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import {
   Card,
@@ -26,8 +26,6 @@ import {
   Shield,
   User,
 } from "lucide-react";
-import Image from "next/image";
-import React from "react";
 import { DocumentCard } from "./DocumentCard";
 
 interface AboutProps {

@@ -1,0 +1,21 @@
+{
+  "titles": {
+    "TEST": "Ceci est une notification de test",
+    "NEW_SIGNIN": "Nouvelle connexion!"
+  },
+  "descriptions": {
+    "TEST": "Ceci est une notification de test décrivant ce qui est testé pour vérifier que le système de notification fonctionne correctement.",
+    "NEW_SIGNIN": "Nous avons remarqué une nouvelle connexion de nouveau dispositif"
+  },
+  "notifications": {
+    "name": "Notifications",
+    "description": "Voir et gérer les notifications pour les clients et les utilisateurs.",
+    "singularName": "Notification",
+    "pluralName": "Notifications",
+    "columns": {
+      "type": "Type",
+      "description": "Description",
+      "recievedAt": "Reçu à"
+    }
+  }
+}

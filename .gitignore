@@ -38,3 +38,6 @@ next-env.d.ts
 
 #prisma
 prisma/interfaces.ts
+
+# vscode
+*code-workspace

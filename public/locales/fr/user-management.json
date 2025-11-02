@@ -12,7 +12,8 @@
       "editUser": "Modifier l'Utilisateur",
       "createUser": "Créer un Utilisateur",
       "deleteUser": "Supprimer l'Utilisateur",
-      "userDetails": "Détails de l'Utilisateur"
+      "userDetails": "Détails de l'Utilisateur",
+      "notify": "Notifier"
     },
     "columns": {
       "id": "ID",
@@ -173,6 +174,7 @@
         "about": "À propos",
         "activity": "Activité",
         "conversations": "Conversations",
+        "notifications": "Notifications",
         "settings": "Paramètres"
       },
       "stats": {
@@ -219,9 +221,9 @@
           "documentHidden": "Document masqué",
           "readyToView": "Prêt à afficher",
           "noDocument": "Aucun document",
-          "show":"Afficher",
-          "hide":"Masquer",
-          "download":"Télécharger"
+          "show": "Afficher",
+          "hide": "Masquer",
+          "download": "Télécharger"
         }
       },
       "conversations": {

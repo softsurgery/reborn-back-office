@@ -10,6 +10,7 @@ import { upload } from "./upload";
 import { store } from "./store";
 import { follow } from "./follow";
 import { chat } from "./chat";
+import { notification } from "./notification";
 
 export const api = {
   admin,
@@ -24,4 +25,5 @@ export const api = {
   follow,
   store,
   chat,
+  notification,
 };
