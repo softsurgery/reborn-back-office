@@ -36,7 +36,7 @@ const formatMessageTime = (
   if (isToday) {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   } else if (isYesterday) {
-    return t ? t("yesterday") : "Yesterday";
+    return t ? t("userManagement.inspect.conversations.conversationItem.yesterday") : "userManagement.inspect.conversations.conversationItem.Yesterday";
   } else if (isThisWeek) {
     return date.toLocaleDateString(locale, { weekday: "long" });
   } else {
@@ -59,7 +59,7 @@ const ConversationItem = ({
   conversation,
   onClick,
 }: ConversationItemProps) => {
-  const { t, i18n } = useTranslation("conversation");
+  const { t, i18n } = useTranslation("user-management");
   const userStore = useUserStore();
   const { data: lastMessageData } = useQuery({
     queryKey: ["last-message", conversation.id],
@@ -123,7 +123,7 @@ const ConversationItem = ({
           <span className="font-semibold truncate">{identifier}</span>
           <div className="flex justify-between items-center mt-1">
             <span className="text-sm truncate max-w-[220px]">
-              {lastMessage?.content || t("noMessagesYet")}
+              {lastMessage?.content || t("userManagement.inspect.conversations.conversationItem.noMessagesYet")}
             </span>
             <span className="text-xs opacity-70 whitespace-nowrap ml-2">
               {formattedTime}

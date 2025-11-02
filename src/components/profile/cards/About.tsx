@@ -33,7 +33,7 @@ interface AboutProps {
 }
 
 export const About = ({ className }: AboutProps) => {
-  const { t } = useTranslation("about");
+  const { t } = useTranslation("user-management");
   const userStore = useUserStore();
   const user = userStore.response;
 
@@ -52,11 +52,12 @@ export const About = ({ className }: AboutProps) => {
   return (
     <Card className={cn(className, "flex flex-col overflow-auto mb-5")}>
       <CardHeader>
-        <CardTitle>{t("title")}</CardTitle>
+        <CardTitle>{t("userManagement.inspect.about.title")}</CardTitle>
         <CardDescription>
-          {userStore.response?.profile?.bio
-            ? userStore.response.profile.bio
-            : t("bio")}
+             {userStore.response?.profile?.bio 
+        ? userStore.response.profile.bio : t("userManagement.inspect.about.Bio") 
+      }
+          
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -65,7 +66,7 @@ export const About = ({ className }: AboutProps) => {
             {/* Contact Information */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("contact")}
+                 {t("userManagement.inspect.about.contact")}
               </h4>
               <div className="grid gap-3">
                 <div className="flex items-center gap-3 text-sm">
@@ -73,7 +74,7 @@ export const About = ({ className }: AboutProps) => {
                   <span>{user?.email}</span>
                   {user?.emailVerified && (
                     <Badge variant="outline" className="text-xs">
-                      {t("emailVerified")}
+                      {t("userManagement.inspect.about.emailVerified")}
                     </Badge>
                   )}
                 </div>
@@ -95,19 +96,15 @@ export const About = ({ className }: AboutProps) => {
             {/* Personal Details */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("personal")}
+                {t("userManagement.inspect.about.personal")}
               </h4>
               <div className="grid gap-3">
                 {user?.profile?.gender && (
                   <div className="flex items-center gap-3 text-sm">
                     <User className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      <span className="font-bold">{t("gender")}: </span>
-                      {user.profile.gender === "Female"
-                        ? t("female")
-                        : user.profile.gender === "Male"
-                        ? t("male")
-                        : user.profile.gender}
+                      <span className="font-bold">{t('userManagement.inspect.about.gender')}: </span>
+                      {user.profile.gender === 'Female' ? t('userManagement.inspect.about.female') : user.profile.gender === 'Male' ? t('about:male') : user.profile.gender}
                     </span>
                   </div>
                 )}
@@ -127,8 +124,8 @@ export const About = ({ className }: AboutProps) => {
                     <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                   <span>
-                    <span className="font-bold">{t("profile")}: </span>
-                    {user?.profile?.isPrivate ? t("private") : t("public")}
+                    <span className="font-bold">{t("userManagement.inspect.about.profile")}: </span>
+                    {user?.profile?.isPrivate ?  t("userManagement.inspect.about.private") : t("userManagement.inspect.about.public")}
                   </span>
                 </div>
               </div>
@@ -137,13 +134,13 @@ export const About = ({ className }: AboutProps) => {
             {/* Account Information */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("account")}
+                {t("userManagement.inspect.about.account")}
               </h4>
               <div className="grid gap-3">
                 <div className="flex items-center gap-3 text-sm">
                   <Shield className="h-4 w-4 text-muted-foreground" />
                   <span>
-                    <span className="font-bold">{t("role")}: </span>
+                    <span className="font-bold">{t("userManagement.inspect.about.role")}: </span>
                     {user?.role.label}
                   </span>
                 </div>
@@ -151,7 +148,7 @@ export const About = ({ className }: AboutProps) => {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   {user?.createdAt && (
                     <span>
-                      <span className="font-bold">{t("memberSince")}: </span>
+                      <span className="font-bold">{t("userManagement.inspect.about.memberSince")}: </span>
                       {format(new Date(user?.createdAt), "yyyy-MM-dd")}
                     </span>
                   )}
@@ -172,42 +169,29 @@ export const About = ({ className }: AboutProps) => {
           <div className="lg:w-1/2 space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                {t("documents")}
+                {t("userManagement.inspect.about.documents")}
               </h4>
             </div>
+            <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
+              {(officialDocument || user?.profile?.officialDocumentId) && (
+                <DocumentCard
+                  title={t("userManagement.inspect.about.officialDocument")} 
+                  icon={FileText}
+                  src={officialDocument}
+                  isLoading={isOfficialDocPending}
+                />
+              )}
 
-            {!(
-              officialDocument ||
-              user?.profile?.officialDocumentId ||
-              driverLicenseDocument ||
-              user?.profile?.driverLicenseDocumentId
-            ) ? (
-              <div className="flex flex-col items-center justify-center h-40 rounded-lg border border-dashed border-muted text-muted-foreground">
-                <FileText className="h-6 w-6 mb-2" />
-                <p className="text-sm font-medium">No documents available</p>
-              </div>
-            ) : (
-              <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
-                {(officialDocument || user?.profile?.officialDocumentId) && (
-                  <DocumentCard
-                    title="Official Document"
-                    icon={FileText}
-                    src={officialDocument}
-                    isLoading={isOfficialDocPending}
-                  />
-                )}
-
-                {(driverLicenseDocument ||
-                  user?.profile?.driverLicenseDocumentId) && (
-                  <DocumentCard
-                    title="Driver License"
-                    icon={Car}
-                    src={driverLicenseDocument}
-                    isLoading={isDriverDocPending}
-                  />
-                )}
-              </div>
-            )}
+              {(driverLicenseDocument ||
+                user?.profile?.driverLicenseDocumentId) && (
+                <DocumentCard
+                  title={t("userManagement.inspect.about.driverLicense")} 
+                  icon={Car}
+                  src={driverLicenseDocument}
+                  isLoading={isDriverDocPending}
+                />
+              )}
+            </div>
           </div>
         </div>
       </CardContent>

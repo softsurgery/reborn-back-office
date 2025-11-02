@@ -9,7 +9,7 @@ interface MyProfileProps {
 }
 
 export const MyProfile = ({ className }: MyProfileProps) => {
-  const { t } = useTranslation('myProfile'); 
+  const { t } = useTranslation('user-management'); 
   const userStore = useUserStore();
   const { user, isFetchUserPending } = useCurrentUser("role");
   React.useEffect(() => {
@@ -23,11 +23,11 @@ export const MyProfile = ({ className }: MyProfileProps) => {
   return (
    <div className={className}>
       {/* Titre dynamique */}
-      <h1>{t("profile")}</h1> 
+      <h1>{t("userManagement.inspect.myProfile.profile")}</h1>
 
       {/* Message de chargement */}
       {isFetchUserPending ? (
-        <p>{t("loadingProfile")}</p> 
+        <p>{t("userManagement.inspect.myProfile.loadingProfile")}</p>
       ) : (
         <BaseProfile
           className={className}

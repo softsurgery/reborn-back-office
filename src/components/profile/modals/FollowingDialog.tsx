@@ -8,14 +8,14 @@ interface FollowingDialogProps {
 }
 
 export const useFollowingDialog = ({ userStore }: FollowingDialogProps) => {
-  const { t } = useTranslation('followingDialog');
+  const { t } = useTranslation('user-management');
   const {
     DialogFragment: followingDialog,
     openDialog: openFollowingDialog,
     closeDialog: closeFollowingDialog,
   } = useDialog({
-    title: <div className="leading-normal">{t("title")}</div>,
-    description: t("description"),
+    title: <div className="leading-normal">{t("userManagement.inspect.followingDialog.title")}</div>,
+    description: t("userManagement.inspect.followingDialog.description"),
     children: (
       <div className="flex flex-1 flex-col">
         {userStore.followings.length > 0 ? (
@@ -28,7 +28,7 @@ export const useFollowingDialog = ({ userStore }: FollowingDialogProps) => {
           ))
         ) : (
           <div className="flex text-sm items-center justify-center py-6 text-muted-foreground">
-            {t("noFollowings")} 
+            {t("userManagement.inspect.followingDialog.noFollowings")}
           </div>
         )}
       </div>

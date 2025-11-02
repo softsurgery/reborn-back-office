@@ -34,7 +34,7 @@ export const BaseProfile = ({
   className,
   isFetchUserPending,
 }: BaseProfileProps) => {
-  const { t } = useTranslation("baseProfile");
+  const { t } = useTranslation("user-management");
   const userStore = useUserStore();
   const user = React.useMemo(() => userStore.response, [userStore]);
   const [activeTab, setActiveTab] = React.useState("about");
@@ -80,31 +80,31 @@ export const BaseProfile = ({
   const tabs = [
     {
       value: "about",
-      label: t("about"),
+      label: t("userManagement.inspect.tabs.about"),
       icon: UserIcon,
       content: <About />,
     },
     {
       value: "activity",
-      label: t("activity"),
+      label: t("userManagement.inspect.tabs.activity"),
       icon: BarChart2,
       content: <Activity userId={user?.id} />,
     },
     {
       value: "conversations",
-      label: t("conversations"),
+      label: t("userManagement.inspect.tabs.conversations"),
       icon: ChatBubbleIcon,
       content: <Conversations />,
     },
     {
-      value: "Notifications",
-      label: t("notifications"),
+      value: "notifications",
+      label: t("userManagement.inspect.tabs.notifications"),
       icon: BellIcon,
       content: <Notifications userId={user?.id as string} />,
     },
     {
       value: "settings",
-      label: t("settings"),
+      label: t("userManagement.inspect.tabs.settings"),
       icon: SettingsIcon,
       content: <Settings />,
     },
@@ -142,11 +142,13 @@ export const BaseProfile = ({
               </div>
               <div className="flex flex-row items-center">
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.region?.label || t("noRegion")}
+                  {user?.profile?.region?.label ||
+                    t("userManagement.inspect.noRegion")}
                 </p>
                 <Separator orientation="vertical" className="mx-1 h-4" />
                 <p className="text-sm text-muted-foreground">
-                  {user?.profile?.phone || t("noPhoneNumber")}
+                  {user?.profile?.phone ||
+                    t("userManagement.inspect.noPhoneNumber")}
                 </p>
               </div>
             </div>
@@ -157,7 +159,7 @@ export const BaseProfile = ({
             <div className="text-center">
               <div className="font-semibold text-lg">-</div>
               <div className="text-sm text-muted-foreground">
-                {t("services")}
+                {t("userManagement.inspect.stats.services")}
               </div>
             </div>
             <div
@@ -168,7 +170,7 @@ export const BaseProfile = ({
                 {followDataCount?.following ?? 0}
               </div>
               <div className="text-sm text-muted-foreground">
-                {t("following")}
+                {t("userManagement.inspect.stats.following")}
               </div>
             </div>
             <div
@@ -179,7 +181,7 @@ export const BaseProfile = ({
                 {followDataCount?.followers ?? 0}
               </div>
               <div className="text-sm text-muted-foreground">
-                {t("followers")}
+                {t("userManagement.inspect.stats.followers")}
               </div>
             </div>
           </div>
