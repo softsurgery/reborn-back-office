@@ -19,7 +19,9 @@ export const useFollowingDialog = ({ userStore }: FollowingDialogProps) => {
     title: (
       <div className="leading-normal">
         {t("userManagement.inspect.followingDialog.title")}{" "}
-        <span className="text-sm text-muted-foreground">({followingsCount})</span>
+        <span className="text-sm text-muted-foreground">
+          ({followingsCount})
+        </span>
       </div>
     ),
     description: t("userManagement.inspect.followingDialog.description"),
@@ -27,11 +29,11 @@ export const useFollowingDialog = ({ userStore }: FollowingDialogProps) => {
       <div
         className="flex flex-col overflow-y-auto"
         style={{
-          maxHeight: "40vh", 
+          maxHeight: "40vh",
         }}
       >
         {userStore.followings.map((f) => (
-          <UserEntry key={f.id} user={f.following} closeDialog={closeDialog} />
+          <UserEntry key={f.id} user={f.following} />
         ))}
       </div>
     ),
