@@ -84,5 +84,3 @@ export enum JobDifficulty {
   SENIOR_LEVEL = "Senior Level",
   INTERN = "Internship",
 }
-
-
