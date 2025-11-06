@@ -550,7 +550,5 @@ export const useUpdateUserFormStructure = ({
   return {
     userUpdateFormStructure,
     profileUpdateFormStructure,
-    step3FormStructure,
-    uploadsFormStructure,
   };
 };

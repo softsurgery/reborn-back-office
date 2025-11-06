@@ -28,14 +28,7 @@ const steps = [
     id: "profile-information",
     title: "userManagement.forms.step2Title",
   },
-  {
-    id: "official-information",
-    title: "userManagement.forms.step3Title",
-  },
-  {
-    id: "uploads",
-    title: "userManagement.forms.step4Title",
-  },
+ 
 ];
 
 const { Stepper } = defineStepper(...steps);
@@ -112,8 +105,6 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
   const {
     userCreateFormStructure,
     profileCreateFormStructure,
-    step3FormStructure,
-    uploadsFormStructure,
   } = useCreateUserFormStructure({
     userStore,
     regions: mapToSelectOptions({
@@ -236,12 +227,6 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
                     )}
                     {methods.current.id === "profile-information" && (
                       <FormBuilder structure={profileCreateFormStructure} />
-                    )}
-                    {methods.current.id === "official-information" && (
-                      <FormBuilder structure={step3FormStructure} />
-                    )}
-                    {methods.current.id === "uploads" && (
-                      <FormBuilder structure={uploadsFormStructure} />
                     )}
                   </div>
                 </div>
