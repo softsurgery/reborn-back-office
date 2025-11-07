@@ -46,7 +46,7 @@
     "i18next-http-backend": "^3.0.2",
     "i18next-localstorage-backend": "^4.2.0",
     "lottie-react": "^2.4.1",
-    "lucide-react": "^0.539.0",
+    "lucide-react": "^0.553.0",
     "motion": "^12.23.12",
     "next": "^15.4.5",
     "next-auth": "^4.24.11",
