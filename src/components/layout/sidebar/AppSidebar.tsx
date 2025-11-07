@@ -18,6 +18,7 @@ import {
   FileText,
   TerminalSquare,
   Tag,
+  Home
 } from "lucide-react";
 import {
   Sidebar,
@@ -39,7 +40,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         logo: BriefcaseBusiness,
       },
     ],
+    
     navMain: [
+          {
+      id: 0,
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: Home,
+    },
+
       {
         id: 1,
         title: `${t("common.sidebar.userManagement")}`,
