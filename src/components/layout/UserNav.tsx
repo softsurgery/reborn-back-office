@@ -87,7 +87,7 @@ export function UserNav({ className }: UserNavProps) {
             <CreditCard />
             {t("common.buttons.billing")}
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={()=> router.push("/notifications")}>
             <Bell />
             {t("common.buttons.notifications")}
           </DropdownMenuItem>

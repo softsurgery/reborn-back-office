@@ -158,7 +158,8 @@
       "userActivatedSuccess": "Utilisateur activé avec succès",
       "userDeactivatedSuccess": "Utilisateur désactivé avec succès",
       "userApprovedSuccess": "Utilisateur approuvé avec succès",
-      "userDisapprovedSuccess": "Utilisateur désapprouvé avec succès"
+      "userDisapprovedSuccess": "Utilisateur désapprouvé avec succès",
+      "testNotificationSuccess": "Notification test envoyée avec succès"
     },
     "inspect": {
       "unknownUser": "Utilisateur inconnu",
