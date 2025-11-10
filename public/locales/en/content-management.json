@@ -1,0 +1,102 @@
+{
+  "refType": {
+    "page": {
+      "title": "Reference Types",
+      "description": "Manage reference types."
+    },
+    "singularName": "Reference Type",
+    "pluralName": "Reference Types",
+    "columns": {
+      "id": "ID",
+      "label": "Label",
+      "description": "Description",
+      "parent": "Parent",
+      "noDescription": "No description",
+      "noParent": "No parent"
+    },
+    "forms": {
+      "create": {
+        "title": "Create Reference Type",
+        "description": "Create a new reference type.",
+        "parent": "Parent"
+      },
+      "update": {
+        "title": "Update Reference Type",
+        "description": "Update a new reference type.",
+        "parent": "Parent"
+      }
+    },
+    "sheet": {
+      "create": {
+        "title": "Create Reference Type",
+        "description": "Use this form to define a new reference type."
+      },
+      "update": {
+        "title": "Update Reference Type",
+        "description": "Use this form to update an existing reference type."
+      }
+    },
+    "dialogs": {
+      "delete": {
+        "title": "Delete Reference Type",
+        "description": "This action is irreversible and permanent. Deleting the reference type will remove all associated parameters, Please proceed with caution.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    },
+    "messages": {
+      "createSuccess": "Reference Type created successfully.",
+      "updateSuccess": "Reference Type updated successfully.",
+      "deleteSuccess": "Reference Type deleted successfully."
+    }
+  },
+  "refParam": {
+    "page": {
+      "title": "Reference Parameters",
+      "description": "Manage reference parameters."
+    },
+    "singularName": "Reference Parameter",
+    "pluralName": "Reference Parameters",
+    "columns": {
+      "id": "ID",
+      "label": "Label",
+      "description": "Description",
+      "refTypeId": "Reference Type",
+      "extras": "Extras",
+      "noDescription": "No description"
+    },
+    "forms": {
+      "create": {
+        "title": "Create Reference Parameter",
+        "description": "Create a new reference parameter."
+      },
+      "update": {
+        "title": "Update Reference Parameter",
+        "description": "Update a new reference parameter."
+      }
+    },
+    "sheet": {
+      "create": {
+        "title": "Create Reference Parameter",
+        "description": "Use this form to define a new reference parameter."
+      },
+      "update": {
+        "title": "Update Reference Parameter",
+        "description": "Use this form to update an existing reference parameter."
+      }
+    },
+    "dialogs": {
+      "delete": {
+        "title": "Delete Reference Parameter",
+        "description": "This action is irreversible and permanent. Deleting the reference parameter will remove all associated parameters, Please proceed with caution.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      }
+    },
+    "messages": {
+      "createSuccess": "Reference Parameter created successfully.",
+      "updateSuccess": "Reference Parameter updated successfully.",
+      "deleteSuccess": "Reference Parameter deleted successfully."
+    }
+  }
+}

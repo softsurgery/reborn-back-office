@@ -31,6 +31,7 @@ const initialState: ReferenceTypesStoreData = {
   refTypeCreateDto: {
     label: "",
     description: "",
+    parentId: undefined,
   },
   refTypeUpdateDto: {},
   refParamCreateDto: {
@@ -61,7 +62,6 @@ export const useReferenceTypesStore = create<ReferenceTypesStore>(
       set((state) => {
         const keys = path.split(".");
         const newState = { ...state };
-
         let current: any = newState;
         for (let i = 0; i < keys.length - 1; i++) {
           const key = keys[i];

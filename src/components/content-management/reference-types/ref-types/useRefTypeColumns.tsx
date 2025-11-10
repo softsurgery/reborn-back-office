@@ -57,6 +57,22 @@ export const useRefTypeColumns = (
       enableHiding: true,
     },
     {
+      accessorKey: `${t("refType.columns.parent")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("refType.columns.parent")}
+          attribute="parent"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => (
+        <div>{row.original.parent?.label || t("refType.columns.noParent")}</div>
+      ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       id: "actions",
       cell: ({ row }) => (
         <div className="flex justify-center">

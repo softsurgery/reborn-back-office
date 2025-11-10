@@ -5,6 +5,8 @@ import { Save } from "lucide-react";
 import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useReferenceTypesStore } from "@/hooks/stores/useReferenceTypesStore";
 import { useUpdateRefTypeFormStructure } from "./useUpdateRefTypeFormStructure";
+import { useRefTypes } from "@/hooks/content/reference-types/useRefTypes";
+import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
 
 interface RefTypeUpdateFormProps {
   className?: string;
@@ -20,8 +22,21 @@ export const RefTypeUpdateForm = ({
   isPending,
 }: RefTypeUpdateFormProps) => {
   const referenceTypesStore = useReferenceTypesStore();
+  const { refTypes, isRefTypesPending } = useRefTypes();
+  const filtredRefTypes = React.useMemo(
+    () =>
+      refTypes.filter(
+        (refType) => referenceTypesStore.refType?.id !== refType.id
+      ),
+    [refTypes]
+  );
   const { refTypeUpdateFormStructure } = useUpdateRefTypeFormStructure({
     referenceTypesStore,
+    refTypesOptions: mapToSelectOptions({
+      data: isRefTypesPending ? [] : filtredRefTypes,
+      labelKey: "label",
+      valueKey: "id",
+    }),
   });
 
   return (
