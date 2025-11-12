@@ -46,7 +46,14 @@
     "JOB_SAVE_CREATE": "Poste sauvegardé",
     "JOB_SAVE_DELETE": "Poste retiré des sauvegardes",
     "JOB_VIEW_CREATE": "Poste consulté",
-    "JOB_VIEW_DELETE": "Consultation du poste supprimée"
+    "JOB_VIEW_DELETE": "Consultation du poste supprimée",
+    "REF_TYPE_CREATE": "Type de référence créé",
+    "REF_TYPE_UPDATE": "Type de référence mis à jour",
+    "REF_TYPE_DELETE": "Type de référence supprimé",
+    "REF_PARAM_CREATE": "Paramètre de référence créé",
+    "REF_PARAM_UPDATE": "Paramètre de référence mis à jour",
+    "REF_PARAM_DELETE": "Paramètre de référence supprimé"
+     
   },
   "descriptions": {
     "SIGNIN": "L'utilisateur <strong>{{fullname}}</strong> s'est connecté.",
@@ -95,7 +102,13 @@
     "JOB_SAVE_CREATE": "Le poste <strong>{{title}}</strong> a été sauvegardé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
     "JOB_SAVE_DELETE": "Le poste <strong>{{title}}</strong> a été retiré des sauvegardes par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
     "JOB_VIEW_CREATE": "Le poste <strong>{{title}}</strong> a été consulté par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
-    "JOB_VIEW_DELETE": "La consultation du poste <strong>{{title}}</strong> a été supprimée par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>."
+    "JOB_VIEW_DELETE": "La consultation du poste <strong>{{title}}</strong> a été supprimée par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_TYPE_CREATE": "Le type de référence <strong>{{label}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_TYPE_UPDATE": "Le type de référence <strong>{{label}}</strong> a été mis à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_TYPE_DELETE": "Le type de référence <strong>{{label}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_PARAM_CREATE": "Le paramètre de référence <strong>{{label}}</strong> a été créé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_PARAM_UPDATE": "Le paramètre de référence <strong>{{label}}</strong> a été mis à jour par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_PARAM_DELETE": "Le paramètre de référence <strong>{{label}}</strong> a été supprimé par <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>."
   },
   "logger": {
     "intro": "Audit & Surveillance",

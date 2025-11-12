@@ -46,7 +46,13 @@
     "JOB_SAVE_CREATE": "Job Saved",
     "JOB_SAVE_DELETE": "Job Unsaved",
     "JOB_VIEW_CREATE": "Job Viewed",
-    "JOB_VIEW_DELETE": "Job View Removed"
+    "JOB_VIEW_DELETE": "Job View Removed",
+    "REF_TYPE_CREATE": "Reference Type Created",
+    "REF_TYPE_UPDATE": "Reference Type Updated",
+    "REF_TYPE_DELETE": "Reference Type Deleted",
+    "REF_PARAM_CREATE": "Reference Parameter Created",
+    "REF_PARAM_UPDATE": "Reference Parameter Updated",
+    "REF_PARAM_DELETE": "Reference Parameter Deleted"
   },
   "descriptions": {
     "SIGNIN": "User <strong>{{fullname}}</strong> has signed in.",
@@ -95,7 +101,13 @@
     "JOB_SAVE_CREATE": "Job <strong>{{title}}</strong> has been saved by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
     "JOB_SAVE_DELETE": "Job <strong>{{title}}</strong> has been removed from saved jobs by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
     "JOB_VIEW_CREATE": "Job <strong>{{title}}</strong> has been viewed by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
-    "JOB_VIEW_DELETE": "Job view <strong>{{title}}</strong> has been removed by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>."
+    "JOB_VIEW_DELETE": "Job view <strong>{{title}}</strong> has been removed by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_TYPE_CREATE": "Reference Type <strong>{{label}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_TYPE_UPDATE": "Reference Type <strong>{{label}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_TYPE_DELETE": "Reference Type <strong>{{label}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_PARAM_CREATE": "Reference Parameter <strong>{{label}}</strong> has been created by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_PARAM_UPDATE": "Reference Parameter <strong>{{label}}</strong> has been updated by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>.",
+    "REF_PARAM_DELETE": "Reference Parameter <strong>{{label}}</strong> has been deleted by <a href=\"/user-management/users/{{user.id}}\"><strong>{{user.username}}</strong></a>."
   },
   "logger": {
   "intro": "Audit & Monitoring",
