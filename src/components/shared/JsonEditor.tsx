@@ -38,6 +38,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import InputColor from "../ui/input-color";
+import { capitalize } from "lodash";
 
 type JSONPrimitive = string | number | boolean | null;
 export type JSONValue =
@@ -233,7 +235,7 @@ function FormNode({
   path,
   depth,
   sensors,
-  defaultOpen,
+  defaultOpen = true,
 }: {
   className?: string;
   value: JSONValue;
@@ -244,9 +246,9 @@ function FormNode({
   sensors: ReturnType<typeof useSensors>;
   defaultOpen?: boolean;
 }) {
-  const [textVariant, setTextVariant] = React.useState<"text" | "textarea">(
-    "text"
-  );
+  const [textVariant, setTextVariant] = React.useState<
+    "text" | "textarea" | "color"
+  >("text");
   switch (schema.kind) {
     case "object":
       return (
@@ -284,16 +286,16 @@ function FormNode({
                 {childSchema.kind === "object" ||
                 childSchema.kind === "array" ? (
                   <Collapsible className="w-full" defaultOpen={defaultOpen}>
-                    <CollapsibleTrigger className="flex justify-between items-center w-full">
-                      <span> {key.toUpperCase()}</span>
+                    <CollapsibleTrigger className="flex justify-between items-center w-full p-4 font-bold">
+                      <span> {capitalize(key)}</span>
                       <ChevronsUpDown />
                     </CollapsibleTrigger>
                     <CollapsibleContent>{formNode}</CollapsibleContent>
                   </Collapsible>
                 ) : (
-                  <div className="flex flex-col gap-2 w-full">
-                    <Label htmlFor={id} className="text-xs font-bold mx-1">
-                      {key.toUpperCase()} :
+                  <div className="flex flex-row gap-2 w-full">
+                    <Label htmlFor={id} className="font-bold text-sm mx-1">
+                      {capitalize(key)}
                     </Label>
                     {formNode}
                   </div>
@@ -407,7 +409,7 @@ function FormNode({
       const id = pathToId(path);
       const str = typeof value === "string" ? value : "";
       return (
-        <div className="flex flex-row gap-2 w-full">
+        <div className="flex flex-row items-center gap-2 w-full my-2">
           {textVariant === "text" && (
             <Input
               id={id}
@@ -430,18 +432,26 @@ function FormNode({
               rows={10}
             />
           )}
+          {textVariant === "color" && (
+            <InputColor
+              className="w-full"
+              value={str}
+              onChange={(e) => onChange(e)}
+            />
+          )}
           <Select
             value={textVariant}
             onValueChange={(value) =>
-              setTextVariant(value as "text" | "textarea")
+              setTextVariant(value as "text" | "textarea" | "color")
             }
           >
             <SelectTrigger className="w-[180px] text-xs">
-              <SelectValue placeholder="Select a fruit" />
+              <SelectValue placeholder="Select a variant" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="text">Text</SelectItem>
               <SelectItem value="textarea">Textarea</SelectItem>
+              <SelectItem value="color">Color</SelectItem>
             </SelectContent>
           </Select>
         </div>
