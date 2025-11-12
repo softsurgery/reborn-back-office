@@ -2,15 +2,19 @@ import {
   Field,
   FieldVariant,
   FormStructure,
+  SelectFieldProps,
+  SelectOption,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { ReferenceTypesStore } from "@/hooks/stores/useReferenceTypesStore";
 
 interface RefTypeCreateFormStructureProps {
   referenceTypesStore?: ReferenceTypesStore;
+  refTypesOptions?: SelectOption[];
 }
 export const useCreateRefTypeFormStructure = ({
   referenceTypesStore,
+  refTypesOptions,
 }: RefTypeCreateFormStructureProps) => {
   const labelField: Field<TextFieldProps> = {
     id: "label",
@@ -50,6 +54,27 @@ export const useCreateRefTypeFormStructure = ({
     },
   };
 
+  const refTypeField: Field<SelectFieldProps> = {
+    id: "refTypeId",
+    label: "Reference Type",
+    variant: FieldVariant.SELECT,
+    placeholder: "Select a reference type",
+    description: "Reference Type's reference parameter.",
+    error: referenceTypesStore?.refTypeCreateDtoErrors?.refTypeId?.[0],
+    props: {
+      options: refTypesOptions,
+      value:
+        referenceTypesStore?.refTypeCreateDto.parentId?.toString() || undefined,
+      onValueChange: (value) => {
+        referenceTypesStore?.setNested(
+          "refTypeCreateDto.parentId",
+          Number(value)
+        );
+        referenceTypesStore?.setNested("refTypeCreateDtoErrors.parentId", []);
+      },
+    },
+  };
+
   const refTypeCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -60,6 +85,9 @@ export const useCreateRefTypeFormStructure = ({
         rows: [
           {
             fields: [labelField],
+          },
+          {
+            fields: [refTypeField],
           },
           {
             fields: [descriptionField],

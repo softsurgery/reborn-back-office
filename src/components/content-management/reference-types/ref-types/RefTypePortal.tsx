@@ -94,6 +94,7 @@ export const RefTypePortal = ({ className }: RefTypePortalProps) => {
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
         search: debouncedSearchTerm,
+        join: "parent",
       }),
   });
 
@@ -207,6 +208,7 @@ export const RefTypePortal = ({ className }: RefTypePortalProps) => {
       referenceTypesStore.set<UpdateRefTypeDto>("refTypeUpdateDto", {
         label: refType.label,
         description: refType.description,
+        parentId: refType.parentId,
       });
     },
   };

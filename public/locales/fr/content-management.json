@@ -1,0 +1,98 @@
+{
+  "refType": {
+    "page": {
+      "title": "Types de référence",
+      "description": "Gérez les types de référence."
+    },
+    "singularName": "Type de référence",
+    "pluralName": "Types de référence",
+    "columns": {
+      "id": "ID",
+      "label": "Libellé",
+      "description": "Description",
+      "parent": "Parent",
+      "noDescription": "Aucune description",
+      "noParent": "Aucun parent"
+    },
+    "forms": {
+      "create": {
+        "title": "Créer un type de référence",
+        "description": "Créer un nouveau type de référence.",
+        "parent": "Parent"
+      },
+      "update": {
+        "title": "Mettre à jour un type de référence",
+        "description": "Mettre à jour un nouveau type de référence.",
+        "parent": "Parent"
+      },
+      "delete": {
+        "title": "Supprimer un type de référence",
+        "description": "Êtes-vous sûr de vouloir supprimer ce type de référence ?",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    },
+    "sheet": {
+      "create": {
+        "title": "Créer un type de référence",
+        "description": "Utilisez ce formulaire pour définir un nouveau type de référence."
+      },
+      "update": {
+        "title": "Mettre à jour un type de référence",
+        "description": "Utilisez ce formulaire pour mettre à jour un type de référence existant."
+      }
+    },
+    "dialogs": {
+      "delete": {
+        "title": "Supprimer un type de référence",
+        "description": "Cette action est irréversible et permanente. La suppression du type de référence supprimera tous les paramètres associés, Veuillez procéder avec prudence.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    }
+  },
+  "refParam": {
+    "page": {
+      "title": "Paramètres de référence",
+      "description": "Gérez les paramètres de référence."
+    },
+    "singularName": "Paramètre de référence",
+    "pluralName": "Paramètres de référence",
+    "columns": {
+      "id": "ID",
+      "label": "Libellé",
+      "description": "Description",
+      "refTypeId": "Type de référence",
+      "extras": "Extras",
+      "noDescription": "Aucune description"
+    },
+    "forms": {
+      "create": {
+        "title": "Créer un paramètre de référence",
+        "description": "Créer un nouveau paramètre de référence."
+      },
+      "update": {
+        "title": "Mettre à jour un paramètre de référence",
+        "description": "Mettre à jour un nouveau paramètre de référence."
+      }
+    },
+    "sheet": {
+      "create": {
+        "title": "Créer un paramètre de référence",
+        "description": "Utilisez ce formulaire pour définir un nouveau paramètre de référence."
+      },
+      "update": {
+        "title": "Mettre à jour un paramètre de référence",
+        "description": "Utilisez ce formulaire pour mettre à jour un paramètre de référence existant."
+      }
+    },
+    "dialogs": {
+      "delete": {
+        "title": "Supprimer un paramètre de référence",
+        "description": "Cette action est irréversible et permanente. La suppression du paramètre de référence supprimera tous les paramètres associés, Veuillez procéder avec prudence.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    }
+  }
+}
