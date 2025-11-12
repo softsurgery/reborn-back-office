@@ -18,7 +18,9 @@ import {
   FileText,
   TerminalSquare,
   Tag,
-  Home
+  Home,
+  Table,
+  Table2
 } from "lucide-react";
 import {
   Sidebar,
@@ -115,6 +117,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/content-management/application-properties",
             icon: FileText,
           },
+            {
+        title: "Reference Types",
+        url: "/content-management/reference-types",
+        icon: Table2,
+      },
+      {
+        title: "Reference Parameters",
+        url: "/content-management/reference-parameters",
+        icon: Table,
+      },
         ],
       },
       {
