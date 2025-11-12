@@ -160,7 +160,8 @@
       "userActivatedSuccess": "User Activated Successfully",
       "userDeactivatedSuccess": "User Deactivated Successfully",
       "userApprovedSuccess": "User Approved Successfully",
-      "userDisapprovedSuccess": "User Disapproved Successfully"
+      "userDisapprovedSuccess": "User Disapproved Successfully",
+      "testNotificationSuccess": "Test notification sent successfully"
     },
     "inspect": {
       "unknownUser": "Unknown User",
