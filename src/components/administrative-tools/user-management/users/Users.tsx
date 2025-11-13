@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { useUserColumns } from "./columns";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 import { useUserCreateSheet } from "./modals/UserCreateSheet";
-import { useUserUpdateSheet } from "./modals/UserUpdateSheet";
 import { useUserDeleteDialog } from "./modals/UserDeleteDialog";
 import { useActivateUserDialog } from "./modals/UserActivateDialog";
 import { useDeactivateUserDialog } from "./modals/UserDeactivateDialog";
@@ -127,23 +126,6 @@ export const Users = ({ className }: UsersProps) => {
     },
   });
 
-  const { mutate: updateUser, isPending: isUpdatePending } = useMutation({
-    mutationFn: (data: { id?: string; user: UpdateUserDto }) =>
-      api.admin.user.update(data.id, data.user),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["user", userStore.response?.email],
-      });
-      toast(t("userManagement.messages.userUpdatedSuccess"));
-      refetchUsers();
-      userStore.reset();
-      closeUpdateUserSheet();
-    },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data?.message);
-    },
-  });
-
   const { mutate: deleteUser, isPending: isDeletionPending } = useMutation({
     mutationFn: (id?: string) => api.admin.user.remove(id),
     onSuccess: () => {
@@ -195,18 +177,19 @@ export const Users = ({ className }: UsersProps) => {
       },
     });
 
-  const handleUpdateSubmit = () => {
-    const data = userStore.updateDto;
-    const result = updateUserSchema(userStore.setManualPassword).safeParse({
-      ...data,
-      confirmPassword: userStore.confirmPassword,
-    });
-    if (!result.success) {
-      userStore.set("updateDtoErrors", result.error.flatten().fieldErrors);
-    } else {
-      updateUser({ id: userStore.response?.id, user: data });
-    }
-  };
+ const handleUpdateSubmit = () => {
+  const data = userStore.updateDto;
+  const result = updateUserSchema(userStore.setManualPassword).safeParse({
+    ...data,
+    confirmPassword: userStore.confirmPassword,
+  });
+
+  if (!result.success) {
+    userStore.set("updateDtoErrors", result.error.flatten().fieldErrors);
+    return;
+  }
+
+};
 
   const handleReset = () => {
     userStore.reset();
@@ -219,12 +202,6 @@ export const Users = ({ className }: UsersProps) => {
       resetUser: handleReset,
     });
 
-  const { updateUserSheet, openUpdateUserSheet, closeUpdateUserSheet } =
-    useUserUpdateSheet({
-      updateUser: handleUpdateSubmit,
-      isUpdatePending,
-      resetUser: handleReset,
-    });
 
   const { deleteUserDialog, openDeleteUserDialog } = useUserDeleteDialog({
     userFullname: `${userStore.response?.firstName} - ${userStore.response?.lastName}`,
@@ -331,7 +308,8 @@ export const Users = ({ className }: UsersProps) => {
     inspectCallback: (entity: ResponseUserDto) =>
       router.push(`/user-management/users/${entity.id}`),
     createCallback: openCreateUserSheet,
-    updateCallback: openUpdateUserSheet,
+    updateCallback: (user: ResponseUserDto) =>
+  router.push(`/user-management/users/edit/${user.id}`),
     deleteCallback: openDeleteUserDialog,
     additionalActions: {
       1: [
@@ -434,7 +412,6 @@ export const Users = ({ className }: UsersProps) => {
         isPending={isPending}
       />
       {createUserSheet}
-      {updateUserSheet}
       {deleteUserDialog}
       {activateUserDialog}
       {deactivateUserDialog}
