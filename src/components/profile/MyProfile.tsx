@@ -22,8 +22,6 @@ export const MyProfile = ({ className }: MyProfileProps) => {
   }, [user]);
   return (
    <div className={className}>
-      {/* Titre dynamique */}
-      <h1>{t("userManagement.inspect.myProfile.profile")}</h1>
 
       {/* Message de chargement */}
       {isFetchUserPending ? (
