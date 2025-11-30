@@ -8,7 +8,7 @@ import {
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { ReferenceTypesStore } from "@/hooks/stores/useReferenceTypesStore";
-import { RefParamExtras } from "../RefParamExtras";
+import { RefParamExtras } from "../../../../shared/JSONExtras";
 import { JSONValue } from "@/components/shared/JsonEditor";
 
 interface RefParamUpdateFormStructureProps {

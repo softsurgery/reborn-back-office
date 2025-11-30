@@ -11,7 +11,7 @@ import {
 import { JSONValue } from "@/components/shared/JsonEditor";
 import { ReferenceTypesStore } from "@/hooks/stores/useReferenceTypesStore";
 import React from "react";
-import { RefParamExtras } from "../RefParamExtras";
+import { RefParamExtras } from "../../../../shared/JSONExtras";
 
 interface RefParamCreateFormStructureProps {
   referenceTypesStore?: ReferenceTypesStore;
