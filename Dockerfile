@@ -1,34 +1,27 @@
-FROM node:20-slim AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-
-RUN apt-get update \
-  && apt-get install -y python3 g++ make \
-  && yarn install --ignore-scripts --frozen-lockfile \
-  && apt-get purge -y python3 g++ make \
-  && apt-get autoremove -y \
-  && rm -rf /var/lib/apt/lists/*
+RUN yarn install --frozen-lockfile
 
 COPY . .
+COPY .env.build .env.build
 
-RUN yarn build
+# ✅ Build Next.js app using public env vars
+RUN export $(grep ^NEXT_PUBLIC_ .env.build | xargs) && yarn build
 
-FROM node:20-alpine AS runner
+# ---- Production image ----
+FROM gcr.io/distroless/nodejs20-debian12 AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/yarn.lock ./
-COPY --from=builder /app/node_modules ./node_modules
-
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/next.config.js ./next.config.js
-
-RUN mkdir -p /uploads/reborn
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["node_modules/next/dist/bin/next", "start"]
