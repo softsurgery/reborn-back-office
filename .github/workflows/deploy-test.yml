@@ -60,6 +60,5 @@ jobs:
             docker stop reborn-backoffice || true && docker rm reborn-backoffice || true
             docker run -d --name reborn-backoffice \
               --env-file .env \
-              --network host \
               -p 3001:3000 \
               reborn-backoffice
