@@ -11,9 +11,6 @@ RUN apt-get update \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/*
 
-COPY prisma ./prisma
-RUN yarn prisma generate
-
 COPY . .
 
 RUN yarn build
@@ -29,7 +26,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/next.config.js ./next.config.js
-COPY --from=builder /app/prisma ./prisma
 
 RUN mkdir -p /uploads/reborn
 
