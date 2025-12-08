@@ -1,4 +1,4 @@
-import { DatabaseEntity } from "./utils"
+import { DatabaseEntity } from "./utils";
 
 export interface ResponseRefTypeDto extends DatabaseEntity {
   id: number;
@@ -15,7 +15,6 @@ export interface CreateRefTypeDto {
   description: string;
   parentId?: number;
 }
-
 
 export interface UpdateRefTypeDto extends Partial<CreateRefTypeDto> {}
 
