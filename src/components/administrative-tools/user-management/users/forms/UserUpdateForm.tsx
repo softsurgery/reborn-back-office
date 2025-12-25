@@ -101,33 +101,31 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
       },
     });
 
-  const {
-    userUpdateFormStructure,
-    profileUpdateFormStructure,
-  } = useUpdateUserFormStructure({
-    userStore,
-    regions: mapToSelectOptions({
-      data: isFetchRegionsPending ? [] : regions,
-      labelKey: "label",
-      valueKey: "id",
-    }),
-    roles: mapToSelectOptions({
-      data: isFetchRolesPending ? [] : roles,
-      labelKey: "label",
-      valueKey: "id",
-    }),
-    uploadProfilePicture,
-    isProfilePictureUploadPending,
+  const { userUpdateFormStructure, profileUpdateFormStructure } =
+    useUpdateUserFormStructure({
+      userStore,
+      regions: mapToSelectOptions({
+        data: isFetchRegionsPending ? [] : regions,
+        labelKey: "label",
+        valueKey: "id",
+      }),
+      roles: mapToSelectOptions({
+        data: isFetchRolesPending ? [] : roles,
+        labelKey: "label",
+        valueKey: "id",
+      }),
+      uploadProfilePicture,
+      isProfilePictureUploadPending,
 
-    uploadOfficialDocument,
-    isOfficialDocumentUploadPending,
+      uploadOfficialDocument,
+      isOfficialDocumentUploadPending,
 
-    uploadDriverLicenseDocument,
-    isDriverLicenseDocumentPending,
+      uploadDriverLicenseDocument,
+      isDriverLicenseDocumentPending,
 
-    uploadPhotos,
-    isPhotosUploadPending,
-  });
+      uploadPhotos,
+      isPhotosUploadPending,
+    });
 
   const validateStep = React.useCallback(
     (stepId: string) => {
@@ -224,13 +222,19 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
               {isFetchRegionsPending && isFetchRolesPending ? (
                 <Spinner />
               ) : (
-                <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
-                  <div className="flex-1 overflow-auto px-2">
+                <div className="flex flex-col flex-1 h-full overflow-hidden">
+                  <div className="flex-1 overflow-auto no-scrollbar px-2">
                     {methods.current.id === "user-information" && (
-                      <FormBuilder structure={userUpdateFormStructure} />
+                      <FormBuilder
+                        structure={userUpdateFormStructure}
+                        className="mt-4"
+                      />
                     )}
                     {methods.current.id === "profile-information" && (
-                      <FormBuilder structure={profileUpdateFormStructure} />
+                      <FormBuilder
+                        structure={profileUpdateFormStructure}
+                        className="mt-4"
+                      />
                     )}
                   </div>
                 </div>
