@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { ResponseConversationDto, ResponseMessageDto } from "@/types";
@@ -8,51 +8,16 @@ import { useTranslation } from "react-i18next";
 import { Spinner } from "@/components/shared/Spinner";
 import { cn } from "@/lib/utils";
 import { identifyUser } from "@/lib/user.utils";
-
-const formatMessengerTime = (
-  dateInput?: string | Date,
-  locale?: string,
-  t?: (key: string) => string
-) => {
-  if (!dateInput) return "";
-  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-  const now = new Date();
-  const isToday =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  const isYesterday =
-    date.getDate() === yesterday.getDate() &&
-    date.getMonth() === yesterday.getMonth() &&
-    date.getFullYear() === yesterday.getFullYear();
-  const weekAgo = new Date(now);
-  weekAgo.setDate(now.getDate() - 7);
-  const isThisWeek = date > weekAgo && !isToday && !isYesterday;
-
-  const timeStr = date.toLocaleTimeString(locale || "en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  if (isToday) return timeStr;
-  if (isYesterday)
-    return `${
-      t?.("userManagement.inspect.conversations.conversationList.yesterday") ||
-      "Yesterday"
-    } at ${timeStr}`;
-  if (isThisWeek)
-    return `${date.toLocaleDateString(locale, {
-      weekday: "long",
-    })} at ${timeStr}`;
-  return `${date.toLocaleDateString(locale, {
-    month: "short",
-    day: "numeric",
-    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
-  })} at ${timeStr}`;
-};
+import { formatMessengerTime } from "@/lib/date.lib";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface ConversationListProps {
   className?: string;
@@ -66,7 +31,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   const [selectedConversation, setSelectedConversation] =
     React.useState<ResponseConversationDto | null>(null);
 
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = React.useRef<HTMLDivElement>(null);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user-conversations", user?.id],
@@ -98,7 +63,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   });
 
   // Refetch messages when selecting a conversation
-  useEffect(() => {
+  React.useEffect(() => {
     if (selectedConversation) refetchMessages();
   }, [selectedConversation, refetchMessages]);
 
@@ -122,7 +87,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   };
 
   // Auto-scroll only if user is near bottom
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
@@ -148,16 +113,30 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   return (
     <div className={cn("flex h-full rounded-lg overflow-hidden", className)}>
       {/* Sidebar Conversations */}
-      <div className="w-1/3 border-r overflow-auto">
-        {conversations.map((conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            onClick={handleSelectConversation}
-          />
-        ))}
-      </div>
-
+      <Card className="w-1/4 m-0">
+        <CardHeader>
+          <CardTitle>
+            {/* need trans */}
+            <span>Conversations</span>
+          </CardTitle>
+          <CardDescription>The user&apos;s conversations</CardDescription>
+          <CardAction>
+            <Button variant="ghost" size={"sm"} className="w-full">
+              {/* need trans */}
+              New conversation
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          {conversations.map((conversation) => (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              onClick={handleSelectConversation}
+            />
+          ))}
+        </CardContent>
+      </Card>
       {/* Messages */}
       <div className="flex-1 flex flex-col">
         {selectedConversation ? (

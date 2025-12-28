@@ -1,11 +1,15 @@
-import { Card } from "@/components/ui/card";
 import React from "react";
 import { ConversationList } from "@/components/chat/conversation/ConversationList";
 
 export const Conversations = () => {
   return (
-    <Card className="flex flex-col overflow-auto mb-5 h-full">
+    <div
+      className="flex flex-col flex-1 overflow-auto mb-5"
+      style={{
+        maxHeight: window.screen.height - 300,
+      }}
+    >
       <ConversationList />
-    </Card>
+    </div>
   );
 };
