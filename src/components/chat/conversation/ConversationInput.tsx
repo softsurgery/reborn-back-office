@@ -50,7 +50,9 @@ export const ConversationInput = ({
         <button
           className={cn(
             "w-10 h-10 flex items-center justify-center rounded-lg",
-            input.trim() ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-500"
+            input.trim()
+              ? "bg-blue-500 text-white"
+              : "bg-gray-300 text-gray-500"
           )}
           onClick={handleSend}
           disabled={!input.trim()}

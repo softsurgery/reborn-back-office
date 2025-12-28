@@ -7,46 +7,7 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import Image from "next/image";
-
-const formatMessageTime = (
-  dateInput?: string | Date,
-  locale?: string,
-  t?: (key: string) => string
-) => {
-  if (!dateInput) return "";
-  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-  const now = new Date();
-
-  const isToday =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
-
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  const isYesterday =
-    date.getDate() === yesterday.getDate() &&
-    date.getMonth() === yesterday.getMonth() &&
-    date.getFullYear() === yesterday.getFullYear();
-
-  const weekAgo = new Date(now);
-  weekAgo.setDate(now.getDate() - 7);
-  const isThisWeek = date > weekAgo && !isToday && !isYesterday;
-
-  if (isToday) {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  } else if (isYesterday) {
-    return t ? t("userManagement.inspect.conversations.conversationItem.yesterday") : "userManagement.inspect.conversations.conversationItem.Yesterday";
-  } else if (isThisWeek) {
-    return date.toLocaleDateString(locale, { weekday: "long" });
-  } else {
-    return date.toLocaleDateString(locale, {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  }
-};
+import { formatMessageTime } from "@/lib/date.lib";
 
 interface ConversationItemProps {
   className?: string;
@@ -123,7 +84,10 @@ const ConversationItem = ({
           <span className="font-semibold truncate">{identifier}</span>
           <div className="flex justify-between items-center mt-1">
             <span className="text-sm truncate max-w-[220px]">
-              {lastMessage?.content || t("userManagement.inspect.conversations.conversationItem.noMessagesYet")}
+              {lastMessage?.content ||
+                t(
+                  "userManagement.inspect.conversations.conversationItem.noMessagesYet"
+                )}
             </span>
             <span className="text-xs opacity-70 whitespace-nowrap ml-2">
               {formattedTime}

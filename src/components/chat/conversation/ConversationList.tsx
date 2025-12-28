@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { ResponseConversationDto, ResponseMessageDto } from "@/types";
 import ConversationItem from "./ConversationItem";
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Spinner } from "@/components/shared/Spinner";
 import { cn } from "@/lib/utils";
 import { identifyUser } from "@/lib/user.utils";
-import { formatMessengerTime } from "@/lib/date.lib";
+import { formatMessageTime } from "@/lib/date.lib";
 import {
   Card,
   CardAction,
@@ -18,6 +18,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useConversationComposeDialog } from "./modals/ConversationComposeDialog";
+import { useUsers } from "@/hooks/content/User/useUsers";
+import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
+import { SelectOption } from "@/components/shared/form-builder/types";
+import { toast } from "sonner";
 
 interface ConversationListProps {
   className?: string;
@@ -26,6 +31,7 @@ interface ConversationListProps {
 export const ConversationList = ({ className }: ConversationListProps) => {
   const { t, i18n } = useTranslation("user-management");
   const userStore = useUserStore();
+
   const user = React.useMemo(() => userStore.response, [userStore.response]);
 
   const [selectedConversation, setSelectedConversation] =
@@ -33,7 +39,62 @@ export const ConversationList = ({ className }: ConversationListProps) => {
 
   const messagesContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, isError } = useQuery({
+  //compose conversation dialog **********************************************************************
+
+  const curentUser = { label: user?.username || "", value: user?.id || "" };
+  const [participants, setParticipants] = React.useState<SelectOption[]>([
+    curentUser,
+  ]);
+  const { users, isFetchUsersPending } = useUsers({});
+
+  const {
+    composeConversationDialog,
+    openComposeConversationDialog,
+    closeComposeConversationDialog,
+  } = useConversationComposeDialog({
+    users: mapToSelectOptions({
+      data: isFetchUsersPending ? [] : users,
+      labelKey: "username",
+      valueKey: "id",
+    }),
+    participants,
+    setParticipants,
+    composeAction: () => composeConversation(),
+  });
+
+  const {
+    mutate: composeConversation,
+    isPending: isComposeConversationPending,
+  } = useMutation({
+    mutationFn: async () =>
+      api.chat.conversation.commposeConversation({
+        participantIds: participants.map((p) => p.value as string),
+      }),
+    onSuccess: () => {
+      refetchUserConversations();
+      closeComposeConversationDialog();
+      {
+        /* need trans */
+      }
+      toast.success("Conversation created");
+    },
+    onError: () => {
+      {
+        /* need trans */
+      }
+
+      toast.error("Error creating conversation");
+    },
+  });
+
+  // ***********************************************************************************************
+
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchUserConversations,
+  } = useQuery({
     queryKey: ["user-conversations", user?.id],
     queryFn: async () => {
       return await api.chat.conversation.findPaginatedUserConversationsById({
@@ -121,7 +182,12 @@ export const ConversationList = ({ className }: ConversationListProps) => {
           </CardTitle>
           <CardDescription>The user&apos;s conversations</CardDescription>
           <CardAction>
-            <Button variant="ghost" size={"sm"} className="w-full">
+            <Button
+              variant="ghost"
+              size={"sm"}
+              className="w-full"
+              onClick={openComposeConversationDialog}
+            >
               {/* need trans */}
               New conversation
             </Button>
@@ -185,7 +251,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                         )}
                       >
                         {getSenderName(msg)} •{" "}
-                        {formatMessengerTime(msg.createdAt, i18n.language, t)}
+                        {formatMessageTime(msg.createdAt, i18n.language, t)}
                       </div>
                     </div>
                   );
@@ -207,6 +273,8 @@ export const ConversationList = ({ className }: ConversationListProps) => {
           </div>
         )}
       </div>
+      {/* compose conversation dialog */}
+      {composeConversationDialog}
     </div>
   );
 };

@@ -16,6 +16,10 @@ export interface ResponseMessageDto extends DatabaseEntity {
   user: ResponseUserDto;
 }
 
+export interface ComposeConversationDto {
+  participantIds: string[];
+}
+
 export interface GroupedMessages {
   date: string;
   messages: ResponseMessageDto[];

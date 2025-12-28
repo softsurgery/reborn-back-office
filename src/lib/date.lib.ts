@@ -38,7 +38,7 @@ export function timeAgo(input: Date | string): string {
   return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
 }
 
-export const formatMessengerTime = (
+export const formatMessageTime = (
   dateInput?: string | Date,
   locale?: string,
   t?: (key: string) => string
