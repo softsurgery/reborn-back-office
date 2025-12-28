@@ -51,10 +51,8 @@ export const About = ({ className }: AboutProps) => {
 
   return (
     <Card
-      className={cn(className, "flex flex-col flex-1 overflow-auto mb-5")}
-      style={{
-        maxHeight: window.screen.height - 300,
-      }}
+      className={cn(className, "flex flex-col flex-1 overflow-auto mb-5 h-fit")}
+      style={{ maxHeight: window.screen.height - 100 }}
     >
       <CardHeader>
         <CardTitle>{t("userManagement.inspect.about.title")}</CardTitle>

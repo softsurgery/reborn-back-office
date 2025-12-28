@@ -172,37 +172,46 @@ export const ConversationList = ({ className }: ConversationListProps) => {
     );
 
   return (
-    <div className={cn("flex h-full rounded-lg overflow-hidden", className)}>
-      {/* Sidebar Conversations */}
-      <Card className="w-1/4 m-0">
-        <CardHeader>
-          <CardTitle>
-            {/* need trans */}
-            <span>Conversations</span>
-          </CardTitle>
-          <CardDescription>The user&apos;s conversations</CardDescription>
-          <CardAction>
-            <Button
-              variant="ghost"
-              size={"sm"}
-              className="w-full"
-              onClick={openComposeConversationDialog}
-            >
+    <div
+      className={cn(
+        "flex flex-col lg:flex-row flex-1 max-h-fit rounded-lg overflow-hidden mb-5",
+        className
+      )}
+      style={{ maxHeight: window.screen.height - 100 }}
+    >
+      <div className="w-full lg:w-1/3 overflow-hidden flex flex-col gap-4">
+        {/* Sidebar Conversations */}
+        <Card className="flex flex-col flex-1 overflow-hidden">
+          <CardHeader>
+            <CardTitle>
               {/* need trans */}
-              New conversation
-            </Button>
-          </CardAction>
-        </CardHeader>
-        <CardContent>
-          {conversations.map((conversation) => (
-            <ConversationItem
-              key={conversation.id}
-              conversation={conversation}
-              onClick={handleSelectConversation}
-            />
-          ))}
-        </CardContent>
-      </Card>
+              <span>Conversations</span>
+            </CardTitle>
+            <CardDescription>The user&apos;s conversations</CardDescription>
+            <CardAction>
+              <Button
+                variant="ghost"
+                size={"sm"}
+                className="w-full"
+                onClick={openComposeConversationDialog}
+              >
+                {/* need trans */}
+                New conversation
+              </Button>
+            </CardAction>
+          </CardHeader>
+          <CardContent className="flex flex-col flex-1 overflow-auto no-scrollbar">
+            {conversations.map((conversation) => (
+              <ConversationItem
+                key={conversation.id}
+                conversation={conversation}
+                onClick={handleSelectConversation}
+              />
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Messages */}
       <div className="flex-1 flex flex-col">
         {selectedConversation ? (

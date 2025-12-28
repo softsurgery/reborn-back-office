@@ -39,15 +39,14 @@ export const BaseProfile = ({
   const user = React.useMemo(() => userStore.response, [userStore]);
   const [activeTab, setActiveTab] = React.useState("about");
 
-  const { followerDialog,
-     openFollowerDialog } 
-     = useFollowerDialog({ userStore });
-  const { followingDialog, 
-    openFollowingDialog }
-     = useFollowingDialog({ userStore });
+  const { followerDialog, openFollowerDialog } = useFollowerDialog({
+    userStore,
+  });
+  const { followingDialog, openFollowingDialog } = useFollowingDialog({
+    userStore,
+  });
 
-  const { followers,
-     followings } = useFollowSystem({
+  const { followers, followings } = useFollowSystem({
     id: userStore?.response?.id!,
     use: ["is-following", "followers", "followings"],
   });
@@ -77,26 +76,36 @@ export const BaseProfile = ({
   if (isFetchUserPending) return <Spinner className="h-screen" />;
 
   const tabs = [
-    { value: "about", 
-      label: t("userManagement.inspect.tabs.about"), 
-      icon: UserIcon, content: 
-      <About /> },
-    { value: "activity", 
+    {
+      value: "about",
+      label: t("userManagement.inspect.tabs.about"),
+      icon: UserIcon,
+      content: <About />,
+    },
+    {
+      value: "activity",
       label: t("userManagement.inspect.tabs.activity"),
-       icon: BarChart2, 
-       content: <Activity userId={user?.id} /> },
-    { value: "conversations", 
-      label: t("userManagement.inspect.tabs.conversations"), 
+      icon: BarChart2,
+      content: <Activity userId={user?.id} />,
+    },
+    {
+      value: "conversations",
+      label: t("userManagement.inspect.tabs.conversations"),
       icon: ChatBubbleIcon,
-       content: <Conversations /> },
-    { value: "notifications",
-       label: t("userManagement.inspect.tabs.notifications"), 
-       icon: BellIcon, 
-       content: <Notifications userId={user?.id as string} /> },
-    { value: "settings", 
-      label: t("userManagement.inspect.tabs.settings"), 
-      icon: SettingsIcon, 
-      content: <Settings /> },
+      content: <Conversations />,
+    },
+    {
+      value: "notifications",
+      label: t("userManagement.inspect.tabs.notifications"),
+      icon: BellIcon,
+      content: <Notifications userId={user?.id as string} />,
+    },
+    {
+      value: "settings",
+      label: t("userManagement.inspect.tabs.settings"),
+      icon: SettingsIcon,
+      content: <Settings />,
+    },
   ];
 
   return (
@@ -107,25 +116,25 @@ export const BaseProfile = ({
         <div className="flex flex-row items-center gap-4">
           <Avatar className="w-24 h-24 rounded-full">
             <AvatarImage src={picture} />
-            <AvatarFallback>{user?.firstName?.charAt(0) || "U"}
-            </AvatarFallback>
+            <AvatarFallback>{user?.firstName?.charAt(0) || "U"}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-start justify-start">
-            <h1 className="font-semibold text-lg">{identifyUser(user) || "Unknown User"}
-
+            <h1 className="font-semibold text-lg">
+              {identifyUser(user) || "Unknown User"}
             </h1>
             <h2 className="text-sm text-muted-foreground hover:underline cursor-pointer">
-              <a href={`mailto:${user?.email}`}>{user?.email || "No email"}
-              </a>
+              <a href={`mailto:${user?.email}`}>{user?.email || "No email"}</a>
             </h2>
             <div className="flex flex-row items-center gap-2">
               <p className="text-sm text-muted-foreground">
-                {user?.profile?.region?.label || t("userManagement.inspect.noRegion")}
-                </p>
+                {user?.profile?.region?.label ||
+                  t("userManagement.inspect.noRegion")}
+              </p>
               <Separator orientation="vertical" className="mx-1 h-4" />
               <p className="text-sm text-muted-foreground">
-                {user?.profile?.phone || t("userManagement.inspect.noPhoneNumber")}
-                </p>
+                {user?.profile?.phone ||
+                  t("userManagement.inspect.noPhoneNumber")}
+              </p>
             </div>
           </div>
         </div>
@@ -134,50 +143,64 @@ export const BaseProfile = ({
         <div className="flex justify-end md:justify-start gap-4">
           <div className="text-center">
             <div className="font-semibold text-lg">-</div>
-            <div className="text-sm text-muted-foreground">{
-            t("userManagement.inspect.stats.services")}
+            <div className="text-sm text-muted-foreground">
+              {t("userManagement.inspect.stats.services")}
             </div>
           </div>
-          <div className="text-center cursor-pointer" 
-          onClick={openFollowingDialog}>
+          <div
+            className="text-center cursor-pointer"
+            onClick={openFollowingDialog}
+          >
             <div className="font-semibold text-lg">
-              {followDataCount?.following ?? 0}</div>
+              {followDataCount?.following ?? 0}
+            </div>
             <div className="text-sm text-muted-foreground">
               {t("userManagement.inspect.stats.following")}
-              </div>
+            </div>
           </div>
-          <div className="text-center cursor-pointer"
-           onClick={openFollowerDialog}>
+          <div
+            className="text-center cursor-pointer"
+            onClick={openFollowerDialog}
+          >
             <div className="font-semibold text-lg">
               {followDataCount?.followers ?? 0}
-              </div>
+            </div>
             <div className="text-sm text-muted-foreground">
               {t("userManagement.inspect.stats.followers")}
-              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex-1 overflow-auto no-scrollbar flex flex-col">
-        <Tabs value={activeTab} onValueChange={setActiveTab} 
-        className="flex flex-col h-full">
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex flex-col h-full"
+        >
           <TabsList className="grid grid-cols-5 mb-4 flex-shrink-0">
             {tabs.map(({ value, label, icon: Icon }) => (
-              <TabsTrigger key={value} value={value} className="flex items-center gap-2">
+              <TabsTrigger
+                key={value}
+                value={value}
+                className="flex items-center gap-2"
+              >
                 <Icon className="h-4 w-4" />
-                <span className="hidden lg:block">
-                  {label}
-                  </span>
+                <span className="hidden lg:block">{label}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
           {/* Tab Content */}
-          <div className="flex-1 overflow-auto no-scrollbar">
+          <div className="flex flex-col flex-1 overflow-hidden">
             {tabs.map(({ value, content }) =>
               activeTab === value ? (
-                <TabsContent key={value} value={value} className="flex flex-col h-full">
+                <TabsContent
+                  key={value}
+                  value={value}
+                  className="flex flex-col h-full"
+                >
                   {content}
                 </TabsContent>
               ) : null
