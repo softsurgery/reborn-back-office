@@ -24,14 +24,14 @@ export interface ResponseRefParamDto extends DatabaseEntity {
   description: string;
   refTypeId: number;
   refType: ResponseRefTypeDto;
-  extras: object;
+  extras: any;
 }
 
 export interface CreateRefParamDto {
   label: string;
   description: string;
   refTypeId?: number;
-  extras: object;
+  extras: any;
 }
 
 export interface UpdateRefParamDto extends Partial<CreateRefParamDto> {}

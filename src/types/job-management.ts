@@ -1,4 +1,4 @@
-import { ResponseCurrencyDto } from "./content";
+import { ResponseRefParamDto } from "./reference-types";
 import { Upload } from "./upload";
 import { ResponseUserDto } from "./user-management";
 import { DatabaseEntity } from "./utils/database-entity";
@@ -9,7 +9,7 @@ export interface ResponseJobDto extends DatabaseEntity {
   description: string;
   price: number;
   postedBy: ResponseUserDto;
-  currency: ResponseCurrencyDto;
+  currency: ResponseRefParamDto;
   currencyId: string;
   tags: ResponseJobTagDto[];
   categoryId: number;
@@ -24,7 +24,7 @@ export interface CreateJobDto {
   description: string;
   price: number;
   tagIds: number[];
-  currencyId?: string;
+  currencyId?: number;
   categoryId?: number;
   style?: JobStyle;
   difficulty?: JobDifficulty;

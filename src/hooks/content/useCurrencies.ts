@@ -2,14 +2,19 @@ import React from "react";
 import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useCurrencies = (enabled?: boolean) => {
+interface useCurrenciesProps {
+  enabled?: boolean;
+}
+
+export const useCurrencies = ({ enabled = true }: useCurrenciesProps = {}) => {
   const {
     data: currenciesResp,
     isFetching: isFetchCurrenciesPending,
     refetch: refetchCurrencies,
   } = useQuery({
     queryKey: ["currencies"],
-    queryFn: () => api._public.currency.findAll(),
+    queryFn: () =>
+      api.admin.refParam.findAll({ filter: `refType.label||$eq||Currency` }),
     enabled,
   });
 
