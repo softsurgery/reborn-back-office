@@ -13,7 +13,7 @@ export interface ResponseJobDto extends DatabaseEntity {
   currencyId: string;
   tags: ResponseJobTagDto[];
   categoryId: number;
-  category: ResponseJobCategoryDto;
+  category: ResponseRefParamDto;
   style: JobStyle;
   difficulty: JobDifficulty;
   uploads: ResponseJobUploadDto[];
@@ -45,17 +45,6 @@ export interface CreateJobTagDto {
 }
 
 export interface UpdateJobTagDto extends Partial<CreateJobTagDto> {}
-
-export interface ResponseJobCategoryDto extends DatabaseEntity {
-  id: number;
-  label: string;
-}
-
-export interface CreateJobCategoryDto {
-  label: string;
-}
-
-export interface UpdateJobCategoryDto extends Partial<CreateJobCategoryDto> {}
 
 export interface ResponseJobUploadDto extends DatabaseEntity {
   id: number;
