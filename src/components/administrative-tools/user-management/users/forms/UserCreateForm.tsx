@@ -28,7 +28,6 @@ const steps = [
     id: "profile-information",
     title: "userManagement.forms.step2Title",
   },
- 
 ];
 
 const { Stepper } = defineStepper(...steps);
@@ -102,33 +101,31 @@ export const UserCreateForm: React.FC<UserCreateFormProps> = ({
       },
     });
 
-  const {
-    userCreateFormStructure,
-    profileCreateFormStructure,
-  } = useCreateUserFormStructure({
-    userStore,
-    regions: mapToSelectOptions({
-      data: isFetchRegionsPending ? [] : regions,
-      labelKey: "label",
-      valueKey: "id",
-    }),
-    roles: mapToSelectOptions({
-      data: isFetchRolesPending ? [] : roles,
-      labelKey: "label",
-      valueKey: "id",
-    }),
-    uploadProfilePicture,
-    isProfilePictureUploadPending,
+  const { userCreateFormStructure, profileCreateFormStructure } =
+    useCreateUserFormStructure({
+      userStore,
+      regions: mapToSelectOptions({
+        data: isFetchRegionsPending ? [] : regions,
+        labelKey: "label",
+        valueKey: "id",
+      }),
+      roles: mapToSelectOptions({
+        data: isFetchRolesPending ? [] : roles,
+        labelKey: "label",
+        valueKey: "id",
+      }),
+      uploadProfilePicture,
+      isProfilePictureUploadPending,
 
-    uploadOfficialDocument,
-    isOfficialDocumentUploadPending,
+      uploadOfficialDocument,
+      isOfficialDocumentUploadPending,
 
-    uploadDriverLicenseDocument,
-    isDriverLicenseDocumentPending,
+      uploadDriverLicenseDocument,
+      isDriverLicenseDocumentPending,
 
-    uploadPhotos,
-    isPhotosUploadPending,
-  });
+      uploadPhotos,
+      isPhotosUploadPending,
+    });
 
   const validateStep = React.useCallback(
     (stepId: string) => {

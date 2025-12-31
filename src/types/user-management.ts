@@ -1,4 +1,4 @@
-import { ResponseRegionDto } from "./content";
+import { ResponseRefParamDto } from "./reference-types";
 import { Upload } from "./upload";
 import { DatabaseEntity } from "./utils/database-entity";
 
@@ -84,7 +84,7 @@ export interface ResponseProfileDto extends DatabaseEntity {
   bio?: string;
   gender?: Gender;
   isPrivate?: boolean;
-  region?: ResponseRegionDto;
+  region?: ResponseRefParamDto;
   regionId?: number;
   user: ResponseUserDto;
   pictureId?: number;
