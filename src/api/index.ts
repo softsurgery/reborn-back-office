@@ -3,8 +3,6 @@ import { auth } from "./auth";
 import { bug } from "./bug";
 import { feedback } from "./feedback";
 import { job } from "./job";
-import { jobTag } from "./job-tag";
-import { jobCategory } from "./job-category";
 import { upload } from "./upload";
 import { store } from "./store";
 import { follow } from "./follow";
@@ -18,8 +16,6 @@ export const api = {
   bug,
   upload,
   job,
-  jobTag,
-  jobCategory,
   follow,
   store,
   chat,

@@ -161,16 +161,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "/services-management/jobs",
             icon: BriefcaseBusiness,
           },
-          {
-            title: `${t("common.sidebar.jobTags")}`,
-            url: "/services-management/job-tags",
-            icon: Tag,
-          },
-          {
-            title: `${t("common.sidebar.jobCategories")}`,
-            url: "/services-management/job-categories",
-            icon: Map,
-          },
         ],
       },
     ],

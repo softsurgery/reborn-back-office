@@ -77,9 +77,7 @@
       "logger": "Logger",
       "developerLogger": "Developer Logger",
       "servicesManagement": "Services Management",
-      "jobs": "Jobs",
-      "jobTags": "Job Tags",
-      "jobCategories": "Job Categories"
+      "jobs": "Jobs"
     }
   }
 }

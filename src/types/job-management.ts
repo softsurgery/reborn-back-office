@@ -35,17 +35,6 @@ export interface UpdateJobDto extends Partial<CreateJobDto> {
   uploads?: { id: number; uploadId: number }[];
 }
 
-export interface ResponseJobTagDto extends DatabaseEntity {
-  id: number;
-  label: string;
-}
-
-export interface CreateJobTagDto {
-  label: string;
-}
-
-export interface UpdateJobTagDto extends Partial<CreateJobTagDto> {}
-
 export interface ResponseJobUploadDto extends DatabaseEntity {
   id: number;
   jobId: string;
