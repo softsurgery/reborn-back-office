@@ -7,6 +7,7 @@ import { api } from "@/api";
 import { OAuthProvider } from "@/types";
 
 export const authOptions: NextAuthOptions = {
+  debug: process.env.NODE_ENV === "development" || false,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -33,6 +34,9 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+      authorization: {
+        params: { redirect_uri: process.env.GITHUB_CALLBACK_URL },
+      },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID as string,
