@@ -20,7 +20,7 @@ import {
   Tag,
   Home,
   Table,
-  Table2
+  Table2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -32,24 +32,32 @@ import {
 import { MainNav } from "./MainNav";
 import { TeamSwitcher } from "./TeamSwitcher";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {t} = useTranslation("common");
+  const { t } = useTranslation("common");
   const data = {
     teams: [
       {
         name: "Reborn Back Office",
-        logo: BriefcaseBusiness,
+        logo: (
+          <Image
+            src="/reborn.svg"
+            width={40}
+            height={40}
+            alt="Reborn Back Office"
+          />
+        ),
       },
     ],
-    
+
     navMain: [
-          {
-      id: 0,
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: Home,
-    },
+      {
+        id: 0,
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: Home,
+      },
 
       {
         id: 1,
@@ -108,25 +116,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: FileUser,
           },
           {
-            title: `${t("common.sidebar.regions")}`,
-            url: "/content-management/regions",
-            icon: MapIcon,
-          },
-          {
             title: `${t("common.sidebar.applicationProperties")}`,
             url: "/content-management/application-properties",
             icon: FileText,
           },
-            {
-        title: "Reference Types",
-        url: "/content-management/reference-types",
-        icon: Table2,
-      },
-      {
-        title: "Reference Parameters",
-        url: "/content-management/reference-parameters",
-        icon: Table,
-      },
+          {
+            title: "Reference Types",
+            url: "/content-management/reference-types",
+            icon: Table2,
+          },
+          {
+            title: "Reference Parameters",
+            url: "/content-management/reference-parameters",
+            icon: Table,
+          },
         ],
       },
       {
@@ -157,16 +160,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: `${t("common.sidebar.jobs")}`,
             url: "/services-management/jobs",
             icon: BriefcaseBusiness,
-          },
-          {
-            title: `${t("common.sidebar.jobTags")}`,
-            url: "/services-management/job-tags",
-            icon: Tag,
-          },
-          {
-            title: `${t("common.sidebar.jobCategories")}`,
-            url: "/services-management/job-categories",
-            icon: Map,
           },
         ],
       },

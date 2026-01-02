@@ -53,12 +53,27 @@ const disapprove = async (id?: string): Promise<ResponseUserDto> => {
   return response.data;
 };
 
-const findAll = async (): Promise<ResponseUserDto[]> => {
-  const response = await axios.get<ResponseUserDto[]>(`/admin/user/all`);
+const findAll = async ({
+  sort,
+  filter = "",
+  search = "",
+}: QueryParams): Promise<ResponseUserDto[]> => {
+  const params: { [key: string]: any } = {
+    sort,
+  };
+
+  if (search) params.search = search;
+  if (filter) params.filter = filter;
+  const response = await axios.get<ResponseUserDto[]>(`/admin/user/all`, {
+    params,
+  });
   return response.data;
 };
 
-const findById = async (userId?: string, join?: string): Promise<ResponseUserDto> => {
+const findById = async (
+  userId?: string,
+  join?: string
+): Promise<ResponseUserDto> => {
   const response = await axios.get<ResponseUserDto>(`/admin/user/${userId}`, {
     params: { join },
   });
@@ -93,9 +108,15 @@ const remove = async (userId?: string): Promise<ResponseUserDto> => {
   return response.data;
 };
 
-const hasPermissions = async (userId?: string, permissions?: string[]): Promise<boolean> => {
+const hasPermissions = async (
+  userId?: string,
+  permissions?: string[]
+): Promise<boolean> => {
   const response = await axios.get(`/admin/user/${userId}/permissions`);
-  return permissions?.every((permission) => response.data.includes(permission)) || false;
+  return (
+    permissions?.every((permission) => response.data.includes(permission)) ||
+    false
+  );
 };
 
 export const user = {

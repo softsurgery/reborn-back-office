@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { ResponseConversationDto, ResponseMessageDto } from "@/types";
 import ConversationItem from "./ConversationItem";
@@ -8,51 +8,21 @@ import { useTranslation } from "react-i18next";
 import { Spinner } from "@/components/shared/Spinner";
 import { cn } from "@/lib/utils";
 import { identifyUser } from "@/lib/user.utils";
-
-const formatMessengerTime = (
-  dateInput?: string | Date,
-  locale?: string,
-  t?: (key: string) => string
-) => {
-  if (!dateInput) return "";
-  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-  const now = new Date();
-  const isToday =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  const isYesterday =
-    date.getDate() === yesterday.getDate() &&
-    date.getMonth() === yesterday.getMonth() &&
-    date.getFullYear() === yesterday.getFullYear();
-  const weekAgo = new Date(now);
-  weekAgo.setDate(now.getDate() - 7);
-  const isThisWeek = date > weekAgo && !isToday && !isYesterday;
-
-  const timeStr = date.toLocaleTimeString(locale || "en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  if (isToday) return timeStr;
-  if (isYesterday)
-    return `${
-      t?.("userManagement.inspect.conversations.conversationList.yesterday") ||
-      "Yesterday"
-    } at ${timeStr}`;
-  if (isThisWeek)
-    return `${date.toLocaleDateString(locale, {
-      weekday: "long",
-    })} at ${timeStr}`;
-  return `${date.toLocaleDateString(locale, {
-    month: "short",
-    day: "numeric",
-    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
-  })} at ${timeStr}`;
-};
+import { formatMessageTime } from "@/lib/date.lib";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useConversationComposeDialog } from "./modals/ConversationComposeDialog";
+import { useUsers } from "@/hooks/content/User/useUsers";
+import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
+import { SelectOption } from "@/components/shared/form-builder/types";
+import { toast } from "sonner";
 
 interface ConversationListProps {
   className?: string;
@@ -61,14 +31,70 @@ interface ConversationListProps {
 export const ConversationList = ({ className }: ConversationListProps) => {
   const { t, i18n } = useTranslation("user-management");
   const userStore = useUserStore();
+
   const user = React.useMemo(() => userStore.response, [userStore.response]);
 
   const [selectedConversation, setSelectedConversation] =
     React.useState<ResponseConversationDto | null>(null);
 
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, isError } = useQuery({
+  //compose conversation dialog **********************************************************************
+
+  const curentUser = { label: user?.username || "", value: user?.id || "" };
+  const [participants, setParticipants] = React.useState<SelectOption[]>([
+    curentUser,
+  ]);
+  const { users, isFetchUsersPending } = useUsers({});
+
+  const {
+    composeConversationDialog,
+    openComposeConversationDialog,
+    closeComposeConversationDialog,
+  } = useConversationComposeDialog({
+    users: mapToSelectOptions({
+      data: isFetchUsersPending ? [] : users,
+      labelKey: "username",
+      valueKey: "id",
+    }),
+    participants,
+    setParticipants,
+    composeAction: () => composeConversation(),
+  });
+
+  const {
+    mutate: composeConversation,
+    isPending: isComposeConversationPending,
+  } = useMutation({
+    mutationFn: async () =>
+      api.chat.conversation.commposeConversation({
+        participantIds: participants.map((p) => p.value as string),
+      }),
+    onSuccess: () => {
+      refetchUserConversations();
+      closeComposeConversationDialog();
+      {
+        /* need trans */
+      }
+      toast.success("Conversation created");
+    },
+    onError: () => {
+      {
+        /* need trans */
+      }
+
+      toast.error("Error creating conversation");
+    },
+  });
+
+  // ***********************************************************************************************
+
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: refetchUserConversations,
+  } = useQuery({
     queryKey: ["user-conversations", user?.id],
     queryFn: async () => {
       return await api.chat.conversation.findPaginatedUserConversationsById({
@@ -98,7 +124,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   });
 
   // Refetch messages when selecting a conversation
-  useEffect(() => {
+  React.useEffect(() => {
     if (selectedConversation) refetchMessages();
   }, [selectedConversation, refetchMessages]);
 
@@ -122,7 +148,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
   };
 
   // Auto-scroll only if user is near bottom
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
 
@@ -146,16 +172,44 @@ export const ConversationList = ({ className }: ConversationListProps) => {
     );
 
   return (
-    <div className={cn("flex h-full rounded-lg overflow-hidden", className)}>
-      {/* Sidebar Conversations */}
-      <div className="w-1/3 border-r overflow-auto">
-        {conversations.map((conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            onClick={handleSelectConversation}
-          />
-        ))}
+    <div
+      className={cn(
+        "flex flex-col lg:flex-row flex-1 max-h-fit rounded-lg overflow-hidden mb-5",
+        className
+      )}
+      style={{ maxHeight: window.screen.height - 100 }}
+    >
+      <div className="w-full lg:w-1/3 overflow-hidden flex flex-col gap-4">
+        {/* Sidebar Conversations */}
+        <Card className="flex flex-col flex-1 overflow-hidden">
+          <CardHeader>
+            <CardTitle>
+              {/* need trans */}
+              <span>Conversations</span>
+            </CardTitle>
+            <CardDescription>The user&apos;s conversations</CardDescription>
+            <CardAction>
+              <Button
+                variant="ghost"
+                size={"sm"}
+                className="w-full"
+                onClick={openComposeConversationDialog}
+              >
+                {/* need trans */}
+                New conversation
+              </Button>
+            </CardAction>
+          </CardHeader>
+          <CardContent className="flex flex-col flex-1 overflow-auto no-scrollbar">
+            {conversations.map((conversation) => (
+              <ConversationItem
+                key={conversation.id}
+                conversation={conversation}
+                onClick={handleSelectConversation}
+              />
+            ))}
+          </CardContent>
+        </Card>
       </div>
 
       {/* Messages */}
@@ -206,7 +260,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                         )}
                       >
                         {getSenderName(msg)} •{" "}
-                        {formatMessengerTime(msg.createdAt, i18n.language, t)}
+                        {formatMessageTime(msg.createdAt, i18n.language, t)}
                       </div>
                     </div>
                   );
@@ -228,6 +282,8 @@ export const ConversationList = ({ className }: ConversationListProps) => {
           </div>
         )}
       </div>
+      {/* compose conversation dialog */}
+      {composeConversationDialog}
     </div>
   );
 };

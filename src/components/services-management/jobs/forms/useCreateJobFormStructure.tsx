@@ -14,12 +14,12 @@ import {
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { JobDifficulty, JobStyle, ResponseCurrencyDto } from "@/types";
+import { JobDifficulty, JobStyle, ResponseRefParamDto } from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface JobCreateFormStructureProps {
   jobStore: JobStore;
-  currencies: ResponseCurrencyDto[];
+  currencies: ResponseRefParamDto[];
   jobTags: SelectOption[];
   jobCategories: SelectOption[];
   uploadPicture: ReturnType<typeof useUploadMutation>["uploadFiles"];
@@ -85,7 +85,8 @@ export const useCreateJobFormStructure = ({
       value: jobStore.createDto?.price || undefined,
       onChange: (value) => {
         if (
-          value == Number(value.toFixed(selectedCurrency?.digitsAfterComma))
+          value ==
+          Number(value.toFixed(selectedCurrency?.extras?.digitsAfterComma))
         ) {
           jobStore.setNested("createDto.price", Number(value));
           jobStore.setNested("createDtoErrors.price", []);
@@ -105,7 +106,7 @@ export const useCreateJobFormStructure = ({
     error: t(jobStore.createDtoErrors?.currencyId?.[0]),
     props: {
       options: currencies.map((currency) => ({
-        label: `${currency.label} (${currency.symbol})`,
+        label: `${currency.label} (${currency.extras?.symbol})`,
         value: currency.id.toString(),
       })),
       value: jobStore.createDto?.currencyId?.toString(),

@@ -2,14 +2,23 @@ import React from "react";
 import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useJobCategories = (enabled?: boolean) => {
+interface useJobCategoriesProps {
+  enabled?: boolean;
+}
+
+export const useJobCategories = ({
+  enabled = true,
+}: useJobCategoriesProps = {}) => {
   const {
     data: jobCategoriesResp,
     isFetching: isFetchJobCategoriesPending,
     refetch: refetchJobCategories,
   } = useQuery({
     queryKey: ["job-categories"],
-    queryFn: () => api.jobCategory.findAll(),
+    queryFn: () =>
+      api.admin.refParam.findAll({
+        filter: `refType.label||$eq||Job Category`,
+      }),
     enabled,
   });
 

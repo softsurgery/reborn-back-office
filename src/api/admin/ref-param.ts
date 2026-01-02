@@ -35,8 +35,23 @@ const findPaginated = async ({
   return response.data;
 };
 
-const findAll = async (): Promise<ResponseRefParamDto[]> => {
-  const response = await axios.get<ResponseRefParamDto[]>(`/ref-param/all`);
+const findAll = async ({
+  sort,
+  search = "",
+  filter = "",
+  join = "",
+}: QueryParams): Promise<ResponseRefParamDto[]> => {
+  const params: { [key: string]: string | undefined } = {
+    sort,
+  };
+
+  if (search) params.search = search;
+  if (filter) params.filter = filter;
+  if (join) params.join = join;
+
+  const response = await axios.get<ResponseRefParamDto[]>(`/ref-param/all`, {
+    params,
+  });
   return response.data;
 };
 

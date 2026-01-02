@@ -6,15 +6,6 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_VERSION: version,
   },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/dashboard",
-        permanent: true, // redirection permanente (HTTP 301)
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;

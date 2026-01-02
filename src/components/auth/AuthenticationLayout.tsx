@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import logo from "/public/next.svg";
 import { AuthenticationForm } from "./AuthenticationForm";
 import { Box } from "lucide-react";
 import { ForgotPasswordForm } from "./ForgetPasswordForm";
@@ -43,10 +42,7 @@ export const AuthenticationLayout = () => {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full">
             <div className="bg-background flex flex-col items-center gap-4 justify-center h-full my-4">
-              {target === "login" && (
-                <AuthenticationForm
-                />
-              )}
+              {target === "login" && <AuthenticationForm />}
               {target === "forgot-password" && (
                 <ForgotPasswordForm
                   goToAuthentication={() => {
@@ -70,10 +66,11 @@ export const AuthenticationLayout = () => {
       </div>
       <div className="relative hidden bg-muted lg:block">
         <Image
-          src={logo}
+          src={"/next.svg"}
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover grayscale"
           draggable="false"
+          fill
         />
       </div>
     </div>

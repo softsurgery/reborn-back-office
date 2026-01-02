@@ -16,7 +16,9 @@ export const ChatBubble = ({
   isPending,
 }: ChatBubbleProps) => {
   const handleLongPress = () => {
-    const action = window.confirm(`Message Options:\n\n${message}\n\nPress OK to copy, Cancel to ignore.`);
+    const action = window.confirm(
+      `Message Options:\n\n${message}\n\nPress OK to copy, Cancel to ignore.`
+    );
     if (action) {
       navigator.clipboard.writeText(message || "");
       alert("Copied to clipboard!");

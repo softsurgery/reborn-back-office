@@ -177,20 +177,6 @@ export const Users = ({ className }: UsersProps) => {
       },
     });
 
- const handleUpdateSubmit = () => {
-  const data = userStore.updateDto;
-  const result = updateUserSchema(userStore.setManualPassword).safeParse({
-    ...data,
-    confirmPassword: userStore.confirmPassword,
-  });
-
-  if (!result.success) {
-    userStore.set("updateDtoErrors", result.error.flatten().fieldErrors);
-    return;
-  }
-
-};
-
   const handleReset = () => {
     userStore.reset();
   };
@@ -201,7 +187,6 @@ export const Users = ({ className }: UsersProps) => {
       isCreatePending,
       resetUser: handleReset,
     });
-
 
   const { deleteUserDialog, openDeleteUserDialog } = useUserDeleteDialog({
     userFullname: `${userStore.response?.firstName} - ${userStore.response?.lastName}`,
@@ -309,7 +294,7 @@ export const Users = ({ className }: UsersProps) => {
       router.push(`/user-management/users/${entity.id}`),
     createCallback: openCreateUserSheet,
     updateCallback: (user: ResponseUserDto) =>
-  router.push(`/user-management/users/edit/${user.id}`),
+      router.push(`/user-management/users/edit/${user.id}`),
     deleteCallback: openDeleteUserDialog,
     additionalActions: {
       1: [

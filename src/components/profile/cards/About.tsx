@@ -50,14 +50,16 @@ export const About = ({ className }: AboutProps) => {
     });
 
   return (
-    <Card className={cn(className, "flex flex-col overflow-auto mb-5")}>
+    <Card
+      className={cn(className, "flex flex-col flex-1 overflow-auto mb-5 h-fit")}
+      style={{ maxHeight: window.screen.height - 100 }}
+    >
       <CardHeader>
         <CardTitle>{t("userManagement.inspect.about.title")}</CardTitle>
         <CardDescription>
-             {userStore.response?.profile?.bio 
-        ? userStore.response.profile.bio : t("userManagement.inspect.about.Bio") 
-      }
-          
+          {userStore.response?.profile?.bio
+            ? userStore.response.profile.bio
+            : t("userManagement.inspect.about.Bio")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -66,7 +68,7 @@ export const About = ({ className }: AboutProps) => {
             {/* Contact Information */}
             <div className="space-y-3">
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                 {t("userManagement.inspect.about.contact")}
+                {t("userManagement.inspect.about.contact")}
               </h4>
               <div className="grid gap-3">
                 <div className="flex items-center gap-3 text-sm">
@@ -103,8 +105,14 @@ export const About = ({ className }: AboutProps) => {
                   <div className="flex items-center gap-3 text-sm">
                     <User className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      <span className="font-bold">{t('userManagement.inspect.about.gender')}: </span>
-                      {user.profile.gender === 'Female' ? t('userManagement.inspect.about.female') : user.profile.gender === 'Male' ? t('about:male') : user.profile.gender}
+                      <span className="font-bold">
+                        {t("userManagement.inspect.about.gender")}:{" "}
+                      </span>
+                      {user.profile.gender === "Female"
+                        ? t("userManagement.inspect.about.female")
+                        : user.profile.gender === "Male"
+                        ? t("about:male")
+                        : user.profile.gender}
                     </span>
                   </div>
                 )}
@@ -124,8 +132,12 @@ export const About = ({ className }: AboutProps) => {
                     <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                   <span>
-                    <span className="font-bold">{t("userManagement.inspect.about.profile")}: </span>
-                    {user?.profile?.isPrivate ?  t("userManagement.inspect.about.private") : t("userManagement.inspect.about.public")}
+                    <span className="font-bold">
+                      {t("userManagement.inspect.about.profile")}:{" "}
+                    </span>
+                    {user?.profile?.isPrivate
+                      ? t("userManagement.inspect.about.private")
+                      : t("userManagement.inspect.about.public")}
                   </span>
                 </div>
               </div>
@@ -140,7 +152,9 @@ export const About = ({ className }: AboutProps) => {
                 <div className="flex items-center gap-3 text-sm">
                   <Shield className="h-4 w-4 text-muted-foreground" />
                   <span>
-                    <span className="font-bold">{t("userManagement.inspect.about.role")}: </span>
+                    <span className="font-bold">
+                      {t("userManagement.inspect.about.role")}:{" "}
+                    </span>
                     {user?.role.label}
                   </span>
                 </div>
@@ -148,7 +162,9 @@ export const About = ({ className }: AboutProps) => {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   {user?.createdAt && (
                     <span>
-                      <span className="font-bold">{t("userManagement.inspect.about.memberSince")}: </span>
+                      <span className="font-bold">
+                        {t("userManagement.inspect.about.memberSince")}:{" "}
+                      </span>
                       {format(new Date(user?.createdAt), "yyyy-MM-dd")}
                     </span>
                   )}
@@ -175,7 +191,7 @@ export const About = ({ className }: AboutProps) => {
             <div className="flex flex-col 2xl:flex-row items-center justify-between gap-6">
               {(officialDocument || user?.profile?.officialDocumentId) && (
                 <DocumentCard
-                  title={t("userManagement.inspect.about.officialDocument")} 
+                  title={t("userManagement.inspect.about.officialDocument")}
                   icon={FileText}
                   src={officialDocument}
                   isLoading={isOfficialDocPending}
@@ -185,7 +201,7 @@ export const About = ({ className }: AboutProps) => {
               {(driverLicenseDocument ||
                 user?.profile?.driverLicenseDocumentId) && (
                 <DocumentCard
-                  title={t("userManagement.inspect.about.driverLicense")} 
+                  title={t("userManagement.inspect.about.driverLicense")}
                   icon={Car}
                   src={driverLicenseDocument}
                   isLoading={isDriverDocPending}

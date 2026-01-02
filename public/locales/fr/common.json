@@ -72,15 +72,12 @@
       "devices": "Appareils",
       "contentManagement": "Gestion de contenu",
       "resources": "Ressources",
-      "regions": "Régions",
       "applicationProperties": "Propriétés de l'application",
       "auditMonitoring": "Audit & Surveillance",
       "logger": "Journal",
       "developerLogger": "Journal Développeur",
       "servicesManagement": "Gestion des services",
-      "jobs": "Postes",
-      "jobTags": "Étiquettes de poste",
-      "jobCategories": "Catégories de poste"
+      "jobs": "Postes"
     }
   }
 }

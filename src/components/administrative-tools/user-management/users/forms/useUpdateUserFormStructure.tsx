@@ -46,7 +46,6 @@ export const useUpdateUserFormStructure = ({
 
   uploadProfilePicture,
   isProfilePictureUploadPending,
-
 }: useUpdateUserFormStructureProps) => {
   const { t } = useTranslation("user-management");
 
@@ -255,7 +254,7 @@ export const useUpdateUserFormStructure = ({
       {
         title: `${t("userManagement.forms.step1FieldTitle")}`,
         description: "",
-        includeHeader: true,
+        includeHeader: false,
         rows: [
           { fields: [photoField] },
           {
@@ -269,7 +268,7 @@ export const useUpdateUserFormStructure = ({
       {
         title: `${t("userManagement.forms.step1Title")}`,
         description: "",
-        includeHeader: true,
+        includeHeader: false,
         rows: [
           {
             fields: [usernameField, roleField],
@@ -403,7 +402,7 @@ export const useUpdateUserFormStructure = ({
       {
         title: `${t("userManagement.forms.step2FieldTitle")}`,
         description: "",
-        includeHeader: true,
+        includeHeader: false,
         rows: [
           {
             fields: [phoneField, cinField],
@@ -421,8 +420,6 @@ export const useUpdateUserFormStructure = ({
       },
     ],
   };
- 
-
 
   return {
     userUpdateFormStructure,

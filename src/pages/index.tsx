@@ -1,7 +1,5 @@
+import { DashboardPortal } from "@/components/dashboard/DashboardPortal";
+
 export default function Home() {
-  return (
-    <div>
-      Home
-    </div>
-  )
+  return <DashboardPortal />;
 }
