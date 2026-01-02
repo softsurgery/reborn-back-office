@@ -68,7 +68,7 @@ export const useJobColumns = (
       cell: ({ row }) => {
         return (
           <div>
-            {row?.original?.price} {row?.original?.currency?.symbol}
+            {row?.original?.price} {row?.original?.currency?.extras?.symbol}
           </div>
         );
       },
