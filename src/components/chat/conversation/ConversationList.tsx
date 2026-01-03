@@ -20,8 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useConversationComposeDialog } from "./modals/ConversationComposeDialog";
 import { useUsers } from "@/hooks/content/User/useUsers";
-import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
-import { SelectOption } from "@/components/shared/form-builder/types";
 import { toast } from "sonner";
 
 interface ConversationListProps {
@@ -41,49 +39,38 @@ export const ConversationList = ({ className }: ConversationListProps) => {
 
   //compose conversation dialog **********************************************************************
 
-  const curentUser = { label: user?.username || "", value: user?.id || "" };
-  const [participants, setParticipants] = React.useState<SelectOption[]>([
-    curentUser,
+  const [participants, setParticipants] = React.useState<string[]>([
+    user?.id || "",
   ]);
   const { users, isFetchUsersPending } = useUsers({});
 
-  const {
-    composeConversationDialog,
-    openComposeConversationDialog,
-    closeComposeConversationDialog,
-  } = useConversationComposeDialog({
-    users: mapToSelectOptions({
-      data: isFetchUsersPending ? [] : users,
-      labelKey: "username",
-      valueKey: "id",
-    }),
-    participants,
-    setParticipants,
-    composeAction: () => composeConversation(),
-  });
-
+const {
+  composeConversationDialog,
+  openComposeConversationDialog,
+  closeComposeConversationDialog,
+} = useConversationComposeDialog({
+  users: isFetchUsersPending ? [] : (users || []), 
+  participants,
+  setParticipants,
+  composeAction: () => composeConversation(),
+  currentUserId: user?.id, 
+});
   const {
     mutate: composeConversation,
     isPending: isComposeConversationPending,
   } = useMutation({
     mutationFn: async () =>
       api.chat.conversation.commposeConversation({
-        participantIds: participants.map((p) => p.value as string),
+        participantIds: participants,
       }),
     onSuccess: () => {
       refetchUserConversations();
       closeComposeConversationDialog();
-      {
-        /* need trans */
-      }
-      toast.success("Conversation created");
+      setParticipants([user?.id || ""]);
+      toast.success(t("userManagement.inspect.conversations.messages.conversationCreatedSuccess"));
     },
     onError: () => {
-      {
-        /* need trans */
-      }
-
-      toast.error("Error creating conversation");
+      toast.error(t("userManagement.inspect.conversations.messages.conversationCreatedError"));
     },
   });
 
@@ -184,10 +171,9 @@ export const ConversationList = ({ className }: ConversationListProps) => {
         <Card className="flex flex-col flex-1 overflow-hidden">
           <CardHeader>
             <CardTitle>
-              {/* need trans */}
-              <span>Conversations</span>
+              <span>{t("userManagement.inspect.conversations.title")}</span>
             </CardTitle>
-            <CardDescription>The user&apos;s conversations</CardDescription>
+            <CardDescription>{t("userManagement.inspect.conversations.description")}</CardDescription>
             <CardAction>
               <Button
                 variant="ghost"
@@ -195,8 +181,7 @@ export const ConversationList = ({ className }: ConversationListProps) => {
                 className="w-full"
                 onClick={openComposeConversationDialog}
               >
-                {/* need trans */}
-                New conversation
+                {t("userManagement.inspect.conversations.newConversation")}
               </Button>
             </CardAction>
           </CardHeader>

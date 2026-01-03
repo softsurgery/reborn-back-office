@@ -34,7 +34,8 @@
       "account": "Compte",
       "viewDetails": "Voir les détails",
       "clearAll": "Tout effacer",
-      "profile": "Profil"
+      "profile": "Profil",
+      "compose": "Composer"
     },
     "table": {
       "Asc": "Croissant",

@@ -34,7 +34,8 @@
       "account": "Account",
       "viewDetails": "View Details",
       "clearAll": "Clear All",
-      "profile": "Profile"
+      "profile": "Profile",
+      "compose": "Compose"
     },
     "table": {
       "Asc": "Ascending",

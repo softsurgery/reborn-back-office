@@ -230,6 +230,20 @@
         }
       },
       "conversations": {
+        "title": "Conversations",
+        "description": "The user's conversations",
+        "newConversation": "New conversation",
+        "composeDialog": {
+          "title": "New Conversation Compose",
+          "description": "You can create a new conversation",
+          "searchPlaceholder": "Search users ...",
+          "userSelected": "user selected",
+          "usersSelected": "users selected",
+          "clearAll": "Clear all",
+          "noUsersFound": "No users found matching your search",
+          "noUsersAvailable": "No users available",
+          "selected": "Selected"
+        },
         "conversationList": {
           "noMessagesYet": "No messages yet.",
           "unknown": "Unknown",
@@ -242,6 +256,10 @@
           "noMessagesYet": "No messages yet.",
           "yesterday": "Yesterday",
           "unknown": "Unknown"
+        },
+        "messages": {
+          "conversationCreatedSuccess": "Conversation created successfully",
+          "conversationCreatedError": "Error creating conversation"
         }
       }
     }
