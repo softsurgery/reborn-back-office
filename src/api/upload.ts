@@ -19,7 +19,7 @@ const findPaginated = async ({
   if (filter) params.filter = filter;
   if (join) params.join = join;
 
-  const response = await axios.get<Paginated<Upload>>(`/upload/list`, {
+  const response = await axios.get<Paginated<Upload>>(`/storage/list`, {
     params,
   });
 
@@ -29,7 +29,7 @@ const findPaginated = async ({
 export const uploadFiles = async (
   files: File[],
   onProgress?: (percent: number) => void,
-  temporary: boolean = true
+  temporary: boolean = true,
 ): Promise<Upload[]> => {
   const formData = new FormData();
   files.forEach((file) => {
@@ -37,7 +37,7 @@ export const uploadFiles = async (
   });
 
   const response = await axios.post<Upload[]>(
-    temporary ? "/upload/multiple/temporary" : "/upload/multiple",
+    temporary ? "/storage/multiple/temporary" : "/storage/multiple",
     formData,
     {
       headers: {
@@ -49,14 +49,14 @@ export const uploadFiles = async (
           onProgress(percent);
         }
       },
-    }
+    },
   );
   return response.data;
 };
 
 const downloadFile = async (slug: string, filename?: string) => {
   try {
-    const response = await axios.get(`/upload/download/slug/${slug}`, {
+    const response = await axios.get(`/storage/download/slug/${slug}`, {
       responseType: "blob",
     });
 
@@ -78,7 +78,7 @@ const downloadFile = async (slug: string, filename?: string) => {
 
 const openFile = async (slug: string) => {
   try {
-    const response = await axios.get(`/upload/download/slug/${slug}`, {
+    const response = await axios.get(`/storage/download/slug/${slug}`, {
       responseType: "blob",
     });
 
@@ -93,19 +93,19 @@ const openFile = async (slug: string) => {
 };
 
 export const getUploadBySlug = async (slug: string) => {
-  const url = `/upload/view/slug/${slug}`;
+  const url = `/storage/view/slug/${slug}`;
   const { data } = await axios.get(url, { responseType: "blob" });
   return URL.createObjectURL(data);
 };
 
 export const getUploadById = async (id: number) => {
-  const url = `/upload/view/id/${id}`;
+  const url = `/storage/view/id/${id}`;
   const { data } = await axios.get(url, { responseType: "blob" });
   return URL.createObjectURL(data);
 };
 
 const deleteFile = async (slug: string): Promise<ServerResponse<Upload>> => {
-  const response = await axios.delete(`/upload/${slug}`);
+  const response = await axios.delete(`/storage/${slug}`);
   return response.data;
 };
 

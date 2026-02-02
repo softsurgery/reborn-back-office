@@ -58,9 +58,9 @@ export const BaseProfile = ({
   });
 
   const { data: picture } = useQuery({
-    queryKey: ["picture", user?.profile?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.profile?.pictureId!),
-    enabled: !!user?.profile?.pictureId,
+    queryKey: ["picture", user?.pictureId],
+    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+    enabled: !!user?.pictureId,
     staleTime: Infinity,
   });
 
@@ -127,13 +127,11 @@ export const BaseProfile = ({
             </h2>
             <div className="flex flex-row items-center gap-2">
               <p className="text-sm text-muted-foreground">
-                {user?.profile?.region?.label ||
-                  t("userManagement.inspect.noRegion")}
+                {user?.region?.label || t("userManagement.inspect.noRegion")}
               </p>
               <Separator orientation="vertical" className="mx-1 h-4" />
               <p className="text-sm text-muted-foreground">
-                {user?.profile?.phone ||
-                  t("userManagement.inspect.noPhoneNumber")}
+                {user?.phone || t("userManagement.inspect.noPhoneNumber")}
               </p>
             </div>
           </div>
@@ -203,7 +201,7 @@ export const BaseProfile = ({
                 >
                   {content}
                 </TabsContent>
-              ) : null
+              ) : null,
             )}
           </div>
         </Tabs>

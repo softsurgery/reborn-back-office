@@ -4,8 +4,6 @@ import {
   FieldVariant,
   FormStructure,
   ImageFieldProps,
-  ImageFile,
-  ImageGalleryFieldProps,
   NumberFieldProps,
   PasswordFieldProps,
   SelectFieldProps,
@@ -284,9 +282,9 @@ export const useCreateUserFormStructure = ({
     description: `${t("userManagement.forms.phoneDescription")}`,
     error: t(userStore.createDtoErrors?.phone?.[0]),
     props: {
-      value: Number(userStore.createDto?.profile?.phone) || undefined,
+      value: Number(userStore.createDto?.phone) || undefined,
       onChange: (value: number) => {
-        userStore.setNested("createDto.profile.phone", value.toString());
+        userStore.setNested("createDto.phone", value.toString());
         userStore.setNested("createDtoErrors.phone", []);
       },
     },
@@ -301,9 +299,9 @@ export const useCreateUserFormStructure = ({
     description: `${t("userManagement.forms.CINDescription")}`,
     error: t(userStore.createDtoErrors?.cin?.[0]),
     props: {
-      value: Number(userStore.createDto?.profile?.cin) || undefined,
+      value: Number(userStore.createDto?.cin) || undefined,
       onChange: (value: number) => {
-        userStore.setNested("createDto.profile.cin", value.toString());
+        userStore.setNested("createDto.cin", value.toString());
         userStore.setNested("createDtoErrors.cin", []);
       },
     },
@@ -318,9 +316,9 @@ export const useCreateUserFormStructure = ({
     description: `${t("userManagement.forms.bioDescription")}`,
     error: t(userStore.createDtoErrors?.bio?.[0]),
     props: {
-      value: userStore.createDto?.profile?.bio,
+      value: userStore.createDto?.bio,
       onChange: (value) => {
-        userStore.setNested("createDto.profile.bio", value);
+        userStore.setNested("createDto.bio", value);
         userStore.setNested("createDtoErrors.bio", []);
       },
       rows: 5,
@@ -340,9 +338,9 @@ export const useCreateUserFormStructure = ({
         value,
         label,
       })),
-      value: userStore.createDto?.profile?.gender,
+      value: userStore.createDto?.gender,
       onValueChange: (value) => {
-        userStore.setNested("createDto.profile.gender", value);
+        userStore.setNested("createDto.gender", value);
         userStore.setNested("createDtoErrors.gender", []);
       },
     },
@@ -357,9 +355,9 @@ export const useCreateUserFormStructure = ({
     description: `${t("userManagement.forms.isPrivateDescription")}`,
     error: t(userStore.createDtoErrors?.isPrivate?.[0]),
     props: {
-      checked: userStore.createDto?.profile?.isPrivate,
+      checked: userStore.createDto?.isPrivate,
       onCheckedChange: (value) => {
-        userStore.setNested("createDto.profile.isPrivate", value);
+        userStore.setNested("createDto.isPrivate", value);
         userStore.setNested("createDtoErrors.isPrivate", []);
       },
     },
@@ -375,9 +373,9 @@ export const useCreateUserFormStructure = ({
     error: t(userStore.createDtoErrors?.regionId?.[0]),
     props: {
       options: regions,
-      value: userStore.createDto?.profile?.regionId?.toString(),
+      value: userStore.createDto?.regionId?.toString(),
       onValueChange: (value) => {
-        userStore.setNested("createDto.profile.regionId", Number(value));
+        userStore.setNested("createDto.regionId", Number(value));
         userStore.setNested("createDtoErrors.regionId", []);
       },
     },
@@ -409,7 +407,7 @@ export const useCreateUserFormStructure = ({
       },
     ],
   };
- 
+
   return {
     userCreateFormStructure,
     profileCreateFormStructure,

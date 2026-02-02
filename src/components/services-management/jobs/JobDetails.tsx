@@ -38,16 +38,15 @@ export const JobDetails = ({
   const job = React.useMemo(() => jobResp ?? null, [jobResp]);
 
   const { data: profilePicture } = useQuery({
-    queryKey: ["profile-picture", jobResp?.postedBy?.profile?.pictureId],
-    queryFn: () =>
-      api.upload.getUploadById(jobResp?.postedBy?.profile?.pictureId!),
-    enabled: !!jobResp?.postedBy?.profile?.pictureId,
+    queryKey: ["profile-picture", jobResp?.postedBy?.pictureId],
+    queryFn: () => api.upload.getUploadById(jobResp?.postedBy?.pictureId!),
+    enabled: !!jobResp?.postedBy?.pictureId,
     staleTime: Infinity,
   });
 
   const fallback = React.useMemo(
     () => identifyUserAvatar(job?.postedBy),
-    [job]
+    [job],
   );
 
   const imageQueries = useQueries({
@@ -143,7 +142,7 @@ export const JobDetails = ({
             className={cn(
               (uploads?.length ?? 0) > 0
                 ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-                : "hidden"
+                : "hidden",
             )}
           >
             {imageQueries.map((query, index) => {
@@ -241,10 +240,10 @@ export const JobDetails = ({
               {job?.createdAt ? timeAgo(job.createdAt) : "No Date Available"}
             </span>
           </div>
-          {job?.postedBy?.profile?.region?.label && (
+          {job?.postedBy?.region?.label && (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <MapPin className="h-3 w-3" />
-              {job?.postedBy?.profile?.region?.label}
+              {job?.postedBy?.region?.label}
             </div>
           )}
         </div>

@@ -34,15 +34,14 @@ const ConversationItem = ({
 
   const otherParticipant = React.useMemo(() => {
     return conversation.participants?.find(
-      (p) => p.id !== userStore.response?.id
+      (p) => p.id !== userStore.response?.id,
     );
   }, [conversation, userStore.response?.id]);
 
   const { data: otherParticipantPicture } = useQuery({
-    queryKey: ["picture", otherParticipant?.profile?.pictureId],
-    queryFn: () =>
-      api.upload.getUploadById(otherParticipant?.profile?.pictureId!),
-    enabled: !!otherParticipant?.profile?.pictureId,
+    queryKey: ["picture", otherParticipant?.pictureId],
+    queryFn: () => api.upload.getUploadById(otherParticipant?.pictureId!),
+    enabled: !!otherParticipant?.pictureId,
     staleTime: Infinity,
   });
 
@@ -67,7 +66,7 @@ const ConversationItem = ({
     <div
       className={cn(
         "p-3 cursor-pointer flex items-center transition-colors",
-        className
+        className,
       )}
       onClick={() => onClick?.(conversation.id)}
     >
@@ -86,7 +85,7 @@ const ConversationItem = ({
             <span className="text-sm truncate max-w-[220px]">
               {lastMessage?.content ||
                 t(
-                  "userManagement.inspect.conversations.conversationItem.noMessagesYet"
+                  "userManagement.inspect.conversations.conversationItem.noMessagesYet",
                 )}
             </span>
             <span className="text-xs opacity-70 whitespace-nowrap ml-2">

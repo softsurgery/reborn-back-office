@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import Icon  from "@/lib/Icon"; 
+import Icon from "@/lib/Icon";
 import { MessageCircleMoreIcon } from "lucide-react";
 import { ResponseUserDto } from "@/types";
 import { useServerImage } from "@/hooks/content/useServerImage";
@@ -24,24 +24,34 @@ export const UserEntry = ({
   isPending,
 }: UserEntryProps) => {
   const { jsx: profilePicture } = useServerImage({
-    id: user.profile?.pictureId,
+    id: user?.pictureId,
     fallback: identifyUserAvatar(user),
     size: { width: 60, height: 60 },
   });
 
   return (
-    <div className={cn("flex justify-between items-center gap-2 w-full", className)}>
+    <div
+      className={cn(
+        "flex justify-between items-center gap-2 w-full",
+        className,
+      )}
+    >
       <div className="flex items-center gap-2">
         {profilePicture}
         <div className="flex flex-col justify-between">
           <span className="text-lg font-semibold">{identifyUser(user)}</span>
           <div className="flex gap-2 items-center">
             {lastMessage ? (
-              <span className="text-xs font-semibold truncate" title={lastMessage}>
+              <span
+                className="text-xs font-semibold truncate"
+                title={lastMessage}
+              >
                 {lastMessage.replaceAll("\n", " ").replace("  ", " ")}
               </span>
             ) : (
-              <span className="text-xs font-semibold">You can start a conversation now</span>
+              <span className="text-xs font-semibold">
+                You can start a conversation now
+              </span>
             )}
             {lastMessage && <span className="text-xs font-thin">{sentAt}</span>}
           </div>

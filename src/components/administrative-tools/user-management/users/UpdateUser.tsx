@@ -28,8 +28,8 @@ export const UpdateUser = ({ id, className }: UpdateUserProps) => {
   const { user } = useIdentifiedUser(id);
 
   //fetch user images
-  const uploadIds = Array.isArray(userStore.updateDto?.profile?.uploads)
-    ? userStore.updateDto.profile.uploads.map((u) => u.uploadId)
+  const uploadIds = Array.isArray(userStore.updateDto?.uploads)
+    ? userStore.updateDto.uploads.map((u) => u.uploadId)
     : [];
 
   const { uploads: images, isPending: isImagesPending } = useUploads(uploadIds);
@@ -47,8 +47,8 @@ export const UpdateUser = ({ id, className }: UpdateUserProps) => {
 
   const { upload: profilePicture, isUploadPending: isProfilePicturePending } =
     useUpload({
-      id: userStore.updateDto?.profile?.pictureId,
-      enabled: Boolean(userStore.updateDto?.profile?.pictureId),
+      id: userStore.updateDto?.pictureId,
+      enabled: Boolean(userStore.updateDto?.pictureId),
     });
   React.useEffect(() => {
     if (profilePicture) {
@@ -56,33 +56,9 @@ export const UpdateUser = ({ id, className }: UpdateUserProps) => {
     }
   }, [profilePicture]);
 
-  const { upload: officialDocument, isUploadPending: isOfficialDocPending } =
-    useUpload({
-      id: userStore.updateDto?.profile?.officialDocumentId,
-      enabled: Boolean(userStore.updateDto?.profile?.officialDocumentId),
-    });
-
-  React.useEffect(() => {
-    if (officialDocument) {
-      userStore.set("officialDocument", officialDocument);
-    }
-  }, [officialDocument]);
-
-  const { upload: driverLicenseDocument, isUploadPending: isDriverDocPending } =
-    useUpload({
-      id: userStore.updateDto?.profile?.driverLicenseDocumentId,
-      enabled: Boolean(userStore.updateDto?.profile?.driverLicenseDocumentId),
-    });
-
-  React.useEffect(() => {
-    if (driverLicenseDocument) {
-      userStore.set("driverLicenseDocument", driverLicenseDocument);
-    }
-  }, [driverLicenseDocument]);
-
   React.useEffect(() => {
     if (user) {
-      const uploads = user.profile?.uploads?.sort((a, b) => a.order - b.order);
+      const uploads = user?.uploads?.sort((a, b) => a.order - b.order);
       userStore.set("response", user);
       userStore.set<UpdateUserDto>("updateDto", {
         firstName: user.firstName,
@@ -94,25 +70,19 @@ export const UpdateUser = ({ id, className }: UpdateUserProps) => {
         email: user.email,
         password: "",
         roleId: user.roleId,
-        profile: {
-          phone: user.profile?.phone,
-          pictureId: user.profile?.pictureId,
-          cin: user.profile?.cin,
-          regionId: user.profile?.regionId,
-          bio: user.profile?.bio,
-          gender: user.profile?.gender as Gender,
-          isPrivate: user.profile?.isPrivate,
-          officialDocumentId: user.profile?.officialDocumentId,
-          driverLicenseDocumentId: user.profile?.driverLicenseDocumentId,
-          uploads: uploads.map((upload) => ({
-            id: upload.id,
-            uploadId: upload.uploadId,
-          })),
-        },
+        phone: user?.phone,
+        pictureId: user?.pictureId,
+        cin: user?.cin,
+        regionId: user?.regionId,
+        bio: user?.bio,
+        gender: user?.gender as Gender,
+        isPrivate: user?.isPrivate,
+        uploads: uploads.map((upload) => ({
+          id: upload.id,
+          uploadId: upload.uploadId,
+        })),
       });
       userStore.set("picture", profilePicture);
-      userStore.set("officialDocument", officialDocument);
-      userStore.set("driverLicenseDocument", driverLicenseDocument);
     }
   }, [user]);
 
@@ -133,7 +103,7 @@ export const UpdateUser = ({ id, className }: UpdateUserProps) => {
     ]);
     setIntro?.(
       t("userManagement.page.editUser"),
-      t("userManagement.page.description")
+      t("userManagement.page.description"),
     );
     return () => {
       clearRoutes?.();
@@ -175,7 +145,7 @@ export const UpdateUser = ({ id, className }: UpdateUserProps) => {
         onSuccess: () => {
           router.push("/user-management/users");
         },
-      }
+      },
     );
   };
 

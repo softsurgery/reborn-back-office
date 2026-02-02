@@ -50,7 +50,7 @@ export const Users = ({ className }: UsersProps) => {
     ]);
     setIntro?.(
       t("userManagement.page.users"),
-      t("userManagement.page.description")
+      t("userManagement.page.description"),
     );
     return () => {
       clearRoutes?.();
@@ -63,13 +63,13 @@ export const Users = ({ className }: UsersProps) => {
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
-    500
+    500,
   );
 
   const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
-    500
+    500,
   );
 
   const [sortDetails, setSortDetails] = React.useState({
@@ -235,8 +235,8 @@ export const Users = ({ className }: UsersProps) => {
   });
 
   //fetch user images
-  const uploadIds = Array.isArray(userStore.updateDto?.profile?.uploads)
-    ? userStore.updateDto.profile.uploads.map((u) => u.uploadId)
+  const uploadIds = Array.isArray(userStore.updateDto?.uploads)
+    ? userStore.updateDto.uploads.map((u) => u.uploadId)
     : [];
 
   const { uploads: images, isPending: isImagesPending } = useUploads(uploadIds);
@@ -254,38 +254,14 @@ export const Users = ({ className }: UsersProps) => {
 
   const { upload: profilePicture, isUploadPending: isProfilePicturePending } =
     useUpload({
-      id: userStore.updateDto?.profile?.pictureId,
-      enabled: Boolean(userStore.updateDto?.profile?.pictureId),
+      id: userStore.updateDto?.pictureId,
+      enabled: Boolean(userStore.updateDto?.pictureId),
     });
   React.useEffect(() => {
     if (profilePicture) {
       userStore.set("picture", profilePicture);
     }
   }, [profilePicture]);
-
-  const { upload: officialDocument, isUploadPending: isOfficialDocPending } =
-    useUpload({
-      id: userStore.updateDto?.profile?.officialDocumentId,
-      enabled: Boolean(userStore.updateDto?.profile?.officialDocumentId),
-    });
-
-  React.useEffect(() => {
-    if (officialDocument) {
-      userStore.set("officialDocument", officialDocument);
-    }
-  }, [officialDocument]);
-
-  const { upload: driverLicenseDocument, isUploadPending: isDriverDocPending } =
-    useUpload({
-      id: userStore.updateDto?.profile?.driverLicenseDocumentId,
-      enabled: Boolean(userStore.updateDto?.profile?.driverLicenseDocumentId),
-    });
-
-  React.useEffect(() => {
-    if (driverLicenseDocument) {
-      userStore.set("driverLicenseDocument", driverLicenseDocument);
-    }
-  }, [driverLicenseDocument]);
 
   const context: DataTableConfig<ResponseUserDto> = {
     singularName: `${t("userManagement.page.user")}`,
@@ -347,7 +323,7 @@ export const Users = ({ className }: UsersProps) => {
     setSortDetails: (order: boolean, sortKey: string) =>
       setSortDetails({ order, sortKey }),
     targetEntity: (user: ResponseUserDto) => {
-      const uploads = user.profile?.uploads?.sort((a, b) => a.order - b.order);
+      const uploads = user?.uploads?.sort((a, b) => a.order - b.order);
       userStore.set("response", user);
       userStore.set<UpdateUserDto>("updateDto", {
         firstName: user.firstName,
@@ -359,25 +335,19 @@ export const Users = ({ className }: UsersProps) => {
         email: user.email,
         password: "",
         roleId: user.roleId,
-        profile: {
-          phone: user.profile?.phone,
-          pictureId: user.profile?.pictureId,
-          cin: user.profile?.cin,
-          regionId: user.profile?.regionId,
-          bio: user.profile?.bio,
-          gender: user.profile?.gender as Gender,
-          isPrivate: user.profile?.isPrivate,
-          officialDocumentId: user.profile?.officialDocumentId,
-          driverLicenseDocumentId: user.profile?.driverLicenseDocumentId,
-          uploads: uploads.map((upload) => ({
-            id: upload.id,
-            uploadId: upload.uploadId,
-          })),
-        },
+        phone: user?.phone,
+        pictureId: user?.pictureId,
+        cin: user?.cin,
+        regionId: user?.regionId,
+        bio: user?.bio,
+        gender: user?.gender as Gender,
+        isPrivate: user?.isPrivate,
+        uploads: uploads.map((upload) => ({
+          id: upload.id,
+          uploadId: upload.uploadId,
+        })),
       });
       userStore.set("picture", profilePicture);
-      userStore.set("officialDocument", officialDocument);
-      userStore.set("driverLicenseDocument", driverLicenseDocument);
     },
   };
 
