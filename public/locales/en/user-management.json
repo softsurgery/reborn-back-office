@@ -175,6 +175,7 @@
       "settings": "Settings",
       "tabs": {
         "about": "About",
+        "book": "Book",
         "activity": "Activity",
         "conversations": "Conversations",
         "notifications": "Notifications",
@@ -184,6 +185,122 @@
         "services": "Services",
         "followers": "Followers",
         "following": "Following"
+      },
+      "books": {
+        "education": {
+          "page": {
+            "title": "Education"
+          },
+          "messages": {
+            "createdSuccess": "Education created successfully",
+            "updatedSuccess": "Education updated successfully",
+            "deletedSuccess": "Education deleted successfully"
+          },
+          "forms": {
+            "title": "Title",
+            "titlePlaceholder": "Enter degree or program title",
+            "titleDescription": "Your degree, diploma, or program name",
+            "institution": "Institution",
+            "institutionPlaceholder": "Enter school or university name",
+            "institutionDescription": "Name of the educational institution",
+            "startDate": "Start Date",
+            "startDateDescription": "When you started this education",
+            "endDate": "End Date",
+            "endDateDescription": "When you completed this education (leave empty if current)",
+            "description": "Description",
+            "descriptionPlaceholder": "Describe your studies, achievements, or specialization",
+            "descriptionDescription": "Details about your education and accomplishments",
+            "updateTitle": "Update Education"
+          },
+          "sheet": {
+            "createTitle": "Add Education",
+            "createDescription": "Add a new education to your profile",
+            "updateTitle": "Edit Education",
+            "updateDescription": "Update your education details"
+          },
+          "dialogs": {
+            "deleteTitle": "Delete Education",
+            "deleteDescription": "Are you sure you want to delete this education? This action cannot be undone."
+          },
+          "validation": {
+            "titleTooShort": "Title must be at least 2 characters",
+            "titleTooLong": "Title cannot exceed 100 characters",
+            "institutionTooShort": "Institution must be at least 2 characters",
+            "institutionTooLong": "Institution cannot exceed 100 characters",
+            "startDateRequired": "Start date is required",
+            "startDateFuture": "Start date cannot be in the future",
+            "endDateBeforeStart": "End date must be after start date",
+            "endDateFuture": "End date cannot be in the future",
+            "descriptionTooLong": "Description cannot exceed 500 characters"
+          }
+        },
+
+        "experience": {
+          "page": {
+            "title": "Experience"
+          },
+          "messages": {
+            "createdSuccess": "Experience created successfully",
+            "updatedSuccess": "Experience updated successfully",
+            "deletedSuccess": "Experience deleted successfully"
+          },
+          "forms": {
+            "title": "Title",
+            "titlePlaceholder": "Enter job title",
+            "titleDescription": "Your role or position at the company",
+            "company": "Company",
+            "companyPlaceholder": "Enter company name",
+            "companyDescription": "Name of the company or organization",
+            "startDate": "Start Date",
+            "startDateDescription": "When you started this position",
+            "endDate": "End Date",
+            "endDateDescription": "When you left this position (leave empty if current)",
+            "description": "Description",
+            "descriptionPlaceholder": "Describe your responsibilities and achievements",
+            "descriptionDescription": "Details about your role and accomplishments",
+            "updateTitle": "Update Experience"
+          },
+          "sheet": {
+            "createTitle": "Add Experience",
+            "createDescription": "Add a new work experience to your profile",
+            "updateTitle": "Edit Experience",
+            "updateDescription": "Update your work experience details"
+          },
+          "dialogs": {
+            "deleteTitle": "Delete Experience",
+            "deleteDescription": "Are you sure you want to delete this experience? This action cannot be undone."
+          },
+          "validation": {
+            "titleTooShort": "Title must be at least 2 characters",
+            "titleTooLong": "Title cannot exceed 100 characters",
+            "companyTooShort": "Company must be at least 2 characters",
+            "companyTooLong": "Company cannot exceed 100 characters",
+            "startDateRequired": "Start date is required",
+            "startDateFuture": "Start date cannot be in the future",
+            "endDateBeforeStart": "End date must be after start date",
+            "endDateFuture": "End date cannot be in the future",
+            "descriptionTooLong": "Description cannot exceed 500 characters"
+          }
+        },
+
+        "ref-params": {
+          "industry": {
+            "messages": {
+              "updatedSuccess": "Industry updated successfully"
+            },
+            "forms": {
+              "reset": "Reset"
+            }
+          },
+          "objective": {
+            "messages": {
+              "updatedSuccess": "Objective updated successfully"
+            },
+            "forms": {
+              "reset": "Reset"
+            }
+          }
+        }
       },
       "myProfile": {
         "profile": "My Profile",

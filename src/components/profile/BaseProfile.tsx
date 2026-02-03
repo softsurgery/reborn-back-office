@@ -4,6 +4,7 @@ import {
   User as UserIcon,
   Settings as SettingsIcon,
   BellIcon,
+  BookUser,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Spinner } from "../shared/Spinner";
@@ -24,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { Conversations } from "./cards/Conversations";
 import { Notifications } from "../audit-monitoring/notifications/Notifications";
+import { Book } from "./cards/Book";
 
 interface BaseProfileProps {
   className?: string;
@@ -81,6 +83,12 @@ export const BaseProfile = ({
       label: t("userManagement.inspect.tabs.about"),
       icon: UserIcon,
       content: <About />,
+    },
+    {
+      value: "book",
+      label: t("userManagement.inspect.tabs.book"),
+      icon: BookUser,
+      content: <Book />,
     },
     {
       value: "activity",
@@ -177,7 +185,7 @@ export const BaseProfile = ({
           onValueChange={setActiveTab}
           className="flex flex-col h-full"
         >
-          <TabsList className="grid grid-cols-5 mb-4 flex-shrink-0">
+          <TabsList className="grid grid-cols-6 mb-4 flex-shrink-0">
             {tabs.map(({ value, label, icon: Icon }) => (
               <TabsTrigger
                 key={value}

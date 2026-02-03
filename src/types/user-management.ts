@@ -76,6 +76,51 @@ export interface ResponseUserUploadDto extends DatabaseEntity {
   order: number;
 }
 
+// user experience dtos ************************************************************************************
+export interface ResponseExperienceDto extends DatabaseEntity {
+  id: number;
+  title?: string;
+  company?: string;
+  startDate?: Date;
+  endDate?: Date;
+  description?: string;
+  user?: ResponseUserDto;
+  userId: string;
+}
+
+export interface CreateExperienceDto {
+  title?: string;
+  company?: string;
+  startDate?: Date;
+  endDate?: Date;
+  description?: string;
+}
+
+export interface UpdateExperienceDto extends Partial<CreateExperienceDto> {}
+
+// user education dtos ************************************************************************************
+
+export interface ResponseEducationDto extends DatabaseEntity {
+  id: string;
+  title?: string;
+  startDate?: Date;
+  endDate?: Date;
+  institution?: string;
+  description?: string;
+  user?: ResponseUserDto;
+  userId: string;
+}
+
+export interface CreateEducationDto {
+  title?: string;
+  startDate?: Date;
+  endDate?: Date;
+  institution?: string;
+  description?: string;
+}
+
+export interface UpdateEducationDto extends Partial<CreateEducationDto> {}
+
 // ********************************************************************************************
 
 export interface ResponseRoleDto extends DatabaseEntity {
