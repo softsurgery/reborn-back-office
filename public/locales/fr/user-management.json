@@ -338,7 +338,21 @@
         }
       },
       "conversations": {
-        "conversationListe": {
+        "title": "Conversations",
+        "description": "Les conversations de l'utilisateur",
+        "newConversation": "Nouvelle conversation",
+        "composeDialog": {
+          "title": "Composer une nouvelle conversation",
+          "description": "Vous pouvez créer une nouvelle conversation",
+          "searchPlaceholder": "Rechercher utilisateurs ...",
+          "userSelected": "utilisateur sélectionné",
+          "usersSelected": "utilisateurs sélectionnés",
+          "clearAll": "Tout effacer",
+          "noUsersFound": "Aucun utilisateur trouvé",
+          "noUsersAvailable": "Aucun utilisateur disponible",
+          "selected": "Sélectionné"
+        },
+        "conversationList": {
           "noMessagesYet": "Aucun message pour le moment.",
           "unknown": "Inconnu",
           "yesterday": "Hier",
@@ -350,6 +364,10 @@
           "noMessagesYet": "Aucun message pour le moment.",
           "yesterday": "Hier",
           "unknown": "Inconnu"
+        },
+        "messages": {
+          "conversationCreatedSuccess": "Conversation créée avec succès",
+          "conversationCreatedError": "Erreur lors de la création de la conversation"
         }
       }
     }
