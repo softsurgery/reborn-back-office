@@ -5,7 +5,7 @@ import { ResponseUserDto } from "@/types";
 import { Search, X } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,7 +17,6 @@ interface ConversationComposeDialogProps {
   setParticipants: (value: string[]) => void;
   composeAction?: () => void;
   currentUserId?: string;
-
 }
 
 export const useConversationComposeDialog = ({
@@ -26,7 +25,6 @@ export const useConversationComposeDialog = ({
   setParticipants,
   composeAction,
   currentUserId,
-
 }: ConversationComposeDialogProps) => {
   const { t: tCommon } = useTranslation("common");
   const { t } = useTranslation("user-management");
@@ -42,66 +40,74 @@ export const useConversationComposeDialog = ({
       const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
       const username = user.username?.toLowerCase() || "";
 
-      return (
-        fullName.includes(searchLower) ||
-        username.includes(searchLower)
-      );
+      return fullName.includes(searchLower) || username.includes(searchLower);
     });
 
     return filtered;
   }, [users, searchTerm, currentUserId]);
 
-
   const toggleUser = (userId: string) => {
     setParticipants(
       participants.includes(userId)
         ? participants.filter((id) => id !== userId)
-        : [...participants, userId]
+        : [...participants, userId],
     );
   };
   const clearSelections = () => {
     setParticipants([]);
   };
 
-  const selectedCount = participants.filter(id => id !== currentUserId).length;
-
-
+  const selectedCount = participants.filter(
+    (id) => id !== currentUserId,
+  ).length;
 
   const {
     DialogFragment: composeConversationDialog,
     openDialog: openComposeConversationDialog,
     closeDialog: closeComposeConversationDialog,
   } = useDialog({
-    title: <div className="leading-normal">{t("userManagement.inspect.conversations.composeDialog.title")}</div>,
-    description: t("userManagement.inspect.conversations.composeDialog.description"),
+    title: (
+      <div className="leading-normal">
+        {t("userManagement.inspect.conversations.composeDialog.title")}
+      </div>
+    ),
+    description: t(
+      "userManagement.inspect.conversations.composeDialog.description",
+    ),
     children: (
       <div className="flex flex-col gap-4">
         <div className="relative">
-
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-           placeholder={t("userManagement.inspect.conversations.composeDialog.searchPlaceholder")} 
-           value={searchTerm}
-           onChange={(e) => setSearchTerm(e.target.value)}
-           className="pl-9 pr-9 "
-           />
+          <Input
+            placeholder={t(
+              "userManagement.inspect.conversations.composeDialog.searchPlaceholder",
+            )}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-9 pr-9 "
+          />
 
-           {searchTerm && (
-            <Button 
+          {searchTerm && (
+            <Button
               className="absolute right-3 top-1/2 transform -translate-y-1/2  "
               onClick={() => setSearchTerm("")}
             >
               <X className="h-4 w-4" />
             </Button>
-           )}
-        </div>     
-      
-             {selectedCount > 0 && (
+          )}
+        </div>
+
+        {selectedCount > 0 && (
           <div className="flex items-center justify-between px-1">
             <span className="text-sm text-muted-foreground">
-              {selectedCount} {selectedCount !== 1 
-                ? t("userManagement.inspect.conversations.composeDialog.usersSelected")
-                : t("userManagement.inspect.conversations.composeDialog.userSelected")}
+              {selectedCount}{" "}
+              {selectedCount !== 1
+                ? t(
+                    "userManagement.inspect.conversations.composeDialog.usersSelected",
+                  )
+                : t(
+                    "userManagement.inspect.conversations.composeDialog.userSelected",
+                  )}
             </span>
             <Button
               variant="ghost"
@@ -113,13 +119,17 @@ export const useConversationComposeDialog = ({
             </Button>
           </div>
         )}
-         <ScrollArea className="h-[400px] rounded-md border overflow-y-auto">
+        <ScrollArea className="h-[400px] rounded-md border overflow-y-auto">
           <div className="p-2">
             {filteredUsers.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 {searchTerm
-                  ? t("userManagement.inspect.conversations.composeDialog.noUsersFound")
-                  : t("userManagement.inspect.conversations.composeDialog.noUsersAvailable")}
+                  ? t(
+                      "userManagement.inspect.conversations.composeDialog.noUsersFound",
+                    )
+                  : t(
+                      "userManagement.inspect.conversations.composeDialog.noUsersAvailable",
+                    )}
               </div>
             ) : (
               <div className="space-y-1">
@@ -135,7 +145,7 @@ export const useConversationComposeDialog = ({
                       className={cn(
                         "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors",
                         "hover:bg-accent",
-                        isSelected && "bg-primary/10 border border-primary/20"
+                        isSelected && "bg-primary/10 border border-primary/20",
                       )}
                     >
                       <Checkbox
@@ -143,11 +153,15 @@ export const useConversationComposeDialog = ({
                         onCheckedChange={() => toggleUser(user.id)}
                         onClick={(e) => e.stopPropagation()}
                       />
-                      
+
                       <Avatar className="h-10 w-10">
                         <AvatarImage
-                           src={user.profile?.picture?.filename ? `/uploads/${user.profile.picture.filename}` : undefined}
-    alt={displayName}
+                          src={
+                            user?.picture?.filename
+                              ? `/uploads/${user.picture.filename}`
+                              : undefined
+                          }
+                          alt={displayName}
                         />
                         <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                           {avatar}
@@ -165,7 +179,11 @@ export const useConversationComposeDialog = ({
 
                       {isSelected && (
                         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-primary/20 text-primary">
-                          <span className="text-xs font-medium">{t("userManagement.inspect.conversations.composeDialog.selected")}</span>
+                          <span className="text-xs font-medium">
+                            {t(
+                              "userManagement.inspect.conversations.composeDialog.selected",
+                            )}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -197,13 +215,13 @@ export const useConversationComposeDialog = ({
             {selectedCount > 0 && ` (${selectedCount})`}
           </Button>
         </div>
-           
-         </div>
+      </div>
     ),
     className: "w-[600px] max-w-[90vw]",
-  onToggle: () => {
+    onToggle: () => {
       setSearchTerm("");
-    },  });
+    },
+  });
 
   return {
     composeConversationDialog,
