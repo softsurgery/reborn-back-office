@@ -1,6 +1,7 @@
 {
   "name": "reborn-back-office",
-  "version": "0.1.0-T",
+  "author": "softsurgery",
+  "version": "0.2.0-T",
   "private": true,
   "scripts": {
     "dev": "next dev",

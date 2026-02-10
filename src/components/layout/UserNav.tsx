@@ -32,10 +32,9 @@ export function UserNav({ className }: UserNavProps) {
   const avatarIdentity = React.useMemo(() => identifyUserAvatar(user), [user]);
 
   const { data: profilePicture } = useQuery({
-    queryKey: ["profile-picture", user?.profile?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.profile?.pictureId!),
-    enabled: !!user?.profile?.pictureId,
-    staleTime: Infinity,
+    queryKey: ["profile-picture", user?.pictureId],
+    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+    enabled: !!user?.pictureId,
   });
 
   const handleSignOut = async () => {
@@ -87,7 +86,7 @@ export function UserNav({ className }: UserNavProps) {
             <CreditCard />
             {t("common.buttons.billing")}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={()=> router.push("/notifications")}>
+          <DropdownMenuItem onClick={() => router.push("/notifications")}>
             <Bell />
             {t("common.buttons.notifications")}
           </DropdownMenuItem>

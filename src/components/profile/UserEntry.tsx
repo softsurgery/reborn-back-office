@@ -17,9 +17,9 @@ export const UserEntry = ({ className, user, closeDialog }: UserEntryProps) => {
   const router = useRouter();
 
   const { data: profilePicture } = useQuery({
-    queryKey: ["profile-picture", user?.profile?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.profile?.pictureId!),
-    enabled: !!user?.profile?.pictureId,
+    queryKey: ["profile-picture", user?.pictureId],
+    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+    enabled: !!user?.pictureId,
     staleTime: Infinity,
   });
 
@@ -34,7 +34,7 @@ export const UserEntry = ({ className, user, closeDialog }: UserEntryProps) => {
     <div
       className={cn(
         "p-2 hover:bg-secondary/10 rounded-md cursor-pointer",
-        className
+        className,
       )}
       onClick={handleClick}
     >

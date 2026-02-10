@@ -30,7 +30,7 @@ export const FormBuilder = ({ className, structure }: FormBuilderProps) => {
           "flex gap-4 xl:gap-10",
           structure?.orientation === "vertical"
             ? "flex-col xl:flex-row"
-            : "flex-col"
+            : "flex-col",
         )}
         onSubmit={() => {
           return false;
@@ -43,7 +43,7 @@ export const FormBuilder = ({ className, structure }: FormBuilderProps) => {
               "flex  w-full",
               structure.orientation === "vertical"
                 ? "flex-row xl:flex-col gap-10"
-                : "flex-col gap-4"
+                : "flex-col gap-4 px-1",
             )}
           >
             {fieldset.includeHeader && (
@@ -64,12 +64,12 @@ export const FormBuilder = ({ className, structure }: FormBuilderProps) => {
                     structure.orientation === "vertical" || fieldCount === 1
                       ? "grid-cols-1"
                       : fieldCount === 2
-                      ? "grid-cols-1 lg:grid-cols-2"
-                      : fieldCount === 3
-                      ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
-                      : fieldCount === 4
-                      ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
-                      : "w-full"
+                        ? "grid-cols-1 lg:grid-cols-2"
+                        : fieldCount === 3
+                          ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
+                          : fieldCount === 4
+                            ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                            : "w-full",
                   )}
                 >
                   {row.fields.map((field) => {
@@ -79,14 +79,14 @@ export const FormBuilder = ({ className, structure }: FormBuilderProps) => {
                           key={field.id}
                           className={cn(
                             "flex flex-col gap-2 w-full",
-                            field.wrapperClassName
+                            field.wrapperClassName,
                           )}
                         >
                           <div className="flex flex-row justify-between items-center">
                             <Label
                               className={cn(
                                 "text-xs font-semibold",
-                                field.variant === "check" && "invisible"
+                                field.variant === "check" && "invisible",
                               )}
                               htmlFor={field.label}
                             >

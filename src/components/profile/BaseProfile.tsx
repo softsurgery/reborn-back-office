@@ -4,6 +4,7 @@ import {
   User as UserIcon,
   Settings as SettingsIcon,
   BellIcon,
+  BookUser,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Spinner } from "../shared/Spinner";
@@ -24,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { Conversations } from "./cards/Conversations";
 import { Notifications } from "../audit-monitoring/notifications/Notifications";
+import { Book } from "./cards/Book";
 
 interface BaseProfileProps {
   className?: string;
@@ -58,9 +60,9 @@ export const BaseProfile = ({
   });
 
   const { data: picture } = useQuery({
-    queryKey: ["picture", user?.profile?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.profile?.pictureId!),
-    enabled: !!user?.profile?.pictureId,
+    queryKey: ["picture", user?.pictureId],
+    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+    enabled: !!user?.pictureId,
     staleTime: Infinity,
   });
 
@@ -81,6 +83,12 @@ export const BaseProfile = ({
       label: t("userManagement.inspect.tabs.about"),
       icon: UserIcon,
       content: <About />,
+    },
+    {
+      value: "book",
+      label: t("userManagement.inspect.tabs.book"),
+      icon: BookUser,
+      content: <Book />,
     },
     {
       value: "activity",
@@ -127,13 +135,11 @@ export const BaseProfile = ({
             </h2>
             <div className="flex flex-row items-center gap-2">
               <p className="text-sm text-muted-foreground">
-                {user?.profile?.region?.label ||
-                  t("userManagement.inspect.noRegion")}
+                {user?.region?.label || t("userManagement.inspect.noRegion")}
               </p>
               <Separator orientation="vertical" className="mx-1 h-4" />
               <p className="text-sm text-muted-foreground">
-                {user?.profile?.phone ||
-                  t("userManagement.inspect.noPhoneNumber")}
+                {user?.phone || t("userManagement.inspect.noPhoneNumber")}
               </p>
             </div>
           </div>
@@ -179,7 +185,7 @@ export const BaseProfile = ({
           onValueChange={setActiveTab}
           className="flex flex-col h-full"
         >
-          <TabsList className="grid grid-cols-5 mb-4 flex-shrink-0">
+          <TabsList className="grid grid-cols-6 mb-4 flex-shrink-0">
             {tabs.map(({ value, label, icon: Icon }) => (
               <TabsTrigger
                 key={value}
@@ -203,7 +209,7 @@ export const BaseProfile = ({
                 >
                   {content}
                 </TabsContent>
-              ) : null
+              ) : null,
             )}
           </div>
         </Tabs>

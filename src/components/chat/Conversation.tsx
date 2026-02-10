@@ -35,7 +35,7 @@ export const Conversation = ({ id }: ConversationProps) => {
     if (!messages) return [];
     const sorted = [...messages].sort(
       (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
 
     const groups: { date: string; messages: ResponseMessageDto[] }[] = [];
@@ -96,7 +96,7 @@ export const Conversation = ({ id }: ConversationProps) => {
       {/* Header */}
       <div className="flex justify-between items-center bg-gray-100 p-2">
         <ChatHeaderLeft
-          profilePicture={getProfilePictureUrl(otherUser?.profile?.picture)}
+          profilePicture={getProfilePictureUrl(otherUser?.picture)}
           identifier={otherUser?.firstName}
           lastSeen={format(new Date(), "hh:mm a")}
         />

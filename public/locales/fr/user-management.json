@@ -173,6 +173,7 @@
       "settings": "Paramètres",
       "tabs": {
         "about": "À propos",
+        "book": "Livres",
         "activity": "Activité",
         "conversations": "Conversations",
         "notifications": "Notifications",
@@ -183,6 +184,115 @@
         "followers": "Abonnés",
         "following": "Abonnements"
       },
+      "books": {
+        "education": {
+          "page": {
+            "title": "Formation"
+          },
+          "messages": {
+            "createdSuccess": "Formation créée avec succès",
+            "updatedSuccess": "Formation mise à jour avec succès",
+            "deletedSuccess": "Formation supprimée avec succès"
+          },
+          "forms": {
+            "title": "Titre",
+            "titlePlaceholder": "Entrez le diplôme ou le titre du programme",
+            "titleDescription": "Nom de votre diplôme, certificat ou programme",
+            "institution": "Établissement",
+            "institutionPlaceholder": "Entrez le nom de l’école ou de l’université",
+            "institutionDescription": "Nom de l’établissement d’enseignement",
+            "startDate": "Date de début",
+            "startDateDescription": "Date de début de cette formation",
+            "endDate": "Date de fin",
+            "endDateDescription": "Date de fin de cette formation (laisser vide si en cours)",
+            "description": "Description",
+            "descriptionPlaceholder": "Décrivez vos études, réalisations ou spécialisation",
+            "descriptionDescription": "Détails sur votre formation et vos réalisations",
+            "updateTitle": "Mettre à jour la formation"
+          },
+          "sheet": {
+            "createTitle": "Ajouter une formation",
+            "createDescription": "Ajouter une nouvelle formation à votre profil",
+            "updateTitle": "Modifier la formation",
+            "updateDescription": "Mettre à jour les informations de votre formation"
+          },
+          "dialogs": {
+            "deleteTitle": "Supprimer la formation",
+            "deleteDescription": "Êtes-vous sûr de vouloir supprimer cette formation ? Cette action est irréversible."
+          },
+          "validation": {
+            "titleTooShort": "Le titre doit contenir au moins 2 caractères",
+            "titleTooLong": "Le titre ne peut pas dépasser 100 caractères",
+            "institutionTooShort": "L’établissement doit contenir au moins 2 caractères",
+            "institutionTooLong": "L’établissement ne peut pas dépasser 100 caractères",
+            "startDateRequired": "La date de début est requise",
+            "startDateFuture": "La date de début ne peut pas être dans le futur",
+            "endDateBeforeStart": "La date de fin doit être postérieure à la date de début",
+            "endDateFuture": "La date de fin ne peut pas être dans le futur",
+            "descriptionTooLong": "La description ne peut pas dépasser 500 caractères"
+          }
+        },
+
+        "experience": {
+          "page": {
+            "title": "Expérience"
+          },
+          "messages": {
+            "createdSuccess": "Expérience créée avec succès",
+            "updatedSuccess": "Expérience mise à jour avec succès",
+            "deletedSuccess": "Expérience supprimée avec succès"
+          },
+          "forms": {
+            "title": "Titre",
+            "titlePlaceholder": "Entrez l’intitulé du poste",
+            "titleDescription": "Votre rôle ou poste au sein de l’entreprise",
+            "company": "Entreprise",
+            "companyPlaceholder": "Entrez le nom de l’entreprise",
+            "companyDescription": "Nom de l’entreprise ou de l’organisation",
+            "startDate": "Date de début",
+            "startDateDescription": "Date de début de ce poste",
+            "endDate": "Date de fin",
+            "endDateDescription": "Date de fin de ce poste (laisser vide si actuel)",
+            "description": "Description",
+            "descriptionPlaceholder": "Décrivez vos responsabilités et réalisations",
+            "descriptionDescription": "Détails sur votre rôle et vos accomplissements",
+            "updateTitle": "Mettre à jour l’expérience"
+          },
+          "sheet": {
+            "createTitle": "Ajouter une expérience",
+            "createDescription": "Ajouter une nouvelle expérience professionnelle à votre profil",
+            "updateTitle": "Modifier l’expérience",
+            "updateDescription": "Mettre à jour les informations de votre expérience"
+          },
+          "dialogs": {
+            "deleteTitle": "Supprimer l’expérience",
+            "deleteDescription": "Êtes-vous sûr de vouloir supprimer cette expérience ? Cette action est irréversible."
+          },
+          "validation": {
+            "titleTooShort": "Le titre doit contenir au moins 2 caractères",
+            "titleTooLong": "Le titre ne peut pas dépasser 100 caractères",
+            "companyTooShort": "L’entreprise doit contenir au moins 2 caractères",
+            "companyTooLong": "L’entreprise ne peut pas dépasser 100 caractères",
+            "startDateRequired": "La date de début est requise",
+            "startDateFuture": "La date de début ne peut pas être dans le futur",
+            "endDateBeforeStart": "La date de fin doit être postérieure à la date de début",
+            "endDateFuture": "La date de fin ne peut pas être dans le futur",
+            "descriptionTooLong": "La description ne peut pas dépasser 500 caractères"
+          }
+        },
+
+        "ref-params": {
+          "industry": {
+            "messages": {
+              "updatedSuccess": "Secteur mis à jour avec succès"
+            },
+            "forms": {
+              "reset": "Réinitialiser"
+            }
+          }
+        }
+      },
+
       "myProfile": {
         "profile": "Mon Profil",
         "loadingProfile": "Chargement du profil..."
@@ -228,7 +338,21 @@
         }
       },
       "conversations": {
-        "conversationListe": {
+        "title": "Conversations",
+        "description": "Les conversations de l'utilisateur",
+        "newConversation": "Nouvelle conversation",
+        "composeDialog": {
+          "title": "Composer une nouvelle conversation",
+          "description": "Vous pouvez créer une nouvelle conversation",
+          "searchPlaceholder": "Rechercher utilisateurs ...",
+          "userSelected": "utilisateur sélectionné",
+          "usersSelected": "utilisateurs sélectionnés",
+          "clearAll": "Tout effacer",
+          "noUsersFound": "Aucun utilisateur trouvé",
+          "noUsersAvailable": "Aucun utilisateur disponible",
+          "selected": "Sélectionné"
+        },
+        "conversationList": {
           "noMessagesYet": "Aucun message pour le moment.",
           "unknown": "Inconnu",
           "yesterday": "Hier",
@@ -240,6 +364,10 @@
           "noMessagesYet": "Aucun message pour le moment.",
           "yesterday": "Hier",
           "unknown": "Inconnu"
+        },
+        "messages": {
+          "conversationCreatedSuccess": "Conversation créée avec succès",
+          "conversationCreatedError": "Erreur lors de la création de la conversation"
         }
       }
     }

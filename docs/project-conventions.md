@@ -68,7 +68,8 @@ reborn-back-office/
 - Components must be **small, reusable, and colocated** with their feature when possible
 - api/api.ts, lib/lib.ts & pages/page.tsx names use **kebab-case**
 - components/component.tsx, hooks/hook.ts & context/context.ts names use **PascalCase**
-- No `any` unless justified
+- hooks must start with `use` followed by the name of the hook in **PascalCase**
+- No `any`, `unknown` & `object` unless justified
 - Keep components under ~500 lines
 
 ---

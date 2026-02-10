@@ -14,7 +14,7 @@ import { DataTableCellVariant } from "@/components/shared/data-tables/types";
 
 export const useUserColumns = (
   context: any,
-  t: any
+  t: any,
 ): ColumnDef<ResponseUserDto>[] => {
   const { t: tCommon } = useTranslation("common");
 
@@ -31,7 +31,7 @@ export const useUserColumns = (
       ),
       cell: ({ row }) => (
         <UserAvatarCell
-          pictureId={row?.original?.profile?.pictureId}
+          pictureId={row?.original?.pictureId}
           fallback={identifyUserAvatar(row?.original)}
         />
       ),

@@ -63,7 +63,7 @@ export function useSheet({
           suitableHeight,
           "flex flex-col flex-1",
           canScroll ? "overflow-auto" : "overflow-hidden",
-          className
+          className,
         )}
         onPointerDownOutside={(e) => {
           e.preventDefault();
@@ -76,7 +76,7 @@ export function useSheet({
         {children}
       </SheetContent>
     </Sheet>,
-    document.body
+    document.body,
   );
 
   return { SheetFragment, openSheet, closeSheet };

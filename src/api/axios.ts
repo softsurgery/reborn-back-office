@@ -30,7 +30,7 @@ axios.interceptors.request.use(
   },
   function (err) {
     return Promise.reject(err);
-  }
+  },
 );
 
 axios.interceptors.response.use(
@@ -67,7 +67,7 @@ axios.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axios;

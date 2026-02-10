@@ -54,7 +54,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     isUploadPending: isProfilePictureUploadPending,
   } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
-      userStore.setNested("updateDto.profile.pictureId", response?.[0]?.id);
+      userStore.setNested("updateDto.pictureId", response?.[0]?.id);
     },
     onError: (error: ServerErrorResponse) => {
       toast.error(error.response?.data?.message);
@@ -66,10 +66,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     isUploadPending: isOfficialDocumentUploadPending,
   } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
-      userStore.setNested(
-        "updateDto.profile.officialDocumentId",
-        response?.[0]?.id
-      );
+      userStore.setNested("updateDto.officialDocumentId", response?.[0]?.id);
     },
     onError: (error: ServerErrorResponse) => {
       toast.error(error.response?.data?.message);
@@ -82,8 +79,8 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
       userStore.setNested(
-        "updateDto.profile.driverLicenseDocumentId",
-        response?.[0]?.id
+        "updateDto.driverLicenseDocumentId",
+        response?.[0]?.id,
       );
     },
     onError: (error: ServerErrorResponse) => {
@@ -131,7 +128,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     (stepId: string) => {
       if (stepId === "user-information") {
         const userResult = updateUserSchema(
-          userStore.setManualPassword
+          userStore.setManualPassword,
         ).safeParse({
           ...userStore.updateDto,
           confirmPassword: userStore.confirmPassword,
@@ -140,7 +137,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
         if (!userResult.success) {
           userStore.set(
             "updateDtoErrors",
-            userResult.error.flatten().fieldErrors
+            userResult.error.flatten().fieldErrors,
           );
           return false;
         }
@@ -155,14 +152,14 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
         if (!profileResult.success) {
           userStore.set(
             "updateDtoErrors",
-            profileResult.error.flatten().fieldErrors
+            profileResult.error.flatten().fieldErrors,
           );
           return false;
         }
       }
       return true;
     },
-    [userStore]
+    [userStore],
   );
 
   const handleSubmit = () => {
@@ -179,7 +176,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
       >
         {({ methods }) => {
           const activeIndex = steps.findIndex(
-            (step) => step.id === methods.current.id
+            (step) => step.id === methods.current.id,
           );
 
           const handleNext = () => {
