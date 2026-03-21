@@ -1,7 +1,7 @@
 import { DatabaseEntity } from "./utils";
 
 export interface ResponseRefTypeDto extends DatabaseEntity {
-  id: number;
+  id: string;
   label: string;
   description: string;
   refParams: ResponseRefParamDto[];

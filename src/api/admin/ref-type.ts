@@ -40,7 +40,7 @@ const findAll = async (): Promise<ResponseRefTypeDto[]> => {
   return response.data;
 };
 
-const findById = async (id: number): Promise<ResponseRefTypeDto> => {
+const findById = async (id: string): Promise<ResponseRefTypeDto> => {
   const response = await axios.get<ResponseRefTypeDto>(`/ref-type/${id}`);
   return response.data;
 };
@@ -51,14 +51,14 @@ const create = async (role: CreateRefTypeDto): Promise<ResponseRefTypeDto> => {
 };
 
 const update = async (
-  id?: number,
+  id?: string,
   refType?: UpdateRefTypeDto
 ): Promise<ResponseRefTypeDto> => {
   const response = await axios.put(`/ref-type/${id}`, refType);
   return response.data;
 };
 
-const remove = async (id?: number): Promise<ResponseRefTypeDto> => {
+const remove = async (id?: string): Promise<ResponseRefTypeDto> => {
   const response = await axios.delete(`/ref-type/${id}`);
   return response.data;
 };
