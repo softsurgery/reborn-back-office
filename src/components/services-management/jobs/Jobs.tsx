@@ -47,13 +47,13 @@ export default function Jobs({ className }: JobsProps) {
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
-    500
+    500,
   );
 
   const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
-    500
+    500,
   );
 
   const [sortDetails, setSortDetails] = React.useState({
@@ -186,7 +186,7 @@ export default function Jobs({ className }: JobsProps) {
         uploads.map(async (upload) => {
           const name =
             jobStore.response?.uploads.find(
-              (ru) => ru.uploadId === upload.uploadId
+              (ru) => ru.uploadId === upload.uploadId,
             )?.upload.filename || `image-${upload.uploadId}.png`;
 
           const url = await api.upload.getUploadById(upload.uploadId);
@@ -197,7 +197,7 @@ export default function Jobs({ className }: JobsProps) {
             image: null,
             progress: 100,
           };
-        })
+        }),
       );
       return blobs;
     },
@@ -222,10 +222,14 @@ export default function Jobs({ className }: JobsProps) {
     singularName: `${t("job.singularName")}`,
     pluralName: `${t("job.pluralName")}`,
     inspectCallback: (entity: ResponseJobDto) => {
-      router.push(`/services-management/jobs/${entity.id}`);
+      router.push(`/services-management/jobs/${entity.id}/details`);
     },
-    createCallback: openCreateJobSheet,
-    updateCallback: openUpdateJobSheet,
+    createCallback: () => {
+      router.push(`/services-management/new-job/`);
+    },
+    updateCallback: (entity: ResponseJobDto) => {
+      router.push(`/services-management/jobs/${entity.id}/edit`);
+    },
     deleteCallback: openDeleteJobDialog,
     // search, filtering, sorting & paging
     searchTerm,
