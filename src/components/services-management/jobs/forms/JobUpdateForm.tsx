@@ -43,7 +43,7 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
 
   const { currencies, isFetchCurrenciesPending } = useCurrencies();
 
-  const { uploadFiles: uploadPicture } = useUploadMutation({
+  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
       jobStore.appendUploadId("update", { uploadId: response?.[0]?.id });
     },
@@ -54,6 +54,12 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
 
   const { jobTags, isFetchJobTagsPending } = useJobTags();
   const { jobCategories, isFetchJobCategoriesPending } = useJobCategories({});
+
+  const isLoading =
+    isFetchCurrenciesPending ||
+    isFetchJobTagsPending ||
+    isFetchJobCategoriesPending;
+  const isFormBusy = isPending || isUploadPending;
 
   const {
     detailedInformationUpdateFormStructure,
@@ -92,7 +98,7 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
       }
       return true;
     },
-    [jobStore]
+    [jobStore],
   );
 
   const handleSubmit = () => {
@@ -107,14 +113,14 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
       >
         {({ methods }) => {
           const activeIndex = steps.findIndex(
-            (step) => step.id === methods.current.id
+            (step) => step.id === methods.current.id,
           );
 
           const handleNext = () => {
             const valid = validateStep(methods.current.id);
             if (!valid) return;
 
-            if (methods.isLast) {
+            if (methods.current.id === "detailed") {
               handleSubmit();
             } else {
               methods.next();
@@ -139,7 +145,7 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
                       }
                       methods.goTo(step.id);
                     }}
-                    disabled={isPending}
+                    disabled={isFormBusy}
                   >
                     <Stepper.Title>{tJob(step.title)}</Stepper.Title>
                   </Stepper.Step>
@@ -147,8 +153,10 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
               </Stepper.Navigation>
 
               {/* Content */}
-              {isFetchCurrenciesPending ? (
-                <Spinner />
+              {isLoading ? (
+                <div className="flex min-h-[420px] items-center justify-center py-20">
+                  <Spinner />
+                </div>
               ) : (
                 <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
                   <div className="flex-1 overflow-auto px-2">
@@ -171,7 +179,7 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
                 <Button
                   variant="secondary"
                   onClick={() => cancelCallback?.()}
-                  disabled={isPending}
+                  disabled={isFormBusy}
                 >
                   {tCommon("common.buttons.cancel")}
                 </Button>
@@ -181,14 +189,14 @@ export const JobUpdateForm: React.FC<JobFormProps> = ({
                     <Button
                       variant="outline"
                       onClick={methods.prev}
-                      disabled={isPending}
+                      disabled={isFormBusy}
                     >
                       <ArrowLeft /> {tCommon("common.buttons.previous")}
                     </Button>
                   )}
 
-                  <Button onClick={handleNext} disabled={isPending}>
-                    {methods.isLast ? (
+                  <Button onClick={handleNext} disabled={isFormBusy}>
+                    {methods.current.id === "detailed" ? (
                       <>
                         <Save /> {tCommon("common.buttons.update")}
                       </>
