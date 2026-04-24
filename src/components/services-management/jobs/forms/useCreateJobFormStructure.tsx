@@ -34,7 +34,7 @@ export const useCreateJobFormStructure = ({
   const { t } = useTranslation("job");
   const selectedCurrency = React.useMemo(() => {
     return currencies.find(
-      (currency) => currency.id === jobStore.createDto.currencyId
+      (currency) => currency.id === jobStore.createDto.currencyId,
     );
   }, [currencies, jobStore.createDto.currencyId]);
 
@@ -84,11 +84,9 @@ export const useCreateJobFormStructure = ({
     props: {
       value: jobStore.createDto?.price || undefined,
       onChange: (value) => {
-        if (
-          value ==
-          Number(value.toFixed(selectedCurrency?.extras?.digitsAfterComma))
-        ) {
-          jobStore.setNested("createDto.price", Number(value));
+        const parsed = Number(value);
+        if (!Number.isNaN(parsed)) {
+          jobStore.setNested("createDto.price", parsed);
           jobStore.setNested("createDtoErrors.price", []);
         }
       },
@@ -98,11 +96,11 @@ export const useCreateJobFormStructure = ({
   //currency
   const currencyField: Field<SelectFieldProps> = {
     id: "currency",
-    label: `${t("job.forms.currencyLabel")}`,
+    label: t("job.forms.currencyLabel"),
     variant: FieldVariant.SELECT,
     required: true,
-    description: `${t("job.forms.currencyDescription")}`,
-    placeholder: `${t("job.forms.currencyPlaceholder")}`,
+    description: t("job.forms.currencyDescription"),
+    placeholder: t("job.forms.currencyPlaceholder"),
     error: t(jobStore.createDtoErrors?.currencyId?.[0]),
     props: {
       options: currencies.map((currency) => ({
@@ -111,7 +109,7 @@ export const useCreateJobFormStructure = ({
       })),
       value: jobStore.createDto?.currencyId?.toString(),
       onValueChange: (value: string) => {
-        jobStore.setNested("createDto.currencyId", value);
+        jobStore.setNested("createDto.currencyId", Number(value));
         jobStore.setNested("createDtoErrors.currencyId", []);
       },
     },
@@ -145,16 +143,16 @@ export const useCreateJobFormStructure = ({
     required: true,
     description: `${t("job.forms.tagsDescription")}`,
     placeholder: `${t("job.forms.tagsPlaceholder")}`,
-    error: t(jobStore.createDtoErrors?.tags?.[0]),
+    error: t(jobStore.createDtoErrors?.tagIds?.[0]),
     props: {
       options: jobTags,
       value: jobTags.filter((option: SelectOption) =>
-        jobStore.createDto?.tagIds?.includes(Number(option.value))
+        jobStore.createDto?.tagIds?.includes(Number(option.value)),
       ),
       onChange: (value) => {
         jobStore.setNested(
           "createDto.tagIds",
-          value.map((v) => Number(v.value))
+          value.map((v) => Number(v.value)),
         );
         jobStore.setNested("createDtoErrors.tagIds", []);
       },
