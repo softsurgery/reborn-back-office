@@ -30,7 +30,7 @@ const createJobSchema = z.object({
     .positive({
       message: "job.validation.invalidPrice",
     }),
-  currencyId: z.string({
+  currencyId: z.number({
     message: "job.validation.currencyRequired",
   }),
   categoryId: z.number({
@@ -77,15 +77,29 @@ const updateJobSchema = z.object({
     })
     .optional(),
 
-  currencyId: z.string({
-    message: "job.validation.currencyRequired",
-  }),
-  style: z.enum(Object.values(JobStyle) as [string, ...string[]], {
-    message: "job.validation.stylesRequired",
-  }),
-  difficulty: z.enum(Object.values(JobDifficulty) as [string, ...string[]], {
-    message: "job.validation.difficultyRequired",
-  }),
+  currencyId: z
+    .number({
+      message: "job.validation.currencyRequired",
+    })
+    .optional(),
+
+  categoryId: z
+    .number({
+      message: "job.validation.categoryRequired",
+    })
+    .optional(),
+
+
+  style: z
+    .enum(Object.values(JobStyle) as [string, ...string[]], {
+      message: "job.validation.stylesRequired",
+    })
+    .optional(),
+  difficulty: z
+    .enum(Object.values(JobDifficulty) as [string, ...string[]], {
+      message: "job.validation.difficultyRequired",
+    })
+    .optional(),
 });
 
 export { createJobSchema, updateJobSchema };
