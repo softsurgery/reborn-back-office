@@ -118,7 +118,7 @@ export const RefTypePortal = ({ className }: RefTypePortalProps) => {
   });
 
   const { mutate: updateRefType, isPending: isUpdatePending } = useMutation({
-    mutationFn: (data: { id?: number; refType?: UpdateRefTypeDto }) =>
+    mutationFn: (data: { id?: string; refType?: UpdateRefTypeDto }) =>
       api.admin.refType.update(data.id, data.refType),
     onSuccess: () => {
       toast(t("refType.messages.updateSuccess"));
@@ -132,7 +132,7 @@ export const RefTypePortal = ({ className }: RefTypePortalProps) => {
   });
 
   const { mutate: deleteRefType, isPending: isDeletionPending } = useMutation({
-    mutationFn: (id?: number) => api.admin.refType.remove(id),
+    mutationFn: (id?: string) => api.admin.refType.remove(id),
     onSuccess: () => {
       toast(t("refType.messages.deleteSuccess"));
       refetchRefTypes();
