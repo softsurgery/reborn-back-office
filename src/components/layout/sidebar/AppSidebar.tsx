@@ -116,8 +116,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: FileUser,
           },
           {
-            title: `${t("common.sidebar.applicationProperties")}`,
-            url: "/content-management/application-properties",
+            title: `${t("common.sidebar.configurations")}`,
+            url: "/content-management/configurations",
             icon: FileText,
           },
           {
@@ -187,7 +187,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const hoverToggledRef = React.useRef(false);
 
   const handleMouseEnter = (
-    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
   ) => {
     e.stopPropagation();
     if (!open) {
@@ -197,7 +197,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const handleMouseLeave = (
-    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
   ) => {
     e.stopPropagation();
     if (hoverToggledRef.current) {
