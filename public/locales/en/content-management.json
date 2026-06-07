@@ -98,5 +98,35 @@
       "updateSuccess": "Reference Parameter updated successfully.",
       "deleteSuccess": "Reference Parameter deleted successfully."
     }
+  },
+  "configuration": {
+    "page": {
+      "title": "Configuration",
+      "description": "Manage and configure application properties in a structured format"
+    },
+    "breadcrumbs": {
+      "contentManagement": "Content Management",
+      "configuration": "Configuration"
+    },
+    "actions": {
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "resetAll": "Reset All"
+    },
+    "messages": {
+      "updateSuccess": "Configuration updated successfully",
+      "updateError": "Failed to update configuration",
+      "resetSuccess": "Configuration reset to original values"
+    },
+    "loading": {
+      "configurations": "Loading configuration..."
+    },
+    "inputs": {
+      "enter": "Enter {{name}}",
+      "select": "Select {{name}}"
+    },
+    "groups": {
+      "count": "({{count}})"
+    }
   }
 }

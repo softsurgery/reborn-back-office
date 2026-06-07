@@ -73,7 +73,7 @@
       "devices": "Devices",
       "contentManagement": "Content Management",
       "resources": "Resources",
-      "applicationProperties": "Application Properties",
+      "configurations": "Configurations",
       "auditMonitoring": "Audit & Monitoring",
       "logger": "Logger",
       "developerLogger": "Developer Logger",

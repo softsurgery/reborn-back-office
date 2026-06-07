@@ -4,7 +4,6 @@ import { bug } from "./bug";
 import { feedback } from "./feedback";
 import { job } from "./job";
 import { upload } from "./upload";
-import { store } from "./store";
 import { follow } from "./follow";
 import { chat } from "./chat";
 import { notification } from "./notification";
@@ -17,7 +16,6 @@ export const api = {
   upload,
   job,
   follow,
-  store,
   chat,
   notification,
 };
