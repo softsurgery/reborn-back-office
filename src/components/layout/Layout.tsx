@@ -11,6 +11,7 @@ import { AppSidebar } from "./sidebar/AppSidebar";
 import { Footer } from "./Footer";
 import { FooterContext } from "@/contexts/FooterContext";
 import { IntroContext } from "@/contexts/IntroContext";
+import { UiContext } from "@/contexts/UiContext";
 import { PageHeader } from "./PageHeader";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -59,44 +60,59 @@ export const Layout = ({ children, className }: LayoutProps) => {
     },
   };
 
+  const [scrollable, setScrollable] = React.useState<boolean>(false);
+
+  const uiContext = {
+    scrollable,
+    setScrollable,
+    clearScrollable: () => {
+      setScrollable?.(false);
+    },
+  };
+
   const isMobile = useMediaQuery("(max-width: 425px)");
   return (
     <div
       className={cn(
-        "flex md:flex-cols-[220px_1fr] lg:flex-cols-[280px_1fr] overflow-hidden fullscreen"
+        "flex md:flex-cols-[220px_1fr] lg:flex-cols-[280px_1fr] overflow-hidden fullscreen",
       )}
     >
       <SidebarProvider>
         <SidebarInset>
-          <BreadcrumbContext.Provider value={breadcrumbContext}>
-            <IntroContext.Provider value={introContext}>
-              <FooterContext.Provider value={footerContext}>
-                <div className="flex flex-row flex-1 overflow-hidden">
-                  {/* Sidebar */}
-                  <AppSidebar />
-                  {/* Header , Main & Footer */}
-                  <div className="flex flex-col flex-1 overflow-hidden bg-background">
-                    <Header />
-                    {(title || description) && (
-                      <PageHeader
-                        className={cn("py-5", isMobile ? "px-4" : "px-10")}
-                      />
-                    )}
-                    <main
-                      className={cn(
-                        "flex flex-col flex-1 overflow-hidden",
-                        isMobile ? "px-4" : "px-10",
-                        className
+          <UiContext.Provider value={uiContext}>
+            <BreadcrumbContext.Provider value={breadcrumbContext}>
+              <IntroContext.Provider value={introContext}>
+                <FooterContext.Provider value={footerContext}>
+                  <div className="flex flex-row flex-1 overflow-hidden">
+                    {/* Sidebar */}
+                    <AppSidebar />
+                    {/* Header , Main & Footer */}
+                    <div className="flex flex-col flex-1 overflow-hidden bg-background">
+                      <Header />
+                      {(title || description) && (
+                        <PageHeader
+                          className={cn("py-5", isMobile ? "px-4" : "px-10")}
+                        />
                       )}
-                    >
-                      {children}
-                    </main>
-                    {content && <Footer />}
+                      <main
+                        className={cn(
+                          "flex flex-col flex-1",
+                          scrollable
+                            ? "overflow-y-auto overflow-x-hidden"
+                            : "overflow-hidden",
+                          isMobile ? "px-4" : "px-10",
+                          className,
+                        )}
+                      >
+                        {children}
+                      </main>
+                      {content && <Footer />}
+                    </div>
                   </div>
-                </div>
-              </FooterContext.Provider>
-            </IntroContext.Provider>
-          </BreadcrumbContext.Provider>
+                </FooterContext.Provider>
+              </IntroContext.Provider>
+            </BreadcrumbContext.Provider>
+          </UiContext.Provider>
           <AppVersion className="fixed bottom-0 left-0 z-50 p-2 text-xs" />
         </SidebarInset>
       </SidebarProvider>
