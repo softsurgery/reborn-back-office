@@ -12,7 +12,9 @@
       "description": "Description",
       "parent": "Parent",
       "noDescription": "Aucune description",
-      "noParent": "Aucun parent"
+      "noParent": "Aucun parent",
+      "createdAt": "Créé le",
+      "updatedAt": "Mis à jour le"
     },
     "forms": {
       "create": {
@@ -64,7 +66,9 @@
       "description": "Description",
       "refTypeId": "Type de référence",
       "extras": "Extras",
-      "noDescription": "Aucune description"
+      "noDescription": "Aucune description",
+      "createdAt": "Créé le",
+      "updatedAt": "Mis à jour le"
     },
     "forms": {
       "create": {

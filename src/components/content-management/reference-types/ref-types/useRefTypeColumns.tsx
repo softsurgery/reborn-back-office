@@ -3,8 +3,12 @@ import { DataTableColumnHeader } from "@/components/shared/data-tables/data-tabl
 import { DataTableRowActions } from "@/components/shared/data-tables/data-table-row-actions";
 import { ResponseRefTypeDto } from "@/types";
 import { useTranslation } from "react-i18next";
-import { DataTableConfig } from "@/components/shared/data-tables/types";
+import {
+  DataTableCellVariant,
+  DataTableConfig,
+} from "@/components/shared/data-tables/types";
 import { cn } from "@/lib/utils";
+import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 
 export const useRefTypeColumns = (
   context: DataTableConfig<ResponseRefTypeDto>,
@@ -68,8 +72,54 @@ export const useRefTypeColumns = (
         />
       ),
       cell: ({ row }) => (
-        <div>{row.original.parent?.label || t("refType.columns.noParent")}</div>
+        <div className={cn(!row.original.parent?.label && "opacity-70")}>
+          {row.original.parent?.label || t("refType.columns.noParent")}
+        </div>
       ),
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: `${t("refType.columns.createdAt")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("refType.columns.createdAt")}
+          attribute="createdAt"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        const date = new Date(row?.original?.createdAt);
+        return (
+          <DataTableCell
+            variant={DataTableCellVariant.DATE_TIME}
+            value={date}
+          />
+        );
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: `${t("refType.columns.updatedAt")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("refType.columns.updatedAt")}
+          attribute="updatedAt"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        const date = new Date(row?.original?.updatedAt);
+        return (
+          <DataTableCell
+            variant={DataTableCellVariant.DATE_TIME}
+            value={date}
+          />
+        );
+      },
       enableSorting: true,
       enableHiding: true,
     },
