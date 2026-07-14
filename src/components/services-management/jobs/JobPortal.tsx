@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
+import { useUi } from "@/contexts/UiContext";
+import { useInfiniteJobs } from "@/hooks/content/useInfiniteJobs";
 import { useJobCreateSheet } from "./modals/JobCreateSheet";
 import { CreateJobDto, ResponseJobDto, UpdateJobDto } from "@/types";
 import { useJobStore } from "@/hooks/stores/useJobStore";
@@ -20,40 +22,91 @@ import {
 import { useTranslation } from "react-i18next";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
 import { useRouter } from "next/router";
+import { JobGridView } from "./views/JobGridView";
+import {
+  FloatingViewSwitcher,
+  JobViewMode,
+} from "./views/FloatingViewSwitcher";
 
-interface JobsProps {
+interface JobPortalPorps {
   className?: string;
 }
 
-export default function Jobs({ className }: JobsProps) {
+export const JobPortal = ({ className }: JobPortalPorps) => {
   const router = useRouter();
   const { t, ready } = useTranslation("job");
   const { setRoutes, clearRoutes } = useBreadcrumb();
-  const { setIntro, clearIntro } = useIntro();
+  const { setIntro, clearIntro, setFloating, clearFloating } = useIntro();
+  const { setScrollable, clearScrollable } = useUi();
   React.useEffect(() => {
     setRoutes?.([
       { title: t("job.intro"), href: "/services-management" },
       { title: t("job.introTitle"), href: "/services-management/jobs" },
     ]);
     setIntro?.(t("job.introTitle"), t("job.introDescription"));
+    setFloating?.(
+      <FloatingViewSwitcher
+        viewMode={viewMode}
+        onChange={handleViewModeChange}
+      />,
+    );
     return () => {
       clearRoutes?.();
       clearIntro?.();
+      clearFloating?.();
+      clearScrollable?.();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t, ready]);
 
   const jobStore = useJobStore();
 
+  const [viewMode, setViewMode] = React.useState<JobViewMode>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("jobs_view_mode") as JobViewMode;
+      if (saved === "table" || saved === "grid") return saved;
+    }
+    return "table";
+  });
+
+  const handleViewModeChange = React.useCallback((mode: JobViewMode) => {
+    setViewMode(mode);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jobs_view_mode", mode);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    setFloating?.(
+      <FloatingViewSwitcher
+        viewMode={viewMode}
+        onChange={handleViewModeChange}
+      />,
+    );
+    return () => {
+      clearFloating?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewMode, handleViewModeChange]);
+
+  React.useEffect(() => {
+    if (viewMode === "grid") {
+      setScrollable?.(true);
+    } else {
+      clearScrollable?.();
+    }
+  }, [viewMode, setScrollable, clearScrollable]);
+
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
-    500
+    500,
   );
 
   const [size, setSize] = React.useState(10);
   const { value: debouncedSize, loading: resizing } = useDebounce<number>(
     size,
-    500
+    500,
   );
 
   const [sortDetails, setSortDetails] = React.useState({
@@ -91,6 +144,22 @@ export default function Jobs({ className }: JobsProps) {
         search: debouncedSearchTerm,
         join: "uploads.upload",
       }),
+    enabled: viewMode === "table",
+  });
+
+  const {
+    data: infiniteJobsData,
+    isPending: isInfinitePending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch: refetchInfiniteJobs,
+  } = useInfiniteJobs({
+    size: debouncedSize,
+    search: debouncedSearchTerm,
+    sortKey: debouncedSortDetails.sortKey,
+    order: debouncedSortDetails.order,
+    enabled: viewMode === "grid",
   });
 
   const jobs = React.useMemo(() => {
@@ -103,6 +172,7 @@ export default function Jobs({ className }: JobsProps) {
     onSuccess: () => {
       toast.success(t("job.toast.created"));
       refetchJobs();
+      refetchInfiniteJobs();
       jobStore.reset();
       closeCreateJobSheet();
     },
@@ -117,6 +187,7 @@ export default function Jobs({ className }: JobsProps) {
     onSuccess: () => {
       toast.success(t("job.toast.updated"));
       refetchJobs();
+      refetchInfiniteJobs();
       jobStore.reset();
       closeUpdateJobSheet();
     },
@@ -131,6 +202,7 @@ export default function Jobs({ className }: JobsProps) {
       toast.success(t("job.toast.deleted"));
       jobStore.reset();
       refetchJobs();
+      refetchInfiniteJobs();
     },
     onError: (error) => toast.error(error.message),
   });
@@ -186,7 +258,7 @@ export default function Jobs({ className }: JobsProps) {
         uploads.map(async (upload) => {
           const name =
             jobStore.response?.uploads.find(
-              (ru) => ru.uploadId === upload.uploadId
+              (ru) => ru.uploadId === upload.uploadId,
             )?.upload.filename || `image-${upload.uploadId}.png`;
 
           const url = await api.upload.getUploadById(upload.uploadId);
@@ -197,7 +269,7 @@ export default function Jobs({ className }: JobsProps) {
             image: null,
             progress: 100,
           };
-        })
+        }),
       );
       return blobs;
     },
@@ -218,63 +290,103 @@ export default function Jobs({ className }: JobsProps) {
     }
   }, [images, jobStore.hasInitializedImages, jobStore]);
 
-  const context: DataTableConfig<ResponseJobDto> = {
-    singularName: `${t("job.singularName")}`,
-    pluralName: `${t("job.pluralName")}`,
-    inspectCallback: (entity: ResponseJobDto) => {
-      router.push(`/services-management/jobs/${entity.id}`);
-    },
-    createCallback: openCreateJobSheet,
-    updateCallback: openUpdateJobSheet,
-    deleteCallback: openDeleteJobDialog,
-    // search, filtering, sorting & paging
-    searchTerm,
-    setSearchTerm,
-    page,
-    size,
-    totalPageCount: jobsResponse?.meta.pageCount || 0,
-    setPage,
-    setSize,
-    order: sortDetails.order,
-    sortKey: sortDetails.sortKey,
-    setSortDetails: (order: boolean, sortKey: string) =>
-      setSortDetails({ order, sortKey }),
-    targetEntity: (job: ResponseJobDto) => {
-      const uploads = job.uploads.sort((a, b) => a.order - b.order);
-      jobStore.set("response", job);
-      jobStore.set("updateDto", {
-        title: job.title,
-        description: job.description,
-        price: job.price,
-        tagIds: job.tags.map((tag) => tag.id),
-        currencyId: job.currencyId,
-        categoryId: job.categoryId,
-        style: job.style,
-        difficulty: job.difficulty,
-        uploads: uploads.map((upload) => ({
-          id: upload.id,
-          uploadId: upload.uploadId,
-        })),
-      });
-    },
-  };
+  const context: DataTableConfig<ResponseJobDto> = React.useMemo(
+    () => ({
+      singularName: `${t("job.singularName")}`,
+      pluralName: `${t("job.pluralName")}`,
+      inspectCallback: (entity: ResponseJobDto) => {
+        router.push(`/services-management/jobs/${entity.id}`);
+      },
+      createCallback: openCreateJobSheet,
+      updateCallback: openUpdateJobSheet,
+      deleteCallback: openDeleteJobDialog,
+      // search, filtering, sorting & paging
+      searchTerm,
+      setSearchTerm,
+      page,
+      size,
+      totalPageCount: jobsResponse?.meta.pageCount || 0,
+      setPage,
+      setSize,
+      order: sortDetails.order,
+      sortKey: sortDetails.sortKey,
+      setSortDetails: (order: boolean, sortKey: string) =>
+        setSortDetails({ order, sortKey }),
+      targetEntity: (job: ResponseJobDto) => {
+        const uploads = job.uploads.sort((a, b) => a.order - b.order);
+        jobStore.set("response", job);
+        jobStore.set("updateDto", {
+          title: job.title,
+          description: job.description,
+          price: job.price,
+          tagIds: job.tags.map((tag) => tag.id),
+          currencyId: job.currencyId,
+          categoryId: job.categoryId,
+          style: job.style,
+          difficulty: job.difficulty,
+          uploads: uploads.map((upload) => ({
+            id: upload.id,
+            uploadId: upload.uploadId,
+          })),
+        });
+      },
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      t,
+      router,
+      openCreateJobSheet,
+      openUpdateJobSheet,
+      openDeleteJobDialog,
+      searchTerm,
+      page,
+      size,
+      jobsResponse?.meta.pageCount,
+      sortDetails.order,
+      sortDetails.sortKey,
+      jobStore,
+    ],
+  );
 
   const columns = useJobColumns(context);
 
-  const isPending = isJobsPending || paging || resizing || searching || sorting;
+  const isTablePending =
+    isJobsPending || paging || resizing || searching || sorting;
+  const isGridPending = isInfinitePending || searching || sorting;
+
   return (
-    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
-      <DataTable
-        className="flex flex-col flex-1 overflow-hidden p-1"
-        containerClassName="overflow-auto"
-        columns={columns}
-        data={jobs}
-        context={context}
-        isPending={isPending}
-      />
+    <div
+      className={cn(
+        "flex flex-col flex-1 relative",
+        viewMode === "table" ? "overflow-hidden" : "",
+        className,
+      )}
+    >
+      {viewMode === "table" ? (
+        <DataTable
+          className="flex flex-col flex-1 overflow-hidden p-1"
+          containerClassName="overflow-auto"
+          columns={columns}
+          data={jobs}
+          context={context}
+          isPending={isTablePending}
+        />
+      ) : (
+        <JobGridView
+          className="flex flex-col flex-1"
+          containerClassName="flex-1 pb-16"
+          jobs={infiniteJobsData}
+          context={context}
+          isPending={isGridPending}
+          footerPagination={false}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
+      )}
       {createJobSheet}
       {updateJobSheet}
       {deleteJobDialog}
     </div>
   );
-}
+};

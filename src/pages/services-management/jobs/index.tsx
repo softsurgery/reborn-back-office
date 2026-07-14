@@ -1,5 +1,5 @@
-import Jobs from "@/components/services-management/jobs/Jobs";
+import { JobPortal } from "@/components/services-management/jobs/JobPortal";
 
 export default function page() {
-  return <Jobs />;
+  return <JobPortal />;
 }
