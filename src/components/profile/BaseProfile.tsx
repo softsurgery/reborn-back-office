@@ -5,6 +5,9 @@ import {
   Settings as SettingsIcon,
   BellIcon,
   BookUser,
+  Mail,
+  MapPin,
+  Phone,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Spinner } from "../shared/Spinner";
@@ -19,13 +22,15 @@ import { api } from "@/api";
 import { useFollowerDialog } from "./modals/FollowersDialog";
 import { useFollowingDialog } from "./modals/FollowingDialog";
 import { useFollowSystem } from "@/hooks/useFollowSystem";
-import { identifyUser } from "@/lib/user.utils";
+import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
 import { useTranslation } from "react-i18next";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { Conversations } from "./cards/Conversations";
 import { Notifications } from "../audit-monitoring/notifications/Notifications";
 import { Book } from "./cards/Book";
+import { useUi } from "@/contexts/UiContext";
 
 interface BaseProfileProps {
   className?: string;
@@ -38,8 +43,23 @@ export const BaseProfile = ({
 }: BaseProfileProps) => {
   const { t } = useTranslation("user-management");
   const userStore = useUserStore();
+  const {
+    setHideScrollbar,
+    setScrollable,
+    clearHideScrollbar,
+    clearScrollable,
+  } = useUi();
   const user = React.useMemo(() => userStore.response, [userStore]);
   const [activeTab, setActiveTab] = React.useState("about");
+
+  React.useEffect(() => {
+    setScrollable?.(true);
+    setHideScrollbar?.(true);
+    return () => {
+      clearScrollable?.();
+      clearHideScrollbar?.();
+    };
+  }, [setScrollable, clearScrollable]);
 
   const { followerDialog, openFollowerDialog } = useFollowerDialog({
     userStore,
@@ -67,13 +87,19 @@ export const BaseProfile = ({
   });
 
   React.useEffect(() => {
-    userStore.set("followers", followers);
-    userStore.set("followings", followings);
-  }, [followers, followings]);
+    if (userStore.followers !== followers) {
+      userStore.set("followers", followers);
+    }
+    if (userStore.followings !== followings) {
+      userStore.set("followings", followings);
+    }
+  }, [followers, followings, userStore]);
 
   React.useEffect(() => {
-    if (user) userStore.set("picture", picture);
-  }, [picture]);
+    if (user && userStore.picture !== picture) {
+      userStore.set("picture", picture);
+    }
+  }, [picture, user, userStore]);
 
   if (isFetchUserPending) return <Spinner className="h-screen" />;
 
@@ -85,8 +111,8 @@ export const BaseProfile = ({
       content: <About />,
     },
     {
-      value: "book",
-      label: t("userManagement.inspect.tabs.book"),
+      value: "career",
+      label: t("userManagement.inspect.tabs.career"),
       icon: BookUser,
       content: <Book />,
     },
@@ -117,95 +143,166 @@ export const BaseProfile = ({
   ];
 
   return (
-    <div className={cn("flex flex-col h-full container mx-auto", className)}>
-      {/* Header (Profile + Stats) */}
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-4 p-4 flex-shrink-0">
-        {/* Profile Info */}
-        <div className="flex flex-row items-center gap-4">
-          <Avatar className="w-24 h-24 rounded-full">
-            <AvatarImage src={picture} />
-            <AvatarFallback>{user?.firstName?.charAt(0) || "U"}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col items-start justify-start">
-            <h1 className="font-semibold text-lg">
-              {identifyUser(user) || "Unknown User"}
-            </h1>
-            <h2 className="text-sm text-muted-foreground hover:underline cursor-pointer">
-              <a href={`mailto:${user?.email}`}>{user?.email || "No email"}</a>
-            </h2>
-            <div className="flex flex-row items-center gap-2">
-              <p className="text-sm text-muted-foreground">
-                {user?.region?.label || t("userManagement.inspect.noRegion")}
-              </p>
-              <Separator orientation="vertical" className="mx-1 h-4" />
-              <p className="text-sm text-muted-foreground">
-                {user?.phone || t("userManagement.inspect.noPhoneNumber")}
-              </p>
-            </div>
-          </div>
+    <div
+      className={cn("flex flex-col flex-1 container mx-auto py-2", className)}
+    >
+      {/* Header Banner (Profile + Stats) */}
+      <div className="relative rounded-2xl border bg-card text-card-foreground shadow-sm overflow-hidden mb-6 flex-shrink-0">
+        {/* Subtle decorative top strip banner */}
+        <div className="h-52 bg-gradient-to-r from-primary/20 via-primary/5 to-muted/40 border-b border-border/40 relative">
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-25 dark:opacity-10" />
         </div>
 
-        {/* Stats */}
-        <div className="flex justify-end md:justify-start gap-4">
-          <div className="text-center">
-            <div className="font-semibold text-lg">-</div>
-            <div className="text-sm text-muted-foreground">
-              {t("userManagement.inspect.stats.services")}
+        <div className="px-6 pb-6 pt-0 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 -mt-12 relative z-10">
+          {/* Profile Info */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
+            <Avatar className="w-28 h-28">
+              <AvatarImage
+                src={picture}
+                alt={identifyUser(user)}
+                className="object-cover"
+              />
+              <AvatarFallback className="rounded-2xl text-2xl font-bold bg-primary/10 text-primary">
+                {identifyUserAvatar(user)}
+              </AvatarFallback>
+            </Avatar>
+
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="font-bold text-2xl tracking-tight text-foreground">
+                  {identifyUser(user) ||
+                    t("userManagement.inspect.unknownUser")}
+                </h1>
+                {user?.role?.label && (
+                  <Badge
+                    variant="secondary"
+                    className="bg-primary/15 text-primary border-primary/20 hover:bg-primary/20 text-xs font-semibold px-2.5 py-0.5"
+                  >
+                    {user.role.label}
+                  </Badge>
+                )}
+                {typeof user?.isActive === "boolean" && (
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "text-xs px-2 py-0.5 font-medium border",
+                      user.isActive
+                        ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                        : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
+                    )}
+                  >
+                    {user.isActive
+                      ? t("userManagement.inspect.about.active", "Active")
+                      : t("userManagement.inspect.about.inactive", "Inactive")}
+                  </Badge>
+                )}
+              </div>
+
+              {user?.username && (
+                <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                  <span>@{user.username}</span>
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center gap-3 pt-1 text-xs sm:text-sm text-muted-foreground">
+                <a
+                  href={`mailto:${user?.email}`}
+                  className="flex items-center gap-1.5 hover:text-primary transition-colors"
+                >
+                  <Mail className="w-3.5 h-3.5 text-primary/70" />
+                  <span>
+                    {user?.email || t("userManagement.inspect.noEmail")}
+                  </span>
+                </a>
+                <Separator
+                  orientation="vertical"
+                  className="h-3.5 hidden sm:block"
+                />
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-primary/70" />
+                  <span>
+                    {user?.region?.label ||
+                      t("userManagement.inspect.noRegion")}
+                  </span>
+                </div>
+                {user?.phone && (
+                  <>
+                    <Separator
+                      orientation="vertical"
+                      className="h-3.5 hidden sm:block"
+                    />
+                    <div className="flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-primary/70" />
+                      <span>{user.phone}</span>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-          <div
-            className="text-center cursor-pointer"
-            onClick={openFollowingDialog}
-          >
-            <div className="font-semibold text-lg">
-              {followDataCount?.following ?? 0}
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-3 gap-3 w-full lg:w-auto pt-4 lg:pt-0 border-t lg:border-t-0 border-border/60">
+            <div className="flex flex-col items-center justify-center bg-muted/40 hover:bg-muted/70 rounded-xl px-5 py-3 border border-border/50 transition-all text-center">
+              <span className="font-bold text-xl text-foreground">-</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {t("userManagement.inspect.stats.services")}
+              </span>
             </div>
-            <div className="text-sm text-muted-foreground">
-              {t("userManagement.inspect.stats.following")}
+            <div
+              className="flex flex-col items-center justify-center bg-muted/40 hover:bg-muted/70 rounded-xl px-5 py-3 border border-border/50 transition-all text-center cursor-pointer shadow-2xs hover:shadow-sm hover:border-primary/30"
+              onClick={openFollowingDialog}
+            >
+              <span className="font-bold text-xl text-foreground">
+                {followDataCount?.following ?? 0}
+              </span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {t("userManagement.inspect.stats.following")}
+              </span>
             </div>
-          </div>
-          <div
-            className="text-center cursor-pointer"
-            onClick={openFollowerDialog}
-          >
-            <div className="font-semibold text-lg">
-              {followDataCount?.followers ?? 0}
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {t("userManagement.inspect.stats.followers")}
+            <div
+              className="flex flex-col items-center justify-center bg-muted/40 hover:bg-muted/70 rounded-xl px-5 py-3 border border-border/50 transition-all text-center cursor-pointer shadow-2xs hover:shadow-sm hover:border-primary/30"
+              onClick={openFollowerDialog}
+            >
+              <span className="font-bold text-xl text-foreground">
+                {followDataCount?.followers ?? 0}
+              </span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {t("userManagement.inspect.stats.followers")}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="flex flex-col h-full"
+          className="flex flex-col flex-1"
         >
-          <TabsList className="grid grid-cols-6 mb-4 flex-shrink-0">
+          <TabsList className="grid grid-cols-6 mb-6 p-1.5 bg-muted/60 rounded-xl border border-border/50 flex-shrink-0 h-auto">
             {tabs.map(({ value, label, icon: Icon }) => (
               <TabsTrigger
                 key={value}
                 value={value}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2.5 py-3.5 px-3 rounded-lg font-semibold text-base transition-all data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm cursor-pointer"
               >
-                <Icon className="h-4 w-4" />
-                <span className="hidden lg:block">{label}</span>
+                <Icon className="h-5 w-5 flex-shrink-0" />
+                <span className="hidden lg:block truncate">{label}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
           {/* Tab Content */}
-          <div className="flex flex-col flex-1 overflow-hidden">
+          <div className="flex flex-col flex-1">
             {tabs.map(({ value, content }) =>
               activeTab === value ? (
                 <TabsContent
                   key={value}
                   value={value}
-                  className="flex flex-col h-full"
+                  className="flex flex-col flex-1"
                 >
                   {content}
                 </TabsContent>

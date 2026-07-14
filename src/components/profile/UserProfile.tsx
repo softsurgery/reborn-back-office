@@ -12,12 +12,12 @@ export const UserProfile = ({ className, id }: UserProfileProps) => {
   const userStore = useUserStore();
   const { user, isFetchUserPending } = useIdentifiedUser(id, "role");
   React.useEffect(() => {
-    if (user) {
+    if (user && userStore.response !== user) {
       userStore.set("response", user);
-      return () => {
-        userStore.reset();
-      };
     }
+    return () => {
+      userStore.reset();
+    };
   }, [user]);
 
   return (
