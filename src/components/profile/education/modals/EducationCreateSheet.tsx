@@ -25,11 +25,11 @@ export const useEducationCreateSheet = ({
     title: (
       <div className="flex items-center gap-2">
         <GraduationCap />
-        {t("userManagement.inspect.books.education.sheet.createTitle")}
+        {t("userManagement.inspect.career.education.sheet.createTitle")}
       </div>
     ),
     description: t(
-      "userManagement.inspect.books.education.sheet.createDescription",
+      "userManagement.inspect.career.education.sheet.createDescription",
     ),
     children: (
       <EducationCreateForm

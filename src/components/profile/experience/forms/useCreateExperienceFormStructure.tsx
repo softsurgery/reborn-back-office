@@ -21,14 +21,14 @@ export const useCreateExperienceFormStructure = ({
   // Title field
   const titleField: Field<TextFieldProps> = {
     id: "title",
-    label: t("userManagement.inspect.books.experience.forms.title"),
+    label: t("userManagement.inspect.career.experience.forms.title"),
     variant: FieldVariant.TEXT,
     required: true,
     placeholder: t(
-      "userManagement.inspect.books.experience.forms.titlePlaceholder",
+      "userManagement.inspect.career.experience.forms.titlePlaceholder",
     ),
     description: t(
-      "userManagement.inspect.books.experience.forms.titleDescription",
+      "userManagement.inspect.career.experience.forms.titleDescription",
     ),
     error: t(experienceStore.createDtoErrors?.title?.[0]),
     props: {
@@ -43,14 +43,14 @@ export const useCreateExperienceFormStructure = ({
   // Company field
   const companyField: Field<TextFieldProps> = {
     id: "company",
-    label: t("userManagement.inspect.books.experience.forms.company"),
+    label: t("userManagement.inspect.career.experience.forms.company"),
     variant: FieldVariant.TEXT,
     required: true,
     placeholder: t(
-      "userManagement.inspect.books.experience.forms.companyPlaceholder",
+      "userManagement.inspect.career.experience.forms.companyPlaceholder",
     ),
     description: t(
-      "userManagement.inspect.books.experience.forms.companyDescription",
+      "userManagement.inspect.career.experience.forms.companyDescription",
     ),
     error: t(experienceStore.createDtoErrors?.company?.[0]),
     props: {
@@ -65,12 +65,12 @@ export const useCreateExperienceFormStructure = ({
   // Start date field
   const startDateField: Field<DateFieldProps> = {
     id: "startDate",
-    label: t("userManagement.inspect.books.experience.forms.startDate"),
+    label: t("userManagement.inspect.career.experience.forms.startDate"),
     variant: FieldVariant.DATE,
     required: true,
     placeholder: "YYYY-MM-DD",
     description: t(
-      "userManagement.inspect.books.experience.forms.startDateDescription",
+      "userManagement.inspect.career.experience.forms.startDateDescription",
     ),
     error: t(experienceStore.createDtoErrors?.startDate?.[0]),
     props: {
@@ -86,12 +86,12 @@ export const useCreateExperienceFormStructure = ({
   // End date field
   const endDateField: Field<DateFieldProps> = {
     id: "endDate",
-    label: t("userManagement.inspect.books.experience.forms.endDate"),
+    label: t("userManagement.inspect.career.experience.forms.endDate"),
     variant: FieldVariant.DATE,
     required: false,
     placeholder: "YYYY-MM-DD",
     description: t(
-      "userManagement.inspect.books.experience.forms.endDateDescription",
+      "userManagement.inspect.career.experience.forms.endDateDescription",
     ),
     error: t(experienceStore.createDtoErrors?.endDate?.[0]),
     props: {
@@ -107,14 +107,14 @@ export const useCreateExperienceFormStructure = ({
   // Description field
   const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
-    label: t("userManagement.inspect.books.experience.forms.description"),
+    label: t("userManagement.inspect.career.experience.forms.description"),
     variant: FieldVariant.TEXTAREA,
     required: false,
     placeholder: t(
-      "userManagement.inspect.books.experience.forms.descriptionPlaceholder",
+      "userManagement.inspect.career.experience.forms.descriptionPlaceholder",
     ),
     description: t(
-      "userManagement.inspect.books.experience.forms.descriptionDescription",
+      "userManagement.inspect.career.experience.forms.descriptionDescription",
     ),
     error: t(experienceStore.createDtoErrors?.description?.[0]),
     props: {
@@ -133,7 +133,7 @@ export const useCreateExperienceFormStructure = ({
     orientation: "horizontal",
     fieldsets: [
       {
-        title: t("userManagement.inspect.books.experience.forms.title"),
+        title: t("userManagement.inspect.career.experience.forms.title"),
         description: "",
         rows: [
           { fields: [titleField, companyField] },

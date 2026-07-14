@@ -21,14 +21,14 @@ export const useUpdateEducationFormStructure = ({
   // Title field
   const titleField: Field<TextFieldProps> = {
     id: "title",
-    label: t("userManagement.inspect.books.education.forms.title"),
+    label: t("userManagement.inspect.career.education.forms.title"),
     variant: FieldVariant.TEXT,
     required: true,
     placeholder: t(
-      "userManagement.inspect.books.education.forms.titlePlaceholder",
+      "userManagement.inspect.career.education.forms.titlePlaceholder",
     ),
     description: t(
-      "userManagement.inspect.books.education.forms.titleDescription",
+      "userManagement.inspect.career.education.forms.titleDescription",
     ),
     error: t(educationStore.updateDtoErrors?.title?.[0]),
     props: {
@@ -43,14 +43,14 @@ export const useUpdateEducationFormStructure = ({
   // Institution field
   const institutionField: Field<TextFieldProps> = {
     id: "institution",
-    label: t("userManagement.inspect.books.education.forms.institution"),
+    label: t("userManagement.inspect.career.education.forms.institution"),
     variant: FieldVariant.TEXT,
     required: true,
     placeholder: t(
-      "userManagement.inspect.books.education.forms.institutionPlaceholder",
+      "userManagement.inspect.career.education.forms.institutionPlaceholder",
     ),
     description: t(
-      "userManagement.inspect.books.education.forms.institutionDescription",
+      "userManagement.inspect.career.education.forms.institutionDescription",
     ),
     error: t(educationStore.updateDtoErrors?.institution?.[0]),
     props: {
@@ -65,12 +65,12 @@ export const useUpdateEducationFormStructure = ({
   // Start date field
   const startDateField: Field<DateFieldProps> = {
     id: "startDate",
-    label: t("userManagement.inspect.books.education.forms.startDate"),
+    label: t("userManagement.inspect.career.education.forms.startDate"),
     variant: FieldVariant.DATE,
     required: true,
     placeholder: "YYYY-MM-DD",
     description: t(
-      "userManagement.inspect.books.education.forms.startDateDescription",
+      "userManagement.inspect.career.education.forms.startDateDescription",
     ),
     error: t(educationStore.updateDtoErrors?.startDate?.[0]),
     props: {
@@ -86,12 +86,12 @@ export const useUpdateEducationFormStructure = ({
   // End date field
   const endDateField: Field<DateFieldProps> = {
     id: "endDate",
-    label: t("userManagement.inspect.books.education.forms.endDate"),
+    label: t("userManagement.inspect.career.education.forms.endDate"),
     variant: FieldVariant.DATE,
     required: false,
     placeholder: "YYYY-MM-DD",
     description: t(
-      "userManagement.inspect.books.education.forms.endDateDescription",
+      "userManagement.inspect.career.education.forms.endDateDescription",
     ),
     error: t(educationStore.updateDtoErrors?.endDate?.[0]),
     props: {
@@ -107,14 +107,14 @@ export const useUpdateEducationFormStructure = ({
   // Description field
   const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
-    label: t("userManagement.inspect.books.education.forms.description"),
+    label: t("userManagement.inspect.career.education.forms.description"),
     variant: FieldVariant.TEXTAREA,
     required: false,
     placeholder: t(
-      "userManagement.inspect.books.education.forms.descriptionPlaceholder",
+      "userManagement.inspect.career.education.forms.descriptionPlaceholder",
     ),
     description: t(
-      "userManagement.inspect.books.education.forms.descriptionDescription",
+      "userManagement.inspect.career.education.forms.descriptionDescription",
     ),
     error: t(educationStore.updateDtoErrors?.description?.[0]),
     props: {
@@ -133,7 +133,7 @@ export const useUpdateEducationFormStructure = ({
     orientation: "vertical",
     fieldsets: [
       {
-        title: t("userManagement.inspect.books.education.forms.updateTitle"),
+        title: t("userManagement.inspect.career.education.forms.updateTitle"),
         description: "",
         rows: [
           { fields: [titleField] },

@@ -153,7 +153,6 @@ export const Experience = ({ className, userId }: ExperienceProps) => {
 
   // Handle delete click - set experience in store and open delete dialog
   const handleDeleteClick = (id: number) => {
-    console.log("Trying to open bug is here?? ");
     const experienceToDelete = experiences?.find((exp) => exp.id === id);
     if (experienceToDelete) {
       experienceStore.set("response", experienceToDelete);

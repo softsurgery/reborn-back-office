@@ -173,7 +173,7 @@
       "settings": "Paramètres",
       "tabs": {
         "about": "À propos",
-        "book": "Livres",
+        "career": "Carrière",
         "activity": "Activité",
         "conversations": "Conversations",
         "notifications": "Notifications",
@@ -184,7 +184,7 @@
         "followers": "Abonnés",
         "following": "Abonnements"
       },
-      "books": {
+      "career": {
         "education": {
           "page": {
             "title": "Formation"
@@ -232,7 +232,6 @@
             "descriptionTooLong": "La description ne peut pas dépasser 500 caractères"
           }
         },
-
         "experience": {
           "page": {
             "title": "Expérience"
@@ -280,7 +279,6 @@
             "descriptionTooLong": "La description ne peut pas dépasser 500 caractères"
           }
         },
-
         "ref-params": {
           "industry": {
             "messages": {
@@ -292,7 +290,6 @@
           }
         }
       },
-
       "myProfile": {
         "profile": "Mon Profil",
         "loadingProfile": "Chargement du profil..."
@@ -327,6 +324,19 @@
         "lastUpdated": "Dernière mise à jour",
         "officialDocument": "Document officiel",
         "driverLicense": "Permis de conduire",
+        "username": "Nom d'utilisateur",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "dateOfBirth": "Date de naissance",
+        "age": "Âge",
+        "status": "Statut du compte",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "approved": "Approuvé",
+        "pendingApproval": "En attente d'approbation",
+        "roleDescription": "Description du rôle",
+        "noDocuments": "Aucun document téléversé",
+        "noDocumentsDesc": "Les documents officiels d'identité ou de certification attachés à ce profil apparaîtront ici.",
         "documentView": {
           "loadingDocument": "Chargement du document...",
           "documentHidden": "Document masqué",

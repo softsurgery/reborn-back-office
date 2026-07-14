@@ -23,13 +23,13 @@ export const useEducationDeleteDialog = ({
   } = useDialog({
     title: (
       <div className="leading-normal">
-        {t("userManagement.inspect.books.education.dialogs.deleteTitle")}{" "}
+        {t("userManagement.inspect.career.education.dialogs.deleteTitle")}{" "}
         <span className="font-light">{educationTitle}</span> ?
       </div>
     ),
     description: (
       <div>
-        {t("userManagement.inspect.books.education.dialogs.deleteDescription")}
+        {t("userManagement.inspect.career.education.dialogs.deleteDescription")}
       </div>
     ),
     children: (

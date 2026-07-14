@@ -175,7 +175,7 @@
       "settings": "Settings",
       "tabs": {
         "about": "About",
-        "book": "Book",
+        "career": "Career",
         "activity": "Activity",
         "conversations": "Conversations",
         "notifications": "Notifications",
@@ -186,7 +186,7 @@
         "followers": "Followers",
         "following": "Following"
       },
-      "books": {
+      "career": {
         "education": {
           "page": {
             "title": "Education"
@@ -234,7 +234,6 @@
             "descriptionTooLong": "Description cannot exceed 500 characters"
           }
         },
-
         "experience": {
           "page": {
             "title": "Experience"
@@ -282,7 +281,6 @@
             "descriptionTooLong": "Description cannot exceed 500 characters"
           }
         },
-
         "ref-params": {
           "industry": {
             "messages": {
@@ -336,6 +334,19 @@
         "lastUpdated": "Last updated",
         "officialDocument": "Official Document",
         "driverLicense": "Driver License",
+        "username": "Username",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "dateOfBirth": "Date of Birth",
+        "age": "Age",
+        "status": "Account Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "approved": "Approved",
+        "pendingApproval": "Pending Approval",
+        "roleDescription": "Role Description",
+        "noDocuments": "No documents uploaded yet",
+        "noDocumentsDesc": "Official identity or certification documents attached to this profile will appear here.",
         "documentView": {
           "loadingDocument": "Loading document...",
           "documentHidden": "Document hidden",
