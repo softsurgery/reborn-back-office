@@ -10,20 +10,20 @@ import { useTranslation } from "react-i18next";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   context: DataTableConfig<TData>;
+  hideViewOptions?: boolean;
 }
 
 export function DataTableToolbar<TData>({
   table,
   context,
+  hideViewOptions,
 }: DataTableToolbarProps<TData>) {
   const { t } = useTranslation("common");
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder={`${t("common.placeholders.filter")} ${
-            context.pluralName
-          }...`}
+          placeholder={`${t("common.placeholders.filter")} ${context.pluralName.toLowerCase()}...`}
           value={context?.searchTerm?.toString()}
           onChange={(event) => {
             context.setPage(1);
@@ -38,7 +38,10 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      {!hideViewOptions &&
+        !context?.hideViewOptions &&
+        !context?.customContent &&
+        !context?.customTable && <DataTableViewOptions table={table} />}
       {context.createCallback && (
         <Button onClick={() => context.createCallback?.()}>
           <Plus className="h-4 w-4" />

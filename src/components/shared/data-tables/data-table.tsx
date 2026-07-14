@@ -12,6 +12,7 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
+  type Table as TanstackTable,
 } from "@tanstack/react-table";
 import { DataTableToolbar } from "./data-table-toolbar";
 import {
@@ -38,6 +39,8 @@ interface DataTableProps<TData, TValue> {
   context: DataTableConfig<TData>;
   footerPagination?: boolean;
   isPending: boolean;
+  customContent?: React.ReactNode | ((table: TanstackTable<TData>) => React.ReactNode);
+  customTable?: React.ReactNode | ((table: TanstackTable<TData>) => React.ReactNode);
 }
 
 export function DataTable<TData, TValue>({
@@ -48,23 +51,18 @@ export function DataTable<TData, TValue>({
   context,
   footerPagination = true,
   isPending,
+  customContent,
+  customTable,
 }: DataTableProps<TData, TValue>) {
+  const injectedContent =
+    customContent ??
+    customTable ??
+    context?.customContent ??
+    context?.customTable;
+
   //set pagination in footer
   const { setContent } = useFooter();
   const { t } = useTranslation("common");
-  React.useEffect(() => {
-    if (footerPagination)
-      setContent?.(
-        <DataTablePagination
-          table={table}
-          context={context}
-          className="px-10"
-        />
-      );
-    return () => {
-      setContent?.(null);
-    };
-  }, [footerPagination, context.totalPageCount, context.size, context.page]);
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -104,77 +102,107 @@ export function DataTable<TData, TValue>({
       },
     },
   });
+
+  React.useEffect(() => {
+    if (footerPagination && !injectedContent) {
+      setContent?.(
+        <DataTablePagination
+          table={table}
+          context={context}
+          className="px-10"
+        />
+      );
+    } else {
+      setContent?.(null);
+    }
+    return () => {
+      setContent?.(null);
+    };
+  }, [footerPagination, injectedContent, context, setContent, table]);
+
   return (
     <div className={cn(className, "space-y-4")}>
-      <DataTableToolbar table={table} context={context} />
-      <div className={cn("rounded-md", containerClassName)}>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className="text-xs"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length && !isPending ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-1 px-2 text-xs">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+      <DataTableToolbar
+        table={table}
+        context={context}
+        hideViewOptions={Boolean(injectedContent)}
+      />
+      {injectedContent ? (
+        typeof injectedContent === "function" ? (
+          injectedContent(table)
+        ) : (
+          injectedContent
+        )
+      ) : (
+        <div className={cn("rounded-md", containerClassName)}>
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        className="text-xs"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : !isPending ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  <div className="flex items-center justify-center gap-2 font-bold">
-                    {t("common.table.noResults")} <PackageOpen />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center "
-                >
-                  <div className="flex items-center justify-center gap-2 font-bold">
-                    {t("common.table.loading")} <Spinner />
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      {!footerPagination && (
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length && !isPending ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="p-1 px-2 text-xs">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : !isPending ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    <div className="flex items-center justify-center gap-2 font-bold">
+                      {t("common.table.noResults")} <PackageOpen />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center "
+                  >
+                    <div className="flex items-center justify-center gap-2 font-bold">
+                      {t("common.table.loading")} <Spinner />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+      {!footerPagination && !injectedContent && (
         <DataTablePagination table={table} context={context} />
       )}
     </div>

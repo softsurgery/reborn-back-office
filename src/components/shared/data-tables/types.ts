@@ -30,6 +30,9 @@ export interface DataTableConfig<T> {
   //utility
   targetEntity?: (entity: T) => void;
   invisibleColumns?: string[];
+  customContent?: React.ReactNode | ((table: any) => React.ReactNode);
+  customTable?: React.ReactNode | ((table: any) => React.ReactNode);
+  hideViewOptions?: boolean;
 }
 
 export enum DataTableCellVariant {
