@@ -61,12 +61,29 @@ export const Layout = ({ children, className }: LayoutProps) => {
   };
 
   const [scrollable, setScrollable] = React.useState<boolean>(false);
+  const [hideScrollbar, setHideScrollbar] = React.useState<boolean>(false);
+  const [paddingX, setPaddingX] = React.useState<string>("");
 
   const uiContext = {
     scrollable,
+    hideScrollbar,
+    paddingX,
     setScrollable,
     clearScrollable: () => {
       setScrollable?.(false);
+    },
+    setHideScrollbar,
+    clearHideScrollbar: () => {
+      setHideScrollbar?.(false);
+    },
+    setPaddingX,
+    clearPaddingX: () => {
+      setPaddingX?.("");
+    },
+    clearUi: () => {
+      setScrollable?.(false);
+      setHideScrollbar?.(false);
+      setPaddingX?.("");
     },
   };
 
@@ -91,7 +108,7 @@ export const Layout = ({ children, className }: LayoutProps) => {
                       <Header />
                       {(title || description) && (
                         <PageHeader
-                          className={cn("py-5", isMobile ? "px-4" : "px-10")}
+                          className={cn("py-5", paddingX || (isMobile ? "px-4" : "px-10"))}
                         />
                       )}
                       <main
@@ -100,7 +117,8 @@ export const Layout = ({ children, className }: LayoutProps) => {
                           scrollable
                             ? "overflow-y-auto overflow-x-hidden"
                             : "overflow-hidden",
-                          isMobile ? "px-4" : "px-10",
+                          hideScrollbar && "no-scrollbar",
+                          paddingX || (isMobile ? "px-4" : "px-10"),
                           className,
                         )}
                       >
