@@ -22,70 +22,96 @@ interface LayoutProps {
 
 export const Layout = ({ children, className }: LayoutProps) => {
   const [routes, setRoutes] = React.useState<BreadcrumbRoute[]>([]);
-  const breadcrumbContext = {
-    routes,
-    setRoutes,
-    clearRoutes: () => {
-      setRoutes?.([]);
-    },
-  };
+  const clearRoutes = React.useCallback(() => {
+    setRoutes([]);
+  }, []);
+  const breadcrumbContext = React.useMemo(
+    () => ({
+      routes,
+      setRoutes,
+      clearRoutes,
+    }),
+    [routes, clearRoutes]
+  );
 
   const [content, setContent] = React.useState<React.ReactNode>(null);
-  const footerContext = {
-    content,
-    setContent,
-    clearContent: () => {
-      setContent?.(null);
-    },
-  };
+  const clearContent = React.useCallback(() => {
+    setContent(null);
+  }, []);
+  const footerContext = React.useMemo(
+    () => ({
+      content,
+      setContent,
+      clearContent,
+    }),
+    [content, clearContent]
+  );
 
   const [title, setTitle] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const [floating, setFloating] = React.useState<React.ReactNode>(null);
-  const introContext = {
-    title,
-    description,
-    floating,
-    setIntro: (title: string, description?: string) => {
-      setTitle(title);
-      setDescription(description || "");
-    },
-    setFloating,
-    clearIntro: () => {
-      setTitle("");
-      setDescription("");
-    },
-    clearFloating: () => {
-      setFloating(null);
-    },
-  };
+
+  const setIntro = React.useCallback((newTitle: string, newDescription?: string) => {
+    setTitle(newTitle);
+    setDescription(newDescription || "");
+  }, []);
+  const clearIntro = React.useCallback(() => {
+    setTitle("");
+    setDescription("");
+  }, []);
+  const clearFloating = React.useCallback(() => {
+    setFloating(null);
+  }, []);
+
+  const introContext = React.useMemo(
+    () => ({
+      title,
+      description,
+      floating,
+      setIntro,
+      setFloating,
+      clearIntro,
+      clearFloating,
+    }),
+    [title, description, floating, setIntro, clearIntro, clearFloating]
+  );
 
   const [scrollable, setScrollable] = React.useState<boolean>(false);
   const [hideScrollbar, setHideScrollbar] = React.useState<boolean>(false);
   const [paddingX, setPaddingX] = React.useState<string>("");
 
-  const uiContext = {
-    scrollable,
-    hideScrollbar,
-    paddingX,
-    setScrollable,
-    clearScrollable: () => {
-      setScrollable?.(false);
-    },
-    setHideScrollbar,
-    clearHideScrollbar: () => {
-      setHideScrollbar?.(false);
-    },
-    setPaddingX,
-    clearPaddingX: () => {
-      setPaddingX?.("");
-    },
-    clearUi: () => {
-      setScrollable?.(false);
-      setHideScrollbar?.(false);
-      setPaddingX?.("");
-    },
-  };
+  const clearScrollable = React.useCallback(() => setScrollable(false), []);
+  const clearHideScrollbar = React.useCallback(() => setHideScrollbar(false), []);
+  const clearPaddingX = React.useCallback(() => setPaddingX(""), []);
+  const clearUi = React.useCallback(() => {
+    setScrollable(false);
+    setHideScrollbar(false);
+    setPaddingX("");
+  }, []);
+
+  const uiContext = React.useMemo(
+    () => ({
+      scrollable,
+      hideScrollbar,
+      paddingX,
+      setScrollable,
+      clearScrollable,
+      setHideScrollbar,
+      clearHideScrollbar,
+      setPaddingX,
+      clearPaddingX,
+      clearUi,
+    }),
+    [
+      scrollable,
+      hideScrollbar,
+      paddingX,
+      clearScrollable,
+      clearHideScrollbar,
+      clearPaddingX,
+      clearUi,
+    ]
+  );
 
   const isMobile = useMediaQuery("(max-width: 425px)");
   return (
