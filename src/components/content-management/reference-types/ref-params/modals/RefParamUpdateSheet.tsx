@@ -30,7 +30,6 @@ export const useRefParamUpdateSheet = ({
     description: t("refParam.sheet.update.description"),
     children: (
       <RefParamUpdateForm
-        className="mx-4"
         refParamCallback={updateRefParam}
         cancelCallback={() => {
           closeUpdateRefParamSheet?.();

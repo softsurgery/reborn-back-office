@@ -37,7 +37,7 @@ export const RefParamUpdateForm = ({
       className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
     >
       <FormBuilder
-        className="mx-auto px-2 h-full flex flex-col flex-1 overflow-auto"
+        className="h-full flex flex-col flex-1 overflow-auto"
         structure={refParamUpdateFormStructure}
       />
       <div className="flex gap-2 justify-end px-4 py-3 border-t">

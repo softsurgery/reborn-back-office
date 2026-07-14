@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { identifyUser } from "@/lib/user.utils";
 import { DataTableCellVariant } from "@/components/shared/data-tables/types";
+import { cn } from "@/lib/utils";
 
 export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
   const { t } = useTranslation("bug");
@@ -35,7 +36,9 @@ export const useBugColumns = (context: any): ColumnDef<ResponseBugDto>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>{row.original.description || t("bug.columns.noDescription")}</div>
+        <div className={cn(!row.original.description && "opacity-70")}>
+          {row.original.description || t("bug.columns.noDescription")}
+        </div>
       ),
       enableSorting: true,
       enableHiding: true,

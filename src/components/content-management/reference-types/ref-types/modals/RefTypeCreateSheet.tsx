@@ -30,7 +30,6 @@ export const useRefTypeCreateSheet = ({
     description: t("refType.sheet.create.description"),
     children: (
       <RefTypeCreateForm
-        className="mx-4"
         refTypeCallback={createRefType}
         cancelCallback={() => {
           closeCreateRefTypeSheet?.();

@@ -4,6 +4,7 @@ import {
   FormStructure,
   SelectFieldProps,
   SelectOption,
+  TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { ReferenceTypesStore } from "@/hooks/stores/useReferenceTypesStore";
@@ -33,7 +34,7 @@ export const useCreateRefTypeFormStructure = ({
     },
   };
 
-  const descriptionField: Field<TextFieldProps> = {
+  const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
     label: "Description",
     variant: FieldVariant.TEXTAREA,
@@ -48,9 +49,10 @@ export const useCreateRefTypeFormStructure = ({
         referenceTypesStore?.setNested("refTypeCreateDto.description", value);
         referenceTypesStore?.setNested(
           "refTypeCreateDtoErrors.description",
-          []
+          [],
         );
       },
+      rows: 7,
     },
   };
 
@@ -63,13 +65,9 @@ export const useCreateRefTypeFormStructure = ({
     error: referenceTypesStore?.refTypeCreateDtoErrors?.refTypeId?.[0],
     props: {
       options: refTypesOptions,
-      value:
-        referenceTypesStore?.refTypeCreateDto.parentId?.toString() || undefined,
+      value: referenceTypesStore?.refTypeCreateDto.parentId?.toString(),
       onValueChange: (value) => {
-        referenceTypesStore?.setNested(
-          "refTypeCreateDto.parentId",
-          Number(value)
-        );
+        referenceTypesStore?.setNested("refTypeCreateDto.parentId", value);
         referenceTypesStore?.setNested("refTypeCreateDtoErrors.parentId", []);
       },
     },

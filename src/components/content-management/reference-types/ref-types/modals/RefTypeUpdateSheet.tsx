@@ -30,7 +30,6 @@ export const useRefTypeUpdateSheet = ({
     description: t("refType.sheet.update.description"),
     children: (
       <RefTypeUpdateForm
-        className="mx-4"
         refTypeCallback={updateRefType}
         cancelCallback={() => {
           closeUpdateRefTypeSheet?.();

@@ -2,7 +2,7 @@ import JSONForm, { JSONValue } from "@/components/shared/JsonEditor";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Check, Text} from "lucide-react";
+import { Check, Text } from "lucide-react";
 import React from "react";
 
 interface RefParamExtrasProps {
@@ -17,11 +17,11 @@ export const RefParamExtras = ({
   onChange,
 }: RefParamExtrasProps) => {
   const [jsonText, setJsonText] = React.useState(
-    JSON.stringify(value, null, 2)
+    JSON.stringify(value, null, 2),
   );
   const lineNumbers = React.useMemo(
-    () => (jsonText.match(/\n/g) || []).length + 1,
-    [jsonText]
+    () => (jsonText.match(/\n/g) || []).length + 8,
+    [jsonText],
   );
   const [error, setError] = React.useState<string | null>(null);
 
@@ -78,10 +78,10 @@ export const RefParamExtras = ({
             <p className="text-red-500 text-xs font-bold mt-1">{error}</p>
           )}
         </div>
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col gap-2">
           <Button
             type="button"
-            variant="default"
+            variant="outline"
             size={"sm"}
             onClick={handleApply}
           >
@@ -90,7 +90,7 @@ export const RefParamExtras = ({
           </Button>
           <Button
             type="button"
-            variant="secondary"
+            variant="outline"
             size={"sm"}
             onClick={handleFormat}
           >

@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
 import { Badge } from "@/components/ui/badge";
 import { JsonToggler } from "@/components/shared/JsonToggler";
+import { cn } from "@/lib/utils";
 
 export const useRefParamColumns = (
-  context: DataTableConfig<ResponseRefParamDto>
+  context: DataTableConfig<ResponseRefParamDto>,
 ): ColumnDef<ResponseRefParamDto>[] => {
   const { t: tCommon } = useTranslation("common");
   const { t } = useTranslation("content-management");
@@ -38,7 +39,7 @@ export const useRefParamColumns = (
         />
       ),
       cell: ({ row }) => (
-        <div>
+        <div className={cn(!row.original.description && "opacity-70")}>
           {row.original.description || t("refParam.columns.noDescription")}
         </div>
       ),

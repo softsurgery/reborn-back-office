@@ -82,5 +82,5 @@ export const useReferenceTypesStore = create<ReferenceTypesStore>(
     reset: () => {
       set({ ...initialState });
     },
-  })
+  }),
 );

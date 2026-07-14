@@ -4,9 +4,10 @@ import { DataTableRowActions } from "@/components/shared/data-tables/data-table-
 import { ResponseRoleDto } from "@/types";
 import { useTranslation } from "react-i18next";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { cn } from "@/lib/utils";
 
 export const useRoleColumns = (
-  context: DataTableConfig<ResponseRoleDto>
+  context: DataTableConfig<ResponseRoleDto>,
 ): ColumnDef<ResponseRoleDto>[] => {
   const { t } = useTranslation("role");
   const { t: tCommon } = useTranslation("common");
@@ -36,7 +37,9 @@ export const useRoleColumns = (
         />
       ),
       cell: ({ row }) => (
-        <div>{row.original.description || t("columns.noDescription")}</div>
+        <div className={cn(!row.original.description && "opacity-70")}>
+          {row.original.description || t("columns.noDescription")}
+        </div>
       ),
       enableSorting: true,
       enableHiding: true,
@@ -73,7 +76,7 @@ export const useRoleColumns = (
               ))}
               {hiddenPermissions > 0 && (
                 <span className="opacity-50 mx-2">{`+${hiddenPermissions}${" "}${tCommon(
-                  "common.general.more"
+                  "common.general.more",
                 )}`}</span>
               )}
             </div>

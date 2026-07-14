@@ -30,7 +30,6 @@ export const useRefParamCreateSheet = ({
     description: t("refParam.sheet.create.description"),
     children: (
       <RefParamCreateForm
-        className="mx-4"
         refParamCallback={createRefParam}
         cancelCallback={() => {
           closeCreateRefParamSheet?.();

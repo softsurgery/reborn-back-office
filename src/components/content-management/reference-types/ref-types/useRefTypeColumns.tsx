@@ -4,9 +4,10 @@ import { DataTableRowActions } from "@/components/shared/data-tables/data-table-
 import { ResponseRefTypeDto } from "@/types";
 import { useTranslation } from "react-i18next";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
+import { cn } from "@/lib/utils";
 
 export const useRefTypeColumns = (
-  context: DataTableConfig<ResponseRefTypeDto>
+  context: DataTableConfig<ResponseRefTypeDto>,
 ): ColumnDef<ResponseRefTypeDto>[] => {
   const { t } = useTranslation("content-management");
   return [
@@ -49,7 +50,7 @@ export const useRefTypeColumns = (
         />
       ),
       cell: ({ row }) => (
-        <div>
+        <div className={cn(!row.original.description && "opacity-70")}>
           {row.original.description || t("refType.columns.noDescription")}
         </div>
       ),

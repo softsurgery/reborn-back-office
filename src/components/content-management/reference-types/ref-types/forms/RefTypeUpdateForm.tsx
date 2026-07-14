@@ -26,9 +26,9 @@ export const RefTypeUpdateForm = ({
   const filtredRefTypes = React.useMemo(
     () =>
       refTypes.filter(
-        (refType) => referenceTypesStore.refType?.id !== refType.id
+        (refType) => referenceTypesStore.refType?.id !== refType.id,
       ),
-    [refTypes]
+    [refTypes],
   );
   const { refTypeUpdateFormStructure } = useUpdateRefTypeFormStructure({
     referenceTypesStore,
@@ -44,7 +44,7 @@ export const RefTypeUpdateForm = ({
       className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
     >
       <FormBuilder
-        className="mx-auto px-2 h-full flex flex-col flex-1 overflow-auto"
+        className="h-full flex flex-col flex-1 overflow-auto"
         structure={refTypeUpdateFormStructure}
       />
       <div className="flex gap-2 justify-end px-4 py-3 border-t">

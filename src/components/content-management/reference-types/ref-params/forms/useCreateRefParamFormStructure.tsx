@@ -6,6 +6,7 @@ import {
   FormStructure,
   SelectFieldProps,
   SelectOption,
+  TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { JSONValue } from "@/components/shared/JsonEditor";
@@ -30,7 +31,7 @@ export const useCreateRefParamFormStructure = ({
     description: "Reference Type's label.",
     error: referenceTypesStore?.refParamCreateDtoErrors?.label?.[0],
     props: {
-      value: referenceTypesStore?.refParamCreateDto.label || undefined,
+      value: referenceTypesStore?.refParamCreateDto.label,
       onChange: (value) => {
         referenceTypesStore?.setNested("refParamCreateDto.label", value);
         referenceTypesStore?.setNested("refParamCreateDtoErrors.label", []);
@@ -38,7 +39,7 @@ export const useCreateRefParamFormStructure = ({
     },
   };
 
-  const descriptionField: Field<TextFieldProps> = {
+  const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
     label: "Description",
     variant: FieldVariant.TEXTAREA,
@@ -48,14 +49,15 @@ export const useCreateRefParamFormStructure = ({
     description: "Reference Type's description.",
     error: referenceTypesStore?.refParamCreateDtoErrors?.description?.[0],
     props: {
-      value: referenceTypesStore?.refParamCreateDto.description || undefined,
+      value: referenceTypesStore?.refParamCreateDto.description,
       onChange: (value) => {
         referenceTypesStore?.setNested("refParamCreateDto.description", value);
         referenceTypesStore?.setNested(
           "refParamCreateDtoErrors.description",
-          []
+          [],
         );
       },
+      rows: 7,
     },
   };
 
@@ -69,14 +71,9 @@ export const useCreateRefParamFormStructure = ({
     error: referenceTypesStore?.refParamCreateDtoErrors?.refTypeId?.[0],
     props: {
       options: refTypesOptions,
-      value:
-        referenceTypesStore?.refParamCreateDto.refTypeId?.toString() ||
-        undefined,
+      value: referenceTypesStore?.refParamCreateDto.refTypeId,
       onValueChange: (value) => {
-        referenceTypesStore?.setNested(
-          "refParamCreateDto.refTypeId",
-          Number(value)
-        );
+        referenceTypesStore?.setNested("refParamCreateDto.refTypeId", value);
         referenceTypesStore?.setNested("refParamCreateDtoErrors.refTypeId", []);
       },
     },
@@ -96,7 +93,7 @@ export const useCreateRefParamFormStructure = ({
             referenceTypesStore?.setNested("refParamCreateDto.extras", value);
             referenceTypesStore?.setNested(
               "refParamCreateDtoErrors.extras",
-              []
+              [],
             );
           }}
         />

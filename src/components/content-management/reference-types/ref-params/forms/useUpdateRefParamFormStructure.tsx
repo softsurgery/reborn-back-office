@@ -5,6 +5,7 @@ import {
   FormStructure,
   SelectFieldProps,
   SelectOption,
+  TextareaFieldProps,
   TextFieldProps,
 } from "@/components/shared/form-builder/types";
 import { ReferenceTypesStore } from "@/hooks/stores/useReferenceTypesStore";
@@ -36,7 +37,7 @@ export const useUpdateRefParamFormStructure = ({
     },
   };
 
-  const descriptionField: Field<TextFieldProps> = {
+  const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
     label: "Description",
     variant: FieldVariant.TEXTAREA,
@@ -51,9 +52,10 @@ export const useUpdateRefParamFormStructure = ({
         referenceTypesStore?.setNested("refParamUpdateDto.description", value);
         referenceTypesStore?.setNested(
           "refParamUpdateDtoErrors.description",
-          []
+          [],
         );
       },
+      rows: 7,
     },
   };
 
@@ -67,14 +69,9 @@ export const useUpdateRefParamFormStructure = ({
     error: referenceTypesStore?.refParamUpdateDtoErrors?.refTypeId?.[0],
     props: {
       options: refTypesOptions,
-      value:
-        referenceTypesStore?.refParamUpdateDto.refTypeId?.toString() ||
-        undefined,
+      value: referenceTypesStore?.refParamUpdateDto.refTypeId?.toString(),
       onValueChange: (value) => {
-        referenceTypesStore?.setNested(
-          "refParamUpdateDto.refTypeId",
-          Number(value)
-        );
+        referenceTypesStore?.setNested("refParamUpdateDto.refTypeId", value);
         referenceTypesStore?.setNested("refParamUpdateDtoErrors.refTypeId", []);
       },
     },
@@ -94,7 +91,7 @@ export const useUpdateRefParamFormStructure = ({
             referenceTypesStore?.setNested("refParamUpdateDto.extras", value);
             referenceTypesStore?.setNested(
               "refParamUpdateDtoErrors.extras",
-              []
+              [],
             );
           }}
         />

@@ -5,7 +5,7 @@ export interface ResponseRefTypeDto extends DatabaseEntity {
   label: string;
   description: string;
   refParams: ResponseRefParamDto[];
-  parentId?: number;
+  parentId?: string;
   parent?: ResponseRefTypeDto;
   children: ResponseRefTypeDto[];
 }
@@ -13,7 +13,7 @@ export interface ResponseRefTypeDto extends DatabaseEntity {
 export interface CreateRefTypeDto {
   label: string;
   description: string;
-  parentId?: number;
+  parentId?: string;
 }
 
 export interface UpdateRefTypeDto extends Partial<CreateRefTypeDto> {}
@@ -22,7 +22,7 @@ export interface ResponseRefParamDto extends DatabaseEntity {
   id: number;
   label: string;
   description: string;
-  refTypeId: number;
+  refTypeId: string;
   refType: ResponseRefTypeDto;
   extras: any;
 }
@@ -30,7 +30,7 @@ export interface ResponseRefParamDto extends DatabaseEntity {
 export interface CreateRefParamDto {
   label: string;
   description: string;
-  refTypeId?: number;
+  refTypeId?: string;
   extras: any;
 }
 
