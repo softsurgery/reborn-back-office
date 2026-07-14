@@ -8,6 +8,7 @@ import { refType } from "./ref-type";
 import { deviceInfo } from "./deviceInfos";
 import { upload } from "./upload";
 import { logger } from "./logger";
+import { configuration } from "./configuration";
 
 export const admin = {
   upload,
@@ -20,4 +21,5 @@ export const admin = {
   education,
   deviceInfo,
   logger,
+  configuration,
 };
