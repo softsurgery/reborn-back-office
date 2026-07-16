@@ -1,21 +1,27 @@
+"use client";
 import React from "react";
-import { cn } from "@/lib/utils";
-import { useJobStore } from "@/hooks/stores/useJobStore";
-import { Button } from "@/components/ui/button";
-import { Save, ArrowLeft, ArrowRight } from "lucide-react";
-import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { useTranslation } from "react-i18next";
-import { useCurrencies } from "@/hooks/content/useCurrencies";
-import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { Upload } from "@/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { defineStepper } from "@/components/ui/stepper";
-import { Spinner } from "@/components/shared/Spinner";
-import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
-import { createJobSchema } from "@/types/validations/job.validation";
-import { useJobTags } from "@/hooks/content/useJobTags";
+import { useRouter } from "next/router";
+import { useJobStore } from "@/hooks/stores/useJobStore";
+import { api } from "@/api";
+import { CreateJobDto, ServerErrorResponse, Upload } from "@/types";
+import { cn } from "@/lib/utils";
+import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
+import { useIntro } from "@/contexts/IntroContext";
+import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
+import { Button } from "@/components/ui/button";
+import { defineStepper } from "@/components/ui/stepper";
+import { useCreateJobFormStructure } from "./useCreateJobFormStructure";
+import { ArrowLeft, ArrowRight, Save } from "lucide-react";
+import { Spinner } from "@/components/shared/Spinner";
+import { useUploadMutation } from "@/hooks/useUploadMutation";
+import { useCurrencies } from "@/hooks/content/useCurrencies";
+import { useJobTags } from "@/hooks/content/useJobTags";
 import { useJobCategories } from "@/hooks/content/useJobCategories";
+import { createJobSchema } from "@/types/validations/job.validation";
 
 const steps = [
   { id: "general", title: "job.forms.generalInformationTitle" },
@@ -24,26 +30,104 @@ const steps = [
 
 const { Stepper } = defineStepper(...steps);
 
-interface JobFormProps {
+export interface CreateJobProps {
   className?: string;
+  createJob?: (job: CreateJobDto) => void;
   jobCallback?: () => void;
-  cancelCallback?: () => void;
+  isCreatePending?: boolean;
   isPending?: boolean;
+  cancelCallback?: () => void;
 }
 
-export const JobCreateForm: React.FC<JobFormProps> = ({
+export const CreateJob: React.FC<CreateJobProps> = ({
   className,
+  createJob: propCreateJob,
   jobCallback,
-  cancelCallback,
-  isPending,
+  isCreatePending: propIsCreatePending,
+  isPending: propIsPending,
+  cancelCallback: propCancelCallback,
 }) => {
-  const jobStore = useJobStore();
   const { t: tCommon } = useTranslation("common");
-  const { t: tJob } = useTranslation("job");
+  const { t: tJob, ready } = useTranslation("job");
+  const jobStore = useJobStore();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const handleCallback = React.useMemo(() => {
+    return propCreateJob || (jobCallback ? () => jobCallback() : undefined);
+  }, [propCreateJob, jobCallback]);
+  const isCreatePending = propIsCreatePending ?? propIsPending;
+
+  const { setRoutes, clearRoutes } = useBreadcrumb();
+  const { setIntro, clearIntro } = useIntro();
+
+  React.useEffect(() => {
+    if (!handleCallback) {
+      jobStore.reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleCallback]);
+
+  React.useEffect(() => {
+    if (!handleCallback) {
+      setRoutes?.([
+        { title: tJob("job.intro"), href: "/services-management" },
+        { title: tJob("job.introTitle"), href: "/services-management/jobs" },
+        {
+          title: tJob("job.sheet.createTitle"),
+          href: "/services-management/jobs/create",
+        },
+      ]);
+      setIntro?.(
+        tJob("job.sheet.createTitle"),
+        tJob("job.sheet.createDescription")
+      );
+      return () => {
+        clearRoutes?.();
+        clearIntro?.();
+      };
+    }
+  }, [ready, tJob, handleCallback, clearIntro, clearRoutes, setIntro, setRoutes]);
+
+  const { mutate: createJobMutation, isPending: isMutationPending } =
+    useMutation({
+      mutationFn: (job: CreateJobDto) => api.job.create(job),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["jobs"],
+        });
+        toast.success(tJob("job.toast.created"));
+        jobStore.reset();
+        router.push("/services-management/jobs");
+      },
+      onError: (error: ServerErrorResponse) => {
+        toast.error(
+          error.response?.data?.message ?? error.message ?? tCommon("common.error")
+        );
+      },
+    });
+
+  const isPending = isCreatePending ?? isMutationPending;
+
+  const handleCreateSubmit = () => {
+    if (handleCallback) {
+      handleCallback(jobStore.createDto);
+    } else {
+      createJobMutation(jobStore.createDto);
+    }
+  };
+
+  const handleCancel = () => {
+    if (propCancelCallback) {
+      propCancelCallback();
+    } else {
+      router.push("/services-management/jobs");
+    }
+  };
 
   const { currencies, isFetchCurrenciesPending } = useCurrencies();
 
-  const { uploadFiles: uploadPicture, isUploadPending } = useUploadMutation({
+  const { uploadFiles: uploadPicture } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
       jobStore.appendUploadId("create", { uploadId: response?.[0]?.id });
     },
@@ -87,20 +171,15 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
           return false;
         }
       }
-      if (stepId === "detailed") {
-        return true;
-      }
       return true;
     },
     [jobStore]
   );
 
-  const handleSubmit = () => {
-    jobCallback?.();
-  };
-
   return (
-    <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
+    <div
+      className={cn("flex flex-col flex-1 overflow-hidden gap-2", className)}
+    >
       <Stepper.Provider
         className="flex flex-col flex-1 overflow-hidden"
         variant="horizontal"
@@ -115,7 +194,7 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
             if (!valid) return;
 
             if (methods.isLast) {
-              handleSubmit();
+              handleCreateSubmit();
             } else {
               methods.next();
             }
@@ -170,7 +249,7 @@ export const JobCreateForm: React.FC<JobFormProps> = ({
               <Stepper.Controls className="shrink-0 flex items-center justify-between gap-2 px-4 py-3 border-t">
                 <Button
                   variant="secondary"
-                  onClick={() => cancelCallback?.()}
+                  onClick={handleCancel}
                   disabled={isPending}
                 >
                   {tCommon("common.buttons.cancel")}

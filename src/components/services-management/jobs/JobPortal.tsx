@@ -1,25 +1,18 @@
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
-import { useServerImages } from "@/hooks/content/useServerImages";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useUi } from "@/contexts/UiContext";
 import { useInfiniteJobs } from "@/hooks/content/useInfiniteJobs";
-import { useJobCreateSheet } from "./modals/JobCreateSheet";
-import { CreateJobDto, ResponseJobDto, UpdateJobDto } from "@/types";
+import { ResponseJobDto } from "@/types";
 import { useJobStore } from "@/hooks/stores/useJobStore";
 import { toast } from "sonner";
-import { useJobUpdateSheet } from "./modals/JobUpdateSheet";
 import { useJobDeleteDialog } from "./modals/JobDeleteDialog";
 import { DataTable } from "@/components/shared/data-tables/data-table";
 import { useJobColumns } from "./columns";
-import {
-  createJobSchema,
-  updateJobSchema,
-} from "@/types/validations/job.validation";
 import { useTranslation } from "react-i18next";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
 import { useRouter } from "next/router";
@@ -209,35 +202,6 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     return jobsResponse.data;
   }, [jobsResponse]);
 
-  const { mutate: createJob, isPending: isCreationPending } = useMutation({
-    mutationFn: (job: CreateJobDto) => api.job.create(job),
-    onSuccess: () => {
-      toast.success(t("job.toast.created"));
-      refetchJobs();
-      refetchInfiniteJobs();
-      jobStore.reset();
-      closeCreateJobSheet();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
-  const { mutate: updateJob, isPending: isUpdatePending } = useMutation({
-    mutationFn: (data: { id?: string; job: UpdateJobDto }) =>
-      api.job.update(data.id, data.job),
-    onSuccess: () => {
-      toast.success(t("job.toast.updated"));
-      refetchJobs();
-      refetchInfiniteJobs();
-      jobStore.reset();
-      closeUpdateJobSheet();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
   const { mutate: deleteJob, isPending: isDeletionPending } = useMutation({
     mutationFn: (id?: string) => api.job.remove(id),
     onSuccess: () => {
@@ -249,99 +213,11 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     onError: (error) => toast.error(error.message),
   });
 
-  const handleCreateSubmit = () => {
-    const data = jobStore.createDto;
-    const result = createJobSchema.safeParse({ ...data });
-    if (!result.success) {
-      jobStore.set("createDtoErrors", result.error.flatten().fieldErrors);
-      return;
-    }
-    createJob(data);
-  };
-
-  const handleUpdateSubmit = () => {
-    const data = jobStore.updateDto;
-    const result = updateJobSchema.safeParse({ ...data });
-
-    if (!result.success) {
-      jobStore.set("updateDtoErrors", result.error.flatten().fieldErrors);
-      return;
-    }
-    updateJob({ id: jobStore.response?.id, job: data });
-  };
-
-  const { createJobSheet, openCreateJobSheet, closeCreateJobSheet } =
-    useJobCreateSheet({
-      createJob: handleCreateSubmit,
-      isCreatePending: isCreationPending,
-      resetJob: jobStore.reset,
-    });
-
-  const { updateJobSheet, openUpdateJobSheet, closeUpdateJobSheet } =
-    useJobUpdateSheet({
-      updateJob: handleUpdateSubmit,
-      isUpdatePending: isUpdatePending,
-      resetJob: jobStore.reset,
-    });
-
   const { deleteJobDialog, openDeleteJobDialog } = useJobDeleteDialog({
     deleteJob: () => deleteJob(jobStore?.response?.id),
     isDeletePending: isDeletionPending,
     representation: jobStore?.response?.title,
   });
-
-  const uploadIds = React.useMemo(() => {
-    const uploads = Array.isArray(jobStore.updateDto?.uploads)
-      ? jobStore.updateDto.uploads
-      : [];
-    return uploads.map((u) => u.uploadId);
-  }, [jobStore.updateDto?.uploads]);
-
-  const { uploads: imageUrls, isPending: isImagesPending } = useServerImages({
-    ids: uploadIds,
-    enabled: uploadIds.length > 0,
-  });
-
-  const images = React.useMemo(() => {
-    if (uploadIds.length === 0 || isImagesPending) return undefined;
-    const uploads = Array.isArray(jobStore.updateDto?.uploads)
-      ? jobStore.updateDto.uploads
-      : [];
-    return uploads
-      .map((upload, index) => {
-        const url = imageUrls[index];
-        if (!url) return null;
-        const name =
-          jobStore.response?.uploads.find(
-            (ru) => ru.uploadId === upload.uploadId,
-          )?.upload.filename || `image-${upload.uploadId}.png`;
-        return {
-          id: upload.uploadId.toString(),
-          url,
-          name,
-          image: null,
-          progress: 100,
-        };
-      })
-      .filter(Boolean) as {
-        id: string;
-        url: string;
-        name: string;
-        image: any;
-        progress: number;
-      }[];
-  }, [uploadIds, imageUrls, isImagesPending, jobStore.updateDto?.uploads, jobStore.response?.uploads]);
-
-  React.useEffect(() => {
-    if (
-      images &&
-      !jobStore.hasInitializedImages &&
-      jobStore.images.length === 0
-    ) {
-      jobStore.set("images", images);
-      jobStore.set("hasInitializedImages", true);
-    }
-  }, [images, jobStore.hasInitializedImages, jobStore]);
 
   const context: DataTableConfig<ResponseJobDto> = React.useMemo(
     () => ({
@@ -350,8 +226,29 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       inspectCallback: (entity: ResponseJobDto) => {
         router.push(`/services-management/jobs/${entity.id}`);
       },
-      createCallback: openCreateJobSheet,
-      updateCallback: openUpdateJobSheet,
+      createCallback: () => {
+        jobStore.reset();
+        router.push("/services-management/jobs/create");
+      },
+      updateCallback: (job: ResponseJobDto) => {
+        const uploads = job.uploads ? [...job.uploads].sort((a, b) => a.order - b.order) : [];
+        jobStore.set("response", job);
+        jobStore.set("updateDto", {
+          title: job.title,
+          description: job.description,
+          price: job.price,
+          tagIds: job.tags ? job.tags.map((tag) => tag.id) : [],
+          currencyId: job.currencyId,
+          categoryId: job.categoryId,
+          style: job.style,
+          difficulty: job.difficulty,
+          uploads: uploads.map((upload) => ({
+            id: upload.id,
+            uploadId: upload.uploadId,
+          })),
+        });
+        router.push(`/services-management/jobs/edit/${job.id}`);
+      },
       deleteCallback: openDeleteJobDialog,
       // search, filtering, sorting & paging
       searchTerm,
@@ -366,13 +263,13 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       setSortDetails: (order: boolean, sortKey: string) =>
         setSortDetails({ order, sortKey }),
       targetEntity: (job: ResponseJobDto) => {
-        const uploads = job.uploads.sort((a, b) => a.order - b.order);
+        const uploads = job.uploads ? [...job.uploads].sort((a, b) => a.order - b.order) : [];
         jobStore.set("response", job);
         jobStore.set("updateDto", {
           title: job.title,
           description: job.description,
           price: job.price,
-          tagIds: job.tags.map((tag) => tag.id),
+          tagIds: job.tags ? job.tags.map((tag) => tag.id) : [],
           currencyId: job.currencyId,
           categoryId: job.categoryId,
           style: job.style,
@@ -388,8 +285,6 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     [
       t,
       router,
-      openCreateJobSheet,
-      openUpdateJobSheet,
       openDeleteJobDialog,
       searchTerm,
       page,
@@ -447,8 +342,6 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
           }
         />
       )}
-      {createJobSheet}
-      {updateJobSheet}
       {deleteJobDialog}
     </div>
   );

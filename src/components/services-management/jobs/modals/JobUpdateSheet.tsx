@@ -1,5 +1,5 @@
 import { Briefcase } from "lucide-react";
-import { JobUpdateForm } from "../forms/JobUpdateForm";
+import { UpdateJob } from "../forms/UpdateJob";
 import { useSheet } from "@/components/shared/Sheets";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +28,7 @@ export const useJobUpdateSheet = ({
     ),
     description: `${t("job.sheet.updateDescription")}`,
     children: (
-      <JobUpdateForm
+      <UpdateJob
         className="my-4"
         jobCallback={updateJob}
         cancelCallback={() => {

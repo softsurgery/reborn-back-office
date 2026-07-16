@@ -1,5 +1,5 @@
 import { Briefcase } from "lucide-react";
-import { JobCreateForm } from "../forms/JobCreateForm";
+import { CreateJob } from "../forms/CreateJob";
 import { useSheet } from "@/components/shared/Sheets";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +28,7 @@ export const useJobCreateSheet = ({
     ),
     description: t("job.sheet.createDescription"),
     children: (
-      <JobCreateForm
+      <CreateJob
         className="my-4"
         jobCallback={createJob}
         cancelCallback={() => {
