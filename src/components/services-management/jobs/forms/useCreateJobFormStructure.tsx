@@ -14,7 +14,7 @@ import {
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { JobDifficulty, JobStyle, ResponseRefParamDto } from "@/types";
+import { JobDifficulty, JobPricingType, JobStatus, JobStyle, ResponseRefParamDto } from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface JobCreateFormStructureProps {
@@ -51,6 +51,26 @@ export const useCreateJobFormStructure = ({
       onChange: (value) => {
         jobStore.setNested("createDto.title", value);
         jobStore.setNested("createDtoErrors.title", []);
+      },
+    },
+  };
+
+  const statusField: Field<SelectFieldProps> = {
+    id: "status",
+    label: `${t("job.forms.statusLabel", "Status")}`,
+    variant: FieldVariant.SELECT,
+    description: `${t("job.forms.statusDescription", "Choose the current status of the job.")}`,
+    placeholder: `${t("job.forms.statusPlaceholder", "Select a status")}`,
+    error: t(jobStore.createDtoErrors?.status?.[0]),
+    props: {
+      value: jobStore.createDto?.status,
+      options: Object.values(JobStatus).map((status) => ({
+        label: status,
+        value: status,
+      })),
+      onValueChange: (value: string) => {
+        jobStore.setNested("createDto.status", value as JobStatus);
+        jobStore.setNested("createDtoErrors.status", []);
       },
     },
   };
@@ -117,6 +137,26 @@ export const useCreateJobFormStructure = ({
     },
   };
 
+  const pricingTypeField: Field<SelectFieldProps> = {
+    id: "pricingType",
+    label: `${t("job.forms.pricingTypeLabel", "Pricing Type")}`,
+    variant: FieldVariant.SELECT,
+    description: `${t("job.forms.pricingTypeDescription", "Choose how the job is priced.")}`,
+    placeholder: `${t("job.forms.pricingTypePlaceholder", "Select a pricing type")}`,
+    error: t(jobStore.createDtoErrors?.pricingType?.[0]),
+    props: {
+      value: jobStore.createDto?.pricingType,
+      options: Object.values(JobPricingType).map((type) => ({
+        label: type === JobPricingType.FIXED ? "Fixed Price" : "Hourly Rate",
+        value: type,
+      })),
+      onValueChange: (value: string) => {
+        jobStore.setNested("createDto.pricingType", value as JobPricingType);
+        jobStore.setNested("createDtoErrors.pricingType", []);
+      },
+    },
+  };
+
   const uploadsField: Field<ImageGalleryFieldProps> = {
     id: "uploads",
     label: `${t("job.forms.uploadsLabel")}`,
@@ -172,7 +212,7 @@ export const useCreateJobFormStructure = ({
     props: {
       options: jobCategories,
       value: jobStore.createDto?.categoryId?.toString(),
-      onValueChange: (value) => {
+      onValueChange: (value: string) => {
         jobStore.setNested("createDto.categoryId", Number(value));
         jobStore.setNested("createDtoErrors.categoryId", []);
       },
@@ -221,6 +261,38 @@ export const useCreateJobFormStructure = ({
     },
   };
 
+  const latitudeField: Field<NumberFieldProps> = {
+    id: "latitude",
+    label: `${t("job.forms.latitudeLabel", "Latitude")}`,
+    variant: FieldVariant.NUMBER,
+    placeholder: `${t("job.forms.latitudePlaceholder", "Enter latitude coordinate")}`,
+    description: `${t("job.forms.latitudeDescription", "Geographical latitude coordinate.")}`,
+    error: t(jobStore.createDtoErrors?.latitude?.[0]),
+    props: {
+      value: jobStore.createDto?.latitude ?? undefined,
+      onChange: (value) => {
+        jobStore.setNested("createDto.latitude", value !== null && value !== undefined && !isNaN(Number(value)) ? Number(value) : undefined);
+        jobStore.setNested("createDtoErrors.latitude", []);
+      },
+    },
+  };
+
+  const longitudeField: Field<NumberFieldProps> = {
+    id: "longitude",
+    label: `${t("job.forms.longitudeLabel", "Longitude")}`,
+    variant: FieldVariant.NUMBER,
+    placeholder: `${t("job.forms.longitudePlaceholder", "Enter longitude coordinate")}`,
+    description: `${t("job.forms.longitudeDescription", "Geographical longitude coordinate.")}`,
+    error: t(jobStore.createDtoErrors?.longitude?.[0]),
+    props: {
+      value: jobStore.createDto?.longitude ?? undefined,
+      onChange: (value) => {
+        jobStore.setNested("createDto.longitude", value !== null && value !== undefined && !isNaN(Number(value)) ? Number(value) : undefined);
+        jobStore.setNested("createDtoErrors.longitude", []);
+      },
+    },
+  };
+
   const generalInformationCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -230,13 +302,13 @@ export const useCreateJobFormStructure = ({
         description: `${t("job.forms.generalInformationDescription")}`,
         rows: [
           {
-            fields: [titleField],
+            fields: [titleField, statusField],
           },
           {
             fields: [descriptionField],
           },
           {
-            fields: [priceField, currencyField],
+            fields: [priceField, currencyField, pricingTypeField],
           },
           {
             fields: [jobCategoriesField, jobStylesField],
@@ -254,9 +326,12 @@ export const useCreateJobFormStructure = ({
     description: "",
     fieldsets: [
       {
-        title: `${t("job.forms.detailInformationTitle")}`,
-        description: `${t("job.forms.detailInformationDescription")}`,
+        title: `${t("job.forms.detailedInformationTitle", "Detailed Information")}`,
+        description: `${t("job.forms.detailedInformationDescription", "Additional details about the job.")}`,
         rows: [
+          {
+            fields: [latitudeField, longitudeField],
+          },
           {
             fields: [uploadsField],
           },

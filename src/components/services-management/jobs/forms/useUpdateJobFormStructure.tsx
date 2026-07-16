@@ -13,7 +13,7 @@ import {
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { JobDifficulty, JobStyle, ResponseRefParamDto } from "@/types";
+import { JobDifficulty, JobPricingType, JobStatus, JobStyle, ResponseRefParamDto } from "@/types";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -55,6 +55,26 @@ export const useUpdateJobFormStructure = ({
     },
   };
 
+  const statusField: Field<SelectFieldProps> = {
+    id: "status",
+    label: `${t("job.forms.statusLabel", "Status")}`,
+    variant: FieldVariant.SELECT,
+    description: `${t("job.forms.statusDescription", "Choose the current status of the job.")}`,
+    placeholder: `${t("job.forms.statusPlaceholder", "Select a status")}`,
+    error: t(jobStore.updateDtoErrors?.status?.[0]),
+    props: {
+      value: jobStore.updateDto?.status,
+      options: Object.values(JobStatus).map((status) => ({
+        label: status,
+        value: status,
+      })),
+      onValueChange: (value: string) => {
+        jobStore.setNested("updateDto.status", value as JobStatus);
+        jobStore.setNested("updateDtoErrors.status", []);
+      },
+    },
+  };
+
   const descriptionField: Field<TextareaFieldProps> = {
     id: "description",
     label: `${t("job.forms.descriptionLabel")}`,
@@ -82,7 +102,7 @@ export const useUpdateJobFormStructure = ({
     description: `${t("job.forms.priceDescription")}`,
     error: t(jobStore.updateDtoErrors?.price?.[0]),
     props: {
-      value: jobStore.updateDto.price || undefined,
+      value: jobStore.updateDto?.price || undefined,
       onChange: (value) => {
         if (
           value ==
@@ -113,6 +133,26 @@ export const useUpdateJobFormStructure = ({
       onValueChange: (value: string) => {
         jobStore.setNested("updateDto.currencyId", value);
         jobStore.setNested("updateDtoErrors.currencyId", []);
+      },
+    },
+  };
+
+  const pricingTypeField: Field<SelectFieldProps> = {
+    id: "pricingType",
+    label: `${t("job.forms.pricingTypeLabel", "Pricing Type")}`,
+    variant: FieldVariant.SELECT,
+    description: `${t("job.forms.pricingTypeDescription", "Choose how the job is priced.")}`,
+    placeholder: `${t("job.forms.pricingTypePlaceholder", "Select a pricing type")}`,
+    error: t(jobStore.updateDtoErrors?.pricingType?.[0]),
+    props: {
+      value: jobStore.updateDto?.pricingType,
+      options: Object.values(JobPricingType).map((type) => ({
+        label: type === JobPricingType.FIXED ? "Fixed Price" : "Hourly Rate",
+        value: type,
+      })),
+      onValueChange: (value: string) => {
+        jobStore.setNested("updateDto.pricingType", value as JobPricingType);
+        jobStore.setNested("updateDtoErrors.pricingType", []);
       },
     },
   };
@@ -220,22 +260,54 @@ export const useUpdateJobFormStructure = ({
     },
   };
 
+  const latitudeField: Field<NumberFieldProps> = {
+    id: "latitude",
+    label: `${t("job.forms.latitudeLabel", "Latitude")}`,
+    variant: FieldVariant.NUMBER,
+    placeholder: `${t("job.forms.latitudePlaceholder", "Enter latitude coordinate")}`,
+    description: `${t("job.forms.latitudeDescription", "Geographical latitude coordinate.")}`,
+    error: t(jobStore.updateDtoErrors?.latitude?.[0]),
+    props: {
+      value: jobStore.updateDto?.latitude ?? undefined,
+      onChange: (value) => {
+        jobStore.setNested("updateDto.latitude", value !== null && value !== undefined && !isNaN(Number(value)) ? Number(value) : undefined);
+        jobStore.setNested("updateDtoErrors.latitude", []);
+      },
+    },
+  };
+
+  const longitudeField: Field<NumberFieldProps> = {
+    id: "longitude",
+    label: `${t("job.forms.longitudeLabel", "Longitude")}`,
+    variant: FieldVariant.NUMBER,
+    placeholder: `${t("job.forms.longitudePlaceholder", "Enter longitude coordinate")}`,
+    description: `${t("job.forms.longitudeDescription", "Geographical longitude coordinate.")}`,
+    error: t(jobStore.updateDtoErrors?.longitude?.[0]),
+    props: {
+      value: jobStore.updateDto?.longitude ?? undefined,
+      onChange: (value) => {
+        jobStore.setNested("updateDto.longitude", value !== null && value !== undefined && !isNaN(Number(value)) ? Number(value) : undefined);
+        jobStore.setNested("updateDtoErrors.longitude", []);
+      },
+    },
+  };
+
   const generalInformationUpdateFormStructure: FormStructure = {
     title: "",
     description: "",
     fieldsets: [
       {
-        title: "General Information",
-        description: "Update the information about the job.",
+        title: `${t("job.forms.generalInformationTitle", "General Information")}`,
+        description: `${t("job.forms.generalInformationDescription", "Update the information about the job.")}`,
         rows: [
           {
-            fields: [titleField],
+            fields: [titleField, statusField],
           },
           {
             fields: [descriptionField],
           },
           {
-            fields: [priceField, currencyField],
+            fields: [priceField, currencyField, pricingTypeField],
           },
           {
             fields: [jobCategoriesField, jobStylesField],
@@ -253,9 +325,12 @@ export const useUpdateJobFormStructure = ({
     description: "",
     fieldsets: [
       {
-        title: "Detailed Information",
-        description: "Update the detailed information about the job.",
+        title: `${t("job.forms.detailedInformationTitle", "Detailed Information")}`,
+        description: `${t("job.forms.detailedInformationDescription", "Update the detailed information about the job.")}`,
         rows: [
+          {
+            fields: [latitudeField, longitudeField],
+          },
           {
             fields: [uploadsField],
           },

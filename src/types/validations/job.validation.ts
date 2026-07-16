@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { JobDifficulty, JobStyle } from "../job-management";
+import { JobDifficulty, JobPricingType, JobStatus, JobStyle } from "../job-management";
 
 const createJobSchema = z.object({
   title: z
@@ -42,6 +42,10 @@ const createJobSchema = z.object({
   difficulty: z.enum(Object.values(JobDifficulty) as [string, ...string[]], {
     message: "job.validation.difficultyRequired",
   }),
+  pricingType: z.enum(Object.values(JobPricingType) as [string, ...string[]]).optional(),
+  status: z.enum(Object.values(JobStatus) as [string, ...string[]]).optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
 });
 
 const updateJobSchema = z.object({
@@ -86,6 +90,10 @@ const updateJobSchema = z.object({
   difficulty: z.enum(Object.values(JobDifficulty) as [string, ...string[]], {
     message: "job.validation.difficultyRequired",
   }),
+  pricingType: z.enum(Object.values(JobPricingType) as [string, ...string[]]).optional(),
+  status: z.enum(Object.values(JobStatus) as [string, ...string[]]).optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
 });
 
 export { createJobSchema, updateJobSchema };

@@ -5,9 +5,11 @@ import { DatabaseEntity } from "./utils/database-entity";
 
 export interface ResponseJobDto extends DatabaseEntity {
   id: string;
+  status: JobStatus;
   title: string;
   description: string;
   price: number;
+  pricingType: JobPricingType;
   postedBy: ResponseUserDto;
   currency: ResponseRefParamDto;
   currencyId: number;
@@ -16,6 +18,8 @@ export interface ResponseJobDto extends DatabaseEntity {
   category: ResponseRefParamDto;
   style: JobStyle;
   difficulty: JobDifficulty;
+  latitude?: number;
+  longitude?: number;
   uploads: ResponseJobUploadDto[];
 }
 
@@ -28,6 +32,10 @@ export interface CreateJobDto {
   categoryId?: number;
   style?: JobStyle;
   difficulty?: JobDifficulty;
+  pricingType?: JobPricingType;
+  status?: JobStatus;
+  latitude?: number;
+  longitude?: number;
   uploads?: { uploadId: number }[];
 }
 
@@ -61,4 +69,23 @@ export enum JobDifficulty {
   MID_LEVEL = "Mid Level",
   SENIOR_LEVEL = "Senior Level",
   INTERN = "Internship",
+}
+
+export enum JobPricingType {
+  FIXED = "fixed",
+  HOURLY = "hourly",
+}
+
+export enum JobStatus {
+  DRAFT = "Draft",
+  POSTED = "Posted",
+  CANDIDATE_PENDING = "Candidate Pending",
+  NOT_STARTED = "Not Started",
+  PENDING = "Pending",
+  FINISHED = "Finished",
+  ON_HOLD = "On Hold",
+  REVIEWED_BY_WORKER = "Reviewed By Worker",
+  REVIEWED_BY_WORKER_AND_CLIENT = "Reviewed By Worker & Client",
+  FAILED = "Failed",
+  SUCCESSFUL = "Successfull",
 }

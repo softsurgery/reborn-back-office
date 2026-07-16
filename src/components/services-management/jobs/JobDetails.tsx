@@ -299,6 +299,12 @@ export const JobDetails = ({
                   {job.difficulty}
                 </span>
               )}
+
+              {job?.status && (
+                <span className="px-3 py-1 rounded-lg text-xs font-bold tracking-tight bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30">
+                  {job.status}
+                </span>
+              )}
             </div>
 
             <h1 className="text-2xl md:text-4xl font-black text-foreground tracking-tight text-balance leading-tight">
@@ -619,6 +625,15 @@ export const JobDetails = ({
               <div className="space-y-3.5 text-xs font-medium">
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-primary" /> Status
+                  </span>
+                  <span className="font-bold text-foreground capitalize">
+                    {job?.status || "Draft"}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground flex items-center gap-2">
                     <Layers className="w-4 h-4 text-primary" /> Category
                   </span>
                   <span className="font-bold text-foreground">
@@ -641,6 +656,30 @@ export const JobDetails = ({
                   </span>
                   <span className="font-bold text-foreground">
                     {job?.difficulty || "Not Specified"}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-primary" /> Pricing Type
+                  </span>
+                  <span className="font-bold text-foreground capitalize">
+                    {job?.pricingType === "hourly"
+                      ? "Hourly Rate"
+                      : job?.pricingType === "fixed"
+                      ? "Fixed Price"
+                      : "Fixed Price"}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary" /> Coordinates
+                  </span>
+                  <span className="font-bold text-foreground">
+                    {job?.latitude !== undefined && job?.longitude !== undefined && job.latitude !== null && job.longitude !== null
+                      ? `${job.latitude}, ${job.longitude}`
+                      : "Not Specified"}
                   </span>
                 </div>
 

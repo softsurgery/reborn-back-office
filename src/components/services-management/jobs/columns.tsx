@@ -76,6 +76,50 @@ export const useJobColumns = (
       enableHiding: true,
     },
     {
+      accessorKey: `${t("job.columns.status", "Status")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.status", "Status")}
+          attribute="status"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="capitalize font-medium">
+            {row?.original?.status || "-"}
+          </div>
+        );
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
+      accessorKey: `${t("job.columns.pricingType", "Pricing Type")}`,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("job.columns.pricingType", "Pricing Type")}
+          attribute="pricingType"
+          context={context}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="capitalize">
+            {row?.original?.pricingType === "hourly"
+              ? "Hourly Rate"
+              : row?.original?.pricingType === "fixed"
+              ? "Fixed Price"
+              : "-"}
+          </div>
+        );
+      },
+      enableSorting: true,
+      enableHiding: true,
+    },
+    {
       accessorKey: `${t("job.columns.pictures")}`,
       header: ({ column }) => (
         <DataTableColumnHeader
