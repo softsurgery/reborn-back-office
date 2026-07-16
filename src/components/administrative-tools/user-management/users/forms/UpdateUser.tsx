@@ -22,7 +22,7 @@ import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
 import { Button } from "@/components/ui/button";
 import { defineStepper } from "@/components/ui/stepper";
-import { useUpdateUserFormStructure } from "./forms/useUpdateUserFormStructure";
+import { useUpdateUserFormStructure } from "./useUpdateUserFormStructure";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { useRegions } from "@/hooks/content/useRegions";
 import { Spinner } from "@/components/shared/Spinner";
@@ -147,20 +147,21 @@ export const UpdateUser = ({
     }
   }, [ready, tUser, id, propUpdateUser]);
 
-  const { mutate: updateUserMutation, isPending: isMutationPending } = useMutation({
-    mutationFn: (data: { id?: string; user: UpdateUserDto }) =>
-      api.admin.user.update(data.id, data.user),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["user", userStore.response?.email],
-      });
-      toast.success(tUser("userManagement.messages.userUpdatedSuccess"));
-      userStore.reset();
-    },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data?.message ?? tUser("common.error"));
-    },
-  });
+  const { mutate: updateUserMutation, isPending: isMutationPending } =
+    useMutation({
+      mutationFn: (data: { id?: string; user: UpdateUserDto }) =>
+        api.admin.user.update(data.id, data.user),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["user", userStore.response?.email],
+        });
+        toast.success(tUser("userManagement.messages.userUpdatedSuccess"));
+        userStore.reset();
+      },
+      onError: (error: ServerErrorResponse) => {
+        toast.error(error.response?.data?.message ?? tUser("common.error"));
+      },
+    });
 
   const isUpdatePending = propIsUpdatePending ?? isMutationPending;
 

@@ -17,7 +17,6 @@ import {
   ServerErrorResponse,
   UpdateUserDto,
 } from "@/types";
-import { updateUserSchema } from "@/types/validations/user.validation";
 import { useIntro } from "@/contexts/IntroContext";
 import { ArrowDown, ArrowUp, BellPlus } from "lucide-react";
 import { useApproveUserDialog } from "./modals/UserApproveDialog";

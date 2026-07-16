@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
 import { useSheet } from "@/components/shared/Sheets";
-import { CreateUser } from "../CreateUser";
+import { CreateUser } from "../forms/CreateUser";
 import { useTranslation } from "react-i18next";
 import { CreateUserDto } from "@/types";
 

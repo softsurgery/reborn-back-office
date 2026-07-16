@@ -1,4 +1,4 @@
-import { UpdateUser } from "@/components/administrative-tools/user-management/users/UpdateUser";
+import { UpdateUser } from "@/components/administrative-tools/user-management/users/forms/UpdateUser";
 import { useParams } from "next/navigation";
 
 export default function Page() {

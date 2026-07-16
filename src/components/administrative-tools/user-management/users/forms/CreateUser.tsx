@@ -15,7 +15,7 @@ import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
 import { Button } from "@/components/ui/button";
 import { defineStepper } from "@/components/ui/stepper";
-import { useCreateUserFormStructure } from "./forms/useCreateUserFormStructure";
+import { useCreateUserFormStructure } from "./useCreateUserFormStructure";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { useRegions } from "@/hooks/content/useRegions";
 import {
@@ -88,20 +88,21 @@ export const CreateUser: React.FC<CreateUserProps> = ({
     }
   }, [ready, tUser, propCreateUser]);
 
-  const { mutate: createUserMutation, isPending: isMutationPending } = useMutation({
-    mutationFn: (user: CreateUserDto) => api.admin.user.create(user),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["users"],
-      });
-      toast.success(tUser("userManagement.messages.userCreatedSuccess"));
-      userStore.reset();
-      router.push("/user-management/users");
-    },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data?.message ?? tUser("common.error"));
-    },
-  });
+  const { mutate: createUserMutation, isPending: isMutationPending } =
+    useMutation({
+      mutationFn: (user: CreateUserDto) => api.admin.user.create(user),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["users"],
+        });
+        toast.success(tUser("userManagement.messages.userCreatedSuccess"));
+        userStore.reset();
+        router.push("/user-management/users");
+      },
+      onError: (error: ServerErrorResponse) => {
+        toast.error(error.response?.data?.message ?? tUser("common.error"));
+      },
+    });
 
   const isCreatePending = propIsCreatePending ?? isMutationPending;
 
