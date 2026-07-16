@@ -7,13 +7,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserColumns } from "./columns";
 import { DataTable } from "@/components/shared/data-tables/data-table";
-import { useUserCreateSheet } from "./modals/UserCreateSheet";
 import { useUserDeleteDialog } from "./modals/UserDeleteDialog";
 import { useActivateUserDialog } from "./modals/UserActivateDialog";
 import { useDeactivateUserDialog } from "./modals/UserDeactivateDialog";
 import { useUserStore } from "@/hooks/stores/useUserStore";
 import {
-  CreateUserDto,
   Gender,
   ResponseUserDto,
   ServerErrorResponse,
@@ -113,19 +111,6 @@ export const Users = ({ className }: UsersProps) => {
     return usersResponse.data;
   }, [usersResponse]);
 
-  const { mutate: createUser, isPending: isCreatePending } = useMutation({
-    mutationFn: (user: CreateUserDto) => api.admin.user.create(user),
-    onSuccess: () => {
-      toast(t("userManagement.messages.userCreatedSuccess"));
-      closeCreateUserSheet();
-      userStore.reset();
-      refetchUsers();
-    },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data?.message);
-    },
-  });
-
   const { mutate: deleteUser, isPending: isDeletionPending } = useMutation({
     mutationFn: (id?: string) => api.admin.user.remove(id),
     onSuccess: () => {
@@ -180,13 +165,6 @@ export const Users = ({ className }: UsersProps) => {
   const handleReset = () => {
     userStore.reset();
   };
-
-  const { createUserSheet, openCreateUserSheet, closeCreateUserSheet } =
-    useUserCreateSheet({
-      createUser,
-      isCreatePending,
-      resetUser: handleReset,
-    });
 
   const { deleteUserDialog, openDeleteUserDialog } = useUserDeleteDialog({
     userFullname: `${userStore.response?.firstName} - ${userStore.response?.lastName}`,
@@ -268,7 +246,7 @@ export const Users = ({ className }: UsersProps) => {
     pluralName: `${t("userManagement.page.users")}`,
     inspectCallback: (entity: ResponseUserDto) =>
       router.push(`/user-management/users/${entity.id}`),
-    createCallback: openCreateUserSheet,
+    createCallback: () => router.push("/user-management/users/create"),
     updateCallback: (user: ResponseUserDto) =>
       router.push(`/user-management/users/edit/${user.id}`),
     deleteCallback: openDeleteUserDialog,
@@ -366,7 +344,6 @@ export const Users = ({ className }: UsersProps) => {
         context={context}
         isPending={isPending}
       />
-      {createUserSheet}
       {deleteUserDialog}
       {activateUserDialog}
       {deactivateUserDialog}

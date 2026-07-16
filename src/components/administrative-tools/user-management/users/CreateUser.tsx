@@ -1,23 +1,29 @@
+"use client";
 import React from "react";
-import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/hooks/stores/useUserStore";
+import { api } from "@/api";
+import { CreateUserDto, ServerErrorResponse, Upload } from "@/types";
+import { cn } from "@/lib/utils";
+import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
+import { useIntro } from "@/contexts/IntroContext";
 import { useRoles } from "@/hooks/content/useRoles";
 import { FormBuilder } from "@/components/shared/form-builder/FormBuilder";
 import { mapToSelectOptions } from "@/components/shared/form-builder/utils/mapToSelectOptions";
 import { Button } from "@/components/ui/button";
-import { useUpdateUserFormStructure } from "./useUpdateUserFormStructure";
+import { defineStepper } from "@/components/ui/stepper";
+import { useCreateUserFormStructure } from "./forms/useCreateUserFormStructure";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { useRegions } from "@/hooks/content/useRegions";
-import { defineStepper } from "@/components/ui/stepper";
-import { ServerErrorResponse, UpdateUserDto, Upload } from "@/types";
 import {
+  createUserSchema,
   profileSchema,
-  updateUserSchema,
 } from "@/types/validations/user.validation";
 import { Spinner } from "@/components/shared/Spinner";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 
 const steps = [
   {
@@ -32,29 +38,90 @@ const steps = [
 
 const { Stepper } = defineStepper(...steps);
 
-interface UserUpdateFormProps {
+interface CreateUserProps {
   className?: string;
-  updateUser?: (user: UpdateUserDto) => void;
-  isUpdatePending?: boolean;
+  createUser?: (user: CreateUserDto) => void;
+  isCreatePending?: boolean;
 }
 
-export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
+export const CreateUser: React.FC<CreateUserProps> = ({
   className,
-  updateUser,
-  isUpdatePending,
+  createUser: propCreateUser,
+  isCreatePending: propIsCreatePending,
 }) => {
   const { t: tCommon } = useTranslation("common");
-  const { t: tUser } = useTranslation("user-management");
+  const { t: tUser, ready } = useTranslation("user-management");
   const userStore = useUserStore();
-  const { roles, isFetchRolesPending } = useRoles();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const { setRoutes, clearRoutes } = useBreadcrumb();
+  const { setIntro, clearIntro } = useIntro();
+
+  React.useEffect(() => {
+    if (!propCreateUser) {
+      userStore.reset();
+    }
+  }, [propCreateUser]);
+
+  React.useEffect(() => {
+    if (!propCreateUser) {
+      setRoutes?.([
+        { title: tUser("userManagement.page.title") },
+        {
+          title: tUser("userManagement.page.users"),
+          href: "/user-management/users",
+        },
+        {
+          title: tUser("userManagement.page.createUser"),
+          href: "/user-management/users/create",
+        },
+      ]);
+      setIntro?.(
+        tUser("userManagement.page.createUser"),
+        tUser("userManagement.page.description"),
+      );
+      return () => {
+        clearRoutes?.();
+        clearIntro?.();
+      };
+    }
+  }, [ready, tUser, propCreateUser]);
+
+  const { mutate: createUserMutation, isPending: isMutationPending } = useMutation({
+    mutationFn: (user: CreateUserDto) => api.admin.user.create(user),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+      toast.success(tUser("userManagement.messages.userCreatedSuccess"));
+      userStore.reset();
+      router.push("/user-management/users");
+    },
+    onError: (error: ServerErrorResponse) => {
+      toast.error(error.response?.data?.message ?? tUser("common.error"));
+    },
+  });
+
+  const isCreatePending = propIsCreatePending ?? isMutationPending;
+
+  const handleCreateSubmit = () => {
+    if (propCreateUser) {
+      propCreateUser(userStore.createDto);
+    } else {
+      createUserMutation(userStore.createDto);
+    }
+  };
+
   const { regions, isFetchRegionsPending } = useRegions();
+  const { roles, isFetchRolesPending } = useRoles();
 
   const {
     uploadFiles: uploadProfilePicture,
     isUploadPending: isProfilePictureUploadPending,
   } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
-      userStore.setNested("updateDto.pictureId", response?.[0]?.id);
+      userStore.setNested("createDto.pictureId", response?.[0]?.id);
     },
     onError: (error: ServerErrorResponse) => {
       toast.error(error.response?.data?.message);
@@ -66,7 +133,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     isUploadPending: isOfficialDocumentUploadPending,
   } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
-      userStore.setNested("updateDto.officialDocumentId", response?.[0]?.id);
+      userStore.setNested("createDto.officialDocumentId", response?.[0]?.id);
     },
     onError: (error: ServerErrorResponse) => {
       toast.error(error.response?.data?.message);
@@ -79,7 +146,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   } = useUploadMutation({
     onSuccess: (response: Upload[]) => {
       userStore.setNested(
-        "updateDto.driverLicenseDocumentId",
+        "createDto.driverLicenseDocumentId",
         response?.[0]?.id,
       );
     },
@@ -91,15 +158,15 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   const { uploadFiles: uploadPhotos, isUploadPending: isPhotosUploadPending } =
     useUploadMutation({
       onSuccess: (response: Upload[]) => {
-        userStore.appendUploadId("update", { uploadId: response?.[0]?.id });
+        userStore.appendUploadId("create", { uploadId: response?.[0]?.id });
       },
       onError: (error: ServerErrorResponse) => {
         toast.error(error.response?.data?.message);
       },
     });
 
-  const { userUpdateFormStructure, profileUpdateFormStructure } =
-    useUpdateUserFormStructure({
+  const { userCreateFormStructure, profileCreateFormStructure } =
+    useCreateUserFormStructure({
       userStore,
       regions: mapToSelectOptions({
         data: isFetchRegionsPending ? [] : regions,
@@ -127,31 +194,24 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
   const validateStep = React.useCallback(
     (stepId: string) => {
       if (stepId === "user-information") {
-        const userResult = updateUserSchema(
-          userStore.setManualPassword,
-        ).safeParse({
-          ...userStore.updateDto,
+        const userResult = createUserSchema.safeParse({
+          ...userStore.createDto,
           confirmPassword: userStore.confirmPassword,
         });
-
         if (!userResult.success) {
           userStore.set(
-            "updateDtoErrors",
+            "createDtoErrors",
             userResult.error.flatten().fieldErrors,
           );
           return false;
         }
-        return true;
       }
 
       if (stepId === "profile-information") {
-        const profileResult = profileSchema.safeParse({
-          ...userStore.updateDto,
-          confirmPassword: userStore.confirmPassword,
-        });
+        const profileResult = profileSchema.safeParse(userStore.createDto);
         if (!profileResult.success) {
           userStore.set(
-            "updateDtoErrors",
+            "createDtoErrors",
             profileResult.error.flatten().fieldErrors,
           );
           return false;
@@ -161,10 +221,6 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
     },
     [userStore],
   );
-
-  const handleSubmit = () => {
-    updateUser?.(userStore.updateDto);
-  };
 
   return (
     <div
@@ -184,7 +240,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
             if (!valid) return;
 
             if (methods.isLast) {
-              handleSubmit();
+              handleCreateSubmit();
             } else {
               methods.next();
             }
@@ -208,7 +264,7 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                       }
                       methods.goTo(step.id);
                     }}
-                    disabled={isUpdatePending}
+                    disabled={isCreatePending}
                   >
                     <Stepper.Title>{tUser(step.title)}</Stepper.Title>
                   </Stepper.Step>
@@ -219,19 +275,13 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
               {isFetchRegionsPending && isFetchRolesPending ? (
                 <Spinner />
               ) : (
-                <div className="flex flex-col flex-1 h-full overflow-hidden">
-                  <div className="flex-1 overflow-auto no-scrollbar px-2">
+                <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
+                  <div className="flex-1 overflow-auto px-2">
                     {methods.current.id === "user-information" && (
-                      <FormBuilder
-                        structure={userUpdateFormStructure}
-                        className="mt-4"
-                      />
+                      <FormBuilder structure={userCreateFormStructure} />
                     )}
                     {methods.current.id === "profile-information" && (
-                      <FormBuilder
-                        structure={profileUpdateFormStructure}
-                        className="mt-4"
-                      />
+                      <FormBuilder structure={profileCreateFormStructure} />
                     )}
                   </div>
                 </div>
@@ -243,15 +293,15 @@ export const UserUpdateForm: React.FC<UserUpdateFormProps> = ({
                   <Button
                     variant="outline"
                     onClick={methods.prev}
-                    disabled={isUpdatePending}
+                    disabled={isCreatePending}
                   >
                     <ArrowLeft /> {tCommon("common.buttons.previous")}
                   </Button>
                 )}
-                <Button onClick={handleNext} disabled={isUpdatePending}>
+                <Button onClick={handleNext} disabled={isCreatePending}>
                   {methods.isLast ? (
                     <React.Fragment>
-                      <Save /> {tCommon("common.buttons.update")}
+                      <Save /> {tCommon("common.buttons.save")}
                     </React.Fragment>
                   ) : (
                     <React.Fragment>

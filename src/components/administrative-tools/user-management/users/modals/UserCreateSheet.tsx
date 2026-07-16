@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
 import { useSheet } from "@/components/shared/Sheets";
-import { UserCreateForm } from "../forms/UserCreateForm";
+import { CreateUser } from "../CreateUser";
 import { useTranslation } from "react-i18next";
 import { CreateUserDto } from "@/types";
 
@@ -29,7 +29,7 @@ export const useUserCreateSheet = ({
     ),
     description: tUser("userManagement.sheet.createUserDescription"),
     children: (
-      <UserCreateForm
+      <CreateUser
         className="my-4"
         createUser={createUser}
         isCreatePending={isCreatePending}
