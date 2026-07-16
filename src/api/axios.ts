@@ -1,7 +1,7 @@
 import { useAuthPersistStore } from "@/hooks/stores/useAuthPersistStore";
 import _axios from "axios";
 
-const BASE_URL =
+export const BASE_URL =
   typeof window !== "undefined"
     ? process.env.NEXT_PUBLIC_BASE_URL
     : process.env.BASE_URL;
