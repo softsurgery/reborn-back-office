@@ -1,7 +1,6 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { cn } from "@/lib/utils";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import { ResponseUserDto } from "@/types";
@@ -16,11 +15,9 @@ interface UserEntryProps {
 export const UserEntry = ({ className, user, closeDialog }: UserEntryProps) => {
   const router = useRouter();
 
-  const { data: profilePicture } = useQuery({
-    queryKey: ["profile-picture", user?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+  const { uploads: [profilePicture] } = useServerImages({
+    ids: [user?.pictureId],
     enabled: !!user?.pictureId,
-    staleTime: Infinity,
   });
 
   const fallback = React.useMemo(() => identifyUserAvatar(user), [user]);

@@ -1,18 +1,19 @@
 import React, { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { cn } from "@/lib/utils";
 
 interface UseServerImageProps {
-  id?: number;
-  size: { width: number; height: number };
+  id?: number | string | null;
+  size?: { width?: number; height?: number };
   fallback?: string | React.ReactNode;
   enabled?: boolean;
   className?: string;
+  wrapperClassName?: string;
+  fallbackClassName?: string;
 }
 
 interface UseServerImageReturn {
-  upload: any | null;
+  upload: string | null;
   isPending: boolean;
   jsx: JSX.Element;
 }
@@ -23,85 +24,21 @@ export const useServerImage = ({
   fallback,
   enabled = true,
   className,
+  wrapperClassName,
+  fallbackClassName,
 }: UseServerImageProps): UseServerImageReturn => {
-  const { data: uploadResp, isPending } = useQuery({
-    queryKey: ["server-image", id],
-    queryFn: async () => api.upload.getUploadById(id!),
-    enabled: !!id && enabled,
-    staleTime: Infinity,
-    retry: false,
+  const { uploads, isPending, jsxArray } = useServerImages({
+    ids: [id],
+    fallbacks: [fallback],
+    size,
+    className: cn("rounded-full", className),
+    wrapperClassName,
+    fallbackClassName,
+    enabled,
   });
 
-  const upload = useMemo(() => uploadResp ?? null, [uploadResp]);
+  const upload = useMemo(() => (uploads[0] ? (uploads[0] as string) : null), [uploads]);
+  const jsx = useMemo(() => (jsxArray[0] ? (jsxArray[0] as JSX.Element) : <></>), [jsxArray]);
 
-  const jsx = useMemo(() => {
-    // 1️⃣ Image serveur disponible
-    if (upload && !isPending) {
-      return (
-        <img
-          src={upload}
-          alt="server"
-          width={size.width}
-          height={size.height}
-          className={cn("rounded-full object-cover", className)}
-          onError={(e) => {
-            if (typeof fallback === "string") {
-              e.currentTarget.src = fallback;
-            }
-          }}
-        />
-      );
-    }
-
-    // 2️⃣ Chargement
-    if (isPending && id) {
-      return (
-        <div
-          className={cn("animate-pulse bg-gray-300 rounded-full", className)}
-          style={{
-            width: `${size.width}px`,
-            height: `${size.height}px`,
-          }}
-        />
-      );
-    }
-
-    // 3️⃣ Fallback React Element
-    if (React.isValidElement(fallback)) {
-      return fallback;
-    }
-
-    // 4️⃣ Fallback texte → première lettre
-    if (typeof fallback === "string") {
-      return (
-        <div
-          className={cn(
-            "flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-bold",
-            className
-          )}
-          style={{
-            width: `${size.width}px`,
-            height: `${size.height}px`,
-            fontSize: `${size.width / 2.5}px`,
-          }}
-        >
-          {fallback.charAt(0).toUpperCase()}
-        </div>
-      );
-    }
-
-    // 5️⃣ Par défaut → squelette
-    return (
-      <div
-        className={cn("animate-pulse bg-gray-300 rounded-full", className)}
-        style={{
-          width: `${size.width}px`,
-          height: `${size.height}px`,
-        }}
-      />
-    );
-  }, [upload, isPending, fallback, size, className, id]);
-
-  // ✅ Retour correct du hook
   return { upload, isPending, jsx };
 };

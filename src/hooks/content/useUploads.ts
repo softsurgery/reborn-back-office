@@ -1,5 +1,5 @@
-import { useQueries } from "@tanstack/react-query";
-import { api } from "@/api";
+import React from "react";
+import { useServerImages } from "@/hooks/content/useServerImages";
 
 interface UploadResult {
   id: number;
@@ -9,30 +9,27 @@ interface UploadResult {
   progress: number;
 }
 
-export const useUploads = (ids?: number[]) => {
-  const results = useQueries({
-    queries: (ids ?? []).map((id) => ({
-      queryKey: ["upload", id],
-      queryFn: async (): Promise<UploadResult> => {
-        const url = await api.upload.getUploadById(id);
+export const useUploads = (ids?: (number | undefined | null)[]) => {
+  const { uploads: urls, isPending } = useServerImages({
+    ids: ids ?? [],
+    enabled: !!ids && ids.length > 0,
+  });
+
+  const uploads = React.useMemo(() => {
+    return (ids ?? [])
+      .map((id, index) => {
+        const url = urls[index];
+        if (!id || !url) return null;
         return {
-          id,
+          id: Number(id),
           url,
           name: `image-${id}.png`,
           image: null,
           progress: 100,
         };
-      },
-      enabled: !!id,
-      staleTime: Infinity,
-      retry: false,
-    })),
-  });
-
-  const isPending = results.some((r) => r.isPending);
-  const uploads = results
-    .map((r) => r.data)
-    .filter((u): u is UploadResult => Boolean(u));
+      })
+      .filter((u): u is UploadResult => Boolean(u));
+  }, [ids, urls]);
 
   return { uploads, isPending };
 };

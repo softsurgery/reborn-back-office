@@ -1,5 +1,11 @@
 import { Paginated, QueryParams, ServerResponse, Upload } from "@/types";
-import axios from "./axios";
+import axios, { BASE_URL } from "./axios";
+
+const getStorageUrl = (path: string) => {
+  const baseUrl = (axios.defaults.baseURL || BASE_URL || "").replace(/\/+$/, "");
+  const cleanPath = path.replace(/^\/+/, "");
+  return `${baseUrl}/${cleanPath}`;
+};
 
 const findPaginated = async ({
   page = "1",
@@ -78,30 +84,19 @@ const downloadFile = async (slug: string, filename?: string) => {
 
 const openFile = async (slug: string) => {
   try {
-    const response = await axios.get(`/storage/download/slug/${slug}`, {
-      responseType: "blob",
-    });
-
-    const blob = new Blob([response.data], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
+    const url = getStorageUrl(`/storage/view/slug/${slug}`);
     window.open(url, "_blank");
-
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
   } catch (error) {
     console.error("Open failed:", error);
   }
 };
 
-export const getUploadBySlug = async (slug: string) => {
-  const url = `/storage/view/slug/${slug}`;
-  const { data } = await axios.get(url, { responseType: "blob" });
-  return URL.createObjectURL(data);
+export const getUploadBySlug = (slug: string): string => {
+  return getStorageUrl(`/storage/view/slug/${slug}`);
 };
 
-export const getUploadById = async (id: number) => {
-  const url = `/storage/view/id/${id}`;
-  const { data } = await axios.get(url, { responseType: "blob" });
-  return URL.createObjectURL(data);
+export const getUploadById = (id: number): string => {
+  return getStorageUrl(`/storage/view/id/${id}`);
 };
 
 const deleteFile = async (slug: string): Promise<ServerResponse<Upload>> => {

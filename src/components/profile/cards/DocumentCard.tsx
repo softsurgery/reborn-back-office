@@ -65,6 +65,7 @@ export const DocumentCard = ({
               }
               alt={`${title} Document`}
               fill
+              unoptimized
               className="object-contain p-4"
             />
           )}

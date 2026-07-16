@@ -1,6 +1,7 @@
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
@@ -63,18 +64,59 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
 
   const [viewMode, setViewMode] = React.useState<JobViewMode>(() => {
     if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const viewParam = urlParams.get("view") as JobViewMode;
+      if (viewParam === "table" || viewParam === "grid") return viewParam;
+
       const saved = localStorage.getItem("jobs_view_mode") as JobViewMode;
       if (saved === "table" || saved === "grid") return saved;
     }
     return "table";
   });
 
-  const handleViewModeChange = React.useCallback((mode: JobViewMode) => {
-    setViewMode(mode);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("jobs_view_mode", mode);
+  const handleViewModeChange = React.useCallback(
+    (mode: JobViewMode) => {
+      setViewMode(mode);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("jobs_view_mode", mode);
+      }
+      if (router.isReady) {
+        router.push(
+          {
+            pathname: router.pathname,
+            query: { ...router.query, view: mode },
+          },
+          undefined,
+          { shallow: true }
+        );
+      }
+    },
+    [router]
+  );
+
+  React.useEffect(() => {
+    if (router.isReady) {
+      const viewParam = router.query.view as JobViewMode;
+      if (viewParam === "table" || viewParam === "grid") {
+        if (viewParam !== viewMode) {
+          setViewMode(viewParam);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("jobs_view_mode", viewParam);
+          }
+        }
+      } else {
+        router.replace(
+          {
+            pathname: router.pathname,
+            query: { ...router.query, view: viewMode },
+          },
+          undefined,
+          { shallow: true }
+        );
+      }
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady, router.query.view]);
 
   React.useEffect(() => {
     setFloating?.(
@@ -248,36 +290,47 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     representation: jobStore?.response?.title,
   });
 
-  const { data: images } = useQuery({
-    queryKey: ["job-images", jobStore.response?.uploads],
-    queryFn: async () => {
-      const uploads = Array.isArray(jobStore.updateDto?.uploads)
-        ? jobStore.updateDto.uploads
-        : [];
-      const blobs = await Promise.all(
-        uploads.map(async (upload) => {
-          const name =
-            jobStore.response?.uploads.find(
-              (ru) => ru.uploadId === upload.uploadId,
-            )?.upload.filename || `image-${upload.uploadId}.png`;
+  const uploadIds = React.useMemo(() => {
+    const uploads = Array.isArray(jobStore.updateDto?.uploads)
+      ? jobStore.updateDto.uploads
+      : [];
+    return uploads.map((u) => u.uploadId);
+  }, [jobStore.updateDto?.uploads]);
 
-          const url = await api.upload.getUploadById(upload.uploadId);
-          return {
-            id: upload.uploadId.toString(),
-            url,
-            name,
-            image: null,
-            progress: 100,
-          };
-        }),
-      );
-      return blobs;
-    },
-    enabled:
-      Array.isArray(jobStore.updateDto?.uploads) &&
-      jobStore.updateDto.uploads.length > 0,
-    staleTime: Infinity,
+  const { uploads: imageUrls, isPending: isImagesPending } = useServerImages({
+    ids: uploadIds,
+    enabled: uploadIds.length > 0,
   });
+
+  const images = React.useMemo(() => {
+    if (uploadIds.length === 0 || isImagesPending) return undefined;
+    const uploads = Array.isArray(jobStore.updateDto?.uploads)
+      ? jobStore.updateDto.uploads
+      : [];
+    return uploads
+      .map((upload, index) => {
+        const url = imageUrls[index];
+        if (!url) return null;
+        const name =
+          jobStore.response?.uploads.find(
+            (ru) => ru.uploadId === upload.uploadId,
+          )?.upload.filename || `image-${upload.uploadId}.png`;
+        return {
+          id: upload.uploadId.toString(),
+          url,
+          name,
+          image: null,
+          progress: 100,
+        };
+      })
+      .filter(Boolean) as {
+        id: string;
+        url: string;
+        name: string;
+        image: any;
+        progress: number;
+      }[];
+  }, [uploadIds, imageUrls, isImagesPending, jobStore.updateDto?.uploads, jobStore.response?.uploads]);
 
   React.useEffect(() => {
     if (
@@ -372,16 +425,26 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
           isPending={isTablePending}
         />
       ) : (
-        <JobGridView
-          className="flex flex-col flex-1"
-          containerClassName="flex-1 pb-16"
-          jobs={infiniteJobsData}
+        <DataTable
+          className="flex flex-col flex-1 overflow-hidden p-1"
+          containerClassName="flex-1 overflow-auto"
+          columns={columns}
+          data={jobs}
           context={context}
           isPending={isGridPending}
-          footerPagination={false}
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
+          customContent={
+            <JobGridView
+              className="flex flex-col flex-1"
+              containerClassName="flex-1 pb-16"
+              jobs={infiniteJobsData}
+              context={context}
+              isPending={isGridPending}
+              footerPagination={false}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
+            />
+          }
         />
       )}
       {createJobSheet}

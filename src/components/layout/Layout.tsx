@@ -79,36 +79,73 @@ export const Layout = ({ children, className }: LayoutProps) => {
   const [scrollable, setScrollable] = React.useState<boolean>(false);
   const [hideScrollbar, setHideScrollbar] = React.useState<boolean>(false);
   const [paddingX, setPaddingX] = React.useState<string>("");
+  const [scrollElement, setScrollElement] = React.useState<HTMLElement | null>(null);
+  const [showHeader, setShowHeader] = React.useState<boolean>(true);
+  const lastOffsetY = React.useRef(0);
 
   const clearScrollable = React.useCallback(() => setScrollable(false), []);
   const clearHideScrollbar = React.useCallback(() => setHideScrollbar(false), []);
   const clearPaddingX = React.useCallback(() => setPaddingX(""), []);
+  const clearScrollElement = React.useCallback(() => setScrollElement(null), []);
   const clearUi = React.useCallback(() => {
     setScrollable(false);
     setHideScrollbar(false);
     setPaddingX("");
+    setScrollElement(null);
+    setShowHeader(true);
   }, []);
+
+  const handleScroll = React.useCallback(
+    (e: React.UIEvent<HTMLElement>) => {
+      if (!scrollable) return;
+      const currentOffsetY = e.currentTarget.scrollTop;
+      const delta = currentOffsetY - lastOffsetY.current;
+
+      if (currentOffsetY <= 10) {
+        setShowHeader(true);
+      } else if (delta < -10) {
+        setShowHeader(true); // scrolling up
+      } else if (delta > 10 && currentOffsetY > 50) {
+        setShowHeader(false); // scrolling down
+      }
+
+      lastOffsetY.current = currentOffsetY;
+    },
+    [scrollable]
+  );
+
+  React.useEffect(() => {
+    if (!scrollable) {
+      setShowHeader(true);
+      lastOffsetY.current = 0;
+    }
+  }, [scrollable]);
 
   const uiContext = React.useMemo(
     () => ({
       scrollable,
       hideScrollbar,
       paddingX,
+      scrollElement,
       setScrollable,
       clearScrollable,
       setHideScrollbar,
       clearHideScrollbar,
       setPaddingX,
       clearPaddingX,
+      setScrollElement,
+      clearScrollElement,
       clearUi,
     }),
     [
       scrollable,
       hideScrollbar,
       paddingX,
+      scrollElement,
       clearScrollable,
       clearHideScrollbar,
       clearPaddingX,
+      clearScrollElement,
       clearUi,
     ]
   );
@@ -131,13 +168,24 @@ export const Layout = ({ children, className }: LayoutProps) => {
                     <AppSidebar />
                     {/* Header , Main & Footer */}
                     <div className="flex flex-col flex-1 overflow-hidden bg-background">
-                      <Header />
-                      {(title || description) && (
-                        <PageHeader
-                          className={cn("py-5", paddingX || (isMobile ? "px-4" : "px-10"))}
-                        />
-                      )}
+                      <div
+                        className={cn(
+                          "flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden",
+                          scrollable && !showHeader
+                            ? "max-h-0 opacity-0 -translate-y-4 pointer-events-none"
+                            : "max-h-[300px] opacity-100 translate-y-0"
+                        )}
+                      >
+                        <Header />
+                        {(title || description) && (
+                          <PageHeader
+                            className={cn("py-5", paddingX || (isMobile ? "px-4" : "px-10"))}
+                          />
+                        )}
+                      </div>
                       <main
+                        ref={setScrollElement}
+                        onScroll={handleScroll}
                         className={cn(
                           "flex flex-col flex-1",
                           scrollable

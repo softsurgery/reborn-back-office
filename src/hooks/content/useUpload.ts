@@ -1,22 +1,18 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 
 interface UseUploadProps {
-  id?: number;
+  id?: number | string | null;
   enabled?: boolean;
 }
 
 export const useUpload = ({ id, enabled = true }: UseUploadProps) => {
-  const { data: uploadResp, isPending: isUploadPending } = useQuery({
-    queryKey: ["upload", id],
-    queryFn: async () => api.upload.getUploadById(id!),
+  const { uploads, isPending: isUploadPending } = useServerImages({
+    ids: [id],
     enabled: !!id && enabled,
-    staleTime: Infinity,
-    retry: false,
   });
 
-  const upload = React.useMemo(() => uploadResp ?? null, [uploadResp]);
+  const upload = React.useMemo(() => uploads[0] ?? null, [uploads]);
 
   return { upload, isUploadPending };
 };

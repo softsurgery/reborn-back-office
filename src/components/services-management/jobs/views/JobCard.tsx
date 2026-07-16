@@ -1,6 +1,5 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { cn } from "@/lib/utils";
 import { ResponseJobDto } from "@/types";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import Image from "next/image";
 
 interface JobCardProps {
   job: ResponseJobDto;
@@ -38,17 +38,20 @@ export const JobCard: React.FC<JobCardProps> = ({ job, context }) => {
   const { t } = useTranslation("job");
   const { t: tCommon } = useTranslation("common");
 
-  const { data: profilePicture } = useQuery({
-    queryKey: ["profile-picture", job.postedBy?.pictureId],
-    queryFn: () => api.upload.getUploadById(job.postedBy?.pictureId!),
-    enabled: !!job.postedBy?.pictureId,
-    staleTime: Infinity,
-  });
-
   const fallback = React.useMemo(
     () => identifyUserAvatar(job?.postedBy),
     [job],
   );
+
+  const firstUploadId = React.useMemo(() => {
+    if (!job.uploads || job.uploads.length === 0) return undefined;
+    const sorted = [...job.uploads].sort((a, b) => a.order - b.order);
+    return sorted[0]?.uploadId;
+  }, [job.uploads]);
+
+  const { uploads: [profilePicture, coverImage], isPending: isCoverPending } = useServerImages({
+    ids: [job.postedBy?.pictureId, firstUploadId],
+  });
 
   const targetAndTrigger = (callback?: Function) => {
     context.targetEntity?.(job);
@@ -60,15 +63,60 @@ export const JobCard: React.FC<JobCardProps> = ({ job, context }) => {
   return (
     <div className="group relative flex flex-col bg-card/80 dark:bg-card/90 backdrop-blur-md border border-border/70 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/50">
       {/* Top Accent Gradient Line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/80 via-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/80 via-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
+
+      {/* Cover Image Header */}
+      {firstUploadId && (
+        <div
+          className="relative w-full h-44 overflow-hidden bg-muted/40 cursor-pointer shrink-0"
+          onClick={() => targetAndTrigger(() => context.inspectCallback?.(job))}
+        >
+          {isCoverPending ? (
+            <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
+              <ImageIcon className="w-8 h-8 text-muted-foreground/30" />
+            </div>
+          ) : coverImage ? (
+            <Image
+              src={coverImage}
+              alt={job.title}
+              width={400}
+              height={300}
+              unoptimized
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-muted">
+              <ImageIcon className="w-8 h-8 text-muted-foreground/40" />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+
+          <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10 pointer-events-none">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-black/60 text-white backdrop-blur-md uppercase tracking-wider shadow-sm">
+              <Layers className="w-3 h-3 text-primary-foreground" />
+              {job.category?.label || tCommon("common.general.unknown")}
+            </span>
+
+            {job.uploads && job.uploads.length > 1 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-black/60 text-white backdrop-blur-md shadow-sm">
+                <ImageIcon className="w-3 h-3" />+{job.uploads.length - 1}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="p-4 flex flex-col flex-1">
-        {/* Header: Category and Action Menu */}
+        {/* Header: Category (if no cover) and Action Menu */}
         <div className="flex items-center justify-between gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-secondary/80 text-secondary-foreground uppercase tracking-wider">
-            <Layers className="w-3 h-3 text-muted-foreground" />
-            {job.category?.label || tCommon("common.general.unknown")}
-          </span>
+          {!firstUploadId ? (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-secondary/80 text-secondary-foreground uppercase tracking-wider">
+              <Layers className="w-3 h-3 text-muted-foreground" />
+              {job.category?.label || tCommon("common.general.unknown")}
+            </span>
+          ) : (
+            <div className="flex-1" />
+          )}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

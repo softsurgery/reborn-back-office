@@ -19,6 +19,7 @@ import { useUserStore } from "@/hooks/stores/useUserStore";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { useFollowerDialog } from "./modals/FollowersDialog";
 import { useFollowingDialog } from "./modals/FollowingDialog";
 import { useFollowSystem } from "@/hooks/useFollowSystem";
@@ -79,11 +80,9 @@ export const BaseProfile = ({
     enabled: !!user?.id,
   });
 
-  const { data: picture } = useQuery({
-    queryKey: ["picture", user?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+  const { uploads: [picture] } = useServerImages({
+    ids: [user?.pictureId],
     enabled: !!user?.pictureId,
-    staleTime: Infinity,
   });
 
   React.useEffect(() => {

@@ -1,16 +1,13 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import DataTableCell from "@/components/shared/data-tables/core/data-table-cell";
 import { DataTableCellVariant } from "@/components/shared/data-tables/types";
 
 const UserAvatarCell = React.memo(
   ({ pictureId, fallback }: { pictureId?: number; fallback?: string }) => {
-    const { data: url } = useQuery({
-      queryKey: ["profile-picture", pictureId],
-      queryFn: () => api.upload.getUploadById(pictureId!),
+    const { uploads: [url] } = useServerImages({
+      ids: [pictureId],
       enabled: !!pictureId,
-      staleTime: Infinity,
     });
 
     return (

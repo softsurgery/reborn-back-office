@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ResponseConversationDto, ResponseMessageDto } from "@/types";
 import { useUserStore } from "@/hooks/stores/useUserStore";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { api } from "@/api";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
@@ -38,11 +39,9 @@ const ConversationItem = ({
     );
   }, [conversation, userStore.response?.id]);
 
-  const { data: otherParticipantPicture } = useQuery({
-    queryKey: ["picture", otherParticipant?.pictureId],
-    queryFn: () => api.upload.getUploadById(otherParticipant?.pictureId!),
+  const { uploads: [otherParticipantPicture] } = useServerImages({
+    ids: [otherParticipant?.pictureId],
     enabled: !!otherParticipant?.pictureId,
-    staleTime: Infinity,
   });
 
   const identifier = React.useMemo(() => {
@@ -59,7 +58,7 @@ const ConversationItem = ({
 
   const formattedTime = React.useMemo(() => {
     return formatMessageTime(lastMessage?.createdAt, i18n.language, t);
-  }, [lastMessage]);
+  }, [lastMessage, i18n.language, t]);
 
   if (!userStore.response?.id) return null;
   return (
@@ -72,11 +71,12 @@ const ConversationItem = ({
     >
       <div className="flex items-center gap-3 w-full">
         <Image
-          src={otherParticipantPicture as string}
+          src={(otherParticipantPicture as string) || "/placeholder.svg"}
           alt={fallback}
           className="rounded-full object-cover border"
           width={50}
           height={50}
+          unoptimized
         />
 
         <div className="flex flex-col flex-1 min-w-0">

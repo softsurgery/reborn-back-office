@@ -37,8 +37,13 @@ const findAll = async (): Promise<ResponseJobDto[]> => {
   return response.data;
 };
 
-const findById = async (jobId: string): Promise<ResponseJobDto> => {
-  const response = await axios.get<ResponseJobDto>(`/job/${jobId}`);
+const findById = async (
+  jobId: string,
+  join = "uploads,uploads.upload"
+): Promise<ResponseJobDto> => {
+  const response = await axios.get<ResponseJobDto>(`/job/${jobId}`, {
+    params: join ? { join } : undefined,
+  });
   return response.data;
 };
 

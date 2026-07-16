@@ -15,8 +15,7 @@ import { signOut } from "next-auth/react";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import { cn } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api";
+import { useServerImages } from "@/hooks/content/useServerImages";
 import { useTranslation } from "react-i18next";
 
 interface UserNavProps {
@@ -31,9 +30,8 @@ export function UserNav({ className }: UserNavProps) {
   const identity = React.useMemo(() => identifyUser(user), [user]);
   const avatarIdentity = React.useMemo(() => identifyUserAvatar(user), [user]);
 
-  const { data: profilePicture } = useQuery({
-    queryKey: ["profile-picture", user?.pictureId],
-    queryFn: () => api.upload.getUploadById(user?.pictureId!),
+  const { uploads: [profilePicture] } = useServerImages({
+    ids: [user?.pictureId],
     enabled: !!user?.pictureId,
   });
 
