@@ -31,7 +31,7 @@ export const Layout = ({ children, className }: LayoutProps) => {
       setRoutes,
       clearRoutes,
     }),
-    [routes, clearRoutes]
+    [routes, clearRoutes],
   );
 
   const [content, setContent] = React.useState<React.ReactNode>(null);
@@ -44,17 +44,20 @@ export const Layout = ({ children, className }: LayoutProps) => {
       setContent,
       clearContent,
     }),
-    [content, clearContent]
+    [content, clearContent],
   );
 
   const [title, setTitle] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const [floating, setFloating] = React.useState<React.ReactNode>(null);
 
-  const setIntro = React.useCallback((newTitle: string, newDescription?: string) => {
-    setTitle(newTitle);
-    setDescription(newDescription || "");
-  }, []);
+  const setIntro = React.useCallback(
+    (newTitle: string, newDescription?: string) => {
+      setTitle(newTitle);
+      setDescription(newDescription || "");
+    },
+    [],
+  );
   const clearIntro = React.useCallback(() => {
     setTitle("");
     setDescription("");
@@ -73,20 +76,28 @@ export const Layout = ({ children, className }: LayoutProps) => {
       clearIntro,
       clearFloating,
     }),
-    [title, description, floating, setIntro, clearIntro, clearFloating]
+    [title, description, floating, setIntro, clearIntro, clearFloating],
   );
 
   const [scrollable, setScrollable] = React.useState<boolean>(false);
   const [hideScrollbar, setHideScrollbar] = React.useState<boolean>(false);
   const [paddingX, setPaddingX] = React.useState<string>("");
-  const [scrollElement, setScrollElement] = React.useState<HTMLElement | null>(null);
+  const [scrollElement, setScrollElement] = React.useState<HTMLElement | null>(
+    null,
+  );
   const [showHeader, setShowHeader] = React.useState<boolean>(true);
   const lastOffsetY = React.useRef(0);
 
   const clearScrollable = React.useCallback(() => setScrollable(false), []);
-  const clearHideScrollbar = React.useCallback(() => setHideScrollbar(false), []);
+  const clearHideScrollbar = React.useCallback(
+    () => setHideScrollbar(false),
+    [],
+  );
   const clearPaddingX = React.useCallback(() => setPaddingX(""), []);
-  const clearScrollElement = React.useCallback(() => setScrollElement(null), []);
+  const clearScrollElement = React.useCallback(
+    () => setScrollElement(null),
+    [],
+  );
   const clearUi = React.useCallback(() => {
     setScrollable(false);
     setHideScrollbar(false);
@@ -111,7 +122,7 @@ export const Layout = ({ children, className }: LayoutProps) => {
 
       lastOffsetY.current = currentOffsetY;
     },
-    [scrollable]
+    [scrollable],
   );
 
   React.useEffect(() => {
@@ -147,7 +158,7 @@ export const Layout = ({ children, className }: LayoutProps) => {
       clearPaddingX,
       clearScrollElement,
       clearUi,
-    ]
+    ],
   );
 
   const isMobile = useMediaQuery("(max-width: 425px)");
@@ -173,13 +184,16 @@ export const Layout = ({ children, className }: LayoutProps) => {
                           "flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden",
                           scrollable && !showHeader
                             ? "max-h-0 opacity-0 -translate-y-4 pointer-events-none"
-                            : "max-h-[300px] opacity-100 translate-y-0"
+                            : "max-h-[300px] opacity-100 translate-y-0",
                         )}
                       >
                         <Header />
                         {(title || description) && (
                           <PageHeader
-                            className={cn("py-5", paddingX || (isMobile ? "px-4" : "px-10"))}
+                            className={cn(
+                              "py-5",
+                              paddingX || (isMobile ? "px-4" : "px-10"),
+                            )}
                           />
                         )}
                       </div>
