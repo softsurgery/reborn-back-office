@@ -3,9 +3,10 @@ import Image from "next/image";
 import { api } from "@/api";
 import axios from "@/api/axios";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export interface UseServerImagesProps {
-  ids: (number | string | undefined | null)[];
+export interface useServerImagesProps {
+  ids: number[];
   fallbacks?: (string | React.ReactNode | undefined)[];
   size?: { width?: number; height?: number };
   className?: string;
@@ -14,7 +15,7 @@ export interface UseServerImagesProps {
   enabled?: boolean;
 }
 
-// Global memory cache of loaded/preloaded image URLs mimicking Expo Image session caching
+// Global memory cache of loaded/preloaded image URLs
 const loadedUrls = new Set<string>();
 const errorUrls = new Set<string>();
 const loadingCallbacks = new Map<string, Set<() => void>>();
@@ -64,17 +65,19 @@ export const useServerImages = ({
   wrapperClassName,
   fallbackClassName,
   enabled = true,
-}: UseServerImagesProps) => {
-  // Synchronously compute direct URLs without useQuery / useQueries
+}: useServerImagesProps) => {
   const rawUrls = React.useMemo(() => {
     return ids.map((id) =>
-      enabled && id !== undefined && id !== null && !isNaN(Number(id)) && Number(id) > 0
+      enabled &&
+      id !== undefined &&
+      id !== null &&
+      !isNaN(Number(id)) &&
+      Number(id) > 0
         ? api.upload.getUploadById(Number(id))
-        : undefined
+        : undefined,
     );
   }, [ids, enabled]);
 
-  // Track re-renders when global background preloads complete
   const [updateCount, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   const uploads = React.useMemo(() => {
@@ -111,7 +114,9 @@ export const useServerImages = ({
 
   const isPending = React.useMemo(() => {
     void updateCount;
-    return rawUrls.some((url) => url && !loadedUrls.has(url) && !errorUrls.has(url));
+    return rawUrls.some(
+      (url) => url && !loadedUrls.has(url) && !errorUrls.has(url),
+    );
   }, [rawUrls, updateCount]);
 
   const jsxArray = React.useMemo(() => {
@@ -127,20 +132,29 @@ export const useServerImages = ({
       const isLoaded = rawUrl ? loadedUrls.has(rawUrl) : false;
       const isError = rawUrl ? errorUrls.has(rawUrl) : false;
 
-      // 1. If upload URL exists and has not permanently failed loading
+      // 1. Server Image Upload (with Skeleton while loading)
+      // Why: A valid image upload URL exists for this ID and has not permanently failed loading.
+      // When: The ID is valid (> 0), the API returned an upload object, and onError hasn't triggered. While the image is being fetched/decoded (!isLoaded), we show <Skeleton /> directly as a temporary placeholder inside the wrapper. Once loaded, the <Image /> transitions smoothly to opacity-100.
       if (upload && !isError) {
         return (
           <div
             key={index}
-            className={cn(wrapperClassName, "flex items-center justify-center overflow-hidden relative")}
+            className={cn(
+              wrapperClassName,
+              "flex items-center justify-center overflow-hidden relative",
+            )}
             style={{
               width: size?.width ? `${size.width}px` : "100%",
               height: size?.height ? `${size.height}px` : "100%",
             }}
           >
             {!isLoaded && (
-              <div
-                className={cn("animate-pulse bg-gray-300 dark:bg-gray-700 absolute inset-0", className)}
+              <Skeleton
+                className={cn("absolute inset-0", className)}
+                style={{
+                  width: size?.width,
+                  height: size?.height,
+                }}
               />
             )}
             {size?.width && size?.height ? (
@@ -165,7 +179,7 @@ export const useServerImages = ({
                 className={cn(
                   "object-cover transition-opacity duration-200",
                   isLoaded ? "opacity-100" : "opacity-0",
-                  className
+                  className,
                 )}
               />
             ) : (
@@ -189,7 +203,7 @@ export const useServerImages = ({
                 className={cn(
                   "object-cover transition-opacity duration-200",
                   isLoaded ? "opacity-100" : "opacity-0",
-                  className
+                  className,
                 )}
               />
             )}
@@ -197,18 +211,31 @@ export const useServerImages = ({
         );
       }
 
-      // 2. Fallback React Element
+      // 2. Custom React Element Fallback
+      // Why: The caller provided a custom React component/element (e.g., custom badge, icon, or specialized placeholder) to render when no server image is available.
+      // When: The server image ID is missing, invalid, or failed to load (isError), and the corresponding fallback in fallbacks[index] is a valid React element (ReactNode).
       if (React.isValidElement(fallback)) {
         return React.cloneElement(fallback, { key: index });
       }
 
-      // 3. Fallback string (URL or avatar character)
+      // 3. String Fallback (Image URL or Avatar Initials)
+      // Why: The caller provided a string fallback, which could either be an external/static image URL or text representing an entity name/initials.
+      // When: The server image ID is missing, invalid, or failed to load, and fallbacks[index] is a string.
+      //       - If the string starts with 'http', '/', or 'blob:', it is rendered as a fallback <Image />.
+      //       - Otherwise, it is rendered as an avatar badge showing the uppercase first character.
       if (typeof fallback === "string") {
-        if (fallback.startsWith("http") || fallback.startsWith("/") || fallback.startsWith("blob:")) {
+        if (
+          fallback.startsWith("http") ||
+          fallback.startsWith("/") ||
+          fallback.startsWith("blob:")
+        ) {
           return (
             <div
               key={index}
-              className={cn(wrapperClassName, "flex items-center justify-center overflow-hidden relative")}
+              className={cn(
+                wrapperClassName,
+                "flex items-center justify-center overflow-hidden relative",
+              )}
               style={{
                 width: size?.width ? `${size.width}px` : "100%",
                 height: size?.height ? `${size.height}px` : "100%",
@@ -242,7 +269,7 @@ export const useServerImages = ({
             className={cn(
               "flex items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold",
               className,
-              fallbackClassName
+              fallbackClassName,
             )}
             style={{
               width: size?.width ? `${size.width}px` : "100%",
@@ -255,10 +282,12 @@ export const useServerImages = ({
       }
 
       // 4. Default Skeleton
+      // Why: Neither a valid server image nor any custom fallback (ReactNode or string) was provided for this item, so we display a standard loading/placeholder skeleton.
+      // When: All previous branches fall through — e.g., when the ID is missing/invalid or the image is currently being fetched without a fallback configured. We use <Skeleton /> directly instead of a manual div mimicking a skeleton to maintain consistent styling across the app.
       return (
-        <div
+        <Skeleton
           key={index}
-          className={cn("animate-pulse bg-gray-300 dark:bg-gray-700", className)}
+          className={className}
           style={{
             width: size?.width ? `${size.width}px` : "100%",
             height: size?.height ? `${size.height}px` : "100%",
@@ -266,7 +295,17 @@ export const useServerImages = ({
         />
       );
     });
-  }, [ids, rawUrls, uploads, fallbacks, size, className, wrapperClassName, fallbackClassName, updateCount]);
+  }, [
+    ids,
+    rawUrls,
+    uploads,
+    fallbacks,
+    size,
+    className,
+    wrapperClassName,
+    fallbackClassName,
+    updateCount,
+  ]);
 
   return {
     uploads,
