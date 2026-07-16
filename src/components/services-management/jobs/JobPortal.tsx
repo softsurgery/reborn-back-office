@@ -48,7 +48,6 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       clearRoutes?.();
       clearIntro?.();
       clearFloating?.();
-      clearScrollable?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t, ready]);
@@ -130,6 +129,9 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     } else {
       clearScrollable?.();
     }
+    return () => {
+      clearScrollable?.();
+    };
   }, [viewMode, setScrollable, clearScrollable]);
 
   const [page, setPage] = React.useState(1);
@@ -321,8 +323,8 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
         />
       ) : (
         <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="flex-1 overflow-auto"
+          className="flex flex-col flex-1 p-1"
+          containerClassName="flex-1"
           columns={columns}
           data={jobs}
           context={context}
