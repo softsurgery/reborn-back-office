@@ -3,7 +3,7 @@ import { useServerImages } from "@/hooks/content/useServerImages";
 import { cn } from "@/lib/utils";
 
 interface UseServerImageProps {
-  id?: number | string | null;
+  id?: number | undefined;
   size?: { width?: number; height?: number };
   fallback?: string | React.ReactNode;
   enabled?: boolean;
@@ -37,8 +37,14 @@ export const useServerImage = ({
     enabled,
   });
 
-  const upload = useMemo(() => (uploads[0] ? (uploads[0] as string) : null), [uploads]);
-  const jsx = useMemo(() => (jsxArray[0] ? (jsxArray[0] as JSX.Element) : <></>), [jsxArray]);
+  const upload = useMemo(
+    () => (uploads[0] ? (uploads[0] as string) : null),
+    [uploads],
+  );
+  const jsx = useMemo(
+    () => (jsxArray[0] ? (jsxArray[0] as JSX.Element) : <></>),
+    [jsxArray],
+  );
 
   return { upload, isPending, jsx };
 };

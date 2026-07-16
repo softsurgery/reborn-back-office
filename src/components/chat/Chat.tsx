@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { StablePressable } from "../shared/StablePressable";
 import { UserEntry } from "./UserEntry";
-import { Loader } from "../shared/Loader";
 import { Separator } from "../ui/separator";
 import { ApplicationHeader } from "../shared/AppHeader";
 import { api } from "@/api";
@@ -11,6 +10,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { ResponseConversationDto } from "@/types";
 import { User, Bell } from "lucide-react";
 import { useUserStore } from "@/hooks/stores/useUserStore";
+import { Spinner } from "../shared/Spinner";
 
 interface ChatProps {
   className?: string;
@@ -50,7 +50,7 @@ export const Chat = ({ className }: ChatProps) => {
 
   const conversations = React.useMemo(
     () => data?.pages.flatMap((page) => page.data) ?? [],
-    [data]
+    [data],
   );
 
   const isPending = isConversationsPending || isFetchingNextPage;
@@ -80,7 +80,7 @@ export const Chat = ({ className }: ChatProps) => {
           {conversations.length > 0
             ? conversations.map((item: ResponseConversationDto) => {
                 const otherUser = item.participants.find(
-                  (u) => u.id !== user?.id
+                  (u) => u.id !== user?.id,
                 );
 
                 const lastMessage = item.messages?.[0]?.content ?? "";
@@ -113,7 +113,7 @@ export const Chat = ({ className }: ChatProps) => {
               )}
         </div>
 
-        {isPending && <Loader isPending />}
+        {isPending && <Spinner />}
         {!hasNextPage && conversations.length > 0 && (
           <div className="flex flex-row items-center justify-center gap-2 p-6">
             <span className="text-gray-400 text-lg font-thin">

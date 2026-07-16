@@ -9,7 +9,7 @@ interface UploadResult {
   progress: number;
 }
 
-export const useUploads = (ids?: (number | undefined | null)[]) => {
+export const useUploads = (ids?: (number | undefined)[]) => {
   const { uploads: urls, isPending } = useServerImages({
     ids: ids ?? [],
     enabled: !!ids && ids.length > 0,

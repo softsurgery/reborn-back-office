@@ -2,7 +2,7 @@ import React from "react";
 import { useServerImages } from "@/hooks/content/useServerImages";
 
 interface UseUploadProps {
-  id?: number | string | null;
+  id?: number | undefined;
   enabled?: boolean;
 }
 

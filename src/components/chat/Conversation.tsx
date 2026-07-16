@@ -4,11 +4,11 @@ import { ChatHeaderLeft } from "./conversation/ChatHeaderLeft";
 import { ChatHeaderRight } from "./conversation/ChatHeaderRight";
 import { ChatBubble } from "./conversation/ChatBubble";
 import { ConversationInput } from "./conversation/ConversationInput";
-import { Loader } from "../shared/Loader";
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { ResponseConversationDto, ResponseMessageDto, Upload } from "@/types";
+import { Spinner } from "../shared/Spinner";
 
 interface ConversationProps {
   id: number;
@@ -106,7 +106,7 @@ export const Conversation = ({ id }: ConversationProps) => {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-2">
         {isConversationLoading ? (
-          <Loader isPending={true} />
+          <Spinner />
         ) : (
           groupedMessages.map((group) => (
             <div key={group.date}>
@@ -124,7 +124,7 @@ export const Conversation = ({ id }: ConversationProps) => {
             </div>
           ))
         )}
-        {loadingMore && <Loader isPending={true} />}
+        {loadingMore && <Spinner />}
       </div>
 
       {/* Input */}
