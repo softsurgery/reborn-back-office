@@ -45,7 +45,7 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
           fetchNextPage?.();
         }
       },
-      { threshold: 0.1, rootMargin: "200px", root: scrollElement || null }
+      { threshold: 0.1, rootMargin: "200px", root: scrollElement || null },
     );
 
     observer.observe(element);
@@ -55,7 +55,7 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 space-y-4",
+        "flex flex-col flex-1 space-y-4 container",
         footerPagination ? "overflow-hidden" : "",
         className,
       )}
@@ -63,9 +63,9 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
       {/* Grid Content */}
       <div
         className={cn(
-          "flex-1 pb-16 pr-1",
+          "flex-1 pr-1",
           footerPagination ? "overflow-y-auto" : "",
-          containerClassName
+          containerClassName,
         )}
       >
         {isPending ? (
@@ -86,7 +86,7 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
               {jobs.map((job) => (
                 <JobCard key={job.id} job={job} context={context} />
               ))}
@@ -99,10 +99,14 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
                 {isFetchingNextPage ? (
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                    <span>{t("common.table.loadingMore", "Loading more...")}</span>
+                    <span>
+                      {t("common.table.loadingMore", "Loading more...")}
+                    </span>
                   </div>
                 ) : (
-                  <span className="text-xs text-transparent select-none">.</span>
+                  <span className="text-xs text-transparent select-none">
+                    .
+                  </span>
                 )}
               </div>
             )}

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export interface useServerImagesProps {
-  ids: number[];
+  ids: (number | undefined)[];
   fallbacks?: (string | React.ReactNode | undefined)[];
   size?: { width?: number; height?: number };
   className?: string;

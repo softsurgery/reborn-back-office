@@ -6,25 +6,8 @@ import { DataTableConfig } from "@/components/shared/data-tables/types";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import { timeAgo } from "@/lib/date.lib";
 import { getStyleBadgeColor, getDifficultyBadgeColor } from "../JobDetails";
-import {
-  Telescope,
-  Edit,
-  Trash2,
-  Image as ImageIcon,
-  Tag as TagIcon,
-  Layers,
-} from "lucide-react";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Image as ImageIcon, Tag as TagIcon, Layers } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import Image from "next/image";
@@ -49,7 +32,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, context }) => {
     return sorted[0]?.uploadId;
   }, [job.uploads]);
 
-  const { uploads: [profilePicture, coverImage], isPending: isCoverPending } = useServerImages({
+  const {
+    uploads: [profilePicture, coverImage],
+    isPending: isCoverPending,
+  } = useServerImages({
     ids: [job.postedBy?.pictureId, firstUploadId],
   });
 
@@ -61,16 +47,13 @@ export const JobCard: React.FC<JobCardProps> = ({ job, context }) => {
   };
 
   return (
-    <div className="group relative flex flex-col bg-card/80 dark:bg-card/90 backdrop-blur-md border border-border/70 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/50">
-      {/* Top Accent Gradient Line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/80 via-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
-
+    <div
+      className="group relative flex flex-col bg-card/80 dark:bg-card/90 backdrop-blur-md border border-border/70 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl"
+      onClick={() => targetAndTrigger(() => context.inspectCallback?.(job))}
+    >
       {/* Cover Image Header */}
       {firstUploadId && (
-        <div
-          className="relative w-full h-44 overflow-hidden bg-muted/40 cursor-pointer shrink-0"
-          onClick={() => targetAndTrigger(() => context.inspectCallback?.(job))}
-        >
+        <div className="relative w-full h-44 overflow-hidden bg-muted/40 cursor-pointer shrink-0">
           {isCoverPending ? (
             <div className="w-full h-full animate-pulse bg-muted flex items-center justify-center">
               <ImageIcon className="w-8 h-8 text-muted-foreground/30" />
@@ -117,69 +100,6 @@ export const JobCard: React.FC<JobCardProps> = ({ job, context }) => {
           ) : (
             <div className="flex-1" />
           )}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 rounded-full text-muted-foreground hover:text-foreground data-[state=open]:bg-muted"
-              >
-                <DotsHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[160px] font-medium">
-              <DropdownMenuLabel className="text-center font-black text-xs">
-                {tCommon("common.table.actions")}
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-
-              {context.inspectCallback && (
-                <DropdownMenuItem
-                  onClick={() =>
-                    targetAndTrigger(() => context.inspectCallback?.(job))
-                  }
-                  className="cursor-pointer"
-                >
-                  <Telescope className="w-4 h-4 mr-2 text-primary" />
-                  <span className="text-xs">
-                    {tCommon("common.buttons.inspect")}
-                  </span>
-                </DropdownMenuItem>
-              )}
-
-              {context.updateCallback && (
-                <DropdownMenuItem
-                  onClick={() =>
-                    targetAndTrigger(() => context.updateCallback?.(job))
-                  }
-                  className="cursor-pointer"
-                >
-                  <Edit className="w-4 h-4 mr-2 text-blue-500" />
-                  <span className="text-xs">
-                    {tCommon("common.buttons.edit")}
-                  </span>
-                </DropdownMenuItem>
-              )}
-
-              {context.deleteCallback && (
-                <>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() =>
-                      targetAndTrigger(() => context.deleteCallback?.(job))
-                    }
-                    className="cursor-pointer text-destructive focus:text-destructive"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    <span className="text-xs">
-                      {tCommon("common.buttons.delete")}
-                    </span>
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
 
         {/* Title */}
