@@ -25,6 +25,8 @@
             "generalInformationDescription": "Informations générales sur le poste.",
             "detailedInformationTitle": "Informations détaillées",
             "detailedInformationDescription": "Informations supplémentaires sur le poste.",
+            "locationInformationTitle": "Localisation",
+            "locationInformationDescription": "Sélectionnez la position géographique sur la carte interactive.",
             "titleLabel": "Titre du poste",
             "titlePlaceholder": "Saisissez le titre du poste",
             "titleDescription": "Le titre du poste.",

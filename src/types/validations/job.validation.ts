@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { JobDifficulty, JobPricingType, JobStatus, JobStyle } from "../job-management";
+import {
+  JobDifficulty,
+  JobPricingType,
+  JobStatus,
+  JobStyle,
+} from "../job-management";
 
 const createJobSchema = z.object({
   title: z
@@ -30,7 +35,7 @@ const createJobSchema = z.object({
     .positive({
       message: "job.validation.invalidPrice",
     }),
-  currencyId: z.string({
+  currencyId: z.number({
     message: "job.validation.currencyRequired",
   }),
   categoryId: z.number({
@@ -42,7 +47,9 @@ const createJobSchema = z.object({
   difficulty: z.enum(Object.values(JobDifficulty) as [string, ...string[]], {
     message: "job.validation.difficultyRequired",
   }),
-  pricingType: z.enum(Object.values(JobPricingType) as [string, ...string[]]).optional(),
+  pricingType: z
+    .enum(Object.values(JobPricingType) as [string, ...string[]])
+    .optional(),
   status: z.enum(Object.values(JobStatus) as [string, ...string[]]).optional(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
@@ -81,7 +88,7 @@ const updateJobSchema = z.object({
     })
     .optional(),
 
-  currencyId: z.string({
+  currencyId: z.number({
     message: "job.validation.currencyRequired",
   }),
   style: z.enum(Object.values(JobStyle) as [string, ...string[]], {
@@ -90,7 +97,9 @@ const updateJobSchema = z.object({
   difficulty: z.enum(Object.values(JobDifficulty) as [string, ...string[]], {
     message: "job.validation.difficultyRequired",
   }),
-  pricingType: z.enum(Object.values(JobPricingType) as [string, ...string[]]).optional(),
+  pricingType: z
+    .enum(Object.values(JobPricingType) as [string, ...string[]])
+    .optional(),
   status: z.enum(Object.values(JobStatus) as [string, ...string[]]).optional(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),

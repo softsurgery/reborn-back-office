@@ -23,10 +23,12 @@ import { useJobTags } from "@/hooks/content/useJobTags";
 import { useJobCategories } from "@/hooks/content/useJobCategories";
 import { updateJobSchema } from "@/types/validations/job.validation";
 import { useServerImages } from "@/hooks/content/useServerImages";
+import { LocationPickerMap } from "@/components/shared/maps/LocationPickerMap";
 
 const steps = [
   { id: "general", title: "job.forms.generalInformationTitle" },
   { id: "detailed", title: "job.forms.detailedInformationTitle" },
+  { id: "location", title: "job.forms.locationInformationTitle" },
 ];
 
 const { Stepper } = defineStepper(...steps);
@@ -67,11 +69,17 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
     enabled: Boolean(id && !handleCallback),
   });
 
-  const job = fetchedJob || (id && jobStore.response?.id === id ? jobStore.response : jobStore.response);
+  const job =
+    fetchedJob ||
+    (id && jobStore.response?.id === id
+      ? jobStore.response
+      : jobStore.response);
 
   React.useEffect(() => {
     if (job) {
-      const uploads = job.uploads ? [...job.uploads].sort((a, b) => a.order - b.order) : [];
+      const uploads = job.uploads
+        ? [...job.uploads].sort((a, b) => a.order - b.order)
+        : [];
       jobStore.set("response", job);
       jobStore.set("updateDto", {
         title: job.title,
@@ -110,14 +118,23 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
       ]);
       setIntro?.(
         tJob("job.sheet.updateTitle"),
-        tJob("job.sheet.updateDescription")
+        tJob("job.sheet.updateDescription"),
       );
       return () => {
         clearRoutes?.();
         clearIntro?.();
       };
     }
-  }, [ready, tJob, id, handleCallback, clearIntro, clearRoutes, setIntro, setRoutes]);
+  }, [
+    ready,
+    tJob,
+    id,
+    handleCallback,
+    clearIntro,
+    clearRoutes,
+    setIntro,
+    setRoutes,
+  ]);
 
   const uploadIds = React.useMemo(() => {
     const uploads = Array.isArray(jobStore.updateDto?.uploads)
@@ -142,7 +159,7 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
         if (!url) return null;
         const name =
           jobStore.response?.uploads.find(
-            (ru) => ru.uploadId === upload.uploadId
+            (ru) => ru.uploadId === upload.uploadId,
           )?.upload.filename || `image-${upload.uploadId}.png`;
         return {
           id: upload.uploadId.toString(),
@@ -153,13 +170,19 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
         };
       })
       .filter(Boolean) as {
-        id: string;
-        url: string;
-        name: string;
-        image: any;
-        progress: number;
-      }[];
-  }, [uploadIds, imageUrls, isImagesPending, jobStore.updateDto?.uploads, jobStore.response?.uploads]);
+      id: string;
+      url: string;
+      name: string;
+      image: any;
+      progress: number;
+    }[];
+  }, [
+    uploadIds,
+    imageUrls,
+    isImagesPending,
+    jobStore.updateDto?.uploads,
+    jobStore.response?.uploads,
+  ]);
 
   React.useEffect(() => {
     if (
@@ -191,7 +214,9 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
       },
       onError: (error: ServerErrorResponse) => {
         toast.error(
-          error.response?.data?.message ?? error.message ?? tCommon("common.error")
+          error.response?.data?.message ??
+            error.message ??
+            tCommon("common.error"),
         );
       },
     });
@@ -269,7 +294,7 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
       }
       return true;
     },
-    [jobStore]
+    [jobStore],
   );
 
   return (
@@ -282,7 +307,7 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
       >
         {({ methods }) => {
           const activeIndex = steps.findIndex(
-            (step) => step.id === methods.current.id
+            (step) => step.id === methods.current.id,
           );
 
           const handleNext = () => {
@@ -326,7 +351,7 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
                 <Spinner />
               ) : (
                 <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
-                  <div className="flex-1 overflow-auto px-2">
+                  <div className="flex-1 flex flex-col overflow-auto px-2">
                     {methods.current.id === "general" && (
                       <FormBuilder
                         structure={generalInformationUpdateFormStructure}
@@ -335,6 +360,17 @@ export const UpdateJob: React.FC<UpdateJobProps> = ({
                     {methods.current.id === "detailed" && (
                       <FormBuilder
                         structure={detailedInformationUpdateFormStructure}
+                      />
+                    )}
+                    {methods.current.id === "location" && (
+                      <LocationPickerMap
+                        height={"fullscreen"}
+                        latitude={jobStore.updateDto?.latitude}
+                        longitude={jobStore.updateDto?.longitude}
+                        onChange={({ latitude, longitude }) => {
+                          jobStore.setNested("updateDto.latitude", latitude);
+                          jobStore.setNested("updateDto.longitude", longitude);
+                        }}
                       />
                     )}
                   </div>

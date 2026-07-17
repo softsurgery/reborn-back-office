@@ -14,7 +14,13 @@ import {
 } from "@/components/shared/form-builder/types";
 import { JobStore } from "@/hooks/stores/useJobStore";
 import { useUploadMutation } from "@/hooks/useUploadMutation";
-import { JobDifficulty, JobPricingType, JobStatus, JobStyle, ResponseRefParamDto } from "@/types";
+import {
+  JobDifficulty,
+  JobPricingType,
+  JobStatus,
+  JobStyle,
+  ResponseRefParamDto,
+} from "@/types";
 import { useTranslation } from "react-i18next";
 
 interface JobCreateFormStructureProps {
@@ -34,7 +40,7 @@ export const useCreateJobFormStructure = ({
   const { t } = useTranslation("job");
   const selectedCurrency = React.useMemo(() => {
     return currencies.find(
-      (currency) => currency.id === jobStore.createDto.currencyId
+      (currency) => currency.id === jobStore.createDto.currencyId,
     );
   }, [currencies, jobStore.createDto.currencyId]);
 
@@ -131,7 +137,7 @@ export const useCreateJobFormStructure = ({
       })),
       value: jobStore.createDto?.currencyId?.toString(),
       onValueChange: (value: string) => {
-        jobStore.setNested("createDto.currencyId", value);
+        jobStore.setNested("createDto.currencyId", Number(value));
         jobStore.setNested("createDtoErrors.currencyId", []);
       },
     },
@@ -189,12 +195,12 @@ export const useCreateJobFormStructure = ({
     props: {
       options: jobTags,
       value: jobTags.filter((option: SelectOption) =>
-        jobStore.createDto?.tagIds?.includes(Number(option.value))
+        jobStore.createDto?.tagIds?.includes(Number(option.value)),
       ),
       onChange: (value) => {
         jobStore.setNested(
           "createDto.tagIds",
-          value.map((v) => Number(v.value))
+          value.map((v) => Number(v.value)),
         );
         jobStore.setNested("createDtoErrors.tagIds", []);
       },
@@ -261,38 +267,6 @@ export const useCreateJobFormStructure = ({
     },
   };
 
-  const latitudeField: Field<NumberFieldProps> = {
-    id: "latitude",
-    label: `${t("job.forms.latitudeLabel", "Latitude")}`,
-    variant: FieldVariant.NUMBER,
-    placeholder: `${t("job.forms.latitudePlaceholder", "Enter latitude coordinate")}`,
-    description: `${t("job.forms.latitudeDescription", "Geographical latitude coordinate.")}`,
-    error: t(jobStore.createDtoErrors?.latitude?.[0]),
-    props: {
-      value: jobStore.createDto?.latitude ?? undefined,
-      onChange: (value) => {
-        jobStore.setNested("createDto.latitude", value !== null && value !== undefined && !isNaN(Number(value)) ? Number(value) : undefined);
-        jobStore.setNested("createDtoErrors.latitude", []);
-      },
-    },
-  };
-
-  const longitudeField: Field<NumberFieldProps> = {
-    id: "longitude",
-    label: `${t("job.forms.longitudeLabel", "Longitude")}`,
-    variant: FieldVariant.NUMBER,
-    placeholder: `${t("job.forms.longitudePlaceholder", "Enter longitude coordinate")}`,
-    description: `${t("job.forms.longitudeDescription", "Geographical longitude coordinate.")}`,
-    error: t(jobStore.createDtoErrors?.longitude?.[0]),
-    props: {
-      value: jobStore.createDto?.longitude ?? undefined,
-      onChange: (value) => {
-        jobStore.setNested("createDto.longitude", value !== null && value !== undefined && !isNaN(Number(value)) ? Number(value) : undefined);
-        jobStore.setNested("createDtoErrors.longitude", []);
-      },
-    },
-  };
-
   const generalInformationCreateFormStructure: FormStructure = {
     title: "",
     description: "",
@@ -329,9 +303,6 @@ export const useCreateJobFormStructure = ({
         title: `${t("job.forms.detailedInformationTitle", "Detailed Information")}`,
         description: `${t("job.forms.detailedInformationDescription", "Additional details about the job.")}`,
         rows: [
-          {
-            fields: [latitudeField, longitudeField],
-          },
           {
             fields: [uploadsField],
           },

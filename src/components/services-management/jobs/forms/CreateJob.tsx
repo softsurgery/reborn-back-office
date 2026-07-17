@@ -22,10 +22,12 @@ import { useCurrencies } from "@/hooks/content/useCurrencies";
 import { useJobTags } from "@/hooks/content/useJobTags";
 import { useJobCategories } from "@/hooks/content/useJobCategories";
 import { createJobSchema } from "@/types/validations/job.validation";
+import { LocationPickerMap } from "@/components/shared/maps/LocationPickerMap";
 
 const steps = [
   { id: "general", title: "job.forms.generalInformationTitle" },
   { id: "detailed", title: "job.forms.detailedInformationTitle" },
+  { id: "location", title: "job.forms.locationInformationTitle" },
 ];
 
 const { Stepper } = defineStepper(...steps);
@@ -80,14 +82,22 @@ export const CreateJob: React.FC<CreateJobProps> = ({
       ]);
       setIntro?.(
         tJob("job.sheet.createTitle"),
-        tJob("job.sheet.createDescription")
+        tJob("job.sheet.createDescription"),
       );
       return () => {
         clearRoutes?.();
         clearIntro?.();
       };
     }
-  }, [ready, tJob, handleCallback, clearIntro, clearRoutes, setIntro, setRoutes]);
+  }, [
+    ready,
+    tJob,
+    handleCallback,
+    clearIntro,
+    clearRoutes,
+    setIntro,
+    setRoutes,
+  ]);
 
   const { mutate: createJobMutation, isPending: isMutationPending } =
     useMutation({
@@ -102,7 +112,9 @@ export const CreateJob: React.FC<CreateJobProps> = ({
       },
       onError: (error: ServerErrorResponse) => {
         toast.error(
-          error.response?.data?.message ?? error.message ?? tCommon("common.error")
+          error.response?.data?.message ??
+            error.message ??
+            tCommon("common.error"),
         );
       },
     });
@@ -173,7 +185,7 @@ export const CreateJob: React.FC<CreateJobProps> = ({
       }
       return true;
     },
-    [jobStore]
+    [jobStore],
   );
 
   return (
@@ -186,7 +198,7 @@ export const CreateJob: React.FC<CreateJobProps> = ({
       >
         {({ methods }) => {
           const activeIndex = steps.findIndex(
-            (step) => step.id === methods.current.id
+            (step) => step.id === methods.current.id,
           );
 
           const handleNext = () => {
@@ -230,7 +242,7 @@ export const CreateJob: React.FC<CreateJobProps> = ({
                 <Spinner />
               ) : (
                 <div className="flex flex-col flex-1 h-full overflow-hidden mt-4">
-                  <div className="flex-1 overflow-auto px-2">
+                  <div className="flex-1 flex flex-col overflow-auto px-2">
                     {methods.current.id === "general" && (
                       <FormBuilder
                         structure={generalInformationCreateFormStructure}
@@ -239,6 +251,17 @@ export const CreateJob: React.FC<CreateJobProps> = ({
                     {methods.current.id === "detailed" && (
                       <FormBuilder
                         structure={detailedInformationCreateFormStructure}
+                      />
+                    )}
+                    {methods.current.id === "location" && (
+                      <LocationPickerMap
+                        height={"fullscreen"}
+                        latitude={jobStore.createDto?.latitude}
+                        longitude={jobStore.createDto?.longitude}
+                        onChange={({ latitude, longitude }) => {
+                          jobStore.setNested("createDto.latitude", latitude);
+                          jobStore.setNested("createDto.longitude", longitude);
+                        }}
                       />
                     )}
                   </div>

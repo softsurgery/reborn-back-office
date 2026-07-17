@@ -25,6 +25,8 @@
       "generalInformationDescription": "General information about the job.",
       "detailedInformationTitle": "Detailed Information",
       "detailedInformationDescription": "Additional details about the job.",
+      "locationInformationTitle": "Location",
+      "locationInformationDescription": "Pick the geographical location on the interactive map.",
       "titleLabel": "Job Title",
       "titlePlaceholder": "Enter the job title",
       "titleDescription": "The title of the job.",
