@@ -42,8 +42,13 @@ export const useInfiniteJobs = ({
       });
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage.meta?.hasNextPage ? Number(lastPage.meta.page) + 1 : undefined,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage?.meta) return undefined;
+      const { page, pageCount, hasNextPage } = lastPage.meta;
+      if (hasNextPage === true) return Number(page) + 1;
+      if (hasNextPage === false) return undefined;
+      return Number(page) < Number(pageCount) ? Number(page) + 1 : undefined;
+    },
     enabled,
   });
 

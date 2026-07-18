@@ -6,7 +6,7 @@ import { PackageOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Spinner } from "@/components/shared/Spinner";
 import { cn } from "@/lib/utils";
-import { useUi } from "@/contexts/UiContext";
+import { InfiniteScrollTrigger } from "@/components/shared/InfiniteScrollTrigger";
 
 interface JobGridViewProps {
   className?: string;
@@ -31,26 +31,7 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
   isFetchingNextPage,
   fetchNextPage,
 }) => {
-  const { scrollElement } = useUi();
   const { t } = useTranslation("common");
-  const loadMoreRef = React.useRef<HTMLDivElement | null>(null);
-
-  React.useEffect(() => {
-    const element = loadMoreRef.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage?.();
-        }
-      },
-      { threshold: 0.1, rootMargin: "200px", root: scrollElement || null },
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, scrollElement]);
 
   return (
     <div
@@ -91,25 +72,11 @@ export const JobGridView: React.FC<JobGridViewProps> = ({
                 <JobCard key={job.id} job={job} context={context} />
               ))}
             </div>
-            {hasNextPage && (
-              <div
-                ref={loadMoreRef}
-                className="w-full flex items-center justify-center py-8 mt-4"
-              >
-                {isFetchingNextPage ? (
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                    <span>
-                      {t("common.table.loadingMore", "Loading more...")}
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-xs text-transparent select-none">
-                    .
-                  </span>
-                )}
-              </div>
-            )}
+            <InfiniteScrollTrigger
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
+            />
           </>
         )}
       </div>

@@ -154,14 +154,6 @@ export const JobDetails = ({
           )}
         </div>
 
-        {/* Budget / Compensation pill */}
-        <div className="inline-flex items-baseline gap-1 font-black text-base md:text-lg text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/15 px-3 py-1 rounded-xl border border-emerald-500/25 shadow-sm">
-          {formatPrice(job.price, job.currency)}
-          <span className="text-[10px] font-bold text-muted-foreground uppercase">
-            {job.currency?.label || ""}
-          </span>
-        </div>
-
         {/* Share Button */}
         <Button
           variant="outline"

@@ -40,13 +40,16 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
         { title: t("job.introTitle"), href: "/services-management/jobs" },
       ]);
       setIntro?.(t("job.introTitle"), t("job.introDescription"));
-      return () => {
-        clearRoutes?.();
-        clearIntro?.();
-      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t, ready, userId]);
+
+  React.useEffect(() => {
+    return () => {
+      clearRoutes?.();
+      clearIntro?.();
+    };
+  }, [clearRoutes, clearIntro]);
 
   const jobStore = useJobStore();
 
@@ -115,12 +118,15 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
           onChange={handleViewModeChange}
         />,
       );
-      return () => {
-        clearFloating?.();
-      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewMode, handleViewModeChange, userId]);
+
+  React.useEffect(() => {
+    return () => {
+      clearFloating?.();
+    };
+  }, [clearFloating]);
 
   React.useEffect(() => {
     if (!userId) {
@@ -129,11 +135,14 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
       } else {
         clearScrollable?.();
       }
-      return () => {
-        clearScrollable?.();
-      };
     }
   }, [viewMode, setScrollable, clearScrollable, userId]);
+
+  React.useEffect(() => {
+    return () => {
+      clearScrollable?.();
+    };
+  }, [clearScrollable]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
