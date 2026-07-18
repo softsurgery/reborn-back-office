@@ -9,10 +9,13 @@ import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
 
 interface HeaderProps {
   className?: string;
+  n?: number;
 }
 
-export const Header = ({ className }: HeaderProps) => {
-  const { routes } = useBreadcrumb();
+export const Header = ({ className, n }: HeaderProps) => {
+  const { routes, n: contextN } = useBreadcrumb();
+  const effectiveN = n !== undefined ? n : (contextN !== undefined ? contextN : 2);
+
   return (
     <header
       className={cn(
@@ -22,7 +25,7 @@ export const Header = ({ className }: HeaderProps) => {
     >
       <SidebarTrigger />
       <Commander />
-      <BreadcrumbCommon hierarchy={routes} />
+      <BreadcrumbCommon hierarchy={routes} n={effectiveN} />
 
       <div className="flex justify-center items-center gap-4 ml-auto">
         <LanguageSwitcher />
@@ -32,3 +35,4 @@ export const Header = ({ className }: HeaderProps) => {
     </header>
   );
 };
+

@@ -6,6 +6,8 @@ interface BreadcrumbContextProps {
   routes: BreadcrumbRoute[];
   setRoutes: (routes: BreadcrumbRoute[]) => void;
   clearRoutes: () => void;
+  n?: number;
+  setN?: (n: number) => void;
 }
 
 export const BreadcrumbContext = React.createContext<
@@ -13,3 +15,4 @@ export const BreadcrumbContext = React.createContext<
 >({});
 
 export const useBreadcrumb = () => React.useContext(BreadcrumbContext);
+

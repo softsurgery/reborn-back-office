@@ -5,6 +5,7 @@ import {
   BreadcrumbContext,
   BreadcrumbRoute,
 } from "../../contexts/BreadcrumbContext";
+import { cacheBreadcrumbTitle } from "@/hooks/useAutoBreadcrumbs";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppVersion } from "./AppVersion";
 import { AppSidebar } from "./sidebar/AppSidebar";
@@ -21,18 +22,35 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children, className }: LayoutProps) => {
-  const [routes, setRoutes] = React.useState<BreadcrumbRoute[]>([]);
-  const clearRoutes = React.useCallback(() => {
-    setRoutes([]);
+  const [routes, setRoutesState] = React.useState<BreadcrumbRoute[]>([]);
+  const [n, setN] = React.useState<number>(2);
+
+  const handleSetRoutes = React.useCallback((newRoutes: BreadcrumbRoute[]) => {
+    if (Array.isArray(newRoutes)) {
+      newRoutes.forEach((r) => {
+        if (r.href && r.title) {
+          cacheBreadcrumbTitle(r.href, r.title);
+        }
+      });
+    }
+    setRoutesState(newRoutes);
   }, []);
+
+  const clearRoutes = React.useCallback(() => {
+    setRoutesState([]);
+  }, []);
+
   const breadcrumbContext = React.useMemo(
     () => ({
       routes,
-      setRoutes,
+      setRoutes: handleSetRoutes,
       clearRoutes,
+      n,
+      setN,
     }),
-    [routes, clearRoutes],
+    [routes, handleSetRoutes, clearRoutes, n],
   );
+
 
   const [content, setContent] = React.useState<React.ReactNode>(null);
   const clearContent = React.useCallback(() => {

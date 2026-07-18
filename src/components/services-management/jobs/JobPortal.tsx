@@ -140,9 +140,11 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
 
   React.useEffect(() => {
     return () => {
-      clearScrollable?.();
+      if (!userId) {
+        clearScrollable?.();
+      }
     };
-  }, [clearScrollable]);
+  }, [clearScrollable, userId]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
