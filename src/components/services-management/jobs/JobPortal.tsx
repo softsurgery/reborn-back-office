@@ -22,39 +22,36 @@ import {
   JobViewMode,
 } from "./views/FloatingViewSwitcher";
 
-interface JobPortalPorps {
+interface JobPortalProps {
   className?: string;
+  userId?: string;
 }
 
-export const JobPortal = ({ className }: JobPortalPorps) => {
+export const JobPortal = ({ className, userId }: JobPortalProps) => {
   const router = useRouter();
   const { t, ready } = useTranslation("job");
   const { setRoutes, clearRoutes } = useBreadcrumb();
   const { setIntro, clearIntro, setFloating, clearFloating } = useIntro();
   const { setScrollable, clearScrollable } = useUi();
   React.useEffect(() => {
-    setRoutes?.([
-      { title: t("job.intro"), href: "/services-management" },
-      { title: t("job.introTitle"), href: "/services-management/jobs" },
-    ]);
-    setIntro?.(t("job.introTitle"), t("job.introDescription"));
-    setFloating?.(
-      <FloatingViewSwitcher
-        viewMode={viewMode}
-        onChange={handleViewModeChange}
-      />,
-    );
-    return () => {
-      clearRoutes?.();
-      clearIntro?.();
-      clearFloating?.();
-    };
+    if (!userId) {
+      setRoutes?.([
+        { title: t("job.intro"), href: "/services-management" },
+        { title: t("job.introTitle"), href: "/services-management/jobs" },
+      ]);
+      setIntro?.(t("job.introTitle"), t("job.introDescription"));
+      return () => {
+        clearRoutes?.();
+        clearIntro?.();
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t, ready]);
+  }, [t, ready, userId]);
 
   const jobStore = useJobStore();
 
   const [viewMode, setViewMode] = React.useState<JobViewMode>(() => {
+    if (userId) return "table";
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const viewParam = urlParams.get("view") as JobViewMode;
@@ -69,10 +66,10 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
   const handleViewModeChange = React.useCallback(
     (mode: JobViewMode) => {
       setViewMode(mode);
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined" && !userId) {
         localStorage.setItem("jobs_view_mode", mode);
       }
-      if (router.isReady) {
+      if (router.isReady && !userId) {
         router.push(
           {
             pathname: router.pathname,
@@ -83,11 +80,11 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
         );
       }
     },
-    [router]
+    [router, userId]
   );
 
   React.useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && !userId) {
       const viewParam = router.query.view as JobViewMode;
       if (viewParam === "table" || viewParam === "grid") {
         if (viewParam !== viewMode) {
@@ -108,31 +105,35 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.isReady, router.query.view]);
+  }, [router.isReady, router.query.view, userId]);
 
   React.useEffect(() => {
-    setFloating?.(
-      <FloatingViewSwitcher
-        viewMode={viewMode}
-        onChange={handleViewModeChange}
-      />,
-    );
-    return () => {
-      clearFloating?.();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewMode, handleViewModeChange]);
-
-  React.useEffect(() => {
-    if (viewMode === "grid") {
-      setScrollable?.(true);
-    } else {
-      clearScrollable?.();
+    if (!userId) {
+      setFloating?.(
+        <FloatingViewSwitcher
+          viewMode={viewMode}
+          onChange={handleViewModeChange}
+        />,
+      );
+      return () => {
+        clearFloating?.();
+      };
     }
-    return () => {
-      clearScrollable?.();
-    };
-  }, [viewMode, setScrollable, clearScrollable]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewMode, handleViewModeChange, userId]);
+
+  React.useEffect(() => {
+    if (!userId) {
+      if (viewMode === "grid") {
+        setScrollable?.(true);
+      } else {
+        clearScrollable?.();
+      }
+      return () => {
+        clearScrollable?.();
+      };
+    }
+  }, [viewMode, setScrollable, clearScrollable, userId]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -170,6 +171,7 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       debouncedSortDetails.order,
       debouncedSortDetails.sortKey,
       debouncedSearchTerm,
+      userId,
     ],
     queryFn: () =>
       api.job.findPaginated({
@@ -179,6 +181,7 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
           debouncedSortDetails.order ? "ASC" : "DESC"
         }`,
         search: debouncedSearchTerm,
+        filter: userId ? `postedById||$eq||${userId}` : "",
         join: "uploads.upload",
       }),
     enabled: viewMode === "table",
@@ -197,6 +200,7 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     sortKey: debouncedSortDetails.sortKey,
     order: debouncedSortDetails.order,
     enabled: viewMode === "grid",
+    userId,
   });
 
   const jobs = React.useMemo(() => {
@@ -228,10 +232,12 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       inspectCallback: (entity: ResponseJobDto) => {
         router.push(`/services-management/jobs/${entity.id}`);
       },
-      createCallback: () => {
-        jobStore.reset();
-        router.push("/services-management/jobs/create");
-      },
+      createCallback: !userId
+        ? () => {
+            jobStore.reset();
+            router.push("/services-management/jobs/create");
+          }
+        : undefined,
       updateCallback: (job: ResponseJobDto) => {
         const uploads = job.uploads ? [...job.uploads].sort((a, b) => a.order - b.order) : [];
         jobStore.set("response", job);
@@ -303,6 +309,7 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
       sortDetails.order,
       sortDetails.sortKey,
       jobStore,
+      userId,
     ],
   );
 
@@ -316,14 +323,22 @@ export const JobPortal = ({ className }: JobPortalPorps) => {
     <div
       className={cn(
         "flex flex-col flex-1 relative",
-        viewMode === "table" ? "overflow-hidden" : "",
+        !userId && viewMode === "table" ? "overflow-hidden" : "",
         className,
       )}
     >
+      {userId && (
+        <div className="flex justify-end mb-2 px-1 flex-shrink-0">
+          <FloatingViewSwitcher
+            viewMode={viewMode}
+            onChange={handleViewModeChange}
+          />
+        </div>
+      )}
       {viewMode === "table" ? (
         <DataTable
-          className="flex flex-col flex-1 overflow-hidden p-1"
-          containerClassName="overflow-auto"
+          className={cn("flex flex-col flex-1 p-1", !userId && "overflow-hidden")}
+          containerClassName={cn(!userId ? "overflow-auto" : "overflow-x-auto")}
           columns={columns}
           data={jobs}
           context={context}

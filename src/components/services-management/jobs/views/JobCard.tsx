@@ -5,7 +5,7 @@ import { ResponseJobDto } from "@/types";
 import { DataTableConfig } from "@/components/shared/data-tables/types";
 import { identifyUser, identifyUserAvatar } from "@/lib/user.utils";
 import { timeAgo } from "@/lib/date.lib";
-import { getStyleBadgeColor, getDifficultyBadgeColor } from "../JobDetails";
+import { getStyleBadgeColor, getDifficultyBadgeColor } from "../job-details";
 import { Image as ImageIcon, Tag as TagIcon, Layers } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";

@@ -24,7 +24,7 @@ import {
   getDifficultyBadgeColor,
 } from "./job-details";
 
-export { getStyleBadgeColor, getDifficultyBadgeColor };
+export { getStyleBadgeColor, getDifficultyBadgeColor } from "./job-details";
 
 interface JobDetailsProps {
   className?: string;
@@ -236,7 +236,7 @@ export const JobDetails = ({
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 pb-16 max-w-7xl mx-auto w-full overflow-y-auto overflow-x-hidden px-4 md:px-6 animate-in fade-in zoom-in-95 duration-300",
+        "flex flex-col flex-1 pb-16 max-w-7xl mx-auto w-full px-4 md:px-6 animate-in fade-in zoom-in-95 duration-300",
         className,
       )}
     >

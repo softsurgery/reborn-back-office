@@ -7,6 +7,8 @@ interface InfiniteJobsProps {
   sortKey?: string;
   order?: boolean;
   enabled?: boolean;
+  userId?: string;
+  filter?: string;
 }
 
 export const useInfiniteJobs = ({
@@ -15,7 +17,10 @@ export const useInfiniteJobs = ({
   sortKey = "id",
   order = true,
   enabled = true,
+  userId,
+  filter = "",
 }: InfiniteJobsProps = {}) => {
+  const computedFilter = filter || (userId ? `postedById||$eq||${userId}` : "");
   const {
     data,
     fetchNextPage,
@@ -25,13 +30,14 @@ export const useInfiniteJobs = ({
     refetch,
     isFetching,
   } = useInfiniteQuery({
-    queryKey: ["infinite-jobs", size, search, sortKey, order],
+    queryKey: ["infinite-jobs", size, search, sortKey, order, computedFilter],
     queryFn: async ({ pageParam = 1 }) => {
       return api.job.findPaginated({
         page: pageParam.toString(),
         limit: size.toString(),
         sort: `${sortKey},${order ? "ASC" : "DESC"}`,
         search: search || "",
+        filter: computedFilter,
         join: "uploads.upload",
       });
     },

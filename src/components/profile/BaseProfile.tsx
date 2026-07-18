@@ -8,6 +8,7 @@ import {
   Mail,
   MapPin,
   Phone,
+  Briefcase,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Spinner } from "../shared/Spinner";
@@ -31,6 +32,7 @@ import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { Conversations } from "./cards/Conversations";
 import { Notifications } from "../audit-monitoring/notifications/Notifications";
 import { Book } from "./cards/Book";
+import { Jobs } from "./cards/Jobs";
 import { useUi } from "@/contexts/UiContext";
 
 interface BaseProfileProps {
@@ -60,7 +62,7 @@ export const BaseProfile = ({
       clearScrollable?.();
       clearHideScrollbar?.();
     };
-  }, [setScrollable, clearScrollable]);
+  }, [setScrollable, clearScrollable, setHideScrollbar, clearHideScrollbar]);
 
   const { followerDialog, openFollowerDialog } = useFollowerDialog({
     userStore,
@@ -108,6 +110,12 @@ export const BaseProfile = ({
       label: t("userManagement.inspect.tabs.about"),
       icon: UserIcon,
       content: <About />,
+    },
+    {
+      value: "jobs",
+      label: t("userManagement.inspect.tabs.jobs", "Jobs"),
+      icon: Briefcase,
+      content: <Jobs userId={user?.id} />,
     },
     {
       value: "career",
@@ -281,7 +289,7 @@ export const BaseProfile = ({
           onValueChange={setActiveTab}
           className="flex flex-col flex-1"
         >
-          <TabsList className="grid grid-cols-6 mb-6 p-1.5 bg-muted/60 rounded-xl border border-border/50 flex-shrink-0 h-auto">
+          <TabsList className="grid grid-cols-7 mb-6 p-1.5 bg-muted/60 rounded-xl border border-border/50 flex-shrink-0 h-auto">
             {tabs.map(({ value, label, icon: Icon }) => (
               <TabsTrigger
                 key={value}
