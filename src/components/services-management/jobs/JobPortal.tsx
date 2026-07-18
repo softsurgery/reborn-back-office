@@ -1,4 +1,5 @@
 import React from "react";
+import { GitBranch } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { cn } from "@/lib/utils";
@@ -273,7 +274,19 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
         router.push(`/services-management/jobs/edit/${job.id}`);
       },
       deleteCallback: openDeleteJobDialog,
+      additionalActions: {
+        0: [
+          {
+            actionLabel: t("job.actions.workflow", "Workflow Graph"),
+            actionIcon: <GitBranch className="w-4 h-4 text-purple-500" />,
+            actionCallback: (entity: ResponseJobDto) => {
+              router.push(`/services-management/jobs/${entity.id}/workflow`);
+            },
+          },
+        ],
+      },
       // search, filtering, sorting & paging
+
       searchTerm,
       setSearchTerm,
       page,

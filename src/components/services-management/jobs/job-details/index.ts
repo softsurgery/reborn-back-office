@@ -6,3 +6,5 @@ export * from "./JobMetricsStrip";
 export * from "./JobEmployerCard";
 export * from "./JobOverviewCard";
 export * from "./JobDetailsSkeleton";
+export * from "./workflow/JobWorkflowGraph";
+export * from "./workflow/xstate-machine";

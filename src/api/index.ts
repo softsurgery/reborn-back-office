@@ -3,6 +3,7 @@ import { auth } from "./auth";
 import { bug } from "./bug";
 import { feedback } from "./feedback";
 import { job } from "./job";
+import { jobWorkflow } from "./job-workflow";
 import { upload } from "./upload";
 import { follow } from "./follow";
 import { chat } from "./chat";
@@ -15,6 +16,7 @@ export const api = {
   bug,
   upload,
   job,
+  jobWorkflow,
   follow,
   chat,
   notification,
