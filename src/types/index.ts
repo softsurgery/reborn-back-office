@@ -5,6 +5,7 @@ export * from "./job-management";
 
 export * from "./user-management";
 export * from "./upload";
+export * from "./storage-folder";
 export * from "./system-reports";
 export * from "./chat";
 

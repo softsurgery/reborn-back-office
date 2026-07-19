@@ -36,16 +36,20 @@ export const uploadFiles = async (
   files: File[],
   onProgress?: (percent: number) => void,
   temporary: boolean = true,
+  folderId?: number,
 ): Promise<Upload[]> => {
   const formData = new FormData();
   files.forEach((file) => {
     formData.append("files", file);
   });
 
+  const params = folderId ? { folderId } : undefined;
+
   const response = await axios.post<Upload[]>(
     temporary ? "/storage/multiple/temporary" : "/storage/multiple",
     formData,
     {
+      params,
       headers: {
         "Content-Type": "multipart/form-data",
       },

@@ -1,5 +1,5 @@
-import Uploads from "@/components/content-management/uploads/Uploads";
+import ResourceExplorer from "@/components/content-management/resources/ResourceExplorer";
 
 export default function Page() {
-  return <Uploads />;
+  return <ResourceExplorer />;
 }

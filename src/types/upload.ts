@@ -12,4 +12,7 @@ export interface Upload extends DatabaseEntity {
   relativePath: string;
   mimetype: string;
   size: number;
+  folderId?: number;
+  isTemporary?: boolean;
+  isPrivate?: boolean;
 }
