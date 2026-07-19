@@ -80,11 +80,11 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
             query: { ...router.query, view: mode },
           },
           undefined,
-          { shallow: true }
+          { shallow: true },
         );
       }
     },
-    [router, userId]
+    [router, userId],
   );
 
   React.useEffect(() => {
@@ -104,7 +104,7 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
             query: { ...router.query, view: viewMode },
           },
           undefined,
-          { shallow: true }
+          { shallow: true },
         );
       }
     }
@@ -130,22 +130,18 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
   }, [clearFloating]);
 
   React.useEffect(() => {
-    if (!userId) {
-      if (viewMode === "grid") {
-        setScrollable?.(true);
-      } else {
-        clearScrollable?.();
-      }
+    if (viewMode === "grid") {
+      setScrollable?.(true);
+    } else {
+      clearScrollable?.();
     }
-  }, [viewMode, setScrollable, clearScrollable, userId]);
+  }, [viewMode, setScrollable, clearScrollable]);
 
   React.useEffect(() => {
     return () => {
-      if (!userId) {
-        clearScrollable?.();
-      }
+      clearScrollable?.();
     };
-  }, [clearScrollable, userId]);
+  }, [clearScrollable]);
 
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
@@ -251,7 +247,9 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
           }
         : undefined,
       updateCallback: (job: ResponseJobDto) => {
-        const uploads = job.uploads ? [...job.uploads].sort((a, b) => a.order - b.order) : [];
+        const uploads = job.uploads
+          ? [...job.uploads].sort((a, b) => a.order - b.order)
+          : [];
         jobStore.set("response", job);
         jobStore.set("updateDto", {
           title: job.title,
@@ -299,7 +297,9 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
       setSortDetails: (order: boolean, sortKey: string) =>
         setSortDetails({ order, sortKey }),
       targetEntity: (job: ResponseJobDto) => {
-        const uploads = job.uploads ? [...job.uploads].sort((a, b) => a.order - b.order) : [];
+        const uploads = job.uploads
+          ? [...job.uploads].sort((a, b) => a.order - b.order)
+          : [];
         jobStore.set("response", job);
         jobStore.set("updateDto", {
           title: job.title,
@@ -361,7 +361,10 @@ export const JobPortal = ({ className, userId }: JobPortalProps) => {
       )}
       {viewMode === "table" ? (
         <DataTable
-          className={cn("flex flex-col flex-1 p-1", !userId && "overflow-hidden")}
+          className={cn(
+            "flex flex-col flex-1 p-1",
+            !userId && "overflow-hidden",
+          )}
           containerClassName={cn(!userId ? "overflow-auto" : "overflow-x-auto")}
           columns={columns}
           data={jobs}

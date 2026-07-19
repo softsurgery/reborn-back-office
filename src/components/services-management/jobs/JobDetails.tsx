@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Layers,
-  ArrowLeft,
-  ThumbsUp,
-  Share2,
-  GitBranch,
-  FileText,
-} from "lucide-react";
+import { Layers, ArrowLeft, ThumbsUp, Share2, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ResponseRefParamDto } from "@/types";
@@ -19,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import { useUi } from "@/contexts/UiContext";
 import { useIntro } from "@/contexts/IntroContext";
 import { useBreadcrumb } from "@/contexts/BreadcrumbContext";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   JobPhotosGallery,
   JobDescriptionCard,
@@ -57,24 +49,6 @@ export const JobDetails = ({
 
   const [hasLiked, setHasLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(12);
-  const [activeTab, setActiveTab] = React.useState(initialTab || "overview");
-
-  React.useEffect(() => {
-    if (initialTab && initialTab !== activeTab) {
-      setActiveTab(initialTab);
-    }
-  }, [initialTab, activeTab]);
-
-  const handleTabChange = (val: string) => {
-    setActiveTab(val);
-    if (typeof window !== "undefined") {
-      const targetUrl =
-        val === "workflow"
-          ? `/services-management/jobs/${jobId}/workflow`
-          : `/services-management/jobs/${jobId}`;
-      router.push(targetUrl, undefined, { shallow: true });
-    }
-  };
 
   const { setScrollable, clearScrollable } = useUi();
   React.useEffect(() => {
@@ -95,6 +69,18 @@ export const JobDetails = ({
   });
 
   const job = React.useMemo(() => jobResp ?? null, [jobResp]);
+
+  React.useEffect(() => {
+    if (job && initialTab === "workflow") {
+      const timer = setTimeout(() => {
+        const el = document.getElementById("workflow");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [job, initialTab]);
 
   const activeUploadsCount = React.useMemo(() => {
     if (Array.isArray(uploads) && uploads.length > 0) return uploads.length;
@@ -128,7 +114,7 @@ export const JobDetails = ({
         title: job.title || t("job.details", "Job Details"),
         href: `/services-management/jobs/${job.id || ""}`,
       },
-      ...(activeTab === "workflow"
+      ...(initialTab === "workflow"
         ? [
             {
               title: t("job.workflow.title", "Workflow Graph"),
@@ -226,7 +212,7 @@ export const JobDetails = ({
     job,
     hasLiked,
     likeCount,
-    activeTab,
+    initialTab,
     setIntro,
     setFloating,
     clearIntro,
@@ -266,66 +252,53 @@ export const JobDetails = ({
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 pb-16 max-w-7xl mx-auto w-full px-4 md:px-6 animate-in fade-in zoom-in-95 duration-300",
+        "flex flex-col flex-1 pb-16 container w-full px-4 md:px-6 animate-in fade-in zoom-in-95 duration-300",
         className,
       )}
     >
       {/* Interactive Photo Gallery Section */}
       <JobPhotosGallery job={job} uploads={uploads} />
 
-      {/* Tabs Switcher between Overview and Workflow Graph */}
-      <Tabs
-        value={activeTab}
-        onValueChange={handleTabChange}
-        className="flex flex-col flex-1 mt-4"
-      >
-        <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/60 pb-4">
-          <TabsList className="grid grid-cols-2 p-1.5 bg-muted/60 rounded-2xl border border-border/50 h-auto w-full sm:w-auto min-w-[320px]">
-            <TabsTrigger
-              value="overview"
-              className="flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-sm transition-all data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm cursor-pointer"
-            >
-              <FileText className="h-4 w-4" />
-              <span>Overview & Details</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="workflow"
-              className="flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-sm transition-all data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm cursor-pointer"
-            >
-              <GitBranch className="h-4 w-4 text-purple-500" />
-              <span>Workflow Graph & XState</span>
-            </TabsTrigger>
-          </TabsList>
+      {/* Two-Column Details & Overview Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+        {/* Left Column: Description & Tags & Stats */}
+        <div className="lg:col-span-2 space-y-8">
+          <JobDescriptionCard job={job} />
+          <JobLocationCard job={job} />
+          <JobMetricsStrip likeCount={likeCount} />
         </div>
 
-        <TabsContent
-          value="overview"
-          className="mt-8 flex flex-col focus-visible:outline-none"
-        >
-          {/* Two-Column Details & Overview Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column: Description & Tags & Stats */}
-            <div className="lg:col-span-2 space-y-8">
-              <JobDescriptionCard job={job} />
-              <JobLocationCard job={job} />
-              <JobMetricsStrip likeCount={likeCount} />
-            </div>
+        {/* Right Column: Employer & Overview Sidebar */}
+        <div className="lg:col-span-1 space-y-6">
+          <JobEmployerCard job={job} />
+          <JobOverviewCard job={job} uploadsCount={activeUploadsCount} />
+        </div>
+      </div>
 
-            {/* Right Column: Employer & Overview Sidebar */}
-            <div className="lg:col-span-1 space-y-6">
-              <JobEmployerCard job={job} />
-              <JobOverviewCard job={job} uploadsCount={activeUploadsCount} />
+      {/* Workflow Graph & XState Section */}
+      <div
+        id="workflow"
+        className="mt-12 py-8 border-t border-border/60 space-y-6 scroll-mt-24"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <GitBranch className="h-6 w-6 text-purple-500" />
+              <h2 className="text-2xl font-black tracking-tight">
+                {t("job.workflow.title", "Workflow Graph & XState")}
+              </h2>
             </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              {t(
+                "job.workflow.description",
+                "Interactive visual representation of the job lifecycle, state transitions, and XState machine configuration.",
+              )}
+            </p>
           </div>
-        </TabsContent>
+        </div>
 
-        <TabsContent
-          value="workflow"
-          className="mt-6 flex flex-col focus-visible:outline-none"
-        >
-          <JobWorkflowGraph job={job} />
-        </TabsContent>
-      </Tabs>
+        <JobWorkflowGraph job={job} />
+      </div>
     </div>
   );
 };
