@@ -18,7 +18,6 @@ import dagre from "dagre";
 import {
   StateNodeConfig,
   getWorkflowNodeStatus,
-  WorkflowNodeStatus,
   PRIMARY_WORKFLOW_ORDER,
   parseBackendMachineToStates,
 } from "./xstate-machine";
@@ -34,10 +33,8 @@ import {
   GitBranch,
   Target,
   Maximize2,
+  Minimize2,
   LayoutGrid,
-  Filter,
-  Sparkles,
-  Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -63,7 +60,7 @@ const NODE_HEIGHT = 170;
 const getLayoutedElements = (
   nodes: Node[],
   edges: Edge[],
-  direction: "TB" | "LR" = "LR"
+  direction: "TB" | "LR" = "LR",
 ) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -102,9 +99,106 @@ const getLayoutedElements = (
   return { nodes: layoutedNodes, edges };
 };
 
-const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
+const FlowContent = ({ job, className }: JobWorkflowGraphProps) => {
   const reactFlowInstance = useReactFlow();
   const currentStatus = job?.status || JobStatus.DRAFT;
+
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isFullScreen, setIsFullScreen] = React.useState(false);
+
+  const toggleFullScreen = React.useCallback(() => {
+    if (!isFullScreen) {
+      setIsFullScreen(true);
+      if (containerRef.current) {
+        if (containerRef.current.requestFullscreen) {
+          containerRef.current.requestFullscreen().catch(() => {});
+        } else if ((containerRef.current as any).webkitRequestFullscreen) {
+          (containerRef.current as any).webkitRequestFullscreen();
+        } else if ((containerRef.current as any).msRequestFullscreen) {
+          (containerRef.current as any).msRequestFullscreen();
+        }
+      }
+    } else {
+      setIsFullScreen(false);
+      const isNativeFullscreen = !!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      if (isNativeFullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if ((document as any).webkitExitFullscreen) {
+          (document as any).webkitExitFullscreen();
+        } else if ((document as any).msExitFullscreen) {
+          (document as any).msExitFullscreen();
+        }
+      }
+    }
+  }, [isFullScreen]);
+
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isNativeFullscreen = !!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      if (!isNativeFullscreen && isFullScreen) {
+        setIsFullScreen(false);
+      } else if (isNativeFullscreen && !isFullScreen) {
+        setIsFullScreen(true);
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange,
+      );
+    };
+  }, [isFullScreen]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isFullScreen) {
+        const isNativeFullscreen = !!(
+          document.fullscreenElement ||
+          (document as any).webkitFullscreenElement ||
+          (document as any).mozFullScreenElement ||
+          (document as any).msFullscreenElement
+        );
+        if (!isNativeFullscreen) {
+          setIsFullScreen(false);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isFullScreen]);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      reactFlowInstance.fitView({ padding: 0.2, duration: 400 });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [isFullScreen, reactFlowInstance]);
 
   const { data: machineConfig, isLoading: isMachineLoading } = useQuery({
     queryKey: ["job-workflow-machine"],
@@ -123,11 +217,14 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
 
   const [direction, setDirection] = React.useState<"LR" | "TB">("LR");
 
-  const [selectedConfig, setSelectedConfig] = React.useState<StateNodeConfig | null>(null);
+  const [selectedConfig, setSelectedConfig] =
+    React.useState<StateNodeConfig | null>(null);
 
   React.useEffect(() => {
     if (statesMap && Object.keys(statesMap).length > 0 && !selectedConfig) {
-      setSelectedConfig(statesMap[currentStatus] || Object.values(statesMap)[0] || null);
+      setSelectedConfig(
+        statesMap[currentStatus] || Object.values(statesMap)[0] || null,
+      );
     }
   }, [statesMap, currentStatus, selectedConfig]);
 
@@ -155,7 +252,6 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
       });
 
       config.transitions.forEach((trans, idx) => {
-
         const sourceStatus = getWorkflowNodeStatus(config.id, currentStatus);
         const targetStatus = getWorkflowNodeStatus(trans.target, currentStatus);
 
@@ -170,17 +266,18 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
           source: config.id,
           target: trans.target,
           label: trans.label,
-          animated: isCompletedEdge || isCurrentEdge || sourceStatus === "current",
+          animated:
+            isCompletedEdge || isCurrentEdge || sourceStatus === "current",
           style: {
             strokeWidth: isCompletedEdge || sourceStatus === "current" ? 3 : 2,
             stroke:
               isCompletedEdge || isCurrentEdge
                 ? "#10b981"
                 : sourceStatus === "current"
-                ? "#a855f7"
-                : targetStatus === "alternate"
-                ? "#f59e0b"
-                : "#64748b",
+                  ? "#a855f7"
+                  : targetStatus === "alternate"
+                    ? "#f59e0b"
+                    : "#64748b",
             opacity: targetStatus === "alternate" ? 0.65 : 1,
           },
           labelStyle: {
@@ -202,10 +299,10 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
               isCompletedEdge || isCurrentEdge
                 ? "#10b981"
                 : sourceStatus === "current"
-                ? "#a855f7"
-                : targetStatus === "alternate"
-                ? "#f59e0b"
-                : "#64748b",
+                  ? "#a855f7"
+                  : targetStatus === "alternate"
+                    ? "#f59e0b"
+                    : "#64748b",
           },
         });
       });
@@ -213,7 +310,6 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
 
     return getLayoutedElements(rawNodes, rawEdges, direction);
   }, [currentStatus, direction, selectedConfig?.id, statesMap]);
-
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -228,7 +324,7 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
           isSelected: selectedConfig?.id === n.id,
           onSelectNode: (cfg: StateNodeConfig) => setSelectedConfig(cfg),
         },
-      }))
+      })),
     );
   }, [selectedConfig, setNodes]);
 
@@ -249,7 +345,7 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
       reactFlowInstance.setCenter(
         targetNode.position.x + NODE_WIDTH / 2,
         targetNode.position.y + NODE_HEIGHT / 2,
-        { zoom: 1, duration: 500 }
+        { zoom: 1, duration: 500 },
       );
     } else {
       reactFlowInstance.fitView({ padding: 0.2, duration: 400 });
@@ -265,14 +361,22 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
         reactFlowInstance.setCenter(
           targetNode.position.x + NODE_WIDTH / 2,
           targetNode.position.y + NODE_HEIGHT / 2,
-          { zoom: 1, duration: 500 }
+          { zoom: 1, duration: 500 },
         );
       }
     }
   };
 
   return (
-    <div className="flex flex-1 w-full h-full min-h-[600px] relative rounded-3xl border border-border/60 overflow-hidden shadow-2xl bg-gradient-to-br from-background via-muted/10 to-background">
+    <div
+      ref={containerRef}
+      className={cn(
+        "flex flex-1 w-full h-full min-h-[600px] relative rounded-3xl border border-border/60 overflow-hidden shadow-2xl bg-gradient-to-br from-background via-muted/10 to-background transition-all duration-300",
+        className,
+        isFullScreen &&
+          "fixed inset-0 z-[100] !w-screen !h-screen !min-h-screen !rounded-none !border-none !shadow-none !m-0 !p-0",
+      )}
+    >
       {/* React Flow Canvas */}
       <ReactFlow
         nodes={nodes}
@@ -286,7 +390,12 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
         maxZoom={2}
         className="w-full h-full"
       >
-        <Background color="#a855f7" gap={24} size={1.5} className="opacity-20" />
+        <Background
+          color="#a855f7"
+          gap={24}
+          size={1.5}
+          className="opacity-20"
+        />
         <Controls
           className="!bg-card !border !border-border/60 !rounded-2xl !shadow-lg !p-1 !gap-1"
           showInteractive={false}
@@ -303,7 +412,10 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
         />
 
         {/* Top Control Panel */}
-        <Panel position="top-left" className="m-4 flex flex-wrap items-center gap-2 z-20">
+        <Panel
+          position="top-left"
+          className="m-4 flex flex-wrap items-center gap-2 z-20"
+        >
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-card/95 backdrop-blur-md border border-border/60 shadow-lg text-xs font-bold">
             <GitBranch className="w-4 h-4 text-primary" />
             <span>Job Status:</span>
@@ -331,6 +443,26 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
             Layout: {direction === "LR" ? "Left-to-Right" : "Top-to-Bottom"}
           </Button>
 
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleFullScreen}
+            className="rounded-2xl bg-card/95 backdrop-blur-md border-border/60 gap-1.5 text-xs font-bold shadow-lg hover:border-primary hover:text-primary transition-all"
+            title={isFullScreen ? "Exit Fullscreen (Esc)" : "Enter Fullscreen"}
+          >
+            {isFullScreen ? (
+              <>
+                <Minimize2 className="w-4 h-4 text-primary" />
+                Exit Fullscreen
+              </>
+            ) : (
+              <>
+                <Maximize2 className="w-4 h-4 text-primary" />
+                Fullscreen
+              </>
+            )}
+          </Button>
+
           <Select
             value={selectedConfig?.id || ""}
             onValueChange={(val) => handleSelectStateById(val as JobStatus)}
@@ -340,7 +472,11 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
             </SelectTrigger>
             <SelectContent className="max-h-64 rounded-2xl">
               {Object.values(statesMap).map((st) => (
-                <SelectItem key={st.id} value={st.id} className="text-xs font-semibold">
+                <SelectItem
+                  key={st.id}
+                  value={st.id}
+                  className="text-xs font-semibold"
+                >
                   {st.title} {st.id === currentStatus ? " (📍 Current)" : ""}
                 </SelectItem>
               ))}
@@ -361,9 +497,7 @@ const FlowContent = ({ job }: { job?: ResponseJobDto | null }) => {
         onSelectStateById={handleSelectStateById}
       />
     </div>
-
   );
-
 };
 
 export const JobWorkflowGraph = (props: JobWorkflowGraphProps) => {
