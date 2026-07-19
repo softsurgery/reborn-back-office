@@ -9,6 +9,7 @@ import nextI18nextConfig from "../../next-i18next.config";
 import { SessionProvider } from "next-auth/react";
 import "@/styles/globals.css";
 import { AuthTokenSync } from "@/components/auth/AuthTokenSync";
+import { UiProvider } from "@/contexts/UiContext";
 
 const inter = { className: "font-inter" };
 const queryClient = new QueryClient();
@@ -31,11 +32,13 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
             enableSystem
             disableTransitionOnChange
           >
-            <Application
-              Component={Component}
-              pageProps={pageProps}
-              className={inter.className}
-            />
+            <UiProvider>
+              <Application
+                Component={Component}
+                pageProps={pageProps}
+                className={inter.className}
+              />
+            </UiProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </SessionProvider>

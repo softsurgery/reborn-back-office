@@ -6,6 +6,7 @@ import { Spinner } from "./shared/Spinner";
 import { Layout } from "./layout/Layout";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { useUi } from "@/contexts/UiContext";
 
 interface ApplicationProps {
   className?: string;
@@ -20,6 +21,7 @@ function Application({ className, Component, pageProps }: ApplicationProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [hasMounted, setHasMounted] = React.useState(false);
+  const { scrollable } = useUi();
 
   const isAuthPage = publicRoutes.some((route) =>
     router.pathname.startsWith(route)
@@ -59,7 +61,8 @@ function Application({ className, Component, pageProps }: ApplicationProps) {
   return (
     <div
       className={cn(
-        `flex flex-col flex-1 overflow-hidden min-h-screen max-h-screen`,
+        "flex flex-col flex-1 min-h-screen",
+        !scrollable && "overflow-hidden max-h-screen",
         className
       )}
     >

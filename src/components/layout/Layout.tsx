@@ -12,7 +12,7 @@ import { AppSidebar } from "./sidebar/AppSidebar";
 import { Footer } from "./Footer";
 import { FooterContext } from "@/contexts/FooterContext";
 import { IntroContext } from "@/contexts/IntroContext";
-import { UiContext } from "@/contexts/UiContext";
+import { useUi } from "@/contexts/UiContext";
 import { PageHeader } from "./PageHeader";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -50,7 +50,6 @@ export const Layout = ({ children, className }: LayoutProps) => {
     }),
     [routes, handleSetRoutes, clearRoutes, n],
   );
-
 
   const [content, setContent] = React.useState<React.ReactNode>(null);
   const clearContent = React.useCallback(() => {
@@ -97,36 +96,24 @@ export const Layout = ({ children, className }: LayoutProps) => {
     [title, description, floating, setIntro, clearIntro, clearFloating],
   );
 
-  const [scrollable, setScrollable] = React.useState<boolean>(false);
-  const [hideScrollbar, setHideScrollbar] = React.useState<boolean>(false);
-  const [paddingX, setPaddingX] = React.useState<string>("");
-  const [scrollElement, setScrollElement] = React.useState<HTMLElement | null>(
-    null,
-  );
+  const {
+    scrollable,
+    hideScrollbar,
+    paddingX,
+    setScrollElement,
+    hideHeaderOnScroll = true,
+    hidePageHeaderOnScroll = true,
+    hidePageHeader = false,
+  } = useUi();
   const [showHeader, setShowHeader] = React.useState<boolean>(true);
   const lastOffsetY = React.useRef(0);
 
-  const clearScrollable = React.useCallback(() => setScrollable(false), []);
-  const clearHideScrollbar = React.useCallback(
-    () => setHideScrollbar(false),
-    [],
-  );
-  const clearPaddingX = React.useCallback(() => setPaddingX(""), []);
-  const clearScrollElement = React.useCallback(
-    () => setScrollElement(null),
-    [],
-  );
-  const clearUi = React.useCallback(() => {
-    setScrollable(false);
-    setHideScrollbar(false);
-    setPaddingX("");
-    setScrollElement(null);
-    setShowHeader(true);
-  }, []);
+  const shouldHideOnScroll =
+    scrollable && hideHeaderOnScroll && hidePageHeaderOnScroll;
 
   const handleScroll = React.useCallback(
     (e: React.UIEvent<HTMLElement>) => {
-      if (!scrollable) return;
+      if (!shouldHideOnScroll) return;
       const currentOffsetY = e.currentTarget.scrollTop;
       const delta = currentOffsetY - lastOffsetY.current;
 
@@ -140,44 +127,32 @@ export const Layout = ({ children, className }: LayoutProps) => {
 
       lastOffsetY.current = currentOffsetY;
     },
-    [scrollable],
+    [shouldHideOnScroll],
   );
 
   React.useEffect(() => {
-    if (!scrollable) {
+    if (!shouldHideOnScroll) {
       setShowHeader(true);
       lastOffsetY.current = 0;
+      return;
     }
-  }, [scrollable]);
+    const onWindowScroll = () => {
+      if (!shouldHideOnScroll) return;
+      const currentOffsetY = window.scrollY;
+      const delta = currentOffsetY - lastOffsetY.current;
 
-  const uiContext = React.useMemo(
-    () => ({
-      scrollable,
-      hideScrollbar,
-      paddingX,
-      scrollElement,
-      setScrollable,
-      clearScrollable,
-      setHideScrollbar,
-      clearHideScrollbar,
-      setPaddingX,
-      clearPaddingX,
-      setScrollElement,
-      clearScrollElement,
-      clearUi,
-    }),
-    [
-      scrollable,
-      hideScrollbar,
-      paddingX,
-      scrollElement,
-      clearScrollable,
-      clearHideScrollbar,
-      clearPaddingX,
-      clearScrollElement,
-      clearUi,
-    ],
-  );
+      if (currentOffsetY <= 10) {
+        setShowHeader(true);
+      } else if (delta < -10) {
+        setShowHeader(true);
+      } else if (delta > 10 && currentOffsetY > 50) {
+        setShowHeader(false);
+      }
+      lastOffsetY.current = currentOffsetY;
+    };
+    window.addEventListener("scroll", onWindowScroll);
+    return () => window.removeEventListener("scroll", onWindowScroll);
+  }, [shouldHideOnScroll]);
 
   const isMobile = useMediaQuery("(max-width: 425px)");
   return (
@@ -188,55 +163,48 @@ export const Layout = ({ children, className }: LayoutProps) => {
     >
       <SidebarProvider>
         <SidebarInset>
-          <UiContext.Provider value={uiContext}>
-            <BreadcrumbContext.Provider value={breadcrumbContext}>
-              <IntroContext.Provider value={introContext}>
-                <FooterContext.Provider value={footerContext}>
-                  <div className="flex flex-row flex-1 overflow-hidden">
-                    {/* Sidebar */}
-                    <AppSidebar />
-                    {/* Header , Main & Footer */}
-                    <div className="flex flex-col flex-1 overflow-hidden bg-background">
-                      <div
-                        className={cn(
-                          "flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden",
-                          scrollable && !showHeader
-                            ? "max-h-0 opacity-0 -translate-y-4 pointer-events-none"
-                            : "max-h-[300px] opacity-100 translate-y-0",
-                        )}
-                      >
-                        <Header />
-                        {(title || description) && (
-                          <PageHeader
-                            className={cn(
-                              "py-5",
-                              paddingX || (isMobile ? "px-4" : "px-10"),
-                            )}
-                          />
-                        )}
-                      </div>
-                      <main
-                        ref={setScrollElement}
-                        onScroll={handleScroll}
-                        className={cn(
-                          "flex flex-col flex-1",
-                          scrollable
-                            ? "overflow-y-auto overflow-x-hidden"
-                            : "overflow-hidden",
-                          hideScrollbar && "no-scrollbar",
-                          paddingX || (isMobile ? "px-4" : "px-10"),
-                          className,
-                        )}
-                      >
-                        {children}
-                      </main>
-                      {content && <Footer />}
+          <BreadcrumbContext.Provider value={breadcrumbContext}>
+            <IntroContext.Provider value={introContext}>
+              <FooterContext.Provider value={footerContext}>
+                <div className="flex flex-row flex-1 overflow-hidden">
+                  {/* Sidebar */}
+                  <AppSidebar />
+                  {/* Header , Main & Footer */}
+                  <div className="flex flex-col flex-1 overflow-hidden bg-background">
+                    <div
+                      className={cn(
+                        "flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden",
+                        shouldHideOnScroll && !showHeader
+                          ? "max-h-0 opacity-0 -translate-y-4 pointer-events-none"
+                          : "max-h-[300px] opacity-100 translate-y-0",
+                      )}
+                    >
+                      <Header />
                     </div>
+                    <main
+                      ref={setScrollElement}
+                      onScroll={handleScroll}
+                      className={cn(
+                        "flex flex-col flex-1",
+                        scrollable
+                          ? "overflow-y-auto overflow-x-hidden"
+                          : "overflow-hidden",
+                        hideScrollbar && "no-scrollbar",
+                        paddingX || (isMobile ? "px-2" : "px-4"),
+                        className,
+                      )}
+                    >
+                      {!hidePageHeader && (title || description) && (
+                        <PageHeader className="py-4 px-2" />
+                      )}
+                      {children}
+                    </main>
+                    {content && <Footer />}
                   </div>
-                </FooterContext.Provider>
-              </IntroContext.Provider>
-            </BreadcrumbContext.Provider>
-          </UiContext.Provider>
+                </div>
+              </FooterContext.Provider>
+            </IntroContext.Provider>
+          </BreadcrumbContext.Provider>
           <AppVersion className="fixed bottom-0 left-0 z-50 p-2 text-xs" />
         </SidebarInset>
       </SidebarProvider>
