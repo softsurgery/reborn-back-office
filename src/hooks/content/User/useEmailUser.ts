@@ -3,7 +3,7 @@ import { api } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const useEmailUser = (
-  email?: string,
+  email?: string | null,
   join?: string,
   enabled?: boolean
 ) => {
@@ -13,7 +13,7 @@ export const useEmailUser = (
     refetch: refetchUser,
   } = useQuery({
     queryKey: ["user", email],
-    queryFn: () => api.admin.user.findByEmail(email, join),
+    queryFn: () => api.admin.user.findByEmail(email || undefined, join),
     enabled: enabled && !!email,
   });
 

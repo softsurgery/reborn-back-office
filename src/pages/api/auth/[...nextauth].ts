@@ -1,4 +1,3 @@
-//@ts-nocheck
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -7,7 +6,7 @@ import { api } from "@/api";
 import { OAuthProvider } from "@/types";
 
 export const authOptions: NextAuthOptions = {
-  debug: process.env.NODE_ENV === "development" || false,
+  debug: process.env.NEXTAUTH_DEBUG === "true",
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -82,15 +81,10 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        // @ts-ignore
         session.user.access_token = token.access_token;
-        // @ts-ignore
         session.user.refresh_token = token.refresh_token;
-        // @ts-ignore
         session.user.id = token.id;
-        // @ts-ignore
         session.user.email = token.email;
-        // @ts-ignore
         session.user.username = token.username;
       }
       return session;
