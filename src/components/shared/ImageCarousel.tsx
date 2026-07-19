@@ -2,7 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Image as ImageIcon, Loader2 } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Image as ImageIcon,
+  Loader2,
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -67,7 +72,8 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const handlePrev = React.useCallback(() => {
     if (validImages.length <= 1) return;
     setDirection(-1);
-    const nextIdx = selectedIdx === 0 ? validImages.length - 1 : selectedIdx - 1;
+    const nextIdx =
+      selectedIdx === 0 ? validImages.length - 1 : selectedIdx - 1;
     setSelectedIdx(nextIdx);
     if (validImages[nextIdx]) {
       onImageSelect?.(nextIdx, validImages[nextIdx]);
@@ -77,7 +83,8 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const handleNext = React.useCallback(() => {
     if (validImages.length <= 1) return;
     setDirection(1);
-    const nextIdx = selectedIdx === validImages.length - 1 ? 0 : selectedIdx + 1;
+    const nextIdx =
+      selectedIdx === validImages.length - 1 ? 0 : selectedIdx + 1;
     setSelectedIdx(nextIdx);
     if (validImages[nextIdx]) {
       onImageSelect?.(nextIdx, validImages[nextIdx]);
@@ -140,7 +147,9 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
           className,
         )}
       >
-        {emptyIcon || <ImageIcon className="w-12 h-12 text-muted-foreground/40 mb-3" />}
+        {emptyIcon || (
+          <ImageIcon className="w-12 h-12 text-muted-foreground/40 mb-3" />
+        )}
         <span className="font-semibold text-sm text-foreground">
           {emptyTitle}
         </span>
@@ -156,7 +165,11 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const currentImage = validImages[selectedIdx];
 
   return (
-    <div ref={containerRef} tabIndex={0} className={cn("w-full space-y-4 focus:outline-none", className)}>
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      className={cn("w-full space-y-4 focus:outline-none", className)}
+    >
       <div
         className={cn(
           "relative w-full rounded-3xl overflow-hidden bg-card border border-border/80 shadow-2xl group",
@@ -234,26 +247,30 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         {/* Navigation Arrows */}
         {validImages.length > 1 && (
           <>
-            <motion.button
-              type="button"
-              onClick={handlePrev}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur-md opacity-80 hover:opacity-100 transition-all z-10 focus:outline-none focus:ring-2 focus:ring-primary shadow-lg"
-              aria-label="Previous photo"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </motion.button>
-            <motion.button
-              type="button"
-              onClick={handleNext}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur-md opacity-80 hover:opacity-100 transition-all z-10 focus:outline-none focus:ring-2 focus:ring-primary shadow-lg"
-              aria-label="Next photo"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </motion.button>
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+              <motion.button
+                type="button"
+                onClick={handlePrev}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="w-10 h-10 rounded-full bg-background flex items-center justify-center backdrop-blur-md opacity-80 hover:opacity-100 transition-all focus:outline-none focus:ring-2 focus:ring-primary shadow-lg"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </motion.button>
+            </div>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+              <motion.button
+                type="button"
+                onClick={handleNext}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="w-10 h-10 rounded-full bg-background flex items-center justify-center backdrop-blur-md opacity-80 hover:opacity-100 transition-all focus:outline-none focus:ring-2 focus:ring-primary shadow-lg"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </motion.button>
+            </div>
           </>
         )}
       </div>
