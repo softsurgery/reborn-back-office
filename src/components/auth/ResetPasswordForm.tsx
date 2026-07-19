@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
 import { toast } from "sonner";
-import { ServerErrorResponse, ServerResponse } from "@/types";
+import { ServerResponse } from "@/types";
 import { PasswordField } from "../shared/form-builder/PasswordField";
 
 interface ResetPasswordFormProps {
@@ -35,8 +35,13 @@ export const ResetPasswordForm = ({
       toast.success(data.message);
       goToAuthentication();
     },
-    onError: () => {
-      toast.error("Failed to reset password");
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to reset password";
+      toast.error(message);
     },
   });
 

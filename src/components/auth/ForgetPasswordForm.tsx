@@ -26,8 +26,13 @@ export const ForgotPasswordForm = ({
       toast.success(data.message);
       goToAuthentication();
     },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data.error);
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to send reset link.";
+      toast.error(message);
       setEmailOrUsername("");
     },
   });

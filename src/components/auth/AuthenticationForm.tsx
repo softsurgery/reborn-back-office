@@ -9,7 +9,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { ServerErrorResponse } from "@/types";
 
 interface AuthenticationFormProps {
   className?: string;
@@ -43,8 +42,18 @@ export function AuthenticationForm({ className }: AuthenticationFormProps) {
       router.push("/");
       toast.success("Welcome back!");
     },
-    onError: (error: ServerErrorResponse) => {
-      toast.error(error.response?.data?.message);
+    onError: (error: any) => {
+      let message =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Invalid email or password";
+
+      if (message === "CredentialsSignin") {
+        message = "Invalid email or password";
+      }
+
+      toast.error(message);
     },
   });
 

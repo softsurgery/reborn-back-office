@@ -26,7 +26,12 @@ export const authOptions: NextAuthOptions = {
             refresh_token: data.refresh_token,
           };
         } catch (err: any) {
-          throw new Error(err.response.data.message);
+          const errorMessage =
+            err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            "Invalid email or password";
+          throw new Error(errorMessage);
         }
       },
     }),
