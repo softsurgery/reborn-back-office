@@ -13,8 +13,7 @@ import { toast } from "sonner";
 import { useResourceDeleteDialog } from "./modal/ResourceDeleteDialog";
 import { useResourcePreviewSheet } from "./modal/ResourcePreviewSheet";
 import { useResourceCreateSheet } from "./modal/ResourceCreateSheet";
-import { PrivilegedFile, ServerErrorResponse, ServerResponse } from "@/types";
-import { useSession } from "next-auth/react";
+import { ServerErrorResponse, ServerResponse } from "@/types";
 import { useCurrentUser } from "@/hooks/content/User/useCurrentUser";
 import { useResourceStore } from "@/hooks/stores/useResourceStore";
 
@@ -93,7 +92,7 @@ export const Resources = ({ className }: ResourcesProps) => {
       resourceStore.reset();
     },
     onError: (error: ServerErrorResponse) => {
-      toast.error('Failed to upload files: ' + error.response?.data.message);
+      toast.error("Failed to upload files: " + error.response?.data.message);
     },
   });
 
@@ -133,7 +132,7 @@ export const Resources = ({ className }: ResourcesProps) => {
     <div
       className={cn(
         "flex flex-col flex-1 overflow-hidden container rounded-xl p-2 pb-4",
-        className
+        className,
       )}
     >
       {/* Top bar */}
@@ -147,7 +146,7 @@ export const Resources = ({ className }: ResourcesProps) => {
       <div
         className={cn(
           "flex flex-col overflow-auto no-scrollbar pt-5 rounded-xl",
-          data.length === 0 && !isPending && "flex-1"
+          data.length === 0 && !isPending && "flex-1",
         )}
         onScroll={handleScroll}
       >
