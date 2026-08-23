@@ -3,7 +3,7 @@ import { DatabaseEntity } from "./utils/database-entity";
 
 export enum NotificationType {
   TEST = "TEST",
-  NEW_SIGIN = "NEW_SIGIN",
+  NEW_SIGNIN = "NEW_SIGNIN",
   NEW_MESSAGE = "NEW_MESSAGE",
   NEW_JOB_REQUEST = "NEW_JOB_REQUEST",
 }

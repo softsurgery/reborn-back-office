@@ -82,7 +82,9 @@ export const BaseProfile = ({
     enabled: !!user?.id,
   });
 
-  const { uploads: [picture] } = useServerImages({
+  const {
+    uploads: [picture],
+  } = useServerImages({
     ids: [user?.pictureId],
     enabled: !!user?.pictureId,
   });
@@ -167,9 +169,9 @@ export const BaseProfile = ({
               <AvatarImage
                 src={picture}
                 alt={identifyUser(user)}
-                className="object-cover"
+                className="object-cover rounded-full"
               />
-              <AvatarFallback className="rounded-2xl text-2xl font-bold bg-primary/10 text-primary">
+              <AvatarFallback className="rounded-full text-2xl font-bold bg-primary/10 text-primary">
                 {identifyUserAvatar(user)}
               </AvatarFallback>
             </Avatar>

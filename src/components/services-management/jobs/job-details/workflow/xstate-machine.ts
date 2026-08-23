@@ -55,6 +55,12 @@ export const getWorkflowNodeStatus = (
   if (targetStatus === JobStatus.ON_HOLD) {
     return currentJobStatus === JobStatus.ON_HOLD ? "current" : "alternate";
   }
+  if (targetStatus === JobStatus.ARCHIVED) {
+    return currentJobStatus === JobStatus.ARCHIVED ? "current" : "alternate";
+  }
+  if (targetStatus === JobStatus.DELETED) {
+    return currentJobStatus === JobStatus.DELETED ? "current" : "alternate";
+  }
 
   if (currentIndex !== -1 && targetIndex !== -1) {
     if (targetIndex < currentIndex) return "completed";

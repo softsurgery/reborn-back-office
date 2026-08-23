@@ -88,6 +88,8 @@ export enum JobStatus {
   REVIEWED_BY_WORKER_AND_CLIENT = "Reviewed By Worker & Client",
   FAILED = "Failed",
   SUCCESSFUL = "Successfull",
+  ARCHIVED = "Archived",
+  DELETED = "Deleted",
 }
 
 export enum JobEvents {
@@ -104,6 +106,7 @@ export enum JobEvents {
   HOLD = "Hold",
   STOP_HOLD = "Stop Hold",
   MARK_FAILED = "Mark Failed",
+  ARCHIVE = "Archive",
 }
 
 export interface ResponseJobWorkflowDto {
